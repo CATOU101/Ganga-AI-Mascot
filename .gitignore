@@ -1,0 +1,12 @@
+# Raw Knowledge Base source documents
+knowledge_base/raw/
+
+# Generated Knowledge Base processing output
+knowledge_base/processed/
+
+# Generated embeddings / vector database data
+knowledge_base/vector_db/
+
+# Python cache
+__pycache__/
+*.py[cod]
