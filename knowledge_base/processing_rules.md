@@ -101,10 +101,6 @@ Historical information may be retained when it provides useful context. Its publ
 
 The document may help the project team understand the domain or design the Brain, but it should not normally become user-facing factual knowledge.
 
-### EXCLUDE
-
-The document must not be ingested. In particular, the accidental RAG research paper `2005.11401v4.pdf` is excluded from the Ganga Knowledge Base.
-
 ## 4. Section-Level Filtering
 
 A PDF is not an all-or-nothing source. A single document can contain useful conceptual material, historical statistics, technical methodology, outdated status information and irrelevant sections. Filtering must happen at the section or content level whenever practical.

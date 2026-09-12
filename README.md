@@ -46,7 +46,8 @@ Ganga-AI-Mascot/
 │   └── research_gap.md
 ├── knowledge_base/
 │   ├── raw_documents/
-│   ├── processed_documents/
+│   ├── processed/
+│   │   └── processed_documents/
 │   └── sources.md
 ├── brain/
 │   ├── rag/
