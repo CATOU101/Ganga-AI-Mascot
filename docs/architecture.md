@@ -6,14 +6,18 @@ The system is designed around a knowledge-grounded conversational AI agent that 
 
 The architecture is modular so that the AI brain can be developed and evaluated independently from the avatar and hardware components.
 
-This revision incorporates findings from the project's literature review (`research/research_log.md`, papers R1–R8). Research grounding is called out inline where it changes or motivates a design decision; it does not constitute implementation claims — no application component has been built yet.
+This revision incorporates findings from the project's literature review (`research/research_log.md`, papers R1–R8) and documents the working implementation of the core AI Brain completed on the `Knowledge-base-creation` branch.
 
-⸻
+---
 
-## 0. Research Grounding Summary
+## 0. Research Grounding & Implementation Summary
 Eight sources reviewed to date shape this architecture:
 
-IDFocusMain influence on this documentR1AI-powered Chacha Chaudhary mascot for Ganga conservation (closest baseline)Confirms the mascot + chatbot concept, but shows the baseline **does not** clearly define a RAG pipeline, curated knowledge source, or source traceability — the primary gap this architecture is designed to closeR2Retrieval-Augmented Generation (Lewis et al., 2020)Scientific basis for §5–§6 (retriever + generator separation); clarifies that RAG ≠ any single vendor stack (ChromaDB, embeddings, an LLM are independent, swappable parts)R3Umbrella review of conversational AI in educationMotivates §15 principles on privacy, information quality, human oversight, and academic/ethical responsibilityR4Pedagogical AI agent framework (higher ed)Motivates separating **pedagogical purpose** (instructional / pastoral / cognitive) from **technological function** (NLP, retrieval, embodiment) — see new §7.1R5Flipped AI-chatbot module for environmental literacyMotivates treating the agent as more than Q&A: explanation, reflection, optional quiz follow-up — see §7.2R6Usability/heuristic evaluation of ChatGPT in environmental educationMotivates splitting evaluation into **usability** (CUQ/SUS-style) vs. **information quality** (groundedness/accuracy) — see revised §12R7Meta-analysis of virtual characters in K-12 learningEvidence that embodiment helps only when pedagogically purposeful — motivates evaluating the Avatar layer independently from the Brain (§12.3)R8Systematic review of pedagogical agent designReinforces that agent design (voice, appearance, role) should be a deliberate, evaluated choice, not a default — informs §10None of these papers prescribe a specific technology stack; all implementation choices (LLM, embedding model, vector database) remain open per §20.
+IDFocusMain influence on this documentR1AI-powered Chacha Chaudhary mascot for Ganga conservation (closest baseline)Confirms the mascot + chatbot concept, but shows the baseline **does not** clearly define a RAG pipeline, curated knowledge source, or source traceability — the primary gap this architecture is designed to closeR2Retrieval-Augmented Generation (Lewis et al., 2020)Scientific basis for §5–§6 (retriever + generator separation); clarifies that RAG ≠ any single vendor stack (SQLite, NumPy, embeddings, an LLM are independent, swappable parts)R3Umbrella review of conversational AI in educationMotivates §15 principles on privacy, information quality, human oversight, and academic/ethical responsibilityR4Pedagogical AI agent framework (higher ed)Motivates separating **pedagogical purpose** (instructional / pastoral / cognitive) from **technological function** (NLP, retrieval, embodiment) — see new §7.1R5Flipped AI-chatbot module for environmental literacyMotivates treating the agent as more than Q&A: explanation, reflection, optional quiz follow-up — see §7.2R6Usability/heuristic evaluation of ChatGPT in environmental educationMotivates splitting evaluation into **usability** (CUQ/SUS-style) vs. **information quality** (groundedness/accuracy) — see revised §12R7Meta-analysis of virtual characters in K-12 learningEvidence that embodiment helps only when pedagogically purposeful — motivates evaluating the Avatar layer independently from the Brain (§12.3)R8Systematic review of pedagogical agent designReinforces that agent design (voice, appearance, role) should be a deliberate, evaluated choice, not a default — informs §10
+
+> **Implementation Note (Current Brain Implementation)**:  
+> The core AI Brain RAG engine is fully implemented on the `Knowledge-base-creation` branch using a curated knowledge base of 86 GRBMP PDFs (4,085 indexed vector chunks), local ONNX semantic embeddings (`all-MiniLM-L6-v2`), a crash-proof SQLite + NumPy vector retrieval engine, an Evidence Quality Gate, a grounded answer generator, and a FastAPI server (`POST /ask`).
+
 
 ⸻
 
@@ -160,31 +164,28 @@ The knowledge base should be treated as a controlled factual foundation rather t
 ## 5. Embedding and Vector Store
 Processed knowledge chunks are converted into vector representations using an embedding model.
 
-```
+```text
 Knowledge Chunk
 	│
 	▼
-Embedding Model
+Embedding Model (all-MiniLM-L6-v2 ONNX)
 	│
 	▼
-Vector Representation
+384-dimensional Vector Representation
 	│
 	▼
-Vector Store
+SQLite Metadata + NumPy Vector Matrix (semantic_vectors.npy)
 ```
-When a user asks a question, the question can similarly be converted into an embedding and compared with stored knowledge vectors.
 
-The vector store is therefore responsible for enabling semantic retrieval of potentially relevant knowledge.
+When a user asks a question, the question is similarly converted into a 384-dimensional embedding and compared against stored knowledge vectors using NumPy Euclidean ($L2$) distance computation.
 
-The exact embedding model and vector database will be selected during implementation based on:
+The vector store enables fast, deterministic semantic retrieval of relevant knowledge.
 
-- Retrieval quality
-- Cost
-- Local versus cloud deployment requirements
-- Hardware constraints
-- Dataset size
-- Ease of development
-**Note (from R2):** Retriever, generator, and knowledge store are conceptually independent — a dense-passage-retrieval-style retriever does not require any particular vector database, and a vector database such as ChromaDB does not require any particular retriever or generator. These are three separable decisions.
+> **Vector Database Implementation Rationale**:  
+> In early prototype testing, ChromaDB 1.5.9 was used as the vector database interface. However, ChromaDB's native Rust binding (`chromadb_rust_bindings.abi3.so`) caused repeated macOS kernel `SIGSEGV` segmentation fault crashes during retrieval queries. To guarantee 100% runtime stability for API serving and demo environments, runtime retrieval was migrated to a pure Python backend using SQLite (`chroma.sqlite3`) for metadata/chunk text storage and a portable NumPy array (`semantic_vectors.npy`) for $L2$ vector similarity.
+
+**Note (from R2):** Retriever, generator, and knowledge store are conceptually independent — a dense-passage-retrieval-style retriever does not require any particular vector database, and a vector database or matrix store does not require any particular retriever or generator. These remain separable decisions.
+
 
 ⸻
 
@@ -627,11 +628,19 @@ Such capabilities should be added as modular components where possible.
 
 ⸻
 
-## 20. Architecture Status
-The architecture is considered the current working architecture for Ganga AI Mascot.
+## 20. Architecture Implementation Status
+The architecture defined here represents the active working implementation of the Ganga AI Mascot Brain completed on the `Knowledge-base-creation` branch.
 
-Specific implementation choices — including the exact LLM, embedding model, vector database, framework, hosting environment, and voice technologies — remain implementation decisions and may be revised following experimentation and evaluation.
+**Implemented Technology Choices:**
+- **Knowledge Base**: 86 official GRBMP PDF reports, filtered into 1,111 sections (4,085 chunks).
+- **Embedding Model**: Local ONNX `all-MiniLM-L6-v2` dense vector model (384 float32 dimensions).
+- **Vector Retrieval Backend**: Crash-proof SQLite metadata (`chroma.sqlite3`) + NumPy vector matrix (`semantic_vectors.npy`).
+- **Retriever**: Hybrid (ONNX dense similarity + lexical reranking).
+- **Quality Gate**: Multi-Factor Evidence Gate (unsupported query rejection + current-info fallback).
+- **Generator**: Local Extractive grounded synthesizer default / OpenAI LLM option.
+- **API Boundary**: FastAPI HTTP Server (`POST /ask`, `GET /health`).
 
 The architectural objective remains:
 
 > Build a modular, knowledge-grounded AI brain — designed against an explicit pedagogical purpose and evaluated on both information quality and interaction quality — that can independently power multiple Ganga AI Mascot interfaces while providing reliable, educational, and traceable responses.
+

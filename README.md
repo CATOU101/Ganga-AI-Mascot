@@ -20,55 +20,102 @@ The current research focuses on:
 - Exploring the role of an interactive mascot in making educational communication more approachable.
 - Establishing evaluation criteria for factual grounding, response quality, usability, and conservation relevance.
 
-No research findings or implementation claims are presented at this stage.
+The core AI Brain implementation is completed on the `Knowledge-base-creation` branch. It provides source-grounded question answering over official Ganga River Basin Management Plan (GRBMP) documentation using a crash-proof SQLite + NumPy vector retrieval backend and a FastAPI server.
 
-## Proposed High-Level Architecture
+## System Architecture
 
-The proposed architecture is organized into the following conceptual layers:
+The current system architecture separates the core AI Brain from presentation and future interface layers:
 
-1. **Knowledge base:** Curated source documents are collected, processed, indexed, and documented with their provenance.
-2. **RAG layer:** A retrieval pipeline identifies relevant source material for each user query and supplies context to the response generation process.
-3. **Agent layer:** The conversational agent interprets the query, applies prompt and response policies, and produces a source-grounded answer.
-4. **Avatar layer:** An interactive digital mascot provides the user-facing conversational and visual experience.
-5. **Integration layer:** Application components and future interfaces are connected through clearly defined integration boundaries.
-6. **Evaluation layer:** Retrieval, grounding, conversation quality, and user experience are assessed against documented criteria.
+```text
+Official GRBMP / NMCG Documentation (86 PDFs, 4,609 pages)
+        ↓
+Knowledge Processing & Section Filtering (1,111 approved sections)
+        ↓
+Chunking (4,085 chunks)
+        ↓
+ONNX Semantic Embeddings (all-MiniLM-L6-v2, 384-dim dense vectors)
+        ↓
+SQLite Metadata + NumPy Vector Matrix (semantic_vectors.npy)
+        ↓
+Hybrid Retrieval (Vector Similarity + Lexical Reranking)
+        ↓
+Evidence Quality Gate (Unsupported Query Rejection & Current-Info Fallback)
+        ↓
+Grounded Answer Generator & Provenance Assembler
+        ↓
+FastAPI Brain API (POST /ask, GET /health)
+```
 
-This architecture is a research-stage proposal and will be refined as the literature review and experimentation progress.
+### Implementation Status Matrix
+
+| Component | Status | Details |
+| :--- | :--- | :--- |
+| **Knowledge Base Processing** | **Implemented** | 86 GRBMP PDFs, 4,609 pages, 1,111 selected sections |
+| **Vector Indexing & Retrieval** | **Implemented** | SQLite metadata + 4,085 float32 vectors (`semantic_vectors.npy`) using NumPy |
+| **Hybrid Retrieval & Quality Gate**| **Implemented** | Dense ONNX similarity + lexical reranking + evidence quality gate |
+| **Grounded Answer Generator** | **Implemented** | Extractive local synthesis default / OpenAI LLM option |
+| **Brain REST API** | **Implemented** | FastAPI server (`POST /ask`, `GET /health`) |
+| **Evaluation Suite** | **Implemented** | Groundedness, retrieval, and failure handling evaluation harness |
+| **Frontend / Web UI** | *Not Implemented Yet* | Planned for subsequent integration phase |
+| **Digital Avatar Runtime** | *Not Implemented Yet* | Design phase (`avatar/` placeholder) |
+| **Voice / Speech (STT/TTS)** | *Not Implemented Yet* | Planned for future accessibility layer |
+| **Realtime Telemetry APIs** | *Not Implemented Yet* | Gracefully falls back to `current-info-fallback` |
+| **Physical Robot** | *Not Implemented Yet* | Future physical embodiment phase |
 
 ## Repository Structure
 
 ```text
 Ganga-AI-Mascot/
 ├── README.md
+├── requirements.txt
+├── .env.example
 ├── research/
-│   ├── papers/
 │   ├── literature_review.md
-│   └── research_gap.md
+│   ├── research_gap.md
+│   └── research_log.md
 ├── knowledge_base/
 │   ├── raw_documents/
 │   ├── processed/
-│   │   └── processed_documents/
+│   ├── vector_db/
+│   ├── processing_rules.md
 │   └── sources.md
 ├── brain/
-│   ├── rag/
-│   ├── agent/
-│   ├── prompts/
-│   └── evaluation/
+│   ├── README.md
+│   ├── api.py
+│   ├── chunking.py
+│   ├── config.py
+│   ├── embeddings.py
+│   ├── generator.py
+│   ├── ingest.py
+│   ├── prompts.py
+│   ├── rag_pipeline.py
+│   ├── retriever.py
+│   ├── vector_store.py
+│   └── tests/
+│       ├── evaluation_questions.md
+│       └── run_evaluation.py
 ├── avatar/
 │   └── README.md
 ├── integration/
 │   └── README.md
 └── docs/
     ├── architecture.md
+    ├── brain_requirements.md
+    ├── knowledge-base.md
     └── project_plan.md
 ```
 
 ## Current Status
 
-**Research and Literature Review in Progress**
+**Brain Engine Completed — Ready for Integration Phase (50% Milestone)**
 
-The repository currently contains the initial research, knowledge-base, architecture, and planning structure. Application implementation has not started.
+The repository contains a fully working, source-grounded RAG Brain engine powered by SQLite and NumPy vector search. It features:
+1. **4,085 vector chunks** derived from 1,111 curated sections of 86 official GRBMP PDF reports.
+2. **Crash-proof vector retrieval** utilizing NumPy dense matrix operations over local ONNX 384-dimensional embeddings, bypassing native C/Rust database binding issues on macOS.
+3. **Multi-Factor Evidence Quality Gate** that rejects out-of-scope queries (*"Mars population"*) and static-historical queries asking for real-time water quality (*"current water status"*).
+4. **FastAPI HTTP Server** exposing `/ask` and `/health` endpoints for upcoming avatar and frontend integration.
 
 ## Academic Disclaimer
 
-This repository is an academic mini-project. The proposed architecture, research direction, and project plan are preliminary and may evolve as the team reviews literature, evaluates alternatives, and learns from future experiments.
+This repository is an academic mini-project (PRJ_316). The architecture and knowledge base are curated specifically for Ganga conservation awareness.
+

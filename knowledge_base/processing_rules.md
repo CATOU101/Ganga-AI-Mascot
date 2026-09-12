@@ -367,35 +367,19 @@ This file does not define:
 
 Those concerns belong to other parts of the project.
 
-## 19. Current Status
+## 19. Current Implementation Status
 
-### Current Status
+**Completed:**
+- GRBMP source collection (86 PDF files, 4,609 total pages)
+- Source registry and classification in `knowledge_base/sources.md`
+- Document extraction and cleaning
+- Section-level filtering strategy (1,111 approved sections selected)
+- Chunking and metadata assignment (4,085 chunks)
+- ONNX 384-dimensional dense semantic vector generation (`all-MiniLM-L6-v2`)
+- Standalone SQLite metadata database (`chroma.sqlite3`) and NumPy vector matrix (`semantic_vectors.npy`)
+- Retrieval, quality gate, and groundedness evaluation harness (`python -m brain.tests.run_evaluation`)
 
-Source identification and initial source screening are complete.
+**Not yet completed:**
+- Real-time telemetry or external current-data API integration (currently falls back gracefully to `current-info-fallback`)
+- Frontend / Avatar runtime integration
 
-The project is now moving from source analysis into Knowledge Base preparation.
-
-Completed:
-
-- GRBMP source collection
-- initial source screening
-- source classification
-- source registry in `knowledge_base/sources.md`
-
-In progress:
-
-- document-processing specification
-- section-level filtering strategy
-- metadata design
-- ingestion pipeline planning
-
-Not yet completed:
-
-- PDF ingestion
-- chunk generation
-- embeddings
-- vector database
-- retrieval evaluation
-- current-data or API integration
-
-No unfinished processing stage listed above is claimed to have been implemented by this specification.

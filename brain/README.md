@@ -17,7 +17,7 @@ Chunking (4,085 chunks preserving metadata & page numbers)
         ↓
 ONNX Semantic Embeddings (all-MiniLM-L6-v2, 384-dim dense vectors)
         ↓
-ChromaDB Vector Database (knowledge_base/vector_db/)
+SQLite Metadata + NumPy Vector Matrix (knowledge_base/vector_db/semantic_vectors.npy)
         ↓
 Retriever & Candidate Reranking (top_k candidates + hybrid lexical scoring)
         ↓
@@ -27,6 +27,9 @@ Grounded Answer Generator & Provenance Assembler
         ↓
 FastAPI HTTP API (POST /ask)
 ```
+
+> **Runtime Backend Note (SQLite + NumPy)**:  
+> ChromaDB 1.5.9 was used during early prototype indexing, but its native Rust binding (`chromadb_rust_bindings.abi3.so`) caused repeated `SIGSEGV` segmentation fault crashes on macOS during query operations. To ensure 100% runtime stability for API and demo usage, runtime retrieval was migrated to a pure Python backend using SQLite (`chroma.sqlite3`) for metadata and NumPy (`semantic_vectors.npy`) for $L2$ vector similarity.
 
 ---
 
@@ -88,12 +91,16 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Build the Vector Index
+### 2. Ingest Metadata & Generate Semantic Vectors
 
-Rebuild the ChromaDB index from approved sections (1,111 sections, 4,085 vectors):
+Ingest approved sections into SQLite and generate the 4,085-vector NumPy matrix (`semantic_vectors.npy`):
 
 ```bash
-python -m brain.rag_pipeline --build-index
+# Ingest section text and metadata into SQLite
+python -m brain.ingest
+
+# Generate 384-dimensional ONNX vector matrix (atomic write)
+python -m brain.vector_store --generate-vectors
 ```
 
 ### 3. Ask a Question via CLI
@@ -101,6 +108,7 @@ python -m brain.rag_pipeline --build-index
 ```bash
 python -m brain.rag_pipeline --ask "What is Aviral Dhara?"
 ```
+
 
 ### 4. Run Evaluation Test Suite
 

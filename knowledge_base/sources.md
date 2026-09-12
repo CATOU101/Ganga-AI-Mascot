@@ -261,17 +261,16 @@ The Knowledge Base is primarily responsible for stable conceptual knowledge and 
 - Highly technical, duplicate or regionally repetitive material should generally be deferred unless retrieval testing shows it is useful.
 - Source provenance must be preserved for every ingested piece of information, including title, author or publisher, publication date, identifier or URL, access date, license or usage notes, document section and historical/current classification.
 
-## Current Status
+## Current Implementation Status
 
-The GRBMP source collection has completed its initial screening and is now moving toward Knowledge Base preparation:
+The GRBMP source collection processing is **completed** on the `Knowledge-base-creation` branch:
 
-1. Source registration
-2. Section-level filtering
-3. Document extraction
-4. Chunking
-5. Metadata assignment
-6. Embedding
-7. Vector database ingestion
-8. Retrieval and grounding evaluation
+1. **Source registration**: 86 GRBMP PDF files registered (4,609 pages).
+2. **Section-level filtering**: Completed; 1,111 approved sections selected.
+3. **Document extraction**: Text extracted cleanly while preserving section boundaries and page numbers.
+4. **Chunking**: 4,085 text chunks created.
+5. **Metadata assignment**: Complete metadata schema attached to each chunk (`source_id`, `file_name`, `page`, `section`, `knowledge_type`, `relevance`).
+6. **Embedding**: 384-dimensional dense ONNX vector embeddings generated (`all-MiniLM-L6-v2`).
+7. **Vector Database Ingestion**: SQLite metadata database (`chroma.sqlite3`) and NumPy vector matrix (`semantic_vectors.npy`) populated.
+8. **Retrieval and grounding evaluation**: Verified via CLI, test suite (`python -m brain.tests.run_evaluation`), and FastAPI server (`POST /ask`).
 
-This registry does not claim that extraction, ingestion, embeddings or vector-database construction has been completed.

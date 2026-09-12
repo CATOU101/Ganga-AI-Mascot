@@ -592,40 +592,25 @@ The RAG system answers: **"Which information is relevant to this question?"**
 
 ---
 
-## 22. Current Status
+## 22. Current Implementation Status
 
-The knowledge-base architecture is currently a **design specification**.
+The initial Knowledge Base processing and vector store construction is **completed and functional** on the `Knowledge-base-creation` branch.
 
-The following implementation decisions remain to be finalized:
-
-- Exact source list
-- Document formats
-- Extraction tools
-- Chunk size
-- Chunk overlap
-- Embedding model
-- Vector database
-- Retrieval strategy
-- Metadata implementation
-- Update mechanism
-
-These decisions will be made during implementation and evaluation rather than being assumed prematurely.
+**Finalized Implementation Specifications:**
+- **Source Collection**: 86 official GRBMP PDF reports (4,609 pages).
+- **Section Filtering**: 1,111 approved sections selected via manual review and automated section filtering rules.
+- **Chunking Strategy**: 4,085 coherent text chunks preserving section boundaries, page numbers, and publication metadata.
+- **Embedding Model**: Local ONNX `all-MiniLM-L6-v2` producing 384-dimensional float32 dense vectors.
+- **Vector Retrieval Store**: Standalone SQLite metadata database (`chroma.sqlite3`) and NumPy vector matrix (`semantic_vectors.npy`).
+- **Retrieval Strategy**: Dense $L2$ vector similarity combined with lexical keyword reranking.
 
 ---
 
-## 23. Next Phase
+## 23. Next Phase — Integration & Evaluation
 
-After this specification is reviewed and committed, the next phase will be **Knowledge Source Collection and Ingestion Pipeline Development**.
+With the Knowledge Base and RAG Brain fully operational, the project is moving into **System Integration & Evaluation (50% Milestone)**:
 
-The immediate objectives will be:
+1. Connect the FastAPI Brain API (`POST /ask`) to the upcoming frontend interface.
+2. Integrate the presentation layer with the Digital Avatar module (`avatar/`).
+3. Conduct comprehensive evaluation across groundedness, retrieval precision, and usability metrics.
 
-1. Identify authoritative sources.
-2. Select an initial set of documents.
-3. Establish the repository structure.
-4. Build document extraction and cleaning.
-5. Implement chunking.
-6. Attach metadata.
-7. Create a small test dataset.
-8. Prepare the data for embedding and retrieval.
-
-The goal is to produce a **small, clean, traceable knowledge dataset** that can be used to build and evaluate the first RAG prototype.
