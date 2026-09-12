@@ -1,0 +1,142 @@
+"""Retriever, hybrid candidate reranking, evidence quality gate, and context assembly."""
+
+from __future__ import annotations
+
+import re
+
+from .config import BrainConfig
+from .vector_store import ChromaVectorStore, get_chroma_vector_store
+
+
+CURRENT_TERMS = (
+    "current", "today", "now", "latest", "real-time", "realtime", "present status",
+    "water quality", "river discharge", "stp status", "pollution monitoring",
+    "programme status", "program status", "infrastructure status", "legal status",
+    "regulatory status",
+)
+
+STOPWORDS = frozenset({
+    "what", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had",
+    "do", "does", "did", "the", "a", "an", "in", "on", "at", "of", "to", "for", "with",
+    "by", "from", "about", "according", "which", "where", "when", "who", "whom",
+    "why", "how", "this", "that", "these", "those", "tell", "tells", "say", "says",
+    "give", "me", "us", "you", "your", "can", "could", "would", "should", "material",
+    "kb", "knowledge", "base", "grbmp", "ganga", "river",
+})
+
+
+def asks_for_current_information(question: str) -> bool:
+    """Detect queries seeking current or real-time status."""
+    lowered = question.lower()
+    dynamic_topic = any(term in lowered for term in CURRENT_TERMS[5:])
+    freshness = any(term in lowered for term in CURRENT_TERMS[:5])
+    return dynamic_topic and freshness
+
+
+def extract_keywords(question: str) -> list[str]:
+    """Extract non-stopword query keywords for lexical grounding check."""
+    tokens = re.findall(r"[A-Za-z0-9][A-Za-z0-9_-]*", question.lower())
+    return [token for token in tokens if len(token) >= 3 and token not in STOPWORDS]
+
+
+def extract_all_query_terms(question: str) -> list[str]:
+    """Extract all query words >= 3 chars including domain words for strict entity checks."""
+    tokens = re.findall(r"[A-Za-z0-9][A-Za-z0-9_-]*", question.lower())
+    ignore = {"what", "is", "are", "was", "were", "the", "a", "an", "in", "on", "at", "of", "to", "for", "with", "by", "from", "according"}
+    return [token for token in tokens if len(token) >= 3 and token not in ignore]
+
+
+class Retriever:
+    def __init__(self, config: BrainConfig, store: ChromaVectorStore | None = None) -> None:
+        self.config = config
+        self.store = store or get_chroma_vector_store(config)
+
+    def retrieve_candidates(self, question: str, candidate_k: int | None = None) -> list[dict]:
+        """Retrieve candidates from Chroma vector store."""
+        k = candidate_k or self.config.candidate_top_k
+        return self.store.query(question, k)
+
+    def rerank_and_filter(self, question: str, hits: list[dict], top_k: int | None = None) -> tuple[bool, list[dict]]:
+        """Rerank candidates using vector similarity and lexical term coverage, then evaluate evidence gate."""
+        target_k = top_k or self.config.top_k
+        keywords = extract_keywords(question)
+        all_terms = extract_all_query_terms(question)
+
+        if not hits or not question.strip():
+            return False, []
+
+        # Out-of-domain / Unsupported topic check:
+        # If question contains non-domain specific keywords (e.g., 'mars', 'animation', '3d'),
+        # verify that at least one candidate text contains those key terms.
+        discriminating_terms = [kw for kw in keywords if kw not in {"pollution", "water", "sewage", "flow", "basin", "management"}]
+        if discriminating_terms:
+            any_term_found = False
+            for hit in hits:
+                content = (hit["text"] + " " + str(hit["metadata"].get("title", "")) + " " + str(hit["metadata"].get("section", ""))).lower()
+                if any(term in content for term in discriminating_terms):
+                    any_term_found = True
+                    break
+            if not any_term_found:
+                return False, []
+
+        scored_hits = []
+        for hit in hits:
+            content_lower = (hit["text"] + " " + str(hit["metadata"].get("title", "")) + " " + str(hit["metadata"].get("section", ""))).lower()
+            if keywords:
+                matched_count = sum(1 for kw in keywords if kw in content_lower)
+                overlap_ratio = matched_count / len(keywords)
+            else:
+                matched_count = 0
+                overlap_ratio = 1.0
+
+            distance = hit.get("distance", 999.0)
+            # Distance threshold depending on embedding type
+            is_semantic = getattr(self.store.embedding, "name", "").startswith("onnx")
+            max_dist = self.config.evidence_max_distance if is_semantic else 1.35
+
+            if distance > max_dist:
+                continue
+
+            # Calculate hybrid score
+            hybrid_score = (1.0 / (1.0 + distance)) + (0.5 * overlap_ratio)
+            scored_hits.append((hybrid_score, overlap_ratio, hit))
+
+        if not scored_hits:
+            return False, []
+
+        # Sort by hybrid score descending
+        scored_hits.sort(key=lambda item: item[0], reverse=True)
+
+        # Evidence Gate Check: top result must have sufficient relevance
+        top_score, top_overlap, top_hit = scored_hits[0]
+        if keywords and top_overlap < self.config.min_keyword_overlap and len(keywords) > 1:
+            return False, []
+
+        reranked_hits = [hit for _, _, hit in scored_hits[:target_k]]
+        return True, reranked_hits
+
+    def retrieve(self, question: str, top_k: int | None = None) -> tuple[bool, list[dict]]:
+        candidates = self.retrieve_candidates(question)
+        return self.rerank_and_filter(question, candidates, top_k)
+
+
+def assemble_context(hits: list[dict], max_chars: int = 6000) -> str:
+    """Assemble retrieved hits into context block for answer generation."""
+    parts = []
+    used = 0
+    for index, hit in enumerate(hits, start=1):
+        metadata = hit["metadata"]
+        header = (
+            f"[{index}] Source: {metadata.get('title')}\n"
+            f"File: {metadata.get('file_name')}\n"
+            f"Page: {metadata.get('page_start')}-{metadata.get('page_end')}\n"
+            f"Section: {metadata.get('section')}\n"
+            f"Knowledge type: {metadata.get('knowledge_type')}\n"
+        )
+        body = hit["text"].strip()
+        block = f"{header}\n{body}"
+        if used + len(block) > max_chars:
+            break
+        parts.append(block)
+        used += len(block)
+    return "\n\n---\n\n".join(parts)

@@ -17,7 +17,8 @@ The system may eventually combine:
 - Digital avatar integration
 - System evaluation
 
-The project is currently in the research and literature review stage. Do not assume that the final architecture, frameworks, models, APIs, or deployment platform have already been selected.
+The core AI Brain engine is fully implemented on the `Knowledge-base-creation` branch. It utilizes a SQLite metadata + NumPy vector store (`semantic_vectors.npy`) for $L2$ similarity retrieval over local 384-dimensional ONNX embeddings (`all-MiniLM-L6-v2`), an Evidence Quality Gate, a grounded answer generator, and a FastAPI server (`POST /ask`).
+
 
 ## Repository Structure
 

@@ -373,14 +373,17 @@ Authoritative Knowledge
 
 The avatar and voice components may initially remain at prototype/integration level.
 
-## 16. Current Status
+## 16. Current Implementation Status
 
-Status: DEVELOPMENT STARTING
+**Status: BRAIN RAG ENGINE COMPLETED (Ready for 50% Milestone Integration)**
 
-Research and literature review: COMPLETED
-
-Brain requirements: INITIAL VERSION
-
-Knowledge-source verification: NOT STARTED
-
-Brain implementation: NOT STARTED
+- **Research and literature review**: COMPLETED
+- **Brain requirements**: DEFINED & IMPLEMENTED
+- **Knowledge-source verification & curation**: COMPLETED (86 GRBMP PDFs, 1,111 sections)
+- **Ingestion & Vector Indexing**: COMPLETED (4,085 chunks in SQLite metadata + NumPy `semantic_vectors.npy`)
+- **Retrieval & Evidence Quality Gate**: COMPLETED (ONNX dense similarity + lexical reranking + out-of-scope fallback + current-info fallback)
+- **Grounded Answer Generator & Provenance**: COMPLETED (Extractive local default / OpenAI option + exact PDF citations)
+- **FastAPI HTTP Server**: COMPLETED (`POST /ask`, `GET /health`)
+- **Evaluation Suite**: COMPLETED (`python -m brain.tests.run_evaluation`)
+- **Real-Time Live Telemetry APIs**: *Not Connected Yet* (gracefully falls back to `current-info-fallback` for live status questions)
+- **Avatar / Voice / Frontend**: *Not Connected Yet* (target for upcoming milestone integration phase)

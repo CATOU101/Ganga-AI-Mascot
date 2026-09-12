@@ -1,0 +1,19 @@
+# Raw Knowledge Base source documents
+knowledge_base/raw/
+knowledge_base/raw_documents/
+
+# Generated Knowledge Base processing output
+knowledge_base/processed/
+
+# Generated embeddings / vector database data
+knowledge_base/vector_db/
+
+# Python cache
+.venv/
+.env
+__pycache__/
+*.py[cod]
+*.backup
+
+# macOS metadata
+.DS_Store
