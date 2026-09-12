@@ -13,6 +13,7 @@ knowledge_base/vector_db/
 .env
 __pycache__/
 *.py[cod]
+*.backup
 
 # macOS metadata
 .DS_Store
