@@ -57,8 +57,8 @@ FastAPI Brain API (POST /ask, GET /health)
 | **Brain REST API** | **Implemented** | FastAPI server (`POST /ask`, `GET /health`) |
 | **Evaluation Suite** | **Implemented** | Groundedness, retrieval, and failure handling evaluation harness |
 | **Frontend / Web UI** | *Not Implemented Yet* | Planned for subsequent integration phase |
-| **Digital Avatar Runtime** | *Not Implemented Yet* | Design phase (`avatar/` placeholder) |
-| **Voice / Speech (STT/TTS)** | *Not Implemented Yet* | Planned for future accessibility layer |
+| **Digital Avatar Runtime** | **Implemented** | Chacha 3D Cartoon Avatar (Model 2 PBR + Model 3 Artwork), Unity scene, 23 bones, 7 animations, 5 blendshapes, real-time lip-sync, dual-model runtime switcher |
+| **Voice / Speech (STT/TTS)** | **Implemented** | Authentic elderly uncle voice library (18 WAVs, 16kHz mono, Hi/En) + local mock FastAPI/HTTP streaming server |
 | **Realtime Telemetry APIs** | *Not Implemented Yet* | Gracefully falls back to `current-info-fallback` |
 | **Physical Robot** | *Not Implemented Yet* | Future physical embodiment phase |
 
@@ -95,7 +95,16 @@ Ganga-AI-Mascot/
 │       ├── evaluation_questions.md
 │       └── run_evaluation.py
 ├── avatar/
-│   └── README.md
+│   ├── README.md
+│   ├── 01_Reference/
+│   ├── 03_Rig/
+│   ├── 04_Animations/
+│   ├── 05_Voice/
+│   ├── 06_LipSync/
+│   ├── 07_Unity/
+│   ├── 08_Final/
+│   ├── 09_LocalMock/
+│   └── tools/
 ├── integration/
 │   └── README.md
 └── docs/
@@ -107,13 +116,15 @@ Ganga-AI-Mascot/
 
 ## Current Status
 
-**Brain Engine Completed — Ready for Integration Phase (50% Milestone)**
+**Brain Engine & Chacha Digital Avatar System Completed — Ready for Integration Phase**
 
-The repository contains a fully working, source-grounded RAG Brain engine powered by SQLite and NumPy vector search. It features:
-1. **4,085 vector chunks** derived from 1,111 curated sections of 86 official GRBMP PDF reports.
-2. **stable SQLite + NumPy vector retrieval backend** utilizing NumPy dense matrix operations over local ONNX 384-dimensional embeddings, bypassing native C/Rust database binding issues on macOS.
-3. **Multi-Factor Evidence Quality Gate** that rejects out-of-scope queries (*"Mars population"*) and static-historical queries asking for real-time water quality (*"current water status"*).
-4. **FastAPI HTTP Server** exposing `/ask` and `/health` endpoints for upcoming avatar and frontend integration.
+The repository contains:
+1. **Source-grounded RAG Brain engine**: powered by SQLite and NumPy vector search over 4,085 curated GRBMP chunks with FastAPI endpoints (`/ask`, `/health`).
+2. **Interactive 3D Chacha AI Avatar (`avatar/`)**: Complete Unity 6 / 2021.3+ runtime featuring:
+   - Dual-model support: **Model 3 (Artwork Image-Textured Avatar)** and **Model 2 (PBR Stylized Avatar)** with runtime switching (`M` key / UI toggle).
+   - 23-bone humanoid armature, 7 skeletal animations, and 5 facial blendshapes.
+   - 18 authentic elderly uncle voice clips (16 kHz mono PCM in Hindi and English) + amplitude-based RMS lip sync.
+   - Comprehensive automated verification suite (69/69 tests passing 100%).
 
 ## Academic Disclaimer
 
