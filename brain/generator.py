@@ -38,6 +38,16 @@ def citations_from_hits(hits: list[dict]) -> list[dict]:
     return citations
 
 
+def clean_hit_text(text: str) -> str:
+    """Clean raw hit text by stripping OCR artifacts, report codes, page markers, and running headers."""
+    text = re.sub(r"\[Page \d+\]", "", text)
+    text = re.sub(r"Report\s*Code\s*:\s*[^\n]+", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\b\d{3}_GBP_IIT_[^\n]+", "", text)
+    text = re.sub(r"\b(?:\d+\s*)?\|\s*P\s*a\s*g\s*e\b", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"GRBMP\s*[\u2013\u2014-]\s*[^\n.]+", "", text)
+    return text
+
+
 class ExtractiveGenerator(Generator):
     """Grounded local generator that summarizes by extracting supported sentences."""
 
@@ -53,11 +63,12 @@ class ExtractiveGenerator(Generator):
         for hit in hits:
             text = hit["text"]
             hit_contributed = False
-            # Clean text: strip raw table/OCR junk line markers
-            clean_text = re.sub(r"\[Page \d+\]", "", text)
+            clean_text = clean_hit_text(text)
             
             for sentence in re.split(r"(?<=[.!?])\s+", clean_text):
                 clean = sentence.strip()
+                clean = re.sub(r"^\s*\d+(\.\d+)*\s+", "", clean)
+                clean = re.sub(r"\s+", " ", clean).strip()
                 if len(clean) < 35 or clean in seen_sentences:
                     continue
                 
@@ -81,8 +92,8 @@ class ExtractiveGenerator(Generator):
         if not sentences:
             # Fallback to top hit text if valid
             if hits:
-                top_text = re.sub(r"\[Page \d+\]", "", hits[0]["text"]).strip()
-                first_few = [s.strip() for s in re.split(r"(?<=[.!?])\s+", top_text) if len(s.strip()) >= 35][:2]
+                top_text = clean_hit_text(hits[0]["text"]).strip()
+                first_few = [re.sub(r"^\s*\d+(\.\d+)*\s+", "", s.strip()).strip() for s in re.split(r"(?<=[.!?])\s+", top_text) if len(s.strip()) >= 35][:2]
                 if first_few:
                     sentences = first_few
                     contributing_hits = [hits[0]]
@@ -102,6 +113,7 @@ class ExtractiveGenerator(Generator):
             "citations": citations_from_hits(contributing_hits),
             "mode": "grounded",
         }
+
 
 
 class OpenAIChatGenerator(Generator):
