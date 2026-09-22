@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ganga AI Mascot — Chacha Interactive Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">🌊</div>
+        <div>
+          <h1>Ganga AI Mascot</h1>
+          <p class="subtitle">Chacha Mascot ↔ Grounded RAG Brain ↔ Voice Integration</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <div class="lang-selector">
+          <button id="langHi" class="lang-btn active" data-lang="hi">हिंदी (Hindi)</button>
+          <button id="langEn" class="lang-btn" data-lang="en">English</button>
+        </div>
+        <div id="statusBadge" class="status-badge state-idle">
+          <span class="status-dot"></span>
+          <span id="statusText">IDLE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Grid Layout -->
+    <main class="main-grid">
+      <!-- Mascot Stage Section -->
+      <section class="mascot-stage-card">
+        <div class="stage-header">
+          <div class="character-tag">CHACHA MASCOT</div>
+          <div class="indicators">
+            <span id="emotionBadge" class="tag emotion-tag">Emotion: Neutral</span>
+            <span id="gestureBadge" class="tag gesture-tag">Gesture: Idle</span>
+            <span id="modeBadge" class="tag mode-tag mode-grounded">Mode: Grounded</span>
+          </div>
+        </div>
+
+        <div class="stage-canvas-wrapper">
+          <svg id="mascotSvg" viewBox="0 0 400 450" class="mascot-svg">
+            <!-- Background Halo -->
+            <circle cx="200" cy="220" r="160" fill="url(#haloGlow)" opacity="0.6"/>
+            
+            <defs>
+              <radialGradient id="haloGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="rgba(14, 165, 233, 0.25)" />
+                <stop offset="100%" stop-color="rgba(15, 23, 42, 0)" />
+              </radialGradient>
+              <linearGradient id="turbanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ea580c" />
+                <stop offset="100%" stop-color="#c2410c" />
+              </linearGradient>
+              <linearGradient id="vestGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#0284c7" />
+                <stop offset="100%" stop-color="#0369a1" />
+              </linearGradient>
+            </defs>
+
+            <!-- Body / Vest -->
+            <g id="bodyGroup">
+              <!-- Torso -->
+              <path d="M 120 330 C 120 280, 280 280, 280 330 L 300 450 L 100 450 Z" fill="url(#vestGrad)" />
+              <!-- Kurta Collar -->
+              <path d="M 175 285 L 200 320 L 225 285 Z" fill="#f8fafc" />
+              <!-- Jacket Lapels -->
+              <path d="M 150 290 L 190 390 L 130 450 Z" fill="#0369a1" opacity="0.8" />
+              <path d="M 250 290 L 210 390 L 270 450 Z" fill="#0369a1" opacity="0.8" />
+            </g>
+
+            <!-- Left Arm (Gestures) -->
+            <g id="leftArmGroup" class="arm-group">
+              <path id="leftArmPath" d="M 120 310 C 90 350, 70 380, 70 420" stroke="#0284c7" stroke-width="24" stroke-linecap="round" fill="none"/>
+              <circle id="leftHand" cx="70" cy="420" r="14" fill="#fed7aa" />
+            </g>
+
+            <!-- Right Arm (Gestures) -->
+            <g id="rightArmGroup" class="arm-group">
+              <path id="rightArmPath" d="M 280 310 C 310 350, 330 380, 330 420" stroke="#0284c7" stroke-width="24" stroke-linecap="round" fill="none"/>
+              <circle id="rightHand" cx="330" cy="420" r="14" fill="#fed7aa" />
+            </g>
+
+            <!-- Head Group -->
+            <g id="headGroup" transform="translate(0, 0)">
+              <!-- Neck -->
+              <rect x="180" y="260" width="40" height="35" fill="#fdba74" rx="6" />
+
+              <!-- Face Oval -->
+              <ellipse cx="200" cy="210" rx="62" ry="70" fill="#fed7aa" />
+              
+              <!-- Ears -->
+              <circle cx="137" cy="210" r="13" fill="#fed7aa" />
+              <circle cx="263" cy="210" r="13" fill="#fed7aa" />
+
+              <!-- Red Turban (Chacha Chaudhary Signature) -->
+              <g id="turbanGroup">
+                <path d="M 130 190 C 130 110, 270 110, 270 190 C 285 150, 260 90, 200 90 C 140 90, 115 150, 130 190 Z" fill="url(#turbanGrad)" />
+                <path d="M 135 175 C 160 145, 240 145, 265 175 C 275 160, 240 130, 200 130 C 160 130, 125 160, 135 175 Z" fill="#ea580c" />
+                <!-- Turban Jewel / Emblem -->
+                <circle cx="200" cy="140" r="7" fill="#fbbf24" />
+              </g>
+
+              <!-- Eyebrows -->
+              <path id="leftBrow" d="M 155 180 Q 170 172 185 180" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+              <path id="rightBrow" d="M 215 180 Q 230 172 245 180" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+
+              <!-- Eyes -->
+              <g id="eyesGroup">
+                <!-- Left Eye -->
+                <ellipse cx="170" cy="195" rx="9" ry="9" fill="#ffffff" />
+                <circle id="leftPupil" cx="170" cy="195" r="4.5" fill="#0f172a" />
+
+                <!-- Right Eye -->
+                <ellipse cx="230" cy="195" rx="9" ry="9" fill="#ffffff" />
+                <circle id="rightPupil" cx="230" cy="195" r="4.5" fill="#0f172a" />
+              </g>
+
+              <!-- Nose -->
+              <path d="M 200 195 L 195 218 L 205 218 Z" fill="#fdba74" />
+
+              <!-- Chacha Mustache (Signature Feature) -->
+              <path d="M 145 232 C 175 220, 195 235, 200 238 C 205 235, 225 220, 255 232 C 265 240, 240 252, 200 242 C 160 252, 135 240, 145 232 Z" fill="#1e293b" />
+
+              <!-- Lip-Sync Mouth Aperture -->
+              <path id="mouthPath" d="M 180 252 Q 200 254 220 252 Q 200 252 180 252 Z" fill="#991b1b" stroke="#7f1d1d" stroke-width="1.5" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- Audio Output Visualizer -->
+        <div class="audio-visualizer-bar">
+          <div class="viz-label">RMS Audio Lip-Sync Signal</div>
+          <div class="viz-track">
+            <div id="vizFill" class="viz-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Q&A and Citations Panel -->
+      <section class="interaction-card">
+        <!-- Answer Display -->
+        <div class="answer-display-box">
+          <div class="box-header">
+            <h3>Response & Source Provenance</h3>
+            <span id="responseLangBadge" class="lang-tag">Lang: HI</span>
+          </div>
+
+          <div id="questionPromptView" class="question-prompt-view" style="display: none;">
+            <strong>Q:</strong> <span id="userQuestionText"></span>
+          </div>
+
+          <div id="answerText" class="answer-text">
+            Namaste! I am Chacha, your river conservation mascot. Ask me anything about the Ganga River, pollution sources, water quality, or Namami Gange programs.
+          </div>
+
+          <!-- Thinking / Loading Wave -->
+          <div id="thinkingWave" class="thinking-wave" style="display: none;">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <span>Consulting official GRBMP knowledge base...</span>
+          </div>
+
+          <!-- Citations Panel -->
+          <div class="citations-section">
+            <h4>Verified GRBMP Citations (<span id="citationCount">0</span>)</h4>
+            <div id="citationsList" class="citations-list">
+              <div class="empty-citations">No citations loaded yet. Ask a question to view GRBMP provenance.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Input Controls -->
+        <div class="input-controls-box">
+          <form id="askForm" class="ask-form">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="questionInput"
+                class="question-input"
+                placeholder="Type your question about Ganga, GRBMP, or pollution..."
+                autocomplete="off"
+              />
+              <button type="button" id="micBtn" class="mic-btn" title="Click to speak (Voice STT)">
+                🎙️
+              </button>
+            </div>
+            <button type="submit" id="submitBtn" class="submit-btn">
+              <span>Ask Brain</span>
+              <span class="btn-arrow">→</span>
+            </button>
+          </form>
+          <div id="voiceStatusMsg" class="voice-status-msg"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Namami Gange Initiative • CSE Mini-Project PRJ_316 • Source-Grounded RAG Architecture</p>
+    </footer>
+  </div>
+
+  <script src="mascot.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
