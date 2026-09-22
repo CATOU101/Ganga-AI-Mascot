@@ -61,15 +61,11 @@ def integration_ask(req: BrainRequest):
         raise HTTPException(status_code=400, detail="Question string must not be empty.")
 
     # Process question through conversation state machine
-    pres = controller.process_text_question(req.question, language=req.language)
+    pres = controller.process_text_question(req.question, language=req.language, top_k=req.top_k)
 
     # Synthesize optional TTS audio & compute lip-sync frames
     tts_result = tts_adapter.synthesize_speech(pres.answer, language=req.language)
-    final_pres = presenter.create_presentation(
-        brain_response=brain_client.ask(req.question, language=req.language, top_k=req.top_k),
-        conversation_state=pres.state,
-        tts_result=tts_result
-    )
+    final_pres = presenter.attach_audio_and_lipsync(pres, tts_result=tts_result)
     final_pres.question = req.question
 
     controller.finish_speaking(language=req.language)

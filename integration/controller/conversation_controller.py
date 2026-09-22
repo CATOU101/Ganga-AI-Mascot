@@ -57,7 +57,7 @@ class ConversationController:
             except Exception as e:
                 logger.error(f"[Integration] Error in state change listener: {e}")
 
-    def process_text_question(self, question: str, language: str = "hi") -> AvatarPresentation:
+    def process_text_question(self, question: str, language: str = "hi", top_k: int | None = None) -> AvatarPresentation:
         """Process a text question through the state machine synchronously / thread-safely."""
         if self.is_busy:
             logger.warning("[Integration] Conversation controller is busy. Ignoring duplicate request.")
@@ -97,7 +97,7 @@ class ConversationController:
 
         # Step 3: Query Brain API
         try:
-            brain_resp = self.brain_client.ask(question, language=language)
+            brain_resp = self.brain_client.ask(question, language=language, top_k=top_k)
         except Exception as e:
             logger.error(f"[Integration] Brain query failed: {e}")
             error_pres = AvatarPresentation(

@@ -1,0 +1,87 @@
+{
+  "objects": [
+    {
+      "name": "Light",
+      "type": "LIGHT",
+      "parent": null,
+      "dimensions": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "location": [
+        4.076245307922363,
+        1.0054539442062378,
+        5.903861999511719
+      ],
+      "modifiers": [],
+      "vertex_group_count": 0
+    },
+    {
+      "name": "model",
+      "type": "MESH",
+      "parent": null,
+      "dimensions": [
+        0.8955802321434021,
+        0.498060017824173,
+        1.900202989578247
+      ],
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "modifiers": [],
+      "vertex_group_count": 0,
+      "materials": [
+        "model"
+      ]
+    },
+    {
+      "name": "Chacha_Mixamo",
+      "type": "MESH",
+      "parent": null,
+      "dimensions": [
+        0.8955802321434021,
+        0.498060017824173,
+        1.900202989578247
+      ],
+      "location": [
+        0.00486590713262558,
+        6.537775876225282e-10,
+        -0.00486590713262558
+      ],
+      "modifiers": [],
+      "vertex_group_count": 0,
+      "materials": [
+        "model"
+      ]
+    }
+  ],
+  "armatures": [],
+  "materials": [
+    {
+      "name": "Dots Stroke",
+      "use_nodes": false
+    },
+    {
+      "name": "Material",
+      "use_nodes": true
+    },
+    {
+      "name": "model",
+      "use_nodes": true
+    }
+  ],
+  "images": [
+    {
+      "name": "Render Result",
+      "filepath": ""
+    },
+    {
+      "name": "Viewer Node",
+      "filepath": ""
+    }
+  ],
+  "actions": []
+}

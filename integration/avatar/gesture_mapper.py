@@ -15,18 +15,30 @@ SUPPORTED_GESTURES = {
 }
 
 
-def map_gesture(raw_gesture: str | None, mode: str | None = None) -> GestureType:
+def map_gesture(raw_gesture: str | GestureType | None, mode: str | None = None) -> GestureType:
     """Map arbitrary gesture string or response mode to supported GestureType with idle fallback."""
-    if not raw_gesture:
-        if mode == "grounded":
-            return GestureType.EXPLAINING
-        elif mode == "insufficient-evidence":
-            return GestureType.THINKING
-        return GestureType.IDLE
+    if isinstance(raw_gesture, GestureType):
+        val = raw_gesture.value
+    elif hasattr(raw_gesture, "value"):
+        val = str(getattr(raw_gesture, "value"))
+    else:
+        val = str(raw_gesture) if raw_gesture is not None else ""
 
-    clean_gesture = str(raw_gesture).strip().lower()
+    clean_gesture = val.strip().lower()
     if clean_gesture in SUPPORTED_GESTURES:
-        return SUPPORTED_GESTURES[clean_gesture]
+        mapped = SUPPORTED_GESTURES[clean_gesture]
+        if mapped == GestureType.IDLE:
+            if mode == "grounded":
+                return GestureType.EXPLAINING
+            elif mode in ("insufficient-evidence", "current-info-fallback"):
+                return GestureType.THINKING
+        return mapped
 
-    logger.warning(f"[Integration Gesture] Unknown gesture '{raw_gesture}'. Falling back to 'idle'.")
+    if mode == "grounded":
+        return GestureType.EXPLAINING
+    elif mode in ("insufficient-evidence", "current-info-fallback"):
+        return GestureType.THINKING
+
+    if raw_gesture:
+        logger.warning(f"[Integration Gesture] Unknown gesture '{raw_gesture}'. Falling back to 'idle'.")
     return GestureType.IDLE

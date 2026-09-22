@@ -44,3 +44,25 @@ class MascotPresenter:
             audio_data_base64=audio_b64,
             rms_lip_sync=rms_lip_sync,
         )
+
+    def attach_audio_and_lipsync(
+        self,
+        presentation: AvatarPresentation,
+        tts_result: TTSAudioResult | None = None,
+    ) -> AvatarPresentation:
+        """Attach audio payload and lip-sync analysis to existing AvatarPresentation."""
+        emotion = map_emotion(presentation.emotion, presentation.mode)
+        gesture = map_gesture(presentation.gesture, presentation.mode)
+
+        rms_lip_sync: list[float] = []
+        audio_b64: str | None = None
+
+        if tts_result:
+            audio_b64 = tts_result.audio_base64
+            rms_lip_sync = self.lipsync_analyzer.compute_rms_frames(tts_result.pcm_samples)
+
+        presentation.emotion = emotion
+        presentation.gesture = gesture
+        presentation.audio_data_base64 = audio_b64
+        presentation.rms_lip_sync = rms_lip_sync
+        return presentation

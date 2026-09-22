@@ -1,0 +1,49 @@
+fileFormatVersion: 2
+guid: 523621068c724dd3a3a9889c1a592281
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimation: 1
+    humanDescription:
+      serializedVersion: 3
+      human: []
+      skeleton: []
+      armTwist: 0.5
+      foreArmTwist: 0.5
+      upperLegTwist: 0.5
+      legTwist: 0.5
+      armStretch: 0.05
+      legStretch: 0.05
+      feetSpacing: 0
+      globalScale: 1
+      rootMotionBoneName: 
+      hasTranslationDoF: 0
+      hasExtraRoot: 0
+      skeletonHasParents: 1
+    lastHumanDescriptionAvatarSource: {instanceID: 0}
+    autoGenerateAvatarMappingIfD衝突: 1
+    animationType: 2
+    humanoidOversampling: 1
+    avatarSetup: 1
+    additionalBone: 0
+    userData: 
+    assetBundleName: 
+    assetBundleVariant: 

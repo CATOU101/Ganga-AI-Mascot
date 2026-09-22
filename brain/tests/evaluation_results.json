@@ -1,0 +1,373 @@
+[
+  {
+    "test_id": "A_factual",
+    "description": "Supported factual KB question",
+    "question": "What is Aviral Dhara?",
+    "expected_mode": "grounded",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "From the retrieved historical GRBMP material: Local authorities; 4) \u201cAviral Dhara\u201d (in a river or stream) means continu ity of flow in both time and space, including connectivity of flow throughout the river; 5) Basin includes land, water, vegetation and other na tural resources on a catchment basis; 6) \u201cBasin\u201d means the entire catchment (of a water body or water course) including the soil, water, vegetation and other natural resources in the area; 7) \u201cCatchment\u201d (or \u201cCatchment Area\u201d, or \u201cWatershed\u201d, o r \u201cDrainage Basin\u201d) is the entire land area whose runoff from rain, snow or ic e drains into a water body or a water course (before the water course joins anoth er river or discharges into a water body); 8) Class I town means a town whose population is greater than 100,000; rectify or compensate for deleterious human activities in the basin in order to maintain \u201cAviral Dhara\u201d in the river system. Status of Aviral Dhara in the Ganga River Network For a given geological setting and climatic pattern, alluvial rivers \u2013 as characterized by their morphologies, drainage network and fluvial patterns \u2013 achieve stability through long -term physical balance between various dynamic parameters such a s basin runoff and erosion rates, river water and sediment flow volumes , and influent/ effluent seepage rates. \u201cAviral Dhara\u201d is a consequence of this long-term stability of rivers.",
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "110-110",
+          "section": "CHAPTER I",
+          "knowledge_type": "STATIC"
+        },
+        {
+          "source": "8_Mission 1_Aviral Dhara",
+          "file_name": "8_Mission 1_Aviral Dhara.pdf",
+          "page": "20-26",
+          "section": "4. Status of Aviral Dhara in the Ganga River Network",
+          "knowledge_type": "HISTORICAL"
+        }
+      ],
+      "mode": "grounded",
+      "retrieved": [
+        {
+          "chunk_id": "prototype-section-00523::chunk-002",
+          "distance": 1.043423056602478,
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "page": "110-110",
+          "section": "CHAPTER I"
+        },
+        {
+          "chunk_id": "prototype-section-01718::chunk-001",
+          "distance": 1.0574337244033813,
+          "source": "8_Mission 1_Aviral Dhara",
+          "page": "20-26",
+          "section": "4. Status of Aviral Dhara in the Ganga River Network"
+        },
+        {
+          "chunk_id": "prototype-section-01715::chunk-002",
+          "distance": 1.087659478187561,
+          "source": "8_Mission 1_Aviral Dhara",
+          "page": "9-16",
+          "section": "1. BBM : Building Block Method."
+        },
+        {
+          "chunk_id": "prototype-section-00490::chunk-001",
+          "distance": 1.0899637937545776,
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "page": "33-33",
+          "section": "4. GRBMP Missions"
+        },
+        {
+          "chunk_id": "prototype-section-00575::chunk-002",
+          "distance": 1.1006966829299927,
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "page": "27-31",
+          "section": "4. Mission Summaries"
+        }
+      ]
+    }
+  },
+  {
+    "test_id": "B_urban_pollution",
+    "description": "Supported urban pollution KB question",
+    "question": "What does the GRBMP say about pollution load from urban areas?",
+    "expected_mode": "grounded",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "From the retrieved historical GRBMP material: Fig 1a: Contribution of Pollution Load (BOD, COD from Class I, II, III Cities) 1.0 10.0 100.0 1000.0 Muzzafarpur Dharbhanga Chhapra Siwan Bettiah Kg / D Class I cities BOD COD 1 10 100 1000 10000 100000 Dumra Sitamarhi town Gopalganj Kg / D Class II cities BOD COD 0 2000 4000 6000 8000 10000 12000 14000 Motipur Kanti Birgania Belsand Jonakpur road (Purpi) Kg / D Class III cities BOD COD Fig 1b: Contribution of Pollution Load (TKN from Class I, II, III Cities) 0.0 500.0 1000.0 1500.0 2000.0 2500.0 3000.0 3500.0 Muzzafarpur Dharbhanga Chhapra Siwan Bettiah Kg / D Class I cities TKN 0 100 200 300 400 500 600 700 800 900 Dumra Sitamarhi town Gopalganj Kg / D Class II cities 0 50 100 150 200 250 300 350 400 450 Motipur Kanti Birgania Belsand Jonakpur road (Purpi) Kg / D Class III cities TKN 4 Appendix-2 Compilation of Data Sheets of Water Balance & Pollution Load (Domestic) of Major Class II Cities/Towns in Uttar Pradesh Water Balance & Pollution Load (Domestic) Data Sheet",
+      "citations": [
+        {
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Gandak and Kosi Sub-Basin",
+          "file_name": "53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf",
+          "page": "6-6",
+          "section": "BOD COD",
+          "knowledge_type": "HISTORICAL"
+        },
+        {
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Gandak and Kosi Sub-Basin",
+          "file_name": "53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf",
+          "page": "7-8",
+          "section": "TKN",
+          "knowledge_type": "HISTORICAL"
+        },
+        {
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Uttar Pradesh",
+          "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+          "page": "140-140",
+          "section": "Unidentified extracted structure",
+          "knowledge_type": "HISTORICAL"
+        },
+        {
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Uttar Pradesh",
+          "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+          "page": "59-59",
+          "section": "S. No. Items Value",
+          "knowledge_type": "METHODOLOGICAL"
+        }
+      ],
+      "mode": "grounded",
+      "retrieved": [
+        {
+          "chunk_id": "prototype-section-01408::chunk-001",
+          "distance": 0.7273825407028198,
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Gandak and Kosi Sub-Basin",
+          "page": "6-6",
+          "section": "BOD COD"
+        },
+        {
+          "chunk_id": "prototype-section-01409::chunk-001",
+          "distance": 0.7771528959274292,
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Gandak and Kosi Sub-Basin",
+          "page": "7-8",
+          "section": "TKN"
+        },
+        {
+          "chunk_id": "prototype-section-01395::chunk-001",
+          "distance": 0.8334659934043884,
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Uttar Pradesh",
+          "page": "140-140",
+          "section": "Unidentified extracted structure"
+        },
+        {
+          "chunk_id": "prototype-section-01338::chunk-001",
+          "distance": 0.8342976570129395,
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Uttar Pradesh",
+          "page": "59-59",
+          "section": "S. No. Items Value"
+        },
+        {
+          "chunk_id": "prototype-section-01340::chunk-001",
+          "distance": 0.8373870253562927,
+          "source": "Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin: Uttar Pradesh",
+          "page": "61-61",
+          "section": "S. No. Items Value"
+        }
+      ]
+    }
+  },
+  {
+    "test_id": "C_historical",
+    "description": "Historical context KB question",
+    "question": "According to the GRBMP material, what historical concerns are associated with sewage pollution?",
+    "expected_mode": "grounded",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "may appear to be low cost, less energy consuming, and simple, but may also pose serious concerns such as pollution of surface and ground waters. On the other hand sewerage system with provision of treating sewage up to tertiary level and using treated sewage for various beneficial uses may be considered very complex and unaffordable. Among point sources, urban and industri al wastewaters are the major source of pollution, needing immediate remediation. The relevant findings of the \u201cNirmal Dhara\u201d mission are presented in the following reports : (i) \u201cGuidelines for Implementation of Sewage Colle ction, Diversion, Pumping, Treatment, and Reuse (Sewage CDPTR) Infrastructure in Class I Towns\u201d [IIT-GRBMP Thematic Urban River Management Plan (URMP) for all Class I Towns in Ganga River Basin\u201d [ IITGRBMP Thematic Paper Industries in Ganga River Basin: Achieving Ze ro Liquid Discharge\u201d [ IIT-GRBMP Thematic Report: Reuse Projects Worldwide\u201d [ IIT-GRBMP Thematic Report: 1_Dec 2011 ].",
+      "citations": [
+        {
+          "source": "Assessment of Some Aspects of Provisioning Sewerage Systems in Urban Agglomeration of Ganga Basin",
+          "file_name": "33_036EQP.pdf",
+          "page": "16-16",
+          "section": "5. Results and Discussion",
+          "knowledge_type": "METHODOLOGICAL"
+        },
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "52-53",
+          "section": "4.2.1. ZLD and Reusable Water from Domestic Wastewaters",
+          "knowledge_type": "METHODOLOGICAL"
+        }
+      ],
+      "mode": "grounded",
+      "retrieved": [
+        {
+          "chunk_id": "prototype-section-00816::chunk-001",
+          "distance": 0.9309991002082825,
+          "source": "Assessment of Some Aspects of Provisioning Sewerage Systems in Urban Agglomeration of Ganga Basin",
+          "page": "16-16",
+          "section": "5. Results and Discussion"
+        },
+        {
+          "chunk_id": "prototype-section-00499::chunk-002",
+          "distance": 0.8378271460533142,
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "page": "52-53",
+          "section": "4.2.1. ZLD and Reusable Water from Domestic Wastewaters"
+        },
+        {
+          "chunk_id": "prototype-section-00218::chunk-001",
+          "distance": 0.8488246202468872,
+          "source": "Review of Wastewater Reuse Projects Worldwide: Collation of Selected International Case Studies and Experiences",
+          "page": "7-7",
+          "section": "1. Introduction"
+        },
+        {
+          "chunk_id": "prototype-section-01254::chunk-001",
+          "distance": 0.8888940811157227,
+          "source": "SWOT Analysis of Ganga Action Plan",
+          "page": "23-23",
+          "section": "6.2. Adaption of River Basin Approach"
+        },
+        {
+          "chunk_id": "prototype-section-00157::chunk-042",
+          "distance": 0.9006673097610474,
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "page": "132-180",
+          "section": "3) based on differences in physical, chemical, and biotic a ttributes. The biotic"
+        }
+      ]
+    }
+  },
+  {
+    "test_id": "D_unsupported_mars",
+    "description": "Unsupported out-of-domain question (MUST trigger safe fallback)",
+    "question": "What is the population of Mars according to the GRBMP?",
+    "expected_mode": "insufficient-evidence",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "I couldn't find sufficient supporting information in the current verified knowledge base to answer that reliably.",
+      "citations": [],
+      "mode": "insufficient-evidence"
+    }
+  },
+  {
+    "test_id": "E_current_info",
+    "description": "Real-time / current information question (MUST trigger current-info fallback)",
+    "question": "What is the current water quality of the Ganga today?",
+    "expected_mode": "current-info-fallback",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "The current prototype knowledge base is built from static/historical GRBMP material and does not provide verified current or real-time information for that question.",
+      "citations": [],
+      "mode": "current-info-fallback"
+    }
+  },
+  {
+    "test_id": "F_provenance_metadata",
+    "description": "Provenance check: verified valid source title and page range metadata",
+    "question": "What does the knowledge base say about environmental flows, and which source page supports it?",
+    "expected_mode": "grounded",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "Environmental Flows \u2013 The Concept and its Rationale Recognition of the escalating hydrological alterations of rivers on a global scale and resultant environmental degradation, has led to the establishment of the science of Environmental Flows (E-Flows) Assessment, whereby the quantity and quality of water required for ecosystem conservation and resources protection are determined. Several attempts have been made to define E-Flows in rivers. The 3 rd World Water Forum held at Kyoto in 2003 defined E-Flows as the provision of water within rivers and ground water systems to maintain downstream ecosystems and their benefits, where the river and underground system is subject to competitive uses and flow regulations. The E-Flows are thus considered as an amount of water that is kept flowing down a river in order to maintain the river in a desired environmental condition.",
+      "citations": [
+        {
+          "source": "State of the Rivers in the Ganga River Basin: Environmental Flows with Special Reference to Rivers in the Ganga River Basin",
+          "file_name": "16_022EFL.pdf",
+          "page": "8-8",
+          "section": "2. Environmental Flows \u2013 The Concept and its Rationale",
+          "knowledge_type": "METHODOLOGICAL"
+        }
+      ],
+      "mode": "grounded",
+      "retrieved": [
+        {
+          "chunk_id": "prototype-section-00331::chunk-001",
+          "distance": 0.9049775004386902,
+          "source": "State of the Rivers in the Ganga River Basin: Environmental Flows with Special Reference to Rivers in the Ganga River Basin",
+          "page": "8-8",
+          "section": "2. Environmental Flows \u2013 The Concept and its Rationale"
+        },
+        {
+          "chunk_id": "prototype-section-00148::chunk-003",
+          "distance": 0.9199966788291931,
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "page": "97-102",
+          "section": "6. GRBMP Documentation"
+        },
+        {
+          "chunk_id": "prototype-section-00307::chunk-001",
+          "distance": 0.9287917017936707,
+          "source": "Hydrological Flow Health Assessment of the River Ganga",
+          "page": "13-13",
+          "section": "1.3. Environmental Flows and Flow Health"
+        },
+        {
+          "chunk_id": "prototype-section-00574::chunk-001",
+          "distance": 0.9570989608764648,
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "page": "26-26",
+          "section": "3.5. Work Structure"
+        },
+        {
+          "chunk_id": "prototype-section-00495::chunk-001",
+          "distance": 0.9576494693756104,
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "page": "40-40",
+          "section": "4.1.4. Environmental Flows"
+        }
+      ]
+    }
+  },
+  {
+    "test_id": "G_citation_alignment",
+    "description": "Citation integrity check: no hallucinated citations",
+    "question": "What are the key functions of National Ganga River Basin Authority?",
+    "expected_mode": "grounded",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "Duties of Central and State Governments 1) It shall be the duty of the Central G overnment to constitute the National River Ganga Basin Management Commission to carry out the provisions of the Act. 4) In accordance with the directions of the Commission, the C entral and the State governments, as the case may be, shall take necessary measures towards prohibition and restriction of activities in any river of the National River Ganga Basin as well as conservation and development of the basin. Chapter VII National River Ganga Basin Management Commission Constitution, Power and Functions Duties, Powers and Functions of the Commission 1) The powers and function of the Commission shall relate to the following: a.",
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan Extended Summary",
+          "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+          "page": "38-38",
+          "section": "10) eco-friendly tourism, pilgrimage, recreational and sporting activities in all rivers",
+          "knowledge_type": "STATIC"
+        },
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "121-121",
+          "section": "18. Procedure for Transaction of Business",
+          "knowledge_type": "METHODOLOGICAL"
+        }
+      ],
+      "mode": "grounded",
+      "retrieved": [
+        {
+          "chunk_id": "prototype-section-00693::chunk-002",
+          "distance": 0.7449313402175903,
+          "source": "Ganga River Basin Management Plan Extended Summary",
+          "page": "38-38",
+          "section": "10) eco-friendly tourism, pilgrimage, recreational and sporting activities in all rivers"
+        },
+        {
+          "chunk_id": "prototype-section-00534::chunk-002",
+          "distance": 0.7543588876724243,
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "page": "121-121",
+          "section": "18. Procedure for Transaction of Business"
+        },
+        {
+          "chunk_id": "prototype-section-00697::chunk-002",
+          "distance": 0.7653167843818665,
+          "source": "Ganga River Basin Management Plan Extended Summary",
+          "page": "42-42",
+          "section": "2) All decisions shall be taken by majority;"
+        },
+        {
+          "chunk_id": "prototype-section-00529::chunk-001",
+          "distance": 0.7660524249076843,
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "page": "116-116",
+          "section": "CHAPTER V"
+        },
+        {
+          "chunk_id": "prototype-section-00530::chunk-002",
+          "distance": 0.7477741837501526,
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "page": "117-117",
+          "section": "6) higher efficiencies in institutional, commercial, i ndustrial, domestic, municipal"
+        }
+      ]
+    }
+  },
+  {
+    "test_id": "H_empty_query",
+    "description": "Empty query safety check",
+    "question": "",
+    "expected_mode": "insufficient-evidence",
+    "status": "PASS",
+    "notes": [],
+    "result": {
+      "answer": "I couldn't find sufficient supporting information in the current verified knowledge base to answer that reliably.",
+      "citations": [],
+      "mode": "insufficient-evidence"
+    }
+  }
+]
