@@ -17,8 +17,12 @@ app = FastAPI(
 
 
 class AskRequest(BaseModel):
-    question: str = Field(..., description="User question about River Ganga / GRBMP material", example="What are the major sources of pollution in the Ganga?")
+    question: str = Field("", description="User question about River Ganga / GRBMP material", example="What are the major sources of pollution in the Ganga?")
+    query: str | None = Field(None, description="Query alias for question")
     top_k: int | None = Field(None, description="Optional override for retriever top_k candidate count", example=5)
+
+    def get_question(self) -> str:
+        return (self.question or self.query or "").strip()
 
 
 class CitationItem(BaseModel):
@@ -42,10 +46,11 @@ def health():
 
 @app.post("/ask", response_model=AskResponse)
 def ask(req: AskRequest):
-    if not req.question or not req.question.strip():
+    q = req.get_question()
+    if not q:
         raise HTTPException(status_code=400, detail="Question string must not be empty.")
 
-    res = answer_question(req.question, top_k=req.top_k)
+    res = answer_question(q, top_k=req.top_k)
     return {
         "answer": res.get("answer", ""),
         "mode": res.get("mode", "insufficient-evidence"),

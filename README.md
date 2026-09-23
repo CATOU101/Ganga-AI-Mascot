@@ -56,9 +56,9 @@ FastAPI Brain API (POST /ask, GET /health)
 | **Grounded Answer Generator** | **Implemented** | Extractive local synthesis default / OpenAI LLM option |
 | **Brain REST API** | **Implemented** | FastAPI server (`POST /ask`, `GET /health`) |
 | **Evaluation Suite** | **Implemented** | Groundedness, retrieval, and failure handling evaluation harness |
-| **Frontend / Web UI** | *Not Implemented Yet* | Planned for subsequent integration phase |
-| **Digital Avatar Runtime** | *Not Implemented Yet* | Design phase (`avatar/` placeholder) |
-| **Voice / Speech (STT/TTS)** | *Not Implemented Yet* | Planned for future accessibility layer |
+| **Digital Avatar Runtime** | **Implemented** | 3D Chacha Chaudhary GLB (`avatar/Member2_Chacha/Chacha_Master.glb`), 57-bone rig, 35 morph targets, 9 Mixamo actions, procedural blinking |
+| **Voice / Speech (STT/TTS)** | **Implemented** | Offline Vosk Kaldi STT (en/hi), neural EdgeTTS (`en-IN-PrabhatNeural`, `hi-IN-MadhurNeural`), SAPI fallback, Rhubarb acoustic lip-sync |
+| **Frontend / Web UI** | **Implemented** | Three.js WebGL mascot interface with real WAV audio playback, frame-accurate viseme morphing, and voice input |
 | **Realtime Telemetry APIs** | *Not Implemented Yet* | Gracefully falls back to `current-info-fallback` |
 | **Physical Robot** | *Not Implemented Yet* | Future physical embodiment phase |
 

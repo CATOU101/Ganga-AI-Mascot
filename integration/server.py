@@ -6,7 +6,7 @@ import argparse
 import os
 import uvicorn
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi import FastAPI, HTTPException, File, UploadFile, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -45,6 +45,11 @@ app.add_middleware(
 )
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(content=b"", media_type="image/x-icon", status_code=204)
+
+
 @app.get("/api/integration/health")
 def integration_health():
     return {
@@ -57,24 +62,32 @@ def integration_health():
 
 @app.post("/api/integration/ask", response_model=AvatarPresentation)
 def integration_ask(req: BrainRequest):
-    if not req.question or not req.question.strip():
+    q_text = req.get_question()
+    if not q_text:
         raise HTTPException(status_code=400, detail="Question string must not be empty.")
 
     # Process question through conversation state machine
-    pres = controller.process_text_question(req.question, language=req.language, top_k=req.top_k)
+    pres = controller.process_text_question(q_text, language=req.language, top_k=req.top_k)
 
     # Synthesize optional TTS audio & compute lip-sync frames
     tts_result = tts_adapter.synthesize_speech(pres.answer, language=req.language)
     final_pres = presenter.attach_audio_and_lipsync(pres, tts_result=tts_result)
-    final_pres.question = req.question
+    final_pres.question = q_text
 
     controller.finish_speaking(language=req.language)
     return final_pres
 
 
 @app.post("/api/integration/stt", response_model=AvatarPresentation)
-async def integration_stt(file: UploadFile = File(...), language: str = "hi"):
-    audio_bytes = await file.read()
+async def integration_stt(
+    file: UploadFile = File(None),
+    audio: UploadFile = File(None),
+    language: str = "hi",
+):
+    upload_file = file or audio
+    if not upload_file:
+        raise HTTPException(status_code=400, detail="Audio file must be uploaded as 'file' or 'audio'.")
+    audio_bytes = await upload_file.read()
     transcription = stt_adapter.transcribe_audio(audio_bytes, language=language)
 
     if not transcription:

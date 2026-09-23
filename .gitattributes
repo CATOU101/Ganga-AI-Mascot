@@ -1,0 +1,2 @@
+avatar/Member2_Chacha/*.glb filter=lfs diff=lfs merge=lfs -text
+avatar/Member2_Chacha/*.blend filter=lfs diff=lfs merge=lfs -text
