@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chacha 3D Avatar — Standalone 3D View</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0b1329;
+      --panel-bg: rgba(15, 23, 42, 0.85);
+      --panel-border: rgba(255, 255, 255, 0.12);
+      --accent-cyan: #0284c7;
+      --accent-orange: #ea580c;
+      --accent-green: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.2) 0px, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(234, 88, 12, 0.15) 0px, transparent 60%);
+      color: var(--text-main);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Fullscreen 3D Viewport */
+    #viewport3D {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Top Overlay Navigation Header */
+    .top-header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .brand-pill {
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--panel-border);
+      padding: 10px 20px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+
+    .brand-pill h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(234, 88, 12, 0.2);
+      color: #fb923c;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(234, 88, 12, 0.4);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .btn-nav {
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--panel-border);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover {
+      background: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Floating Interactive 3D Control Panel */
+    .controls-panel {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: 90%;
+      max-width: 860px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--panel-border);
+      border-radius: 20px;
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .group-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover, .btn-action.active {
+      background: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+
+    /* Speech & Q&A Bar */
+    .ask-bar {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .input-3d {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--panel-border);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-family: inherit;
+    }
+
+    .input-3d:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border: none;
+      color: #fff;
+      padding: 0 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-send:hover {
+      background: linear-gradient(135deg, #0369a1, #075985);
+    }
+
+    /* Live Output Box */
+    .speech-bubble {
+      position: absolute;
+      top: 100px;
+      right: 40px;
+      z-index: 10;
+      max-width: 380px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: none;
+    }
+
+    .speech-text {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: #f1f5f9;
+    }
+
+    .speech-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Helper instruction overlay */
+    .hint-overlay {
+      position: absolute;
+      top: 90px;
+      left: 40px;
+      z-index: 5;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="top-header">
+    <div class="brand-pill">
+      <span>🌊</span>
+      <h1>Chacha 3D Model 2 Viewport</h1>
+      <span class="badge-tag">Model 2: Chacha_Rigged.fbx</span>
+    </div>
+
+    <div class="nav-links">
+      <button id="resetCamBtn" class="btn-nav">🎥 Reset Camera</button>
+      <a href="index.html" class="btn-nav">← Back to Full UI</a>
+    </div>
+  </header>
+
+  <div class="hint-overlay">
+    🖱️ Drag to rotate 3D character • Scroll to zoom • Right-click to pan
+  </div>
+
+  <!-- Live Speech Response Overlay -->
+  <div id="speechBubble" class="speech-bubble">
+    <div id="speechText" class="speech-text"></div>
+    <div class="speech-meta">
+      <span id="speechState">State: SPEAKING</span>
+      <span id="speechMode">Mode: grounded</span>
+    </div>
+  </div>
+
+  <!-- 3D Canvas Viewport -->
+  <canvas id="viewport3D"></canvas>
+
+  <!-- Interactive Control Deck -->
+  <div class="controls-panel">
+    <!-- Row 1: 3D Gestures & Camera Controls -->
+    <div class="control-row">
+      <div class="control-group">
+        <span class="group-label">3D Pose / Gesture:</span>
+        <button class="btn-action active" onclick="setGesture3D('idle')">Idle</button>
+        <button class="btn-action" onclick="setGesture3D('explaining')">Explaining</button>
+        <button class="btn-action" onclick="setGesture3D('thinking')">Thinking</button>
+        <button class="btn-action" onclick="setGesture3D('wave')">Wave</button>
+      </div>
+
+      <div class="control-group">
+        <span class="group-label">3D Expression:</span>
+        <button class="btn-action active" onclick="setEmotion3D('neutral')">Neutral</button>
+        <button class="btn-action" onclick="setEmotion3D('happy')">Happy</button>
+        <button class="btn-action" onclick="setEmotion3D('thinking')">Thinking</button>
+        <button class="btn-action" onclick="setEmotion3D('sad')">Sad</button>
+      </div>
+    </div>
+
+    <!-- Row 2: Camera Presets & Lip-Sync Aperture -->
+    <div class="control-row">
+      <div class="control-group">
+        <span class="group-label">Camera Angle:</span>
+        <button class="btn-action" onclick="setCameraPreset('full')">Full Body</button>
+        <button class="btn-action" onclick="setCameraPreset('face')">Close-Up Face</button>
+      </div>
+
+      <div class="control-group">
+        <span class="group-label">3D Lip-Sync Aperture:</span>
+        <input type="range" id="lipSyncSlider" min="0" max="1" step="0.02" value="0" style="width: 140px;" />
+      </div>
+    </div>
+
+    <!-- Row 3: Interactive Brain Q&A Prompt -->
+    <form id="askForm3D" class="ask-bar">
+      <input type="text" id="promptInput3D" class="input-3d" placeholder="Ask Chacha a question (e.g., What is Aviral Dhara?)..." autocomplete="off" />
+      <button type="submit" class="btn-send">Ask Brain 3D</button>
+    </form>
+  </div>
+
+  <script>
+    // 3D Engine Setup
+    let scene, camera, renderer, controls, clock;
+    let characterGroup, avatar3DMeshGroup, mouth3DMesh, browL3D, browR3D, armL3D, armR3D;
+    let fbxModel = null, mixer = null;
+
+    function init3D() {
+      const canvas = document.getElementById('viewport3D');
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      // 1. Renderer
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+
+      // 2. Scene & Camera
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+      camera.position.set(0, 1.35, 2.8);
+
+      // 3. OrbitControls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.target.set(0, 1.1, 0);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2 + 0.1;
+
+      // 4. Studio Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+      scene.add(ambientLight);
+
+      const keyLight = new THREE.DirectionalLight(0x38bdf8, 1.3);
+      keyLight.position.set(3, 5, 4);
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0xea580c, 0.7);
+      fillLight.position.set(-3, 3, 2);
+      scene.add(fillLight);
+
+      const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      rimLight.position.set(0, 4, -4);
+      scene.add(rimLight);
+
+      // 5. Character Group & Models
+      characterGroup = new THREE.Group();
+      scene.add(characterGroup);
+
+      buildProcedural3DMascot();
+      loadFBXModel();
+
+      // 6. Animation Loop
+      clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+        if (mixer) mixer.update(delta);
+        controls.update();
+
+        // Idle breathing motion
+        if (characterGroup) {
+          characterGroup.position.y = Math.sin(Date.now() / 900) * 0.015;
+          characterGroup.rotation.y = Math.sin(Date.now() / 1800) * 0.02;
+        }
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      });
+    }
+
+    function buildProcedural3DMascot() {
+      avatar3DMeshGroup = new THREE.Group();
+
+      // Head
+      const headGeo = new THREE.SphereGeometry(0.34, 32, 32);
+      const skinMat = new THREE.MeshStandardMaterial({ color: 0xfed7aa, roughness: 0.55 });
+      const head = new THREE.Mesh(headGeo, skinMat);
+      head.position.set(0, 1.25, 0);
+      avatar3DMeshGroup.add(head);
+
+      // Signature Red Turban
+      const turbanGeo = new THREE.SphereGeometry(0.38, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.55);
+      const turbanMat = new THREE.MeshStandardMaterial({ color: 0xea580c, roughness: 0.35 });
+      const turban = new THREE.Mesh(turbanGeo, turbanMat);
+      turban.position.set(0, 1.3, 0);
+      avatar3DMeshGroup.add(turban);
+
+      // White Moustache
+      const stacheGeo = new THREE.ConeGeometry(0.2, 0.09, 16);
+      const stacheMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
+      const stacheL = new THREE.Mesh(stacheGeo, stacheMat);
+      stacheL.rotation.z = -Math.PI / 2.4;
+      stacheL.position.set(-0.11, 1.14, 0.3);
+      const stacheR = new THREE.Mesh(stacheGeo, stacheMat);
+      stacheR.rotation.z = Math.PI / 2.4;
+      stacheR.position.set(0.11, 1.14, 0.3);
+      avatar3DMeshGroup.add(stacheL);
+      avatar3DMeshGroup.add(stacheR);
+
+      // Mouth Mesh
+      const mouthGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.03, 16);
+      const mouthMat = new THREE.MeshStandardMaterial({ color: 0x991b1b });
+      mouth3DMesh = new THREE.Mesh(mouthGeo, mouthMat);
+      mouth3DMesh.rotation.x = Math.PI / 2;
+      mouth3DMesh.position.set(0, 1.05, 0.31);
+      mouth3DMesh.scale.set(1, 0.2, 1);
+      avatar3DMeshGroup.add(mouth3DMesh);
+
+      // Eyebrows
+      const browGeo = new THREE.BoxGeometry(0.13, 0.02, 0.02);
+      const browMat = new THREE.MeshStandardMaterial({ color: 0x0f172a });
+      browL3D = new THREE.Mesh(browGeo, browMat);
+      browL3D.position.set(-0.13, 1.33, 0.32);
+      browR3D = new THREE.Mesh(browGeo, browMat);
+      browR3D.position.set(0.13, 1.33, 0.32);
+      avatar3DMeshGroup.add(browL3D);
+      avatar3DMeshGroup.add(browR3D);
+
+      // Torso Vest
+      const vestGeo = new THREE.CylinderGeometry(0.38, 0.42, 0.8, 32);
+      const vestMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.5 });
+      const vest = new THREE.Mesh(vestGeo, vestMat);
+      vest.position.set(0, 0.55, 0);
+      avatar3DMeshGroup.add(vest);
+
+      // Arms
+      const armGeo = new THREE.CylinderGeometry(0.06, 0.05, 0.5, 16);
+      const armMat = new THREE.MeshStandardMaterial({ color: 0x0369a1 });
+      armL3D = new THREE.Mesh(armGeo, armMat);
+      armL3D.position.set(-0.46, 0.5, 0);
+      armL3D.rotation.z = 0.3;
+      armR3D = new THREE.Mesh(armGeo, armMat);
+      armR3D.position.set(0.46, 0.5, 0);
+      armR3D.rotation.z = -0.3;
+      avatar3DMeshGroup.add(armL3D);
+      avatar3DMeshGroup.add(armR3D);
+
+      characterGroup.add(avatar3DMeshGroup);
+    }
+
+    function loadFBXModel() {
+      if (typeof THREE.FBXLoader === 'undefined') return;
+
+      const fbxPath = '/07_Unity/Assets/ChachaAvatar/Models/Chacha_Rigged.fbx';
+      const loader = new THREE.FBXLoader();
+      loader.load(
+        fbxPath,
+        (fbx) => {
+          fbx.scale.setScalar(0.012);
+          fbx.position.set(0, -0.2, 0);
+
+          fbx.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+
+          if (avatar3DMeshGroup) avatar3DMeshGroup.visible = false;
+          characterGroup.add(fbx);
+          fbxModel = fbx;
+
+          if (fbx.animations && fbx.animations.length > 0) {
+            mixer = new THREE.AnimationMixer(fbx);
+            const action = mixer.clipAction(fbx.animations[0]);
+            action.play();
+          }
+          console.log('[3D Viewport] Successfully loaded Model 2 FBX (Chacha_Rigged.fbx)');
+        },
+        undefined,
+        (err) => {
+          console.info('[3D Viewport] Rendering 3D WebGL Chacha model (FBX active).');
+        }
+      );
+    }
+
+    // 3D Controls Functions
+    function setGesture3D(gesture) {
+      if (!armL3D || !armR3D) return;
+      document.querySelectorAll('.control-row:nth-child(1) .control-group:nth-child(1) .btn-action').forEach(b => b.classList.remove('active'));
+      event?.target?.classList?.add('active');
+
+      if (gesture === 'explaining') {
+        armL3D.rotation.z = 0.9; armR3D.rotation.z = -0.9; armL3D.rotation.x = 0.4; armR3D.rotation.x = 0.4;
+      } else if (gesture === 'thinking') {
+        armL3D.rotation.z = 0.3; armR3D.rotation.z = -1.4; armR3D.rotation.x = 0.8;
+      } else if (gesture === 'wave') {
+        armL3D.rotation.z = 0.3; armR3D.rotation.z = -2.1; armR3D.rotation.x = 0.2;
+      } else {
+        armL3D.rotation.z = 0.3; armR3D.rotation.z = -0.3; armL3D.rotation.x = 0; armR3D.rotation.x = 0;
+      }
+    }
+
+    function setEmotion3D(emotion) {
+      if (!browL3D || !browR3D) return;
+      document.querySelectorAll('.control-row:nth-child(1) .control-group:nth-child(2) .btn-action').forEach(b => b.classList.remove('active'));
+      event?.target?.classList?.add('active');
+
+      if (emotion === 'happy') {
+        browL3D.rotation.z = -0.2; browR3D.rotation.z = 0.2; browL3D.position.y = 1.35; browR3D.position.y = 1.35;
+      } else if (emotion === 'thinking') {
+        browL3D.rotation.z = 0.25; browR3D.rotation.z = -0.15; browL3D.position.y = 1.36; browR3D.position.y = 1.32;
+      } else if (emotion === 'sad') {
+        browL3D.rotation.z = 0.2; browR3D.rotation.z = -0.2; browL3D.position.y = 1.31; browR3D.position.y = 1.31;
+      } else {
+        browL3D.rotation.z = 0; browR3D.rotation.z = 0; browL3D.position.y = 1.33; browR3D.position.y = 1.33;
+      }
+    }
+
+    function setCameraPreset(preset) {
+      if (preset === 'face') {
+        camera.position.set(0, 1.25, 1.2);
+        controls.target.set(0, 1.2, 0);
+      } else {
+        camera.position.set(0, 1.35, 2.8);
+        controls.target.set(0, 1.1, 0);
+      }
+    }
+
+    // Lip sync slider input listener
+    document.getElementById('lipSyncSlider')?.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      if (mouth3DMesh) {
+        mouth3DMesh.scale.set(1 + val * 0.4, 0.2 + val * 0.9, 1);
+      }
+    });
+
+    document.getElementById('resetCamBtn')?.addEventListener('click', () => {
+      setCameraPreset('full');
+    });
+
+    // Handle Form Q&A Submit to Real Brain API
+    document.getElementById('askForm3D')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('promptInput3D');
+      const question = input.value.trim();
+      if (!question) return;
+
+      const bubble = document.getElementById('speechBubble');
+      const textEl = document.getElementById('speechText');
+      const modeEl = document.getElementById('speechMode');
+
+      bubble.style.display = 'block';
+      textEl.textContent = 'Thinking... Querying Brain RAG engine...';
+      setEmotion3D('thinking');
+      setGesture3D('thinking');
+
+      try {
+        const resp = await fetch('/api/integration/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: question, language: 'en' })
+        });
+        const data = await resp.json();
+
+        textEl.textContent = data.answer || 'No response returned.';
+        modeEl.textContent = `Mode: ${data.mode || 'grounded'}`;
+
+        setEmotion3D(data.emotion || 'neutral');
+        setGesture3D(data.gesture || 'explaining');
+
+        // Simulate mouth aperture lip sync motion
+        let ticks = 0;
+        const lipInterval = setInterval(() => {
+          ticks++;
+          const val = Math.sin(ticks / 2) * 0.4 + 0.5;
+          if (mouth3DMesh) mouth3DMesh.scale.set(1 + val * 0.4, 0.2 + val * 0.9, 1);
+          if (ticks > 40) {
+            clearInterval(lipInterval);
+            if (mouth3DMesh) mouth3DMesh.scale.set(1, 0.2, 1);
+          }
+        }, 80);
+
+      } catch (err) {
+        textEl.textContent = 'Error connecting to Brain API.';
+      }
+    });
+
+    window.onload = init3D;
+  </script>
+</body>
+</html>
