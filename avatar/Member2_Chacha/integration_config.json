@@ -1,0 +1,39 @@
+{
+  "description": "Chacha Chaudhary End-to-End Conversation Integration Configuration",
+  "stage": "12B",
+  "supported_languages": [
+    "en",
+    "hi"
+  ],
+  "default_language": "en",
+  "ai": {
+    "provider": "mock",
+    "mock_disclaimer": "DEVELOPMENT-ONLY MOCK AI FOR PIPELINE VALIDATION. NOT MEMBER 1 AI."
+  },
+  "stt": {
+    "provider": "local",
+    "engine": "vosk",
+    "models": {
+      "en": "vosk-model-small-en-us-0.15",
+      "hi": "vosk-model-small-hi-0.22"
+    }
+  },
+  "tts": {
+    "provider": "edge",
+    "voices": {
+      "en": "en-IN-PrabhatNeural",
+      "hi": "hi-IN-MadhurNeural"
+    }
+  },
+  "rhubarb": {
+    "transition_ms": 50.0
+  },
+  "paths": {
+    "audio_input_dir": "Output/Audio/Input",
+    "audio_output_dir": "Output/Audio",
+    "lipsync_output_dir": "Output/LipSync",
+    "stt_output_dir": "Output/STT",
+    "log_output_dir": "Output/Integration/Logs",
+    "master_blend": "Output/Chacha_Master.blend"
+  }
+}

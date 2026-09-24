@@ -7,9 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌊</text></svg>">
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
@@ -21,7 +23,7 @@
         <div class="logo-icon">🌊</div>
         <div>
           <h1>Ganga AI Mascot</h1>
-          <p class="subtitle">Chacha 3D Model 2 Avatar ↔ Grounded RAG Brain ↔ Voice Integration</p>
+          <p class="subtitle">Chacha Chaudhary Digital Avatar (Member 2 Production) ↔ Grounded RAG Brain ↔ Voice</p>
         </div>
       </div>
       <div class="header-controls">
@@ -41,17 +43,21 @@
       <!-- Mascot Stage Section -->
       <section class="mascot-stage-card">
         <div class="stage-header">
-          <div class="character-tag">CHACHA 3D AVATAR (MODEL 2)</div>
+          <div class="character-tag">CHACHA 3D AVATAR (MEMBER 2 PRODUCTION)</div>
           <div class="indicators">
+            <span id="avatarVersionBadge" class="tag avatar-version-tag">Avatar: Member 2 Chacha</span>
             <span id="emotionBadge" class="tag emotion-tag">Emotion: Neutral</span>
             <span id="gestureBadge" class="tag gesture-tag">Gesture: Idle</span>
             <span id="modeBadge" class="tag mode-tag mode-grounded">Mode: Grounded</span>
           </div>
         </div>
 
-        <div class="stage-canvas-wrapper">
+        <div class="stage-canvas-wrapper" style="position: relative;">
+          <div id="avatarLoadingOverlay" class="avatar-loading-overlay">
+            <div class="avatar-spinner"></div>
+            <span class="loading-label">Loading Member 2 Chacha (GLB)...</span>
+          </div>
           <canvas id="mascotCanvas3D" class="mascot-canvas-3d"></canvas>
-        </div>
         </div>
 
         <!-- Audio Output Visualizer -->
@@ -128,7 +134,7 @@
     </footer>
   </div>
 
-  <script src="mascot.js"></script>
-  <script src="app.js"></script>
+  <script src="mascot.js?v=member2-final5"></script>
+  <script src="app.js?v=member2-final5"></script>
 </body>
 </html>

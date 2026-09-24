@@ -20,14 +20,28 @@ class EmotionType(str, Enum):
     NEUTRAL = "neutral"
     HAPPY = "happy"
     SAD = "sad"
+    ANGRY = "angry"
+    SURPRISED = "surprised"
+    CONFUSED = "confused"
     THINKING = "thinking"
+    LAUGHING = "laughing"
 
 
 class GestureType(str, Enum):
     IDLE = "idle"
+    NOD = "nod"
+    POINT = "point"
+    SHRUG = "shrug"
     THINKING = "thinking"
-    EXPLAINING = "explaining"
+    LAUGHING = "laughing"
     WAVE = "wave"
+    THANKFUL = "thankful"
+    SHAKING_HANDS = "shaking_hands"
+    # Legacy aliases preserved for backward compatibility
+    EXPLAINING = "explaining"
+    HAND = "hand"
+    GESTURE = "gesture"
+    TURN = "turn"
 
 
 class CitationItem(BaseModel):
@@ -39,9 +53,13 @@ class CitationItem(BaseModel):
 
 
 class BrainRequest(BaseModel):
-    question: str = Field(..., description="Question prompt to Ganga Brain RAG")
+    question: str = Field("", description="Question prompt to Ganga Brain RAG")
+    query: str | None = Field(None, description="Alias for question")
     language: str = Field("hi", description="Target language ('hi' | 'en')")
     top_k: int | None = Field(None, description="Retriever candidate override")
+
+    def get_question(self) -> str:
+        return (self.question or self.query or "").strip()
 
 
 class BrainResponse(BaseModel):
@@ -57,11 +75,16 @@ class AvatarPresentation(BaseModel):
     state: ConversationState = Field(ConversationState.IDLE, description="Current conversation state")
     question: str = Field("", description="User question string")
     answer: str = Field("", description="Grounded answer text")
+    text: str = Field("", description="Standardized alias for answer text")
     mode: str = Field("grounded", description="Brain mode")
     citations: list[CitationItem] = Field(default_factory=list, description="Provenance citations")
-    language: str = Field("hi", description="Language")
+    language: str = Field("hi", description="Language ('hi' | 'en')")
     emotion: EmotionType = Field(EmotionType.NEUTRAL, description="Emotion expression")
     gesture: GestureType = Field(GestureType.IDLE, description="Gesture pose")
-    audio_data_base64: str | None = Field(None, description="Synthesized TTS audio payload if available")
+    audio_data_base64: str | None = Field(None, description="Synthesized TTS audio payload (base64)")
+    audio: str | None = Field(None, description="Standardized audio payload or URL")
+    audio_format: str = Field("wav", description="Audio format")
     rms_lip_sync: list[float] = Field(default_factory=list, description="Calculated lip-sync RMS frames")
+    rhubarb_lipsync: dict | None = Field(None, description="Phonetic mouth cues timeline from Rhubarb")
+    lip_sync: dict | None = Field(None, description="Standardized lip_sync alias containing source and mouth_cues")
     error_message: str | None = Field(None, description="User-facing error details if failed")

@@ -12,8 +12,9 @@ class IntegrationConfig:
     brain_timeout_seconds: float = float(os.getenv("BRAIN_TIMEOUT_SECONDS", "30.0"))
     mock_mode: bool = os.getenv("MOCK_MODE", "false").lower() in ("true", "1", "yes")
     default_language: str = os.getenv("DEFAULT_LANGUAGE", "hi")
-    stt_provider: str = os.getenv("STT_PROVIDER", "auto")
-    tts_provider: str = os.getenv("TTS_PROVIDER", "auto")
+    stt_provider: str = os.getenv("STT_PROVIDER", "vosk")
+    tts_provider: str = os.getenv("TTS_PROVIDER", "edge")
+    tts_fallback: str = os.getenv("TTS_FALLBACK", "sapi")
     server_host: str = os.getenv("SERVER_HOST", "0.0.0.0")
     server_port: int = int(os.getenv("SERVER_PORT", "8080"))
 

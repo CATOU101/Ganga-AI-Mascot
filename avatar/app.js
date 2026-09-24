@@ -1,6 +1,12 @@
 /**
  * Main Application Orchestrator for Ganga AI Mascot UI
- * Connects Brain API, Web Speech STT, SpeechSynthesis TTS, RMS Lip-Sync, and Avatar Controller.
+ * Production Integration: Member 2 Digital Avatar + Voice System
+ * 
+ * Pipeline:
+ * - Typed Question -> POST /api/integration/ask -> Brain -> EdgeTTS -> Rhubarb -> Three.js GLB
+ * - Microphone -> MediaRecorder -> POST /api/integration/stt -> Vosk STT -> Brain -> EdgeTTS -> Rhubarb -> Three.js GLB
+ * - Full 35 Morph Targets + 9 Mixamo Actions + Procedural Blinking
+ * - Preserves Web Speech API and SpeechSynthesis as emergency fallbacks
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,11 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentLanguage = 'hi';
   let currentState = 'IDLE';
-  let speechSynth = window.speechSynthesis;
-  let speechUtterance = null;
-  let audioCtx = null;
-  let isListening = false;
-  let recognition = null;
+
+  // Audio Playback & Synchronization State
+  let activeAudio = null;
+  let lipSyncAnimationId = null;
+
+  // Microphone Recording State (MediaRecorder)
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let isRecording = false;
 
   // Language selection handlers
   langHiBtn.addEventListener('click', () => setLanguage('hi'));
@@ -55,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Update UI State Badges
+  // Update UI State Badges & Synchronize Avatar State Machine
   function setState(state) {
     currentState = state;
     statusBadge.className = `status-badge state-${state.toLowerCase()}`;
@@ -69,13 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = false;
     }
 
-    if (state === 'IDLE') {
-      mascot.setGesture('idle');
-      mascot.setEmotion('neutral');
+    // Forward state to Member 2 avatar state machine
+    if (mascot && mascot.setState) {
+      mascot.setState(state);
     }
   }
 
-  // Form Submission
+  // Form Submission (Typed Question Pipeline)
   askForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const question = questionInput.value.trim();
@@ -84,21 +94,18 @@ document.addEventListener('DOMContentLoaded', () => {
     await processQuestion(question);
   });
 
-  // Main Question Pipeline
+  // Main Question Pipeline (Typed Text)
   async function processQuestion(question) {
-    if (currentState !== 'IDLE') return;
+    if (currentState === 'SPEAKING' || currentState === 'THINKING') return;
 
     // 1. Update UI to PROCESSING -> THINKING
     questionPromptView.style.display = 'block';
     userQuestionText.textContent = question;
     answerText.textContent = '';
-    setState('PROCESSING');
-    mascot.setGesture('thinking');
-    mascot.setEmotion('thinking');
     setState('THINKING');
 
     try {
-      // 2. Call Integration API endpoint (/api/integration/ask or fallback /ask)
+      // 2. Call Integration API endpoint (/api/integration/ask)
       const response = await fetch('/api/integration/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -129,10 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Render Response Payload & Start Speech / Lip-Sync
   function renderResponse(data) {
-    const answer = data.answer || "No response received.";
+    const answer = data.answer || data.text || "No response received.";
     const mode = data.mode || "grounded";
-    const emotion = data.emotion || "neutral";
-    const gesture = data.gesture || "explaining";
+    const emotion = data.emotion || "happy";
+    const gesture = data.gesture || "nod";
     const citations = data.citations || [];
 
     // Display Text
@@ -144,16 +151,15 @@ document.addEventListener('DOMContentLoaded', () => {
     emotionBadge.textContent = `Emotion: ${emotion}`;
     gestureBadge.textContent = `Gesture: ${gesture}`;
 
-    mascot.setEmotion(emotion);
+    // Apply Member 2 composite emotion & body gesture
+    mascot.setEmotion(emotion, 0.85);
     mascot.setGesture(gesture);
 
     // Render Citations
     renderCitations(citations);
 
-    // Trigger Speech & Lip-Sync
-    speakText(answer, () => {
-      setState('IDLE');
-    });
+    // Trigger Real Member 2 Acoustic Audio & Lip-Sync Playback
+    playProductionSpeech(data, answer);
   }
 
   // Render Provenance Citations
@@ -181,104 +187,288 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Text-To-Speech with Real-Time Lip-Sync
-  function speakText(text, onComplete) {
-    if (!speechSynth) {
+  // =========================================================================
+  // Production Audio & Rhubarb Lip-Sync Player
+  // =========================================================================
+
+  function playProductionSpeech(data, fallbackText) {
+    // Cancel any previous speech playback
+    stopCurrentSpeech();
+
+    let src = null;
+    if (data.audio_data_base64) {
+      src = `data:audio/wav;base64,${data.audio_data_base64}`;
+    } else if (data.audio) {
+      if (data.audio.startsWith('data:') || data.audio.startsWith('http') || data.audio.startsWith('/')) {
+        src = data.audio;
+      } else {
+        src = `data:audio/wav;base64,${data.audio}`;
+      }
+    } else if (data.audio_url) {
+      src = data.audio_url;
+    }
+    const rhubarbData = data.rhubarb_lipsync || data.lip_sync;
+
+    if (src) {
+      activeAudio = new Audio(src);
+
+      // Extract Rhubarb cues
+      const cues = (rhubarbData && (rhubarbData.mouth_cues || rhubarbData.visemes)) || [];
+
       setState('SPEAKING');
-      setTimeout(onComplete, 3000);
+
+      activeAudio.onplay = () => {
+        syncRhubarbLipSync(cues, data.rms_lip_sync);
+      };
+
+      activeAudio.onended = () => {
+        stopCurrentSpeech();
+        setState('IDLE');
+      };
+
+      activeAudio.onerror = (err) => {
+        console.warn('[Frontend Audio] Error playing audio WAV, falling back to speech synthesis:', err);
+        fallbackBrowserTTS(fallbackText);
+      };
+
+      activeAudio.play().catch((err) => {
+        console.warn('[Frontend Audio] Autoplay blocked or failed, using fallback:', err);
+        fallbackBrowserTTS(fallbackText);
+      });
+
+    } else {
+      // Audio payload absent: fallback to browser TTS
+      fallbackBrowserTTS(fallbackText);
+    }
+  }
+
+  function syncRhubarbLipSync(cues, rmsFrames) {
+    if (!activeAudio) return;
+
+    const updateFrame = () => {
+      if (!activeAudio || activeAudio.paused || activeAudio.ended) {
+        return;
+      }
+
+      const currentTime = activeAudio.currentTime;
+
+      // 1. Acoustic Rhubarb Phonetic Alignment
+      let matchedViseme = 'Viseme_Silence';
+      if (cues && cues.length > 0) {
+        const activeCue = cues.find((c) => currentTime >= c.start && currentTime <= c.end);
+        if (activeCue) {
+          matchedViseme = activeCue.viseme || activeCue.value || 'Viseme_A';
+        }
+      }
+
+      // Apply to 35 Morph Targets
+      mascot.setViseme(matchedViseme, 1.0);
+
+      // Update Visualizer
+      if (vizFill) {
+        if (matchedViseme !== 'Viseme_Silence') {
+          vizFill.style.width = '75%';
+          vizFill.style.backgroundColor = '#38bdf8';
+        } else {
+          vizFill.style.width = '10%';
+          vizFill.style.backgroundColor = '#94a3b8';
+        }
+      }
+
+      lipSyncAnimationId = requestAnimationFrame(updateFrame);
+    };
+
+    lipSyncAnimationId = requestAnimationFrame(updateFrame);
+  }
+
+  function stopCurrentSpeech() {
+    if (lipSyncAnimationId) {
+      cancelAnimationFrame(lipSyncAnimationId);
+      lipSyncAnimationId = null;
+    }
+    if (activeAudio) {
+      activeAudio.pause();
+      activeAudio.currentTime = 0;
+      activeAudio = null;
+    }
+    mascot.clearViseme();
+    if (vizFill) {
+      vizFill.style.width = '0%';
+    }
+  }
+
+  // Emergency Browser SpeechSynthesis Fallback
+  function fallbackBrowserTTS(text) {
+    if (!window.speechSynthesis) {
+      setState('IDLE');
       return;
     }
-
-    // Cancel ongoing speech
-    speechSynth.cancel();
+    window.speechSynthesis.cancel();
     setState('SPEAKING');
 
-    speechUtterance = new SpeechSynthesisUtterance(text);
-    speechUtterance.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
-    speechUtterance.rate = 1.0;
-    speechUtterance.pitch = 1.0;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    utter.rate = 1.0;
 
-    // Simulate Lip-Sync mouth movement while speaking
-    let lipSyncInterval = setInterval(() => {
-      if (speechSynth.speaking) {
-        // Generate simulated RMS aperture between 0.1 and 0.95
-        const aperture = Math.sin(Date.now() / 80) * 0.4 + 0.5;
-        mascot.setMouthAperture(aperture);
-        vizFill.style.width = `${aperture * 100}%`;
+    let simInterval = setInterval(() => {
+      if (window.speechSynthesis.speaking) {
+        const ap = Math.sin(Date.now() / 90) * 0.4 + 0.5;
+        mascot.setMouthAperture(ap);
+        if (vizFill) vizFill.style.width = `${ap * 100}%`;
       }
     }, 60);
 
-    speechUtterance.onend = () => {
-      clearInterval(lipSyncInterval);
-      mascot.setMouthAperture(0);
-      vizFill.style.width = '0%';
-      if (onComplete) onComplete();
+    utter.onend = () => {
+      clearInterval(simInterval);
+      mascot.clearViseme();
+      if (vizFill) vizFill.style.width = '0%';
+      setState('IDLE');
     };
 
-    speechUtterance.onerror = (err) => {
-      console.warn('[Frontend TTS] Speech error:', err);
-      clearInterval(lipSyncInterval);
-      mascot.setMouthAperture(0);
-      vizFill.style.width = '0%';
-      if (onComplete) onComplete();
+    utter.onerror = () => {
+      clearInterval(simInterval);
+      mascot.clearViseme();
+      if (vizFill) vizFill.style.width = '0%';
+      setState('IDLE');
     };
 
-    speechSynth.speak(speechUtterance);
+    window.speechSynthesis.speak(utter);
   }
 
-  // Web Speech API Voice Recognition (STT)
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
+  // =========================================================================
+  // Production Hardware Microphone (MediaRecorder -> Backend Vosk STT)
+  // =========================================================================
 
-    recognition.onstart = () => {
-      isListening = true;
-      micBtn.classList.add('mic-listening');
-      setState('LISTENING');
-      voiceStatusMsg.textContent = 'Listening... Speak your question clearly.';
-    };
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      voiceStatusMsg.textContent = `Transcribed: "${transcript}"`;
-      questionInput.value = transcript;
-      processQuestion(transcript);
-    };
-
-    recognition.onerror = (event) => {
-      console.warn('[Frontend STT] Speech recognition error:', event.error);
-      voiceStatusMsg.textContent = `Voice input error: ${event.error}`;
-      stopListening();
-    };
-
-    recognition.onend = () => {
-      stopListening();
-    };
-  } else {
-    micBtn.title = 'Web Speech API not supported in this browser';
-  }
-
-  micBtn.addEventListener('click', () => {
-    if (!recognition) {
-      alert('Speech recognition is not supported in this browser. Please type your question.');
-      return;
-    }
-    if (isListening) {
-      recognition.stop();
-      stopListening();
+  micBtn.addEventListener('click', async () => {
+    if (isRecording) {
+      stopMicrophoneRecording();
     } else {
-      recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
-      recognition.start();
+      await startMicrophoneRecording();
     }
   });
 
-  function stopListening() {
-    isListening = false;
-    micBtn.classList.remove('mic-listening');
-    if (currentState === 'LISTENING') {
-      setState('IDLE');
+  async function startMicrophoneRecording() {
+    if (currentState === 'SPEAKING' || currentState === 'THINKING') return;
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      console.warn('[Frontend Mic] MediaDevices API not supported, trying Web Speech API fallback.');
+      startWebSpeechFallback();
+      return;
     }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) {
+          audioChunks.push(e.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        // Stop audio tracks
+        stream.getTracks().forEach((track) => track.stop());
+
+        const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+        voiceStatusMsg.textContent = 'Transcribing with local Vosk STT...';
+        setState('THINKING');
+
+        // Send to production backend STT endpoint
+        await uploadAudioForSTT(audioBlob);
+      };
+
+      mediaRecorder.start();
+      isRecording = true;
+      micBtn.classList.add('mic-listening');
+      setState('LISTENING');
+      voiceStatusMsg.textContent = 'Listening (Member 2 Vosk)... Click mic again to send.';
+
+    } catch (err) {
+      console.warn('[Frontend Mic] getUserMedia failed or denied. Falling back to Web Speech API:', err);
+      startWebSpeechFallback();
+    }
+  }
+
+  function stopMicrophoneRecording() {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      isRecording = false;
+      micBtn.classList.remove('mic-listening');
+    }
+  }
+
+  async function uploadAudioForSTT(blob) {
+    try {
+      const formData = new FormData();
+      formData.append('file', blob, 'user_speech.webm');
+
+      const response = await fetch(`/api/integration/stt?language=${currentLanguage}`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error(`STT server returned status ${response.status}`);
+      }
+
+      const data = await response.json();
+      voiceStatusMsg.textContent = data.question ? `Heard: "${data.question}"` : 'Transcription complete.';
+      if (data.question) {
+        questionInput.value = data.question;
+        userQuestionText.textContent = data.question;
+      }
+      renderResponse(data);
+
+    } catch (err) {
+      console.error('[Frontend STT] Failed to transcribe with backend Vosk:', err);
+      voiceStatusMsg.textContent = 'STT transcription failed. Please try typing.';
+      setState('ERROR');
+      setTimeout(() => setState('IDLE'), 2000);
+    }
+  }
+
+  // Emergency Web Speech API Fallback
+  function startWebSpeechFallback() {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) {
+      alert('Microphone input is not available in this browser. Please type your question.');
+      return;
+    }
+
+    const rec = new SpeechRec();
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
+
+    rec.onstart = () => {
+      micBtn.classList.add('mic-listening');
+      setState('LISTENING');
+      voiceStatusMsg.textContent = 'Listening (Browser fallback)... Speak clearly.';
+    };
+
+    rec.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      voiceStatusMsg.textContent = `Transcribed: "${transcript}"`;
+      questionInput.value = transcript;
+      micBtn.classList.remove('mic-listening');
+      processQuestion(transcript);
+    };
+
+    rec.onerror = (e) => {
+      console.warn('[Frontend STT Fallback] Error:', e.error);
+      micBtn.classList.remove('mic-listening');
+      setState('IDLE');
+    };
+
+    rec.onend = () => {
+      micBtn.classList.remove('mic-listening');
+      if (currentState === 'LISTENING') {
+        setState('IDLE');
+      }
+    };
+
+    rec.start();
   }
 });

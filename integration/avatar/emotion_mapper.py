@@ -11,7 +11,11 @@ SUPPORTED_EMOTIONS = {
     "neutral": EmotionType.NEUTRAL,
     "happy": EmotionType.HAPPY,
     "sad": EmotionType.SAD,
+    "angry": EmotionType.ANGRY,
+    "surprised": EmotionType.SURPRISED,
+    "confused": EmotionType.CONFUSED,
     "thinking": EmotionType.THINKING,
+    "laughing": EmotionType.LAUGHING,
 }
 
 
@@ -35,5 +39,5 @@ def map_emotion(raw_emotion: str | EmotionType | None, mode: str | None = None) 
         return EmotionType.THINKING
 
     if raw_emotion:
-        logger.warning(f"[Integration Emotion] Unknown emotion '{raw_emotion}'. Falling back to 'neutral'.")
-    return EmotionType.NEUTRAL
+        logger.warning(f"[Integration Emotion] Unknown emotion '{raw_emotion}'. Falling back to 'happy' or 'neutral'.")
+    return EmotionType.HAPPY if mode == "grounded" else EmotionType.NEUTRAL
