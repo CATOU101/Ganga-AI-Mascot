@@ -6,7 +6,8 @@ knowledge_base/raw_documents/
 knowledge_base/processed/
 
 # Generated embeddings / vector database data
-knowledge_base/vector_db/
+!knowledge_base/vector_db/
+!knowledge_base/vector_db/**
 
 # Python cache
 .venv/
