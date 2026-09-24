@@ -72,9 +72,15 @@ class Member2TTSAdapter(TTSAdapter):
 
             if meta is None:
                 logger.info(f"[Integration TTS] Synthesizing via Local SAPI offline fallback ({lang_key})")
-                meta = self.sapi_provider.synthesize_to_wav(
-                    text=clean_text, language=lang_key, output_wav=temp_wav
-                )
+                try:
+                    meta = self.sapi_provider.synthesize_to_wav(
+                        text=clean_text, language=lang_key, output_wav=temp_wav
+                    )
+                except Exception as sapi_err:
+                    logger.warning(f"[Integration TTS] SAPI fallback failed: {sapi_err}")
+
+            if meta is None:
+                raise RuntimeError("Both EdgeTTS and SAPI fallback failed to generate WAV file.")
 
             # Read audio bytes and convert to Base64
             with open(temp_wav, "rb") as f:
@@ -109,13 +115,13 @@ class Member2TTSAdapter(TTSAdapter):
             )
 
         except Exception as err:
-            logger.error(f"[Integration TTS] Member2TTSAdapter failed completely: {err}. Falling back to synthetic.")
+            logger.error(f"[Integration TTS] Member2TTSAdapter failed: {err}. Returning None for WebSpeech fallback.")
             if temp_wav and os.path.exists(temp_wav):
                 try:
                     os.remove(temp_wav)
                 except Exception:
                     pass
-            return SyntheticWavTTSAdapter().synthesize_speech(clean_text, language=lang_key)
+            return None
 
 
 class SyntheticWavTTSAdapter(TTSAdapter):

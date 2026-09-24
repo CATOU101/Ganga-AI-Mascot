@@ -228,12 +228,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       activeAudio.onerror = (err) => {
         console.warn('[Frontend Audio] Error playing audio WAV, falling back to speech synthesis:', err);
+        stopCurrentSpeech();
         fallbackBrowserTTS(fallbackText);
       };
 
-      activeAudio.play().catch((err) => {
-        console.warn('[Frontend Audio] Autoplay blocked or failed, using fallback:', err);
-        fallbackBrowserTTS(fallbackText);
+      activeAudio.play().then(() => {
+        console.log('[Frontend Audio] Active neural voice audio playing successfully.');
+      }).catch((err) => {
+        console.warn('[Frontend Audio] Autoplay blocked or failed, using fallback if not playing:', err);
+        if (!activeAudio || activeAudio.paused) {
+          fallbackBrowserTTS(fallbackText);
+        }
       });
 
     } else {

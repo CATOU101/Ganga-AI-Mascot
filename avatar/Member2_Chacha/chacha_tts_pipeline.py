@@ -17,6 +17,8 @@ import sys
 import json
 import wave
 import subprocess
+import asyncio
+import concurrent.futures
 from abc import ABC, abstractmethod
 
 class BaseTTSProvider(ABC):
@@ -55,17 +57,26 @@ class EdgeTTSProvider(BaseTTSProvider):
         temp_mp3 = output_wav.replace(".wav", "_temp.mp3")
         os.makedirs(os.path.dirname(output_wav), exist_ok=True)
 
-        # 1. Generate MP3 via edge-tts
-        gen_script = f"""
-import asyncio, edge_tts
-async def run():
-    comm = edge_tts.Communicate({repr(text)}, {repr(voice_name)})
-    await comm.save({repr(temp_mp3)})
-asyncio.run(run())
-"""
-        res = subprocess.run([self.python_exe, "-c", gen_script], capture_output=True, text=True)
-        if res.returncode != 0:
-            raise RuntimeError(f"EdgeTTS generation failed: {res.stderr}")
+        # 1. Generate MP3 via edge-tts directly in Python
+        async def _save():
+            import edge_tts
+            comm = edge_tts.Communicate(text, voice_name)
+            await comm.save(temp_mp3)
+
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+
+        if loop and loop.is_running():
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(asyncio.run, _save())
+                future.result()
+        else:
+            asyncio.run(_save())
+
+        if not os.path.exists(temp_mp3) or os.path.getsize(temp_mp3) == 0:
+            raise RuntimeError(f"EdgeTTS generation failed: temporary MP3 file was not created.")
 
         # 2. Convert MP3 to 16-bit 16kHz Mono PCM WAV
         converted = False
