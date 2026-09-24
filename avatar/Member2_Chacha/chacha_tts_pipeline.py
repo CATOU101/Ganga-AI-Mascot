@@ -67,16 +67,33 @@ asyncio.run(run())
         if res.returncode != 0:
             raise RuntimeError(f"EdgeTTS generation failed: {res.stderr}")
 
-        # 2. Convert MP3 to 16-bit 16kHz Mono PCM WAV using Blender aud
-        conv_script = f"""
+        # 2. Convert MP3 to 16-bit 16kHz Mono PCM WAV
+        converted = False
+        try:
+            import miniaudio
+            decoded = miniaudio.decode_file(temp_mp3, sample_rate=16000, nchannels=1)
+            with wave.open(output_wav, "wb") as wf:
+                wf.setnchannels(1)
+                wf.setsampwidth(2)
+                wf.setframerate(16000)
+                wf.writeframes(decoded.samples)
+            converted = True
+        except Exception as err:
+            pass
+
+        if not converted and self.blender_exe and os.path.exists(self.blender_exe):
+            conv_script = f"""
 import aud
 sound = aud.Sound({repr(temp_mp3)})
 sound.write({repr(output_wav)}, 16000, 1, aud.FORMAT_S16, aud.CONTAINER_WAV, 65536)
 """
-        conv_res = subprocess.run([self.blender_exe, "--background", "--python-expr", conv_script],
-                                  capture_output=True, text=True)
-        if conv_res.returncode != 0:
-            raise RuntimeError(f"Audio conversion to WAV failed: {conv_res.stderr}")
+            conv_res = subprocess.run([self.blender_exe, "--background", "--python-expr", conv_script],
+                                      capture_output=True, text=True)
+            if conv_res.returncode == 0:
+                converted = True
+
+        if not converted:
+            raise RuntimeError("Audio conversion from MP3 to WAV failed.")
 
         # Clean up temporary mp3
         if os.path.exists(temp_mp3):
