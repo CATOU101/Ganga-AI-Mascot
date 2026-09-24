@@ -29,12 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const questionInput = document.getElementById('questionInput');
   const micBtn = document.getElementById('micBtn');
   const submitBtn = document.getElementById('submitBtn');
-  const langHiBtn = document.getElementById('langHi');
-  const langEnBtn = document.getElementById('langEn');
+  const inputLangHiBtn = document.getElementById('inputLangHi');
+  const inputLangEnBtn = document.getElementById('inputLangEn');
+  const outputLangHiBtn = document.getElementById('outputLangHi');
+  const outputLangEnBtn = document.getElementById('outputLangEn');
   const vizFill = document.getElementById('vizFill');
   const voiceStatusMsg = document.getElementById('voiceStatusMsg');
 
-  let currentLanguage = 'hi';
+  let currentInputLanguage = 'hi';
+  let currentOutputLanguage = 'hi';
   let currentState = 'IDLE';
 
   // Audio Playback & Synchronization State
@@ -47,21 +50,44 @@ document.addEventListener('DOMContentLoaded', () => {
   let isRecording = false;
 
   // Language selection handlers
-  langHiBtn.addEventListener('click', () => setLanguage('hi'));
-  langEnBtn.addEventListener('click', () => setLanguage('en'));
+  if (inputLangHiBtn && inputLangEnBtn) {
+    inputLangHiBtn.addEventListener('click', () => setInputLanguage('hi'));
+    inputLangEnBtn.addEventListener('click', () => setInputLanguage('en'));
+  }
+  if (outputLangHiBtn && outputLangEnBtn) {
+    outputLangHiBtn.addEventListener('click', () => setOutputLanguage('hi'));
+    outputLangEnBtn.addEventListener('click', () => setOutputLanguage('en'));
+  }
 
-  function setLanguage(lang) {
-    currentLanguage = lang;
+  function setInputLanguage(lang) {
+    currentInputLanguage = lang;
     if (lang === 'hi') {
-      langHiBtn.classList.add('active');
-      langEnBtn.classList.remove('active');
-      responseLangBadge.textContent = 'Lang: HI';
+      inputLangHiBtn.classList.add('active');
+      inputLangEnBtn.classList.remove('active');
       questionInput.placeholder = 'गंगा नदी या नमामि गंगे से जुड़ा प्रश्न पूछें...';
     } else {
-      langEnBtn.classList.add('active');
-      langHiBtn.classList.remove('active');
-      responseLangBadge.textContent = 'Lang: EN';
+      inputLangEnBtn.classList.add('active');
+      inputLangHiBtn.classList.remove('active');
       questionInput.placeholder = 'Type your question about Ganga, GRBMP, or pollution...';
+    }
+    updateLangBadge();
+  }
+
+  function setOutputLanguage(lang) {
+    currentOutputLanguage = lang;
+    if (lang === 'hi') {
+      outputLangHiBtn.classList.add('active');
+      outputLangEnBtn.classList.remove('active');
+    } else {
+      outputLangEnBtn.classList.add('active');
+      outputLangHiBtn.classList.remove('active');
+    }
+    updateLangBadge();
+  }
+
+  function updateLangBadge() {
+    if (responseLangBadge) {
+      responseLangBadge.textContent = `In: ${currentInputLanguage.toUpperCase()} | Out: ${currentOutputLanguage.toUpperCase()}`;
     }
   }
 
@@ -109,13 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/integration/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: question, language: currentLanguage })
+        body: JSON.stringify({ question: question, input_language: currentInputLanguage, output_language: currentOutputLanguage })
       }).catch(async () => {
         // Fallback to direct Brain FastAPI /ask endpoint if integration endpoint isn't mounted
         return fetch('/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: question, language: currentLanguage })
+          body: JSON.stringify({ question: question, input_language: currentInputLanguage, output_language: currentOutputLanguage })
         });
       });
 
@@ -409,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData();
       formData.append('file', blob, 'user_speech.webm');
 
-      const response = await fetch(`/api/integration/stt?language=${currentLanguage}`, {
+      const response = await fetch(`/api/integration/stt?input_language=${currentInputLanguage}&output_language=${currentOutputLanguage}`, {
         method: 'POST',
         body: formData
       });

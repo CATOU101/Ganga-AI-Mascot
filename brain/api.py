@@ -18,7 +18,24 @@ app = FastAPI(
 
 class AskRequest(BaseModel):
     question: str = Field(..., description="User question about River Ganga / GRBMP material", example="What are the major sources of pollution in the Ganga?")
+    input_language: str | None = Field(None, description="Input language ('en' | 'hi')", example="en")
+    output_language: str | None = Field(None, description="Output language ('en' | 'hi')", example="hi")
+    language: str | None = Field(None, description="Legacy language fallback ('en' | 'hi')")
     top_k: int | None = Field(None, description="Optional override for retriever top_k candidate count", example=5)
+
+    def get_input_language(self) -> str:
+        if self.input_language:
+            return self.input_language.lower().strip()
+        if self.language:
+            return self.language.lower().strip()
+        return "hi"
+
+    def get_output_language(self) -> str:
+        if self.output_language:
+            return self.output_language.lower().strip()
+        if self.language:
+            return self.language.lower().strip()
+        return "hi"
 
 
 class CitationItem(BaseModel):
@@ -33,6 +50,8 @@ class AskResponse(BaseModel):
     answer: str = Field(..., description="Grounded answer text or safe fallback message")
     mode: str = Field(..., description="Response mode: 'grounded' | 'insufficient-evidence' | 'current-info-fallback'")
     citations: list[CitationItem] = Field(default_factory=list, description="Traceable provenance citations")
+    input_language: str = Field("hi", description="Input language code")
+    output_language: str = Field("hi", description="Output language code")
 
 
 @app.get("/health")
@@ -45,11 +64,15 @@ def ask(req: AskRequest):
     if not req.question or not req.question.strip():
         raise HTTPException(status_code=400, detail="Question string must not be empty.")
 
-    res = answer_question(req.question, top_k=req.top_k)
+    in_lang = req.get_input_language()
+    out_lang = req.get_output_language()
+    res = answer_question(req.question, top_k=req.top_k, input_language=in_lang, output_language=out_lang)
     return {
         "answer": res.get("answer", ""),
         "mode": res.get("mode", "insufficient-evidence"),
         "citations": res.get("citations", []),
+        "input_language": in_lang,
+        "output_language": out_lang,
     }
 
 

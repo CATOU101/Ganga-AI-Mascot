@@ -57,8 +57,18 @@ class ConversationController:
             except Exception as e:
                 logger.error(f"[Integration] Error in state change listener: {e}")
 
-    def process_text_question(self, question: str, language: str = "hi", top_k: int | None = None) -> AvatarPresentation:
+    def process_text_question(
+        self,
+        question: str,
+        input_language: str = "hi",
+        output_language: str = "hi",
+        top_k: int | None = None,
+        language: str | None = None,
+    ) -> AvatarPresentation:
         """Process a text question through the state machine synchronously / thread-safely."""
+        in_lang = (input_language or language or "hi").lower().strip()
+        out_lang = (output_language or language or "hi").lower().strip()
+
         if self.is_busy:
             logger.warning("[Integration] Conversation controller is busy. Ignoring duplicate request.")
             return self._last_presentation
@@ -70,7 +80,9 @@ class ConversationController:
                 question="",
                 answer="Please enter a question to ask Chacha Mascot.",
                 mode="insufficient-evidence",
-                language=language,
+                input_language=in_lang,
+                output_language=out_lang,
+                language=out_lang,
                 emotion=EmotionType.NEUTRAL,
                 gesture=GestureType.IDLE,
             )
@@ -81,7 +93,9 @@ class ConversationController:
         self._set_state(AvatarPresentation(
             state=ConversationState.PROCESSING,
             question=question,
-            language=language,
+            input_language=in_lang,
+            output_language=out_lang,
+            language=out_lang,
             emotion=EmotionType.NEUTRAL,
             gesture=GestureType.IDLE,
         ))
@@ -90,14 +104,16 @@ class ConversationController:
         self._set_state(AvatarPresentation(
             state=ConversationState.THINKING,
             question=question,
-            language=language,
+            input_language=in_lang,
+            output_language=out_lang,
+            language=out_lang,
             emotion=EmotionType.THINKING,
             gesture=GestureType.THINKING,
         ))
 
         # Step 3: Query Brain API
         try:
-            brain_resp = self.brain_client.ask(question, language=language, top_k=top_k)
+            brain_resp = self.brain_client.ask(question, input_language=in_lang, output_language=out_lang, top_k=top_k)
         except Exception as e:
             logger.error(f"[Integration] Brain query failed: {e}")
             error_pres = AvatarPresentation(
@@ -105,14 +121,16 @@ class ConversationController:
                 question=question,
                 answer="Sorry, I'm having trouble connecting right now.",
                 mode="insufficient-evidence",
-                language=language,
+                input_language=in_lang,
+                output_language=out_lang,
+                language=out_lang,
                 emotion=EmotionType.NEUTRAL,
                 gesture=GestureType.IDLE,
                 error_message=str(e),
             )
             self._set_state(error_pres)
             time.sleep(0.5)
-            self._set_state(AvatarPresentation(state=ConversationState.IDLE, language=language))
+            self._set_state(AvatarPresentation(state=ConversationState.IDLE, input_language=in_lang, output_language=out_lang, language=out_lang))
             return error_pres
 
         # State 4: SPEAKING
@@ -122,7 +140,9 @@ class ConversationController:
             answer=brain_resp.answer,
             mode=brain_resp.mode,
             citations=brain_resp.citations,
-            language=brain_resp.language,
+            input_language=brain_resp.input_language,
+            output_language=brain_resp.output_language,
+            language=brain_resp.output_language,
             emotion=brain_resp.emotion,
             gesture=brain_resp.gesture,
         )
@@ -130,15 +150,19 @@ class ConversationController:
 
         return speaking_pres
 
-    def finish_speaking(self, language: str = "hi") -> AvatarPresentation:
+    def finish_speaking(self, input_language: str = "hi", output_language: str = "hi", language: str | None = None) -> AvatarPresentation:
         """Explicit trigger to transition from SPEAKING back to IDLE after audio finishes."""
+        in_lang = (input_language or language or "hi").lower().strip()
+        out_lang = (output_language or language or "hi").lower().strip()
         idle_pres = AvatarPresentation(
             state=ConversationState.IDLE,
             question=self._last_presentation.question,
             answer=self._last_presentation.answer,
             mode=self._last_presentation.mode,
             citations=self._last_presentation.citations,
-            language=language,
+            input_language=in_lang,
+            output_language=out_lang,
+            language=out_lang,
             emotion=EmotionType.NEUTRAL,
             gesture=GestureType.IDLE,
         )

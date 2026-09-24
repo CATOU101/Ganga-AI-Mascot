@@ -66,15 +66,18 @@ def integration_ask(req: BrainRequest):
     if not q_text:
         raise HTTPException(status_code=400, detail="Question string must not be empty.")
 
-    # Process question through conversation state machine
-    pres = controller.process_text_question(q_text, language=req.language, top_k=req.top_k)
+    in_lang = req.get_input_language()
+    out_lang = req.get_output_language()
 
-    # Synthesize optional TTS audio & compute lip-sync frames
-    tts_result = tts_adapter.synthesize_speech(pres.answer, language=req.language)
+    # Process question through conversation state machine
+    pres = controller.process_text_question(q_text, input_language=in_lang, output_language=out_lang, top_k=req.top_k)
+
+    # Synthesize optional TTS audio using output_language & compute lip-sync frames
+    tts_result = tts_adapter.synthesize_speech(pres.answer, language=out_lang)
     final_pres = presenter.attach_audio_and_lipsync(pres, tts_result=tts_result)
     final_pres.question = q_text
 
-    controller.finish_speaking(language=req.language)
+    controller.finish_speaking(input_language=in_lang, output_language=out_lang)
     return final_pres
 
 
@@ -82,23 +85,31 @@ def integration_ask(req: BrainRequest):
 async def integration_stt(
     file: UploadFile = File(None),
     audio: UploadFile = File(None),
-    language: str = "hi",
+    input_language: str = "hi",
+    output_language: str = "hi",
+    language: str | None = None,
 ):
     upload_file = file or audio
     if not upload_file:
         raise HTTPException(status_code=400, detail="Audio file must be uploaded as 'file' or 'audio'.")
+
+    in_lang = (input_language or language or "hi").lower().strip()
+    out_lang = (output_language or language or "hi").lower().strip()
+
     audio_bytes = await upload_file.read()
-    transcription = stt_adapter.transcribe_audio(audio_bytes, language=language)
+    transcription = stt_adapter.transcribe_audio(audio_bytes, language=in_lang)
 
     if not transcription:
         return AvatarPresentation(
             state=controller.cancel_to_idle("Could not transcribe voice input.").state,
             answer="Sorry, I could not hear or transcribe your voice input.",
             mode="insufficient-evidence",
-            language=language,
+            input_language=in_lang,
+            output_language=out_lang,
+            language=out_lang,
         )
 
-    return integration_ask(BrainRequest(question=transcription, language=language))
+    return integration_ask(BrainRequest(question=transcription, input_language=in_lang, output_language=out_lang))
 
 
 # Mount the core Brain FastAPI router endpoints (/ask, /health) directly

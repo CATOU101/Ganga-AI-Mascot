@@ -37,7 +37,7 @@ class MascotPresenter:
             rms_lip_sync = self.lipsync_analyzer.compute_rms_frames(tts_result.pcm_samples)
             audio_path = getattr(tts_result, "audio_path", "")
             if audio_path and os.path.exists(audio_path):
-                rhubarb_lipsync = self.rhubarb_analyzer.analyze_audio_file(audio_path, language=brain_response.language)
+                rhubarb_lipsync = self.rhubarb_analyzer.analyze_audio_file(audio_path, language=brain_response.output_language)
 
         return AvatarPresentation(
             state=conversation_state,
@@ -45,7 +45,9 @@ class MascotPresenter:
             text=brain_response.answer,
             mode=brain_response.mode,
             citations=brain_response.citations,
-            language=brain_response.language,
+            input_language=brain_response.input_language,
+            output_language=brain_response.output_language,
+            language=brain_response.output_language,
             emotion=emotion,
             gesture=gesture,
             audio_data_base64=audio_b64,
@@ -74,7 +76,7 @@ class MascotPresenter:
             rms_lip_sync = self.lipsync_analyzer.compute_rms_frames(tts_result.pcm_samples)
             audio_path = getattr(tts_result, "audio_path", "")
             if audio_path and os.path.exists(audio_path):
-                rhubarb_lipsync = self.rhubarb_analyzer.analyze_audio_file(audio_path, language=presentation.language)
+                rhubarb_lipsync = self.rhubarb_analyzer.analyze_audio_file(audio_path, language=presentation.output_language)
 
         presentation.emotion = emotion
         presentation.gesture = gesture

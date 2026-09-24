@@ -26,11 +26,23 @@
           <p class="subtitle">Chacha Chaudhary Digital Avatar (Member 2 Production) ↔ Grounded RAG Brain ↔ Voice</p>
         </div>
       </div>
-      <div class="header-controls">
-        <div class="lang-selector">
-          <button id="langHi" class="lang-btn active" data-lang="hi">हिंदी (Hindi)</button>
-          <button id="langEn" class="lang-btn" data-lang="en">English</button>
+      <div class="header-controls" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <div class="lang-selector-group">
+          <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 3px;">Input Lang</span>
+          <div class="lang-selector">
+            <button id="inputLangHi" class="lang-btn active" data-lang="hi">हिंदी</button>
+            <button id="inputLangEn" class="lang-btn" data-lang="en">English</button>
+          </div>
         </div>
+
+        <div class="lang-selector-group">
+          <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 3px;">Output Lang</span>
+          <div class="lang-selector">
+            <button id="outputLangHi" class="lang-btn active" data-lang="hi">हिंदी</button>
+            <button id="outputLangEn" class="lang-btn" data-lang="en">English</button>
+          </div>
+        </div>
+
         <div id="statusBadge" class="status-badge state-idle">
           <span class="status-dot"></span>
           <span id="statusText">IDLE</span>

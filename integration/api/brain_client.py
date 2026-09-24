@@ -33,24 +33,37 @@ class BrainClient:
     def __init__(self, config: IntegrationConfig | None = None) -> None:
         self.config = config or load_integration_config()
 
-    def ask(self, question: str, language: str = "hi", top_k: int | None = None) -> BrainResponse:
-        """Send question to Brain API POST /ask safely."""
+    def ask(
+        self,
+        question: str,
+        input_language: str = "hi",
+        output_language: str = "hi",
+        top_k: int | None = None,
+        language: str | None = None,
+    ) -> BrainResponse:
+        """Send question to Brain API POST /ask safely with separate input and output languages."""
+        in_lang = (input_language or language or "hi").lower().strip()
+        out_lang = (output_language or language or "hi").lower().strip()
+
         if not question or not question.strip():
             logger.warning("[Integration] Empty question provided to BrainClient.")
             return self._fallback_response(
                 answer="Please ask a question about River Ganga or Namami Gange programs.",
                 mode="insufficient-evidence",
-                language=language
+                input_language=in_lang,
+                output_language=out_lang,
             )
 
         if self.config.mock_mode:
             logger.info("[Integration] MOCK_MODE active. Returning mock Brain response.")
-            return self._mock_response(question, language)
+            return self._mock_response(question, in_lang, out_lang)
 
         url = f"{self.config.brain_base_url}/ask"
         payload = {
             "question": question.strip(),
-            "language": language,
+            "input_language": in_lang,
+            "output_language": out_lang,
+            "language": out_lang,
         }
         if top_k is not None:
             payload["top_k"] = top_k
@@ -58,7 +71,7 @@ class BrainClient:
         data = json.dumps(payload).encode("utf-8")
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
-        logger.info(f"[Integration] Sending question to Brain API at {url}")
+        logger.info(f"[Integration] Sending question to Brain API at {url} (in: {in_lang}, out: {out_lang})")
 
         req = urllib.request.Request(url, data=data, headers=headers, method="POST")
         
@@ -69,13 +82,13 @@ class BrainClient:
                     raise BrainResponseError(f"Brain API returned HTTP status {status_code}")
                 
                 resp_bytes = response.read()
-                return self._parse_response(resp_bytes, language)
+                return self._parse_response(resp_bytes, in_lang, out_lang)
 
         except (urllib.error.URLError, TimeoutError, OSError) as e:
             logger.info(f"[Integration] Standalone Brain HTTP server unreachable ({e}). Calling RAG pipeline in-process.")
             try:
                 from brain.rag_pipeline import answer_question
-                rag_res = answer_question(question.strip(), top_k=top_k)
+                rag_res = answer_question(question.strip(), top_k=top_k, input_language=in_lang, output_language=out_lang)
                 mode = rag_res.get("mode", "insufficient-evidence")
                 gesture = "explaining" if mode == "grounded" else ("thinking" if mode == "insufficient-evidence" else "idle")
                 return self._parse_response(
@@ -83,18 +96,22 @@ class BrainClient:
                         "answer": rag_res.get("answer", ""),
                         "mode": mode,
                         "citations": rag_res.get("citations", []),
-                        "language": language,
+                        "input_language": in_lang,
+                        "output_language": out_lang,
+                        "language": out_lang,
                         "emotion": "neutral",
                         "gesture": gesture,
                     }).encode("utf-8"),
-                    language
+                    in_lang,
+                    out_lang
                 )
             except Exception as in_proc_err:
                 logger.error(f"[Integration] In-process RAG execution error: {in_proc_err}")
                 return self._fallback_response(
                     answer="Sorry, I am having trouble connecting to the Ganga AI Brain right now. Please check if the Brain server is running.",
                     mode="insufficient-evidence",
-                    language=language
+                    input_language=in_lang,
+                    output_language=out_lang,
                 )
 
         except Exception as e:
@@ -102,11 +119,21 @@ class BrainClient:
             return self._fallback_response(
                 answer="An unexpected error occurred while processing your query.",
                 mode="insufficient-evidence",
-                language=language
+                input_language=in_lang,
+                output_language=out_lang,
             )
 
-    def _parse_response(self, raw_bytes: bytes, request_language: str) -> BrainResponse:
+    def _parse_response(
+        self,
+        raw_bytes: bytes,
+        request_input_lang: str = "hi",
+        request_output_lang: str = "hi",
+        request_language: str | None = None,
+    ) -> BrainResponse:
         """Parse JSON response safely with full validation and fallback defaults."""
+        if request_language:
+            request_input_lang = request_language
+            request_output_lang = request_language
         try:
             data = json.loads(raw_bytes.decode("utf-8"))
         except Exception as err:
@@ -114,15 +141,17 @@ class BrainClient:
             return self._fallback_response(
                 answer="Received an invalid response format from the AI Brain server.",
                 mode="insufficient-evidence",
-                language=request_language
+                input_language=request_input_lang,
+                output_language=request_output_lang,
             )
 
         if not isinstance(data, dict):
-            return self._fallback_response("Invalid response format.", "insufficient-evidence", request_language)
+            return self._fallback_response("Invalid response format.", "insufficient-evidence", request_input_lang, request_output_lang)
 
         answer = str(data.get("answer", "")).strip() or "No response available."
         mode = str(data.get("mode", "insufficient-evidence"))
-        language = str(data.get("language") or request_language)
+        in_lang = str(data.get("input_language") or request_input_lang)
+        out_lang = str(data.get("output_language") or data.get("language") or request_output_lang)
         
         # Parse citations safely
         raw_citations = data.get("citations", [])
@@ -156,22 +185,26 @@ class BrainClient:
             answer=answer,
             mode=mode,
             citations=citations,
-            language=language,
+            input_language=in_lang,
+            output_language=out_lang,
+            language=out_lang,
             emotion=emotion,
             gesture=gesture,
         )
 
-    def _fallback_response(self, answer: str, mode: str, language: str) -> BrainResponse:
+    def _fallback_response(self, answer: str, mode: str, input_language: str = "hi", output_language: str = "hi") -> BrainResponse:
         return BrainResponse(
             answer=answer,
             mode=mode,
             citations=[],
-            language=language,
+            input_language=input_language,
+            output_language=output_language,
+            language=output_language,
             emotion=EmotionType.NEUTRAL,
             gesture=GestureType.IDLE
         )
 
-    def _mock_response(self, question: str, language: str) -> BrainResponse:
+    def _mock_response(self, question: str, input_language: str, output_language: str) -> BrainResponse:
         """Generate a realistic mock response for testing without backend."""
         q_lower = question.lower()
         if "aviral" in q_lower or "dhara" in q_lower:
@@ -187,7 +220,9 @@ class BrainClient:
                         knowledge_type="METHODOLOGICAL"
                     )
                 ],
-                language=language,
+                input_language=input_language,
+                output_language=output_language,
+                language=output_language,
                 emotion=EmotionType.NEUTRAL,
                 gesture=GestureType.EXPLAINING
             )
@@ -196,7 +231,9 @@ class BrainClient:
                 answer="The retrieved Ganga River Basin Management Plan (GRBMP) material does not contain sufficient evidence to answer questions about Mars.",
                 mode="insufficient-evidence",
                 citations=[],
-                language=language,
+                input_language=input_language,
+                output_language=output_language,
+                language=output_language,
                 emotion=EmotionType.THINKING,
                 gesture=GestureType.THINKING
             )
@@ -213,7 +250,9 @@ class BrainClient:
                         knowledge_type="GENERAL"
                     )
                 ],
-                language=language,
+                input_language=input_language,
+                output_language=output_language,
+                language=output_language,
                 emotion=EmotionType.HAPPY,
                 gesture=GestureType.WAVE
             )

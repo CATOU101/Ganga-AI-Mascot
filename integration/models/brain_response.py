@@ -55,18 +55,36 @@ class CitationItem(BaseModel):
 class BrainRequest(BaseModel):
     question: str = Field("", description="Question prompt to Ganga Brain RAG")
     query: str | None = Field(None, description="Alias for question")
-    language: str = Field("hi", description="Target language ('hi' | 'en')")
+    input_language: str | None = Field(None, description="Input language ('en' | 'hi')")
+    output_language: str | None = Field(None, description="Output language ('en' | 'hi')")
+    language: str | None = Field(None, description="Legacy language fallback ('en' | 'hi')")
     top_k: int | None = Field(None, description="Retriever candidate override")
 
     def get_question(self) -> str:
         return (self.question or self.query or "").strip()
+
+    def get_input_language(self) -> str:
+        if self.input_language:
+            return self.input_language.lower().strip()
+        if self.language:
+            return self.language.lower().strip()
+        return "hi"
+
+    def get_output_language(self) -> str:
+        if self.output_language:
+            return self.output_language.lower().strip()
+        if self.language:
+            return self.language.lower().strip()
+        return "hi"
 
 
 class BrainResponse(BaseModel):
     answer: str = Field(..., description="Grounded answer text")
     mode: str = Field("grounded", description="Response mode: 'grounded' | 'insufficient-evidence' | 'current-info-fallback'")
     citations: list[CitationItem] = Field(default_factory=list, description="List of source citations")
-    language: str = Field("hi", description="Language code")
+    input_language: str = Field("hi", description="Input language code")
+    output_language: str = Field("hi", description="Output language code")
+    language: str = Field("hi", description="Legacy language code")
     emotion: EmotionType = Field(EmotionType.NEUTRAL, description="Avatar emotion state")
     gesture: GestureType = Field(GestureType.IDLE, description="Avatar gesture animation")
 
@@ -78,7 +96,9 @@ class AvatarPresentation(BaseModel):
     text: str = Field("", description="Standardized alias for answer text")
     mode: str = Field("grounded", description="Brain mode")
     citations: list[CitationItem] = Field(default_factory=list, description="Provenance citations")
-    language: str = Field("hi", description="Language ('hi' | 'en')")
+    input_language: str = Field("hi", description="Input language ('hi' | 'en')")
+    output_language: str = Field("hi", description="Output language ('hi' | 'en')")
+    language: str = Field("hi", description="Legacy language code")
     emotion: EmotionType = Field(EmotionType.NEUTRAL, description="Emotion expression")
     gesture: GestureType = Field(GestureType.IDLE, description="Gesture pose")
     audio_data_base64: str | None = Field(None, description="Synthesized TTS audio payload (base64)")
