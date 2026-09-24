@@ -111,7 +111,7 @@ Ganga-AI-Mascot/
 
 The repository contains a fully working, source-grounded RAG Brain engine powered by SQLite and NumPy vector search. It features:
 1. **4,085 vector chunks** derived from 1,111 curated sections of 86 official GRBMP PDF reports.
-2. **Crash-proof vector retrieval** utilizing NumPy dense matrix operations over local ONNX 384-dimensional embeddings, bypassing native C/Rust database binding issues on macOS.
+2. **stable SQLite + NumPy vector retrieval backend** utilizing NumPy dense matrix operations over local ONNX 384-dimensional embeddings, bypassing native C/Rust database binding issues on macOS.
 3. **Multi-Factor Evidence Quality Gate** that rejects out-of-scope queries (*"Mars population"*) and static-historical queries asking for real-time water quality (*"current water status"*).
 4. **FastAPI HTTP Server** exposing `/ask` and `/health` endpoints for upcoming avatar and frontend integration.
 
