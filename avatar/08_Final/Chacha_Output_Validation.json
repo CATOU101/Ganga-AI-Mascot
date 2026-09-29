@@ -1,0 +1,133 @@
+{
+  "blend_armature_count": 1,
+  "blend_mesh_count": 1,
+  "blend_bone_count": 23,
+  "blend_actions": [
+    "Happy_Reaction",
+    "Head_Nod",
+    "Head_Turn",
+    "Idle_Breathing",
+    "Simple_Hand_Gesture",
+    "Talking_UpperBody",
+    "Thinking_Reaction"
+  ],
+  "blend_mesh_modifiers": {
+    "Chacha_Rigged_Mesh": [
+      {
+        "name": "Armature",
+        "type": "ARMATURE",
+        "target": "Chacha_Humanoid_Armature"
+      }
+    ]
+  },
+  "blend_materials": [
+    "Chacha_Cane_Brown",
+    "Chacha_Moustache_White",
+    "Chacha_Pants_Navy",
+    "Chacha_Shirt_White",
+    "Chacha_Shoes_Black",
+    "Chacha_Skin",
+    "Chacha_Tie_Red",
+    "Chacha_Turban_Red",
+    "Chacha_Vest_Dark",
+    "Dots Stroke",
+    "Material",
+    "model"
+  ],
+  "blend_shape_keys": [
+    "Basis",
+    "Face_Happy",
+    "Face_Thinking",
+    "Face_Surprised",
+    "Face_SadConfused",
+    "Mouth_Open"
+  ],
+  "renders": [
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Idle_Breathing_frame_30.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Talking_UpperBody_frame_36.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Head_Nod_frame_16.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Head_Turn_frame_20.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Simple_Hand_Gesture_frame_24.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Happy_Reaction_frame_18.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Thinking_Reaction_frame_18.png"
+  ],
+  "expression_renders": [
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Face_Happy.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Face_Thinking.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Face_Surprised.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Face_SadConfused.png",
+    "B:\\Chacha_Avatar\\08_Final\\validation_renders\\Mouth_Open.png"
+  ],
+  "fbx_reimport_armature_count": 1,
+  "fbx_reimport_mesh_count": 1,
+  "fbx_reimport_bone_count": 23,
+  "fbx_reimport_actions": [
+    "Chacha_Humanoid_Armature|Chacha_Humanoid_Armature|Happy_Reactio",
+    "Chacha_Humanoid_Armature|Chacha_Humanoid_Armature|Head_Nod",
+    "Chacha_Humanoid_Armature|Chacha_Humanoid_Armature|Head_Turn",
+    "Chacha_Humanoid_Armature|Chacha_Humanoid_Armature|Idle_Breathin",
+    "Chacha_Humanoid_Armature|Chacha_Humanoid_Armature|Simple_Hand_G",
+    "Chacha_Humanoid_Armature|Chacha_Humanoid_Armature|Talking_Upper",
+    "Chacha_Humanoid_Armature|Chacha_Humanoid_Armature|Thinking_Reac",
+    "Chacha_Humanoid_Armature|Happy_Reaction",
+    "Chacha_Humanoid_Armature|Head_Nod",
+    "Chacha_Humanoid_Armature|Head_Turn",
+    "Chacha_Humanoid_Armature|Idle_Breathing",
+    "Chacha_Humanoid_Armature|Simple_Hand_Gesture",
+    "Chacha_Humanoid_Armature|Talking_UpperBody",
+    "Chacha_Humanoid_Armature|Thinking_Reaction",
+    "Happy_Reaction",
+    "Head_Nod",
+    "Head_Turn",
+    "Idle_Breathing",
+    "Key.001|Chacha_Humanoid_Armature|Happy_Reaction",
+    "Key.001|Chacha_Humanoid_Armature|Head_Nod",
+    "Key.001|Chacha_Humanoid_Armature|Head_Turn",
+    "Key.001|Chacha_Humanoid_Armature|Idle_Breathing",
+    "Key.001|Chacha_Humanoid_Armature|Simple_Hand_Gesture",
+    "Key.001|Chacha_Humanoid_Armature|Talking_UpperBody",
+    "Key.001|Chacha_Humanoid_Armature|Thinking_Reaction",
+    "Key.001|Happy_Reaction",
+    "Key.001|Head_Nod",
+    "Key.001|Head_Turn",
+    "Key.001|Idle_Breathing",
+    "Key.001|Simple_Hand_Gesture",
+    "Key.001|Talking_UpperBody",
+    "Key.001|Thinking_Reaction",
+    "Simple_Hand_Gesture",
+    "Talking_UpperBody",
+    "Thinking_Reaction"
+  ],
+  "fbx_reimport_materials": [
+    "Chacha_Cane_Brown",
+    "Chacha_Cane_Brown.001",
+    "Chacha_Moustache_White",
+    "Chacha_Moustache_White.001",
+    "Chacha_Pants_Navy",
+    "Chacha_Pants_Navy.001",
+    "Chacha_Shirt_White",
+    "Chacha_Shirt_White.001",
+    "Chacha_Shoes_Black",
+    "Chacha_Shoes_Black.001",
+    "Chacha_Skin",
+    "Chacha_Skin.001",
+    "Chacha_Tie_Red",
+    "Chacha_Tie_Red.001",
+    "Chacha_Turban_Red",
+    "Chacha_Turban_Red.001",
+    "Chacha_Vest_Dark",
+    "Chacha_Vest_Dark.001",
+    "Dots Stroke",
+    "Material",
+    "model"
+  ],
+  "fbx_reimport_shape_keys": [
+    "Basis",
+    "Face_Happy",
+    "Face_Thinking",
+    "Face_Surprised",
+    "Face_SadConfused",
+    "Mouth_Open"
+  ],
+  "fbx_reimport_has_armature_modifier": true
+}

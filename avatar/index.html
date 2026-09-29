@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ganga AI Mascot — Chacha Interactive Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌊</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">🌊</div>
+        <div>
+          <h1>Ganga AI Mascot</h1>
+          <p class="subtitle">Chacha Chaudhary Digital Avatar (Member 2 Production) ↔ Grounded RAG Brain ↔ Voice</p>
+        </div>
+      </div>
+      <div class="header-controls" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <div class="lang-selector-group">
+          <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 3px;">Input Lang</span>
+          <div class="lang-selector">
+            <button id="inputLangHi" class="lang-btn active" data-lang="hi">हिंदी</button>
+            <button id="inputLangEn" class="lang-btn" data-lang="en">English</button>
+          </div>
+        </div>
+
+        <div class="lang-selector-group">
+          <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 3px;">Output Lang</span>
+          <div class="lang-selector">
+            <button id="outputLangHi" class="lang-btn active" data-lang="hi">हिंदी</button>
+            <button id="outputLangEn" class="lang-btn" data-lang="en">English</button>
+          </div>
+        </div>
+
+        <div id="statusBadge" class="status-badge state-idle">
+          <span class="status-dot"></span>
+          <span id="statusText">IDLE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Grid Layout -->
+    <main class="main-grid">
+      <!-- Mascot Stage Section -->
+      <section class="mascot-stage-card">
+        <div class="stage-header">
+          <div class="character-tag">CHACHA 3D AVATAR (MEMBER 2 PRODUCTION)</div>
+          <div class="indicators">
+            <span id="avatarVersionBadge" class="tag avatar-version-tag">Avatar: Member 2 Chacha</span>
+            <span id="emotionBadge" class="tag emotion-tag">Emotion: Neutral</span>
+            <span id="gestureBadge" class="tag gesture-tag">Gesture: Idle</span>
+            <span id="modeBadge" class="tag mode-tag mode-grounded">Mode: Grounded</span>
+          </div>
+        </div>
+
+        <div class="stage-canvas-wrapper" style="position: relative;">
+          <div id="avatarLoadingOverlay" class="avatar-loading-overlay">
+            <div class="avatar-spinner"></div>
+            <span class="loading-label">Loading Member 2 Chacha (GLB)...</span>
+          </div>
+          <canvas id="mascotCanvas3D" class="mascot-canvas-3d"></canvas>
+        </div>
+
+        <!-- Audio Output Visualizer -->
+        <div class="audio-visualizer-bar">
+          <div class="viz-label">RMS Audio Lip-Sync Signal</div>
+          <div class="viz-track">
+            <div id="vizFill" class="viz-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Q&A and Citations Panel -->
+      <section class="interaction-card">
+        <!-- Answer Display -->
+        <div class="answer-display-box">
+          <div class="box-header">
+            <h3>Response & Source Provenance</h3>
+            <span id="responseLangBadge" class="lang-tag">Lang: HI</span>
+          </div>
+
+          <div id="questionPromptView" class="question-prompt-view" style="display: none;">
+            <strong>Q:</strong> <span id="userQuestionText"></span>
+          </div>
+
+          <div id="answerText" class="answer-text">
+            Namaste! I am Chacha, your river conservation mascot. Ask me anything about the Ganga River, pollution sources, water quality, or Namami Gange programs.
+          </div>
+
+          <!-- Thinking / Loading Wave -->
+          <div id="thinkingWave" class="thinking-wave" style="display: none;">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <span>Consulting official GRBMP knowledge base...</span>
+          </div>
+
+          <!-- Citations Panel -->
+          <div class="citations-section">
+            <h4>Verified GRBMP Citations (<span id="citationCount">0</span>)</h4>
+            <div id="citationsList" class="citations-list">
+              <div class="empty-citations">No citations loaded yet. Ask a question to view GRBMP provenance.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Input Controls -->
+        <div class="input-controls-box">
+          <form id="askForm" class="ask-form">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="questionInput"
+                class="question-input"
+                placeholder="Type your question about Ganga, GRBMP, or pollution..."
+                autocomplete="off"
+              />
+              <button type="button" id="micBtn" class="mic-btn" title="Click to speak (Voice STT)">
+                🎙️
+              </button>
+            </div>
+            <button type="submit" id="submitBtn" class="submit-btn">
+              <span>Ask Brain</span>
+              <span class="btn-arrow">→</span>
+            </button>
+          </form>
+          <div id="voiceStatusMsg" class="voice-status-msg"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Namami Gange Initiative • CSE Mini-Project PRJ_316 • Source-Grounded RAG Architecture</p>
+    </footer>
+  </div>
+
+  <script src="mascot.js?v=member2-final5"></script>
+  <script src="app.js?v=member2-final5"></script>
+</body>
+</html>

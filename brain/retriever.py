@@ -21,8 +21,69 @@ STOPWORDS = frozenset({
     "by", "from", "about", "according", "which", "where", "when", "who", "whom",
     "why", "how", "this", "that", "these", "those", "tell", "tells", "say", "says",
     "give", "me", "us", "you", "your", "can", "could", "would", "should", "material",
-    "kb", "knowledge", "base", "grbmp", "ganga", "river",
+    "kb", "knowledge", "base", "grbmp",
 })
+
+SPECIFIC_TOPIC_TERMS = frozenset({
+    "aviral", "dhara", "nirmal", "ngrba", "dolphin", "fish", "hilsa", "agriculture",
+    "pesticide", "sanitation", "sewage", "stp", "treatment", "flood", "landslide",
+    "disaster", "cremation", "hazard", "swot", "legal", "legislation", "law", "act",
+    "ordinance", "judgement", "court", "institution", "governance", "model", "policy",
+    "mining", "tannery", "industrial", "effluent", "wetland", "afforestation",
+    "tributary", "tributaries", "monitoring", "station", "discharge", "quality",
+    "dissolved", "oxygen", "bod", "cod",
+})
+
+CORE_OVERVIEW_FILES = (
+    "13_GRBMP - MPD.pdf",
+    "25_GRBMPInterim_Rep.pdf",
+    "27_GRBMP - Extended Summary.pdf",
+    "29_2014-06-13_GRBMP_Extended Summary.pdf",
+    "Vision Ganga Eng_Compressed.pdf",
+    "33_43_001_GEN_DAT_01.pdf",
+)
+
+CORE_OVERVIEW_TITLES = (
+    "main plan document",
+    "interim report",
+    "extended summary",
+    "vision ganga",
+    "river ganga at a glance",
+)
+
+OVERVIEW_SECTIONS = (
+    "defining river ganga",
+    "key features of national river ganga basin",
+    "river ganga in basin perspective",
+    "vision",
+    "chapter i",
+    "1. introduction",
+)
+
+
+def is_broad_ganga_query(question: str) -> bool:
+    """Detect queries seeking a broad or general overview of the Ganga River."""
+    lowered = question.lower()
+    has_domain = "ganga" in lowered or "river" in lowered
+    if not has_domain:
+        return False
+    tokens = set(re.findall(r"[A-Za-z0-9][A-Za-z0-9_-]*", lowered))
+    if tokens & SPECIFIC_TOPIC_TERMS:
+        return False
+    return True
+
+
+def is_core_overview_hit(hit: dict) -> bool:
+    """Identify whether candidate hit comes from core overview material."""
+    fn = str(hit.get("metadata", {}).get("file_name", "")).lower()
+    title = str(hit.get("metadata", {}).get("title", "")).lower()
+    section = str(hit.get("metadata", {}).get("section", "")).lower()
+
+    file_match = any(f.lower() in fn for f in CORE_OVERVIEW_FILES)
+    title_match = any(t in title for t in CORE_OVERVIEW_TITLES)
+    sec_match = any(s in section for s in OVERVIEW_SECTIONS)
+
+    return (file_match or title_match) or (sec_match and ("main plan" in title or "summary" in title or "glance" in title or "interim" in title))
 
 
 def asks_for_current_information(question: str) -> bool:
@@ -66,18 +127,17 @@ class Retriever:
             return False, []
 
         # Out-of-domain / Unsupported topic check:
-        # If question contains non-domain specific keywords (e.g., 'mars', 'animation', '3d'),
-        # verify that at least one candidate text contains those key terms.
-        discriminating_terms = [kw for kw in keywords if kw not in {"pollution", "water", "sewage", "flow", "basin", "management"}]
-        if discriminating_terms:
-            any_term_found = False
-            for hit in hits:
-                content = (hit["text"] + " " + str(hit["metadata"].get("title", "")) + " " + str(hit["metadata"].get("section", ""))).lower()
-                if any(term in content for term in discriminating_terms):
-                    any_term_found = True
-                    break
-            if not any_term_found:
+        # Require that at least 60% of query keywords appear somewhere in the candidate pool.
+        if keywords:
+            pool_terms_found = sum(
+                1 for kw in keywords
+                if any(kw in (hit["text"] + " " + str(hit["metadata"].get("title", "")) + " " + str(hit["metadata"].get("section", ""))).lower() for hit in hits)
+            )
+            pool_coverage = pool_terms_found / len(keywords)
+            if pool_coverage < 0.60:
                 return False, []
+
+        is_broad = is_broad_ganga_query(question)
 
         scored_hits = []
         for hit in hits:
@@ -97,8 +157,11 @@ class Retriever:
             if distance > max_dist:
                 continue
 
-            # Calculate hybrid score
-            hybrid_score = (1.0 / (1.0 + distance)) + (0.5 * overlap_ratio)
+            # Calculate hybrid score with mild overview preference for broad queries
+            base_score = (1.0 / (1.0 + distance)) + (0.5 * overlap_ratio)
+            overview_boost = 0.25 if (is_broad and is_core_overview_hit(hit)) else 0.0
+            hybrid_score = base_score + overview_boost
+
             scored_hits.append((hybrid_score, overlap_ratio, hit))
 
         if not scored_hits:
@@ -140,3 +203,4 @@ def assemble_context(hits: list[dict], max_chars: int = 6000) -> str:
         parts.append(block)
         used += len(block)
     return "\n\n---\n\n".join(parts)
+

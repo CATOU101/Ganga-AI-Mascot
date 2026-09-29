@@ -1,0 +1,133 @@
+"""Unified Integration FastAPI server mounting Brain API, Integration endpoints, and Web Avatar UI."""
+
+from __future__ import annotations
+
+import argparse
+import os
+import uvicorn
+from pathlib import Path
+from fastapi import FastAPI, HTTPException, File, UploadFile, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from brain.api import app as brain_app
+from integration.api.brain_client import BrainClient
+from integration.config.integration_config import load_integration_config
+from integration.controller.conversation_controller import ConversationController
+from integration.models.brain_response import AvatarPresentation, BrainRequest
+from integration.avatar.mascot_presenter import MascotPresenter
+from integration.voice.stt_adapter import get_stt_adapter
+from integration.voice.tts_adapter import get_tts_adapter
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+AVATAR_DIR = ROOT_DIR / "avatar"
+
+config = load_integration_config()
+brain_client = BrainClient(config)
+controller = ConversationController(brain_client=brain_client, config=config)
+presenter = MascotPresenter()
+stt_adapter = get_stt_adapter(config.stt_provider)
+tts_adapter = get_tts_adapter("synthetic" if config.mock_mode else config.tts_provider)
+
+app = FastAPI(
+    title="Ganga AI Mascot End-to-End Integration Server",
+    description="Unified API & Avatar presentation server connecting Brain RAG, STT, TTS, Lip-Sync, and UI.",
+    version="1.0.0",
+)
+
+# Enable CORS for local cross-origin connections (e.g., local Unity or WebGL app)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(content=b"", media_type="image/x-icon", status_code=204)
+
+
+@app.get("/api/integration/health")
+def integration_health():
+    return {
+        "status": "ok",
+        "service": "ganga-integration-server",
+        "mock_mode": config.mock_mode,
+        "brain_url": config.brain_base_url,
+    }
+
+
+@app.post("/api/integration/ask", response_model=AvatarPresentation)
+def integration_ask(req: BrainRequest):
+    q_text = req.get_question()
+    if not q_text:
+        raise HTTPException(status_code=400, detail="Question string must not be empty.")
+
+    in_lang = req.get_input_language()
+    out_lang = req.get_output_language()
+
+    # Process question through conversation state machine
+    pres = controller.process_text_question(q_text, input_language=in_lang, output_language=out_lang, top_k=req.top_k)
+
+    # Synthesize optional TTS audio using output_language & compute lip-sync frames
+    tts_result = tts_adapter.synthesize_speech(pres.answer, language=out_lang)
+    final_pres = presenter.attach_audio_and_lipsync(pres, tts_result=tts_result)
+    final_pres.question = q_text
+
+    controller.finish_speaking(input_language=in_lang, output_language=out_lang)
+    return final_pres
+
+
+@app.post("/api/integration/stt", response_model=AvatarPresentation)
+async def integration_stt(
+    file: UploadFile = File(None),
+    audio: UploadFile = File(None),
+    input_language: str = "hi",
+    output_language: str = "hi",
+    language: str | None = None,
+):
+    upload_file = file or audio
+    if not upload_file:
+        raise HTTPException(status_code=400, detail="Audio file must be uploaded as 'file' or 'audio'.")
+
+    in_lang = (input_language or language or "hi").lower().strip()
+    out_lang = (output_language or language or "hi").lower().strip()
+
+    audio_bytes = await upload_file.read()
+    transcription = stt_adapter.transcribe_audio(audio_bytes, language=in_lang)
+
+    if not transcription:
+        return AvatarPresentation(
+            state=controller.cancel_to_idle("Could not transcribe voice input.").state,
+            answer="Sorry, I could not hear or transcribe your voice input.",
+            mode="insufficient-evidence",
+            input_language=in_lang,
+            output_language=out_lang,
+            language=out_lang,
+        )
+
+    return integration_ask(BrainRequest(question=transcription, input_language=in_lang, output_language=out_lang))
+
+
+# Mount the core Brain FastAPI router endpoints (/ask, /health) directly
+app.mount("/brain", brain_app)
+
+# Serve Web Mascot frontend if avatar directory exists
+if AVATAR_DIR.exists() and (AVATAR_DIR / "index.html").exists():
+    app.mount("/", StaticFiles(directory=str(AVATAR_DIR), html=True), name="avatar_ui")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Start Ganga AI Mascot Integration Server")
+    parser.add_argument("--host", default=config.server_host, help="Host address to bind")
+    parser.add_argument("--port", type=int, default=config.server_port, help="Port to listen on")
+    args = parser.parse_args()
+
+    uvicorn.run("integration.server:app", host=args.host, port=args.port, reload=False)
+
+
+if __name__ == "__main__":
+    main()

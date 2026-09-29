@@ -1,0 +1,43 @@
+{
+  "description": "Mapping from Rhubarb acoustic mouth cues to Chacha 16-Viseme target system",
+  "rhubarb_to_chacha_en": {
+    "X": "Silence",
+    "A": "MBP",
+    "B": "DTN",
+    "C": "E",
+    "D": "A",
+    "E": "O",
+    "F": "U",
+    "G": "FV",
+    "H": "L"
+  },
+  "rhubarb_to_chacha_hi": {
+    "X": "Silence",
+    "A": "MBP",
+    "B": "DTN",
+    "C": "E",
+    "D": "A",
+    "E": "O",
+    "F": "U",
+    "G": "FV",
+    "H": "L"
+  },
+  "chacha_allowed_visemes": [
+    "A",
+    "E",
+    "I",
+    "O",
+    "U",
+    "MBP",
+    "FV",
+    "L",
+    "DTN",
+    "KG",
+    "SHCH",
+    "R",
+    "S",
+    "NG",
+    "Th",
+    "Silence"
+  ]
+}

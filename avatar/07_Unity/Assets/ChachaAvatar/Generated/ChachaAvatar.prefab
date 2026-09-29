@@ -1,0 +1,399 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1188068579909238982
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_Name
+      value: ChachaAvatar
+      objectReference: {fileID: 0}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 61ca947ddeff0f988d1160c78636388f, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 27126fb8561842b55c1765c9973aa431, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a9edee91b8cfc3a0f9732ddc84d3bf70, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1913c19c1cf25e6054695e3c78ae5f8d, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 86ee6359c1467ca6f9642a9ad1be73ce, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[5]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fe7b4b49b87f6f7ae4ca0e4933b748f9, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 675fccc21628dbf43051ce92c673143c, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[7]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9efb3d2fe5c8c5bd5fefe13d266f5173, type: 2}
+    - target: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      propertyPath: 'm_Materials.Array.data[8]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6730667a51290146b54e83a740199994, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 100000003}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1261320423245436882}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5627366342016239302}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7324996579808613685}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9059639875327659824}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2939996935494834099}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8867080445656598001}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3535919931878260847}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3441318769884597812}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1480397207497611052}
+  m_SourcePrefab: {fileID: 100100000, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+--- !u!1 &2071013463857446295 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+  m_PrefabInstance: {fileID: 1188068579909238982}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &100000003
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 13a8bfbbc73d6d21775ae209dc36d302, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!82 &1261320423245436882
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &5627366342016239302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a885b1075bce566f568d97bd7d31134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.HttpTextToSpeechProvider
+  audioType: 20
+--- !u!114 &7324996579808613685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b73f82194a2b3c4d5e6f7a8b9c0d1e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.HttpSpeechToTextProvider
+  endpoint: http://127.0.0.1:8765/stt
+--- !u!114 &9059639875327659824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 908ab35e6b12ef947b2f6a095079babf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.HttpBrainApiClient
+  endpoint: http://127.0.0.1:8765/brain
+  authorizationHeader: 
+--- !u!114 &2939996935494834099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2675f028e554b7a47359a846eef48351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.AudioMouthLipSync
+  faceRenderer: {fileID: 4593519028310022255}
+  sensitivity: 6
+  smoothing: 16
+  silenceThreshold: 0.008
+  minimumOpenWeight: 12
+  maximumOpenWeight: 85
+  enableProceduralFallback: 1
+--- !u!114 &8867080445656598001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 535d80757f02b0978fac857d114a7275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.ChachaAvatarController
+  animator: {fileID: 100000003}
+  faceRenderer: {fileID: 4593519028310022255}
+  speechAudio: {fileID: 1261320423245436882}
+  lipSync: {fileID: 2939996935494834099}
+  textToSpeech: {fileID: 5627366342016239302}
+  brainApi: {fileID: 9059639875327659824}
+  voices:
+  - language: hi
+    voice: chacha_hi
+    ttsEndpoint: http://127.0.0.1:8765/tts
+  - language: en
+    voice: chacha_en
+    ttsEndpoint: http://127.0.0.1:8765/tts
+  greetingClipHindi: {fileID: 8300000, guid: 3a1370610f17e376b795c3c6057e9721, type: 3}
+  happyClipHindi: {fileID: 8300000, guid: 8ea849e86b9557f747f3f7f5dd251a36, type: 3}
+  thinkingClipHindi: {fileID: 8300000, guid: a8c04af766c53f37320b62b72fe85bfd, type: 3}
+  surprisedClipHindi: {fileID: 8300000, guid: 034d2ab712455938c0768a0886cab62f, type: 3}
+  nodClipHindi: {fileID: 8300000, guid: ef44f4e280404ff72e49131890e60417, type: 3}
+  greetingClipEnglish: {fileID: 8300000, guid: b9fde463b3eb5075b9c1e8b213b8b38e, type: 3}
+  happyClipEnglish: {fileID: 8300000, guid: cb5be809a3001812ad678f5a7aa83f03, type: 3}
+  thinkingClipEnglish: {fileID: 8300000, guid: b69e6c40d96fa74901483b2e4d50b6d4, type: 3}
+  surprisedClipEnglish: {fileID: 8300000, guid: bbac186b01fd2606fdc5ae5cfa09947b, type: 3}
+--- !u!114 &3535919931878260847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a1f6eb4951bc969d311e3288e698258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.MicrophoneSpeechInput
+  speechToText: {fileID: 7324996579808613685}
+  language: hi
+  maxRecordingSeconds: 20
+  sampleRate: 16000
+--- !u!114 &3441318769884597812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069b7c46bb378836ff6b9eb453e41288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.ChachaConversationController
+  microphoneInput: {fileID: 3535919931878260847}
+  brainApi: {fileID: 9059639875327659824}
+  avatar: {fileID: 8867080445656598001}
+--- !u!114 &1480397207497611052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071013463857446295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac7d88ee1c4d25b13851257db6f315c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChachaAvatar.ChachaTestUI
+  avatar: {fileID: 8867080445656598001}
+  conversation: {fileID: 3441318769884597812}
+  model2Avatar: {fileID: 0}
+  model3Avatar: {fileID: 0}
+  mockServerHealthUrl: http://127.0.0.1:8765/health
+--- !u!137 &4593519028310022255 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3441782710629144745, guid: 933d12cebb1616d8b69ffca9577d5508, type: 3}
+  m_PrefabInstance: {fileID: 1188068579909238982}
+  m_PrefabAsset: {fileID: 0}

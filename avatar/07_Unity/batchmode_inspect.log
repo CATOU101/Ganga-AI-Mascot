@@ -1,0 +1,42 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.24f1 (4e7b9b5b6244) revision 5143451'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-BADALKUMAR" at "2026-09-12T12:34:23.2879656Z"
+OS: 'Windows 10  (10.0.19045) 64bit Professional' Language: 'en' Physical Memory: 8066 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-09-12T12:34:23Z
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 4312, path: "C:/Program Files/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.3+d7ffd15
+  Session Id:              c4f39977773647f588be5bb62580447c
+  Correlation Id:          c12c044743f9ced399b352154125ae74
+  External correlation Id: 5023032934945755345
+  Machine Id:              k9e3qzgTFulwvewVJEnO4UfAwmg=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-BADALKUMAR" (connect: 0.00s, validation: 0.00s, handshake: 1.42s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-BADALKUMAR-notifications" at "2026-09-12T12:34:24.7063699Z"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 13469969200545-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 1.84s
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.24f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+B:\Chacha_Avatar\07_Unity
+-executeMethod
+ChachaAvatar.Editor.ChachaSceneBuilder.InspectFbx
+-logFile
+B:\Chacha_Avatar\07_Unity\batchmode_inspect.log
+Successfully changed project path to: B:\Chacha_Avatar\07_Unity
+B:/Chacha_Avatar/07_Unity
+Exiting without the bug reporter. Application will terminate with return code 1
