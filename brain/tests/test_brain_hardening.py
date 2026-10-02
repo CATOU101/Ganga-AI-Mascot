@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from dataclasses import replace
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import Mock, patch
 
 import numpy as np
 from fastapi.testclient import TestClient
@@ -16,7 +16,7 @@ from brain.api import AskRequest, app
 from brain.chunking import Chunk
 from brain.config import load_config
 from brain.embeddings import embedding_provenance
-from brain.generator import OpenAIChatGenerator
+from brain.generator import GroqGenerator
 from brain.translator import TranslationError, normalize_language, translate_text
 from brain.vector_store import IndexIntegrityError, _validate_index_files, _write_sqlite_index
 
@@ -180,14 +180,11 @@ class BrainHardeningTests(unittest.TestCase):
             with self.assertRaisesRegex(IndexIntegrityError, "Vector shape"):
                 _validate_index_files(test_config, sqlite_path, vectors_path, manifest_path)
 
-    def test_openai_generator_uses_bearer_api_key(self):
-        response = MagicMock()
-        response.__enter__.return_value.read.return_value = json.dumps(
-            {"choices": [{"message": {"content": "Supported answer."}}]}
-        ).encode("utf-8")
-        generator = OpenAIChatGenerator.__new__(OpenAIChatGenerator)
-        generator.api_key = "test-key"
-        generator.model = "test-model"
+    def test_groq_generator_configures_sdk_with_api_key(self):
+        sdk_client = Mock()
+        sdk_client.chat.completions.create.return_value.choices = [
+            Mock(message=Mock(content="Supported answer."))
+        ]
         hits = [
             {
                 "text": "Ganga source evidence is represented here.",
@@ -200,10 +197,19 @@ class BrainHardeningTests(unittest.TestCase):
                 },
             }
         ]
-        with patch("brain.generator.urllib.request.urlopen", return_value=response) as urlopen:
-            generator.generate("What is Ganga?", hits)
-        request = urlopen.call_args.args[0]
-        self.assertEqual(request.get_header("Authorization"), "Bearer test-key")
+        with patch.dict("os.environ", {"GROQ_API_KEY": "test-key"}):
+            with patch("openai.OpenAI", return_value=sdk_client) as openai_client:
+                generator = GroqGenerator(model="test-model")
+                result = generator.generate("What is Ganga?", hits)
+
+        openai_client.assert_called_once_with(
+            api_key="test-key",
+            base_url="https://api.groq.com/openai/v1",
+            timeout=30.0,
+            max_retries=0,
+        )
+        self.assertEqual(sdk_client.chat.completions.create.call_count, 1)
+        self.assertEqual(result["answer"], "Supported answer.")
 
     def test_health_reports_readiness_and_ask_defaults_languages(self):
         class ReadyStore:
