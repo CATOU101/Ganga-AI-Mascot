@@ -63,7 +63,13 @@ def answer_question(
 
     # Step 4: Generate grounded answer with citations
     generator = build_generator(config.llm_provider, config.llm_model)
-    result = generator.generate(search_question, hits, is_sufficient)
+    result = generator.generate(
+        search_question,
+        hits,
+        is_sufficient,
+        input_language=input_lang,
+        output_language=output_lang,
+    )
 
     # Step 5: Translate answer to output_language if requested
     if output_lang != "en":

@@ -1,6 +1,6 @@
 # Ganga Brain — Demo-Ready RAG Engine
 
-The **Brain** of the Ganga AI Mascot retrieves from the reviewed Ganga River Basin Management Plan (GRBMP) knowledge base and returns extractive answers with source metadata.
+The **Brain** of the Ganga AI Mascot retrieves from the reviewed Ganga River Basin Management Plan (GRBMP) knowledge base and returns grounded answers with source metadata. The default generator uses Groq; set `LLM_PROVIDER=extractive` to use local extractive generation instead.
 
 It uses heuristic checks for unsupported and current-information questions, and reports provenance for retrieved chunks that contribute extracted sentences. These mechanisms are not claim-level evidence verification or a guarantee against unsupported answers.
 
@@ -74,16 +74,13 @@ GANGA_BRAIN_MIN_KEYWORD_OVERLAP=0.15
 # ONNX runtime thread limit
 GANGA_BRAIN_ORT_THREADS=2
 
-# Generator provider: 'extractive' (default local) or 'openai'
-GANGA_BRAIN_LLM_PROVIDER=extractive
-GANGA_BRAIN_LLM_MODEL=grounded-extractive-v1
-
-# Optional: choose openai provider, then set GANGA_BRAIN_LLM_MODEL to the API model
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
+# Generator provider: 'groq' or 'extractive'
+LLM_PROVIDER=groq
+GROQ_MODEL=openai/gpt-oss-120b
+# Set GROQ_API_KEY privately in the process environment or ignored local .env.
 ```
 
-`GANGA_BRAIN_LLM_MODEL`, when set, takes precedence; if it is unset, `OPENAI_MODEL` supplies the model name. The embedding model setting applies to the `semantic` provider; the `local-hash` provider always uses its fixed hash-embedding implementation. Index paths, collection name, and chunk-size defaults are defined in `BrainConfig` rather than loaded from environment variables.
+The Groq provider uses the OpenAI Python SDK with Groq's OpenAI-compatible API. `.env` values are not loaded automatically; load them into the process environment before starting the API. The embedding model setting applies to the `semantic` provider; the `local-hash` provider always uses its fixed hash-embedding implementation. Index paths, collection name, and chunk-size defaults are defined in `BrainConfig` rather than loaded from environment variables.
 
 ---
 
@@ -96,7 +93,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Build the complete index
+### 2. Configure Groq generation
+
+Copy `.env.example` to the ignored local `.env` file, add `GROQ_API_KEY` there, then export the settings before launching:
+
+```bash
+cp .env.example .env
+# Add GROQ_API_KEY=your_secret_key to the local .env file.
+set -a
+source .env
+set +a
+```
+
+Groq is called only after current-information handling, retrieval, and the evidence quality gate accept the query. The model receives selected evidence and trusted metadata; citations are assembled by the Brain from retrieved metadata. If the key is missing or generation fails, the existing extractive generator is used. Current-information and insufficient-evidence responses bypass the LLM.
+
+### 3. Build the complete index
 
 Build the derived ingestion manifest, split approved sections into chunks, write the configured SQLite collection, generate embeddings, and validate the SQLite/vector/manifest identities before publishing the index:
 
@@ -106,20 +117,20 @@ python -m brain.rag_pipeline --build-index
 
 The equivalent vector-store CLI is `python -m brain.vector_store --generate-vectors`. Both commands build the complete index from reviewed/processed knowledge. The pre-existing Chroma-format artifacts are not overwritten.
 
-### 3. Ask a Question via CLI
+### 4. Ask a Question via CLI
 
 ```bash
 python -m brain.rag_pipeline --ask "What is Aviral Dhara?"
 ```
 
 
-### 4. Run Evaluation Test Suite
+### 5. Run Evaluation Test Suite
 
 ```bash
 python -m brain.tests.run_evaluation
 ```
 
-### 5. Start the HTTP API Server for Integration
+### 6. Start the HTTP API Server for Integration
 
 ```bash
 python -m brain.api --host 0.0.0.0 --port 8000
@@ -195,5 +206,5 @@ Omitting language fields defaults both input and output to English. Supported co
 ## Limitations
 
 - Prototype uses static GRBMP PDF material; live telemetry/water quality sensor APIs should be integrated behind a dedicated realtime service.
-- The default generator is extractive sentence selection. Translation between English and Hindi uses the existing external Google Translate GTX endpoint; when that endpoint fails, translation raises an explicit error and the API returns HTTP 503 rather than presenting untranslated text as translated.
+- Groq-assisted phrasing is not a guarantee of factual correctness or claim-level entailment. Translation between English and Hindi uses the existing external Google Translate GTX endpoint; when that endpoint fails, translation raises an explicit error and the API returns HTTP 503 rather than presenting untranslated text as translated.
 - `REVIEW_REQUIRED`, `OCR_REQUIRED`, `FILTER`, and `EXCLUDE` sections are excluded.

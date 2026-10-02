@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import math
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_API_TOP_K = 100
+DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b"
 
 
 @dataclass(frozen=True)
@@ -34,10 +35,9 @@ class BrainConfig:
     evidence_max_distance: float = float(os.getenv("GANGA_BRAIN_EVIDENCE_MAX_DISTANCE", "1.15"))
     min_keyword_overlap: float = float(os.getenv("GANGA_BRAIN_MIN_KEYWORD_OVERLAP", "0.15"))
     ort_threads: int = int(os.getenv("GANGA_BRAIN_ORT_THREADS", "2"))
-    llm_provider: str = os.getenv("GANGA_BRAIN_LLM_PROVIDER", "extractive")
-    llm_model: str = os.getenv(
-        "GANGA_BRAIN_LLM_MODEL",
-        os.getenv("OPENAI_MODEL", "grounded-extractive-v1"),
+    llm_provider: str = field(default_factory=lambda: os.getenv("LLM_PROVIDER", "groq"))
+    llm_model: str = field(
+        default_factory=lambda: os.getenv("GROQ_MODEL", "").strip() or DEFAULT_GROQ_MODEL
     )
 
     def __post_init__(self) -> None:
@@ -70,7 +70,7 @@ class BrainConfig:
                 )
         elif self.embedding_provider.lower().strip() not in {"local-hash", "hash", "baseline"}:
             raise ValueError(f"Unsupported embedding provider: {self.embedding_provider}")
-        if self.llm_provider.lower().strip() not in {"extractive", "openai"}:
+        if self.llm_provider.lower().strip() not in {"extractive", "groq"}:
             raise ValueError(f"Unsupported answer generator provider: {self.llm_provider}")
         if not self.llm_model.strip():
             raise ValueError("llm_model must not be empty")
