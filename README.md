@@ -5,6 +5,22 @@
 
 Ganga AI Mascot is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based mascot interface. The Brain answers questions using a curated, static collection of official Ganga and Namami Gange documents. A Groq-hosted language model is used for grounded generation after evidence retrieval and filtering; it is not a live web or river-monitoring service.
 
+The project brings together source-grounded question answering, a Three.js character interface, and voice-related adapters. Its educational aim is to make information about Ganga stewardship, pollution, and conservation accessible through text and supported voice interaction.
+
+## Overall system architecture
+
+```text
+Browser text or audio input
+        ↓
+Integration FastAPI service
+        ├── Text questions ──→ Brain client ──→ Brain retrieval and answer pipeline
+        └── Audio input ──────→ STT adapter ───→ Brain retrieval and answer pipeline
+                                                   ↓
+Browser UI ← Avatar presentation ← TTS and lip-sync processing ← Answer and citations
+```
+
+The integration service exposes its own endpoints and mounts the standalone Brain API under `/brain`. The browser interface is served from `avatar/` when its `index.html` is present. Voice synthesis and lip-sync use the configured integrations and available platform tools; availability can depend on runtime configuration and operating system.
+
 ## Brain architecture
 
 ```text
@@ -104,7 +120,18 @@ The integration application can be started separately:
 python -m integration.server --host 127.0.0.1 --port 8080
 ```
 
-It defines `/api/integration/health`, `/api/integration/ask`, and `/api/integration/stt`, mounts the Brain API under `/brain`, and serves the avatar frontend when its entry point is available. Voice services and browser/avatar behavior are integration components; this README does not claim every deployment or platform combination is complete.
+It defines `/api/integration/health`, `/api/integration/ask`, and `/api/integration/stt`, mounts the Brain API under `/brain`, and serves the avatar frontend when its entry point is available. If the frontend is served, open `http://127.0.0.1:8080/`. The interface supports typed questions and browser-recorded audio input, with input and output language controls for English and Hindi.
+
+## Avatar, voice, and integration components
+
+- **Avatar and browser UI:** `avatar/index.html`, `avatar/app.js`, and `avatar/mascot.js` provide the web interface and Three.js avatar controller. The model asset is `avatar/Member2_Chacha/Chacha_Master.glb`. The controller includes mappings for facial morph targets, Mixamo actions, avatar states, and speech visemes.
+- The avatar implementation documents 35 morph targets, nine Mixamo actions, and a 57-bone model rig; its controller also includes procedural blinking and animation/state handling.
+- **Speech recognition:** `integration/voice/stt_adapter.py` provides the Vosk adapter for English and Hindi, along with mock and browser-delegation adapters. Audio upload is handled by the integration STT route.
+- **Speech synthesis:** `integration/voice/tts_adapter.py` provides Edge TTS and Windows SAPI-backed adapters, a synthetic WAV adapter for testing, and browser Web Speech delegation. Actual provider availability depends on the host environment.
+- **Lip-sync and presentation:** `integration/avatar/lipsync.py` wraps Rhubarb when its binary is available and includes fallback timelines and RMS-based mouth-aperture analysis. `mascot_presenter.py` combines Brain responses with optional audio and lip-sync data for the browser.
+- **Conversation and Brain connection:** `integration/controller/` manages conversation state; `integration/api/brain_client.py` connects the integration service to the Brain.
+
+These are implemented project components, not a claim that every provider or operating-system path has been validated in every deployment environment.
 
 ## Tests
 
@@ -117,20 +144,48 @@ python -m pytest -q integration/tests
 
 The Brain provider tests mock Groq. These test commands do not require a real Groq request.
 
+The Brain suite on the integrated `main` branch was most recently verified with 38 passing tests. Run the commands above to check the current checkout; no fixed result is claimed for the integration suite here.
+
+## Project workstreams
+
+The earlier project documentation records these areas of team work:
+
+- **Brain and RAG:** knowledge-base curation, reviewed-section processing, indexing, hybrid retrieval, and evidence quality gating.
+- **Digital avatar and WebGL:** Chacha Chaudhary model and interface work, Three.js rendering, animation, and facial controls.
+- **Integration and voice:** FastAPI integration, dialogue state, speech recognition and synthesis adapters, and lip-sync/presentation.
+
 ## Repository layout
 
 ```text
-brain/                  RAG pipeline, retriever, generator, API, prompts, and tests
-brain/prompts/          Public prompt interface and system prompt
-knowledge_base/         Source documents, processed sections, and vector-index files
-integration/            Integration API, Brain client, dialogue, voice, and avatar adapters
-avatar/                 Web avatar frontend and model assets
+brain/
+  api.py                Standalone Brain FastAPI service
+  rag_pipeline.py       Retrieval and generation orchestration
+  retriever.py          Hybrid retrieval and ranking
+  vector_store.py       SQLite metadata and NumPy vector index
+  generator.py          Groq-backed and extractive answer generators
+  prompts/              Public prompt interface and system prompt
+  tests/                Brain regression and provider tests
+knowledge_base/
+  raw_documents/        Source document collection
+  processed/            Extracted and reviewed content
+  vector_db/            Runtime index files and retained legacy artifacts
+integration/
+  server.py             Integration FastAPI app and frontend hosting
+  api/                  Brain client
+  controller/           Conversation state and orchestration
+  voice/                STT and TTS adapters
+  avatar/               Presentation, emotion, gesture, and lip-sync
+  tests/                Integration tests
+avatar/                 Web interface, Three.js code, and model assets
 research/               Research material
 docs/                   Project documentation and design material
+tools/                  Supporting tools, including lip-sync tooling
 ```
 
 ## Status and limitations
 
 The Brain Phase 1 knowledge pipeline and Phase 2 Groq generation are integrated in the current project branch. The system is a prototype: it uses static documents, heuristic retrieval/evidence thresholds, and an external generation provider. It does not have live web search or real-time water-quality data, does not perform formal claim-level entailment verification, and does not guarantee factual correctness. Translation and optional voice services depend on their configured external or platform-specific components.
+
+Potential future directions recorded in earlier project material include adding live hydrological data sources, expanding language coverage, and exploring physical mascot embodiments; these are not described as implemented features.
 
 This academic project demonstrates an information-access prototype for river-conservation awareness; it is not an operational environmental monitoring or decision-support system.
