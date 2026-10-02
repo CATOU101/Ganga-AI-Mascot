@@ -1,0 +1,1131 @@
+# Prototype Ingestion Manifest
+
+Generated: `2026-10-02T06:44:52.533142+00:00`
+
+This is a derived prototype manifest. It does not change source classifications.
+
+## Selection Rule
+
+Only sections classified KEEP, KEEP_HISTORICAL, or KEEP_METHODOLOGICAL.
+
+Excluded classifications: `REVIEW_REQUIRED`, `OCR_REQUIRED`, `FILTER`, `EXCLUDE`.
+
+## Summary
+
+- Selected sections: **1111**
+- Skipped approved sections with missing text: **0**
+- Documents loaded: **83**
+
+## Included Sections
+
+- `prototype-section-00001` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00004` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 7-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Brief Summary`
+- `prototype-section-00005` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 8-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Key Concepts and Terms`
+- `prototype-section-00007` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 16-17; KEEP_HISTORICAL; HISTORICAL; section: `4.2. Generic Functions (GFs)`
+- `prototype-section-00008` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 18-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.3. The Core Governance Tasks (CTs)`
+- `prototype-section-00009` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 20-20; KEEP; STATIC; section: `4.4. Execution of Generic Function`
+- `prototype-section-00010` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 21-21; KEEP; STATIC; section: `5. The Governance Process: Limitations and Failure`
+- `prototype-section-00011` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 22-22; KEEP_HISTORICAL; HISTORICAL; section: `5.2. Governance Process in Practice`
+- `prototype-section-00012` — `GRBMP-TR-004`; `10_009PLG.pdf`; pages 23-34; KEEP; STATIC; section: `5.4. Lacunas in the Policy Instruments`
+- `prototype-section-00013` — `GRBMP-TR-005`; `10_019SEC.pdf`; pages 1-6; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-00014` — `GRBMP-TR-005`; `10_019SEC.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00015` — `GRBMP-TR-005`; `10_019SEC.pdf`; pages 8-13; KEEP_HISTORICAL; HISTORICAL; section: `3. Land Use and Patterns of Land Holding`
+- `prototype-section-00016` — `GRBMP-TR-005`; `10_019SEC.pdf`; pages 14-16; KEEP_HISTORICAL; HISTORICAL; section: `4. Growth of Agriculture in West Bengal`
+- `prototype-section-00020` — `GRBMP-TR-005`; `10_019SEC.pdf`; pages 29-30; KEEP_HISTORICAL; HISTORICAL; section: `5.2. Use of Chemical Fertilizers`
+- `prototype-section-00021` — `GRBMP-TR-005`; `10_019SEC.pdf`; pages 31-32; KEEP; STATIC; section: `6. Implications`
+- `prototype-section-00022` — `GRBMP-TR-005`; `10_019SEC.pdf`; pages 33-45; KEEP_HISTORICAL; HISTORICAL; section: `2007. The impact of increasing farm size and mechanization on rural income and rice`
+- `prototype-section-00029` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 7-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00030` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 11-11; KEEP_HISTORICAL; HISTORICAL; section: `3. Need and Justification for New Legislation`
+- `prototype-section-00032` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 13-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. The NRGBM Act`
+- `prototype-section-00033` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 15-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. Model for Implementation of the Law`
+- `prototype-section-00034` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 16-17; KEEP_HISTORICAL; HISTORICAL; section: `9. Objectives and Mandate of the NRGBMC`
+- `prototype-section-00035` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 18-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `9.2. NRGB Fund`
+- `prototype-section-00036` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 19-20; KEEP; STATIC; section: `10. NRGBM Tribunal`
+- `prototype-section-00037` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 21-23; KEEP; STATIC; section: `11. Epilogue`
+- `prototype-section-00038` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 24-24; KEEP; STATIC; section: `1. Short Title, Extent and Commencement`
+- `prototype-section-00039` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 25-25; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `9) Class II town means a town whose population is greater than 50,000 and`
+- `prototype-section-00042` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 28-28; KEEP; STATIC; section: `3. Respect and Dignity`
+- `prototype-section-00044` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 30-30; KEEP; STATIC; section: `5) construction of bridges and associated roads, jetties, ghats, ports and`
+- `prototype-section-00045` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 31-31; KEEP_HISTORICAL; HISTORICAL; section: `c. using of floodplains in environmentally safe manner, and after ensuring`
+- `prototype-section-00046` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 32-32; KEEP; STATIC; section: `9) protection of breeding areas and natural habitats of indigenous a nd`
+- `prototype-section-00047` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 33-33; KEEP; STATIC; section: `11. Establishment of Commission`
+- `prototype-section-00048` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 34-34; KEEP; STATIC; section: `13. Selection of Chairperson and other members of the`
+- `prototype-section-00049` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 35-35; KEEP; STATIC; section: `5) No person shall be appointed as Chairperson or member of the Commission`
+- `prototype-section-00050` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 36-36; KEEP; STATIC; section: `17. Salary and Allowances and other terms and conditions of`
+- `prototype-section-00051` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 37-37; KEEP; STATIC; section: `20. Power of Superintendence`
+- `prototype-section-00052` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 38-38; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `22. Constitution of Wings`
+- `prototype-section-00053` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 39-39; KEEP_HISTORICAL; HISTORICAL; section: `2) The Research and Development Wing shall`
+- `prototype-section-00054` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 40-40; KEEP; STATIC; section: `25. Appointment and service conditions of Director, officers,`
+- `prototype-section-00055` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 41-41; KEEP; STATIC; section: `2) Where however the Commission is of the opinion that there exists no prima`
+- `prototype-section-00056` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 42-42; KEEP; STATIC; section: `3) Every proceeding before the Commission shall be deemed to be a judicial`
+- `prototype-section-00057` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 43-43; KEEP; STATIC; section: `32. Appeal`
+- `prototype-section-00058` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 44-44; KEEP; STATIC; section: `36. Protection of Action taken in good faith`
+- `prototype-section-00059` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 45-45; KEEP_HISTORICAL; HISTORICAL; section: `4) Notwithstanding anything contained above, where any contravention und er`
+- `prototype-section-00060` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 46-46; KEEP; STATIC; section: `4) No appeal under clause (1) shall lie unless the memorandum of appeal is`
+- `prototype-section-00061` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 47-47; KEEP; STATIC; section: `45. Term of office of Chairperson and Members of Tribunal`
+- `prototype-section-00065` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 51-51; KEEP; STATIC; section: `56. Power to Punish for Contempt`
+- `prototype-section-00066` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 52-52; KEEP; STATIC; section: `CHAPTER IX`
+- `prototype-section-00067` — `GRBMP-TR-006`; `10_037_ Implementation Mechanism.pdf`; pages 53-53; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `65. Institution of Award`
+- `prototype-section-00068` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 1-1; KEEP; STATIC; section: `CIFRI NEERI JNU PU NIT -`
+- `prototype-section-00070` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 7-8; KEEP; STATIC; section: `1. AK : Available Potassium.`
+- `prototype-section-00071` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 9-10; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00072` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 11-11; KEEP_HISTORICAL; HISTORICAL; section: `2. Objective`
+- `prototype-section-00073` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 12-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Environmental Data Bank and KnowledgeBuilding for NRGB`
+- `prototype-section-00074` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 13-13; KEEP_HISTORICAL; HISTORICAL; section: `5. Water quality data for both surface and ground water including sources of`
+- `prototype-section-00075` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 14-14; KEEP; STATIC; section: `22. Social environment such as water-related institutions, interest groups,`
+- `prototype-section-00076` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 15-17; KEEP_HISTORICAL; HISTORICAL; section: `1997 [ICPDR, 2005`
+- `prototype-section-00079` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 22-23; KEEP_HISTORICAL; HISTORICAL; section: `5. Environmental Sensitization for NRGB`
+- `prototype-section-00080` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 24-27; KEEP_HISTORICAL; HISTORICAL; section: `[EEA, 2005]`
+- `prototype-section-00081` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 28-30; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Reforestation of upland hill-slopes.`
+- `prototype-section-00082` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 31-34; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `[SUDSWP, 2002]`
+- `prototype-section-00083` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 35-35; KEEP_HISTORICAL; HISTORICAL; section: `6. Summary of Recommendations`
+- `prototype-section-00084` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 36-36; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. CWC [2007], “ Guidelines for Preparation of River Basin Master Plan ,” June`
+- `prototype-section-00085` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 37-37; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `12. IITC [2014b], “ Surface and Groundwater Model of the Ganga River Basin ”,`
+- `prototype-section-00086` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge (1).pdf`; pages 38-38; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `26. Sadoff, C.W. and Muller, M. [2009], “ Better Water Resources`
+- `prototype-section-00087` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 1-1; KEEP; STATIC; section: `CIFRI NEERI JNU PU NIT -`
+- `prototype-section-00089` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 7-8; KEEP; STATIC; section: `1. AK : Available Potassium.`
+- `prototype-section-00090` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 9-10; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00091` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 11-11; KEEP_HISTORICAL; HISTORICAL; section: `2. Objective`
+- `prototype-section-00092` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 12-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Environmental Data Bank and KnowledgeBuilding for NRGB`
+- `prototype-section-00093` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 13-13; KEEP_HISTORICAL; HISTORICAL; section: `5. Water quality data for both surface and ground water including sources of`
+- `prototype-section-00094` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 14-14; KEEP; STATIC; section: `22. Social environment such as water-related institutions, interest groups,`
+- `prototype-section-00095` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 15-17; KEEP_HISTORICAL; HISTORICAL; section: `1997 [ICPDR, 2005`
+- `prototype-section-00098` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 22-23; KEEP_HISTORICAL; HISTORICAL; section: `5. Environmental Sensitization for NRGB`
+- `prototype-section-00099` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 24-27; KEEP_HISTORICAL; HISTORICAL; section: `[EEA, 2005]`
+- `prototype-section-00100` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 28-30; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Reforestation of upland hill-slopes.`
+- `prototype-section-00101` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 31-34; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `[SUDSWP, 2002]`
+- `prototype-section-00102` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 35-35; KEEP_HISTORICAL; HISTORICAL; section: `6. Summary of Recommendations`
+- `prototype-section-00103` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 36-36; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. CWC [2007], “ Guidelines for Preparation of River Basin Master Plan ,” June`
+- `prototype-section-00104` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 37-37; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `12. IITC [2014b], “ Surface and Groundwater Model of the Ganga River Basin ”,`
+- `prototype-section-00105` — `GRBMP-M08`; `11_Mission 8 - Environmental Knowledge.pdf`; pages 38-38; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `26. Sadoff, C.W. and Muller, M. [2009], “ Better Water Resources`
+- `prototype-section-00108` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 4-6; KEEP; STATIC; section: `Unidentified extracted structure`
+- `prototype-section-00111` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 9-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. CGWB : Central Ground Water Board.`
+- `prototype-section-00112` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 15-16; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2006) at Different Locations of National River Ganga 38`
+- `prototype-section-00113` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 17-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00114` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 19-20; KEEP; STATIC; section: `2. Key Features of National River Ganga Basin`
+- `prototype-section-00115` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 21-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Vision, Mission, and Conceptual Framework`
+- `prototype-section-00116` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 22-22; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `iii. Geologic Entity: The Ganga River System is the earth’s creations of`
+- `prototype-section-00117` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 23-29; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Mission Summaries`
+- `prototype-section-00118` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 30-30; KEEP_HISTORICAL; HISTORICAL; section: `5. Recommendations for Implementation`
+- `prototype-section-00119` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 31-32; KEEP; STATIC; section: `6. GRBMP Documentation`
+- `prototype-section-00120` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 33-35; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00121` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 36-36; KEEP_HISTORICAL; HISTORICAL; section: `NRGB`
+- `prototype-section-00122` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 37-38; KEEP_HISTORICAL; HISTORICAL; section: `1.2. Resource Management in Ganga Basin`
+- `prototype-section-00123` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 39-39; KEEP_HISTORICAL; HISTORICAL; section: `1.3. Philosophy of GRBMP`
+- `prototype-section-00125` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 41-44; KEEP_HISTORICAL; HISTORICAL; section: `4) Agricultural and Other Rural Activities: (i) Over-useof resources (including`
+- `prototype-section-00128` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 49-51; KEEP; STATIC; section: `2.3. Geology`
+- `prototype-section-00131` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 56-58; KEEP_HISTORICAL; HISTORICAL; section: `2.6. Biodiversity of National River Ganga`
+- `prototype-section-00132` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 59-60; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Philosophy, Vision and Conceptual Framework`
+- `prototype-section-00133` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 61-64; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c) Water and other aquatic resources of the Ganga River System shall be used`
+- `prototype-section-00134` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 65-70; KEEP_HISTORICAL; HISTORICAL; section: `4. GRBMP Missions`
+- `prototype-section-00135` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 71-73; KEEP; STATIC; section: `4.2. Mission 2 – Nirmal Dhara`
+- `prototype-section-00136` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 74-74; KEEP; STATIC; section: `4.7. For overall implementation of MND recommendations in NRGB,`
+- `prototype-section-00137` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 75-84; KEEP_HISTORICAL; HISTORICAL; section: `4.3. Mission 3 – Ecological Restoration`
+- `prototype-section-00138` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 85-85; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Implementation of GRBMPRecommendations`
+- `prototype-section-00139` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 86-86; KEEP; STATIC; section: `6. Disposal of un -burnt or partially`
+- `prototype-section-00142` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 89-89; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6. Realistic pricing of fresh water with incentives, technical assistance an d`
+- `prototype-section-00143` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 90-90; KEEP_HISTORICAL; HISTORICAL; section: `18. Promoting landscape -scale agricultural systems to mitigate concentrated`
+- `prototype-section-00144` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 91-91; KEEP; STATIC; section: `5.5. Implementation Mechanism`
+- `prototype-section-00145` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 92-92; KEEP; STATIC; section: `5.6. Legislation for NRGBMC`
+- `prototype-section-00146` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 93-95; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.6.2. Objective of NRGBMC`
+- `prototype-section-00147` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 96-96; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.6.4. NRGB Fund Generated by NRGBMC`
+- `prototype-section-00148` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 97-102; KEEP; STATIC; section: `6. GRBMP Documentation`
+- `prototype-section-00149` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 103-103; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Bhattacharyya, T .et al . [2013], “ Soils of India: historical perspective,`
+- `prototype-section-00150` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 104-104; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `11. IITC [2010b]: “Active Floodplain Mapping: Defining the River Space;`
+- `prototype-section-00151` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 105-105; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `28. MoWR (Min. of Water Resources, GOI) [2002], “National Water Policy`
+- `prototype-section-00152` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 106-106; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `39. Sinha, R. et al. [2005], “Late Quaternary geology and alluvial stratigraphy`
+- `prototype-section-00153` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 107-118; KEEP_HISTORICAL; HISTORICAL; section: `TOTAL VALUE PER HECTARE: $3,335`
+- `prototype-section-00154` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 119-120; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c. Kanpur-Buxar: Generally narrow; increasing to ~7.5 km near Allhabad;`
+- `prototype-section-00155` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 121-121; KEEP; STATIC; section: `1. The public consultation process must be mandatory even for projects of`
+- `prototype-section-00156` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 122-131; KEEP_HISTORICAL; HISTORICAL; section: `1. Pre-environmental clearance based on EIA studies is to be made`
+- `prototype-section-00157` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 132-180; KEEP_HISTORICAL; HISTORICAL; section: `3) based on differences in physical, chemical, and biotic a ttributes. The biotic`
+- `prototype-section-00158` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 181-181; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `THE NATIONAL RIVER GANGA BASIN MANAGEMENT BILL, 2015`
+- `prototype-section-00159` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 182-182; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `CHAPTER I`
+- `prototype-section-00160` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 183-183; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3) Authority means any authority, board, corporation, council,`
+- `prototype-section-00161` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 184-184; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `14) “Degraded Forest” means a forest having loss or reduction of`
+- `prototype-section-00167` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 190-190; KEEP; STATIC; section: `14) hazardous or harmful emissions into the atmosphere that can affect`
+- `prototype-section-00168` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 191-191; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `9. Promotion of Activities relating to the National River Ganga`
+- `prototype-section-00169` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 192-192; KEEP; STATIC; section: `9) protection of breeding areas and natural habitats of indigenous`
+- `prototype-section-00170` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 193-193; KEEP; STATIC; section: `CHAPTER VII`
+- `prototype-section-00171` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 194-194; KEEP; STATIC; section: `13. Selection of Chairperson and other members of the Commission`
+- `prototype-section-00172` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 195-195; KEEP; STATIC; section: `4) When the Chairperson is unable to discharg e his function owing to`
+- `prototype-section-00173` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 196-196; KEEP; STATIC; section: `16. Restrictions on Employment of Members in certain cases`
+- `prototype-section-00174` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 197-197; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4) All decisions of the Commission shall be authenticated by the`
+- `prototype-section-00175` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 198-198; KEEP; STATIC; section: `21. General Administration and Finance Division`
+- `prototype-section-00176` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 199-199; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `23. Composition of Wings`
+- `prototype-section-00177` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 200-200; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3) The Environmental Monitoring and Impact Assessment Wing shall`
+- `prototype-section-00178` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 201-201; KEEP; STATIC; section: `c) Promote awareness of issues pertaining to Nation al River Ganga`
+- `prototype-section-00179` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 202-202; KEEP_HISTORICAL; HISTORICAL; section: `POWERS OF INQUIRY AND INVESTIGATION`
+- `prototype-section-00180` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 203-203; KEEP; STATIC; section: `28. Power of Commission to Regulate its own Procedure`
+- `prototype-section-00181` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 204-204; KEEP; STATIC; section: `2) The Director shall have all the powers as are conferred upon the`
+- `prototype-section-00182` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 205-205; KEEP; STATIC; section: `32. Appeal`
+- `prototype-section-00183` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 206-206; KEEP; STATIC; section: `36. Protection of Action taken in good faith`
+- `prototype-section-00184` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 207-207; KEEP_HISTORICAL; HISTORICAL; section: `4) Notwithstanding anything contained above, where any contravention`
+- `prototype-section-00185` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 208-208; KEEP; STATIC; section: `2) The Tribunal may entertain an appeal after the expiry of the said`
+- `prototype-section-00186` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 209-209; KEEP; STATIC; section: `43. Qualifications for ap pointment of Chairperson and Members of`
+- `prototype-section-00190` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 213-213; KEEP; STATIC; section: `i. any other matter which may be prescribed.`
+- `prototype-section-00191` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 214-214; KEEP; STATIC; section: `55. Suo-moto Powers of the Tribunal`
+- `prototype-section-00192` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 215-215; KEEP; STATIC; section: `59. Right to Legal Representation`
+- `prototype-section-00193` — `GRBMP-CORE-001`; `13_GRBMP - MPD.pdf`; pages 216-216; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `64. National River Ganga Basin Management Fund`
+- `prototype-section-00198` — `GRBMP-TR-034`; `14_61_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Rajasthan.pdf`; pages 7-9; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00200` — `GRBMP-TR-034`; `14_61_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Rajasthan.pdf`; pages 15-18; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Ganga Basin in the State`
+- `prototype-section-00201` — `GRBMP-TR-034`; `14_61_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Rajasthan.pdf`; pages 19-29; KEEP_HISTORICAL; HISTORICAL; section: `4. Pollution Load`
+- `prototype-section-00202` — `GRBMP-TR-034`; `14_61_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Rajasthan.pdf`; pages 30-32; KEEP; STATIC; section: `5. Conclusions`
+- `prototype-section-00203` — `GRBMP-TR-034`; `14_61_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Rajasthan.pdf`; pages 33-48; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-00204` — `GRBMP-TR-034`; `14_61_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Rajasthan.pdf`; pages 49-49; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-00205` — `GRBMP-TR-034`; `14_61_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Rajasthan.pdf`; pages 50-58; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-00209` — `GRBMP-TR-035`; `14_culturalrelegiousaspects.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00210` — `GRBMP-TR-035`; `14_culturalrelegiousaspects.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Objectives`
+- `prototype-section-00211` — `GRBMP-TR-035`; `14_culturalrelegiousaspects.pdf`; pages 10-13; KEEP; STATIC; section: `4. Pilgrimage Places`
+- `prototype-section-00218` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00219` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 8-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Existing Water Quality Guidelines and Standards for`
+- `prototype-section-00220` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 10-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `USEPA`
+- `prototype-section-00221` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 11-15; KEEP_HISTORICAL; HISTORICAL; section: `3. Selected Case Studies`
+- `prototype-section-00222` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 16-18; KEEP_HISTORICAL; HISTORICAL; section: `BAC`
+- `prototype-section-00225` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 21-24; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `WRP`
+- `prototype-section-00226` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 25-25; KEEP_HISTORICAL; HISTORICAL; section: `2007. In Website:`
+- `prototype-section-00231` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 48-50; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Public Health Impacts of Wastewater Reuse`
+- `prototype-section-00232` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 51-52; KEEP_HISTORICAL; HISTORICAL; section: `6. Economics of Wastewater Reuse`
+- `prototype-section-00234` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 56-58; KEEP_HISTORICAL; HISTORICAL; section: `7. Community and Public Perception and Participation`
+- `prototype-section-00235` — `GRBMP-TR-007`; `15_012EQP.pdf`; pages 59-60; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2000. Role of water reuse in enhancement of integrated water management in Europe and`
+- `prototype-section-00236` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 1-6; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00237` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00239` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 13-14; KEEP_HISTORICAL; HISTORICAL; section: `3. Land Holdings`
+- `prototype-section-00240` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 15-16; KEEP_HISTORICAL; HISTORICAL; section: `4. Sources of Irrigation`
+- `prototype-section-00241` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 17-19; KEEP_HISTORICAL; HISTORICAL; section: `5. Rainfall`
+- `prototype-section-00242` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 20-24; KEEP_HISTORICAL; HISTORICAL; section: `7. Area, Production and Yield`
+- `prototype-section-00243` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 25-25; KEEP_HISTORICAL; HISTORICAL; section: `8. Cost and Returns in Agriculture`
+- `prototype-section-00244` — `GRBMP-TR-008`; `15_018SEC.pdf`; pages 26-33; KEEP_HISTORICAL; HISTORICAL; section: `9. Summary`
+- `prototype-section-00251` — `GRBMP-TR-009`; `15_025ENB.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00252` — `GRBMP-TR-009`; `15_025ENB.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `c. Narora to Fatehgarh: MG-3`
+- `prototype-section-00253` — `GRBMP-TR-009`; `15_025ENB.pdf`; pages 9-9; KEEP_HISTORICAL; HISTORICAL; section: `2.1. Phytoplankton`
+- `prototype-section-00254` — `GRBMP-TR-009`; `15_025ENB.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `2.2. Periphyton`
+- `prototype-section-00259` — `GRBMP-TR-009`; `15_025ENB.pdf`; pages 17-18; KEEP_HISTORICAL; HISTORICAL; section: `2.6. Other Higher Vertebrates`
+- `prototype-section-00270` — `GRBMP-TR-036`; `15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00271` — `GRBMP-TR-036`; `15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf`; pages 10-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Methodology`
+- `prototype-section-00272` — `GRBMP-TR-036`; `15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf`; pages 18-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Q= 361A0.72 (WGP), R2 = 0.58`
+- `prototype-section-00273` — `GRBMP-TR-036`; `15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf`; pages 19-24; KEEP_HISTORICAL; HISTORICAL; section: `4. Results`
+- `prototype-section-00274` — `GRBMP-TR-036`; `15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf`; pages 25-34; KEEP_HISTORICAL; HISTORICAL; section: `1994) has also been derived. It mainly includes Ramganga, Baghmati and Kamla-Balan rivers.`
+- `prototype-section-00275` — `GRBMP-TR-036`; `15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf`; pages 35-37; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Conclusions`
+- `prototype-section-00279` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 7-9; KEEP_HISTORICAL; HISTORICAL; section: `MLD`
+- `prototype-section-00280` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 10-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 NIL`
+- `prototype-section-00281` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 11-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `COD NIL`
+- `prototype-section-00282` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 13-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `NIL`
+- `prototype-section-00283` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 15-17; KEEP_HISTORICAL; HISTORICAL; section: `160MLD`
+- `prototype-section-00284` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 18-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 NIL`
+- `prototype-section-00285` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `COD NIL`
+- `prototype-section-00286` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 21-22; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 NIL`
+- `prototype-section-00287` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 23-23; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `COD NIL`
+- `prototype-section-00288` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 24-25; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 0.0`
+- `prototype-section-00289` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 26-26; KEEP_HISTORICAL; HISTORICAL; section: `BOD COD`
+- `prototype-section-00290` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 27-27; KEEP; STATIC; section: `(MLD)`
+- `prototype-section-00291` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 28-28; KEEP_HISTORICAL; HISTORICAL; section: `MLD`
+- `prototype-section-00292` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 29-30; KEEP_HISTORICAL; HISTORICAL; section: `BOD COD`
+- `prototype-section-00293` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 31-31; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-00294` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 32-32; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 0.0`
+- `prototype-section-00295` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 33-33; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 NIL`
+- `prototype-section-00296` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 34-34; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `COD NIL`
+- `prototype-section-00297` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 35-35; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `COD 0.0`
+- `prototype-section-00298` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 36-36; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 NIL`
+- `prototype-section-00299` — `GRBMP-TR-037`; `15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf`; pages 37-38; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `COD 0.0`
+- `prototype-section-00302` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 6-6; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction 12`
+- `prototype-section-00303` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 7-7; KEEP; STATIC; section: `7. Recommendations 60`
+- `prototype-section-00304` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `1. Illustration of eight of the nine aspects of the flow regime characterised by`
+- `prototype-section-00305` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 9-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Median flow Health scores based on 29 years of s imulation with the`
+- `prototype-section-00306` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 12-12; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00307` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1.3. Environmental Flows and Flow Health`
+- `prototype-section-00308` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 14-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Hydrological Flow Health Assessment`
+- `prototype-section-00310` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 17-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Objectives`
+- `prototype-section-00311` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 18-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.2. Flow Health Tool`
+- `prototype-section-00314` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 23-23; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.3.2. Mean Monthly Flow Analysis`
+- `prototype-section-00315` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 24-24; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.2. Upper Ganga`
+- `prototype-section-00320` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 29-29; KEEP_HISTORICAL; HISTORICAL; section: `6.11.2. Ayodhya`
+- `prototype-section-00321` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 30-30; KEEP_HISTORICAL; HISTORICAL; section: `6.13. Kosi`
+- `prototype-section-00325` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 60-60; KEEP_HISTORICAL; HISTORICAL; section: `7. Recommendations`
+- `prototype-section-00326` — `GRBMP-TR-038`; `15_Hydrological Flow Health Assessment of the River Ganga.pdf`; pages 61-62; KEEP; STATIC; section: `6. Mean Monthly flows analysis suggested that consider able variation in flow regime has`
+- `prototype-section-00330` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 7-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00331` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Environmental Flows – The Concept and its Rationale`
+- `prototype-section-00332` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 9-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Overview of E-Flows Estimation Methods`
+- `prototype-section-00333` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 14-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Comparative Analysis of various Holistic Methodologies for`
+- `prototype-section-00334` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Importance of E-Flows Assessment for Rivers in the`
+- `prototype-section-00336` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 23-23; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.1. Hydrology`
+- `prototype-section-00337` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 24-24; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.2. Fluvial Geomorphology and Hydraulic Modeling`
+- `prototype-section-00339` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 28-31; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. Concluding Remarks`
+- `prototype-section-00340` — `GRBMP-TR-010`; `16_022EFL.pdf`; pages 32-33; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Using a stakeholder consultation process to set objectives for the environmental`
+- `prototype-section-00344` — `GRBMP-TR-011`; `16_31_003_EQP_S&R_02.pdf`; pages 5-5; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. General`
+- `prototype-section-00346` — `GRBMP-TR-011`; `16_31_003_EQP_S&R_02.pdf`; pages 7-7; KEEP; STATIC; section: `4. Cost of Treatment and Land Requirement`
+- `prototype-section-00347` — `GRBMP-TR-011`; `16_31_003_EQP_S&R_02.pdf`; pages 8-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `ASP EA - ASP UASB + ASP SBR`
+- `prototype-section-00348` — `GRBMP-TR-011`; `16_31_003_EQP_S&R_02.pdf`; pages 11-12; KEEP_HISTORICAL; HISTORICAL; section: `1. No Sludge Drying Beds. However can be provided to cater 25 % of`
+- `prototype-section-00349` — `GRBMP-TR-011`; `16_31_003_EQP_S&R_02.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6. Sludge Management`
+- `prototype-section-00350` — `GRBMP-TR-011`; `16_31_003_EQP_S&R_02.pdf`; pages 14-15; KEEP; STATIC; section: `1. Oncorhynchus mykiss (rainbow trout) and Salvelinus fontinalis (brook trout)`
+- `prototype-section-00354` — `GRBMP-TR-001`; `17_028ENB.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00357` — `GRBMP-TR-001`; `17_028ENB.pdf`; pages 7-9; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00358` — `GRBMP-TR-001`; `17_028ENB.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `2010) Sinha et al. (2000)`
+- `prototype-section-00359` — `GRBMP-TR-001`; `17_028ENB.pdf`; pages 11-26; KEEP_HISTORICAL; HISTORICAL; section: `1998) the same stretch showed the population of 35 individuals of which 7 were`
+- `prototype-section-00360` — `GRBMP-TR-001`; `17_028ENB.pdf`; pages 27-28; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2011. IUCN Red List of Threatened Species. Version 2011.1. <www.iucnredlist.org>.`
+- `prototype-section-00364` — `GRBMP-TR-002`; `18_17_005_FGM_DAT_01.pdf`; pages 5-5; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00365` — `GRBMP-TR-002`; `18_17_005_FGM_DAT_01.pdf`; pages 6-6; KEEP_HISTORICAL; HISTORICAL; section: `iii) Google Earth`
+- `prototype-section-00366` — `GRBMP-TR-002`; `18_17_005_FGM_DAT_01.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `3. Result and Discussions`
+- `prototype-section-00367` — `GRBMP-TR-002`; `18_17_005_FGM_DAT_01.pdf`; pages 8-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Ongoing Work`
+- `prototype-section-00371` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00372` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `2. Lower Ganga Basin: State of Bihar`
+- `prototype-section-00373` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 9-10; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Characteristics`
+- `prototype-section-00374` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 11-11; KEEP_HISTORICAL; HISTORICAL; section: `3.2. Trends in Natural Growth Rate`
+- `prototype-section-00375` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 12-12; KEEP_HISTORICAL; HISTORICAL; section: `3.3. Distribution of Population`
+- `prototype-section-00378` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 17-18; KEEP_HISTORICAL; HISTORICAL; section: `4. Economic Indicators`
+- `prototype-section-00379` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 19-19; KEEP_HISTORICAL; HISTORICAL; section: `4.2. Per Capita Gross Domestic Product`
+- `prototype-section-00380` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 20-22; KEEP_HISTORICAL; HISTORICAL; section: `4.3. Sectoral Composition of GSDP`
+- `prototype-section-00381` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 23-25; KEEP_HISTORICAL; HISTORICAL; section: `4.4. Trends in Occupational Structure`
+- `prototype-section-00383` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 28-28; KEEP_HISTORICAL; HISTORICAL; section: `4.6. Trends and Pattern in Banking`
+- `prototype-section-00384` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 29-30; KEEP_HISTORICAL; HISTORICAL; section: `1) Commercial Banks`
+- `prototype-section-00385` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 31-32; KEEP_HISTORICAL; HISTORICAL; section: `2) Cooperative Banks`
+- `prototype-section-00387` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 35-36; KEEP_HISTORICAL; HISTORICAL; section: `5.2. Education`
+- `prototype-section-00388` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 37-38; KEEP_HISTORICAL; HISTORICAL; section: `5.3. Drinking Water and Sanitation`
+- `prototype-section-00389` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 39-40; KEEP_HISTORICAL; HISTORICAL; section: `5.4. Health Indicators`
+- `prototype-section-00390` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 41-42; KEEP; STATIC; section: `6. Conclusion and Policy Implications`
+- `prototype-section-00391` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 43-54; KEEP_HISTORICAL; HISTORICAL; section: `1. Annual Health Survey, 2010, Registrar General of India. http://censusindia.gov.in/`
+- `prototype-section-00396` — `GRBMP-TR-039`; `18_Demographic and Socio-Economic Analysis in Lower Ganga Basin.pdf`; pages 60-66; KEEP_HISTORICAL; HISTORICAL; section: `NA NA NA`
+- `prototype-section-00398` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 7-7; KEEP; STATIC; section: `1. Environmental Quality and Pollution (EQP)`
+- `prototype-section-00399` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 8-8; KEEP; STATIC; section: `5. Socio Economic and Cultural (SEC)`
+- `prototype-section-00400` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 9-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. BBM : Building Block Method.`
+- `prototype-section-00401` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 15-16; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00402` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 17-17; KEEP; STATIC; section: `2. Objective`
+- `prototype-section-00403` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 18-18; KEEP; STATIC; section: `4. Problems and Their Remediation`
+- `prototype-section-00404` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 19-19; KEEP; STATIC; section: `5. Summary of Recommendations`
+- `prototype-section-00405` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 20-20; KEEP; STATIC; section: `2. Region-specific r estrictions on geo -morphologically harmful land-use`
+- `prototype-section-00406` — `GRBMP-M05`; `1_Mission 5_Geological  Safegaurding.pdf`; pages 21-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Ellsworth, W.L. [2013], “Injection–Induced Earthquakes ”, Science, 12 July`
+- `prototype-section-00407` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 1-6; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-00408` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 7-7; KEEP; STATIC; section: `1. Preamble`
+- `prototype-section-00409` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Objectives`
+- `prototype-section-00410` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Violation of statutory provisions`
+- `prototype-section-00411` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `6. Comparative Analysis of Provisions of PC Process`
+- `prototype-section-00412` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 11-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Bonafide residents`
+- `prototype-section-00413` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 12-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Representatives of SPCB`
+- `prototype-section-00414` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 13-13; KEEP; STATIC; section: `1. Public consultation is applicable to all Category ‘A’ and Category B1 hydropower`
+- `prototype-section-00415` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 14-16; KEEP; STATIC; section: `4. About the District Magistrate (DM) being responsible for steering the meeting: DM has`
+- `prototype-section-00416` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 17-18; KEEP_HISTORICAL; HISTORICAL; section: `8. Lacunae in Existing PC Process and Practice`
+- `prototype-section-00417` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 19-19; KEEP_HISTORICAL; HISTORICAL; section: `1. Demystifying the complex, technical language: EIA reports and other documents that are`
+- `prototype-section-00418` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `10. Time of Public Consultation Process`
+- `prototype-section-00419` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 21-22; KEEP; STATIC; section: `12. Recommendations`
+- `prototype-section-00420` — `GRBMP-TR-012`; `20_007PLG.pdf`; pages 23-23; KEEP; STATIC; section: `13. Concluding Observations`
+- `prototype-section-00421` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 1-6; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00422` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00423` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `2. A Brief Profile of the State of Uttarakhand`
+- `prototype-section-00424` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 9-10; KEEP_HISTORICAL; HISTORICAL; section: `3. Trends in Sectoral Composition of GSDP`
+- `prototype-section-00425` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 11-11; KEEP_HISTORICAL; HISTORICAL; section: `4. Trends in Land Use Pattern`
+- `prototype-section-00426` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 12-12; KEEP_HISTORICAL; HISTORICAL; section: `4.1. Area Under Forest`
+- `prototype-section-00427` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 13-13; KEEP; STATIC; section: `4.2. Area Under Agriculture (Net Sown Area)`
+- `prototype-section-00428` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 14-14; KEEP_HISTORICAL; HISTORICAL; section: `4.3. Area Under Non-Agriculture Use`
+- `prototype-section-00431` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 17-17; KEEP_HISTORICAL; HISTORICAL; section: `6. Trends in Irrigation Pattern`
+- `prototype-section-00435` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 22-22; KEEP_HISTORICAL; HISTORICAL; section: `6.2.4. Area Irrigated under Major Crops`
+- `prototype-section-00441` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 31-31; KEEP_HISTORICAL; HISTORICAL; section: `8.1. Operation of Tube-wells`
+- `prototype-section-00443` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 34-34; KEEP_HISTORICAL; HISTORICAL; section: `9.1. Rice`
+- `prototype-section-00454` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 46-46; KEEP; STATIC; section: `12. Conclusions`
+- `prototype-section-00456` — `GRBMP-TR-013`; `22_016SEC.pdf`; pages 50-70; KEEP_HISTORICAL; HISTORICAL; section: `GSDP`
+- `prototype-section-00460` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00461` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `2. Sanitation`
+- `prototype-section-00464` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 31-32; KEEP_HISTORICAL; HISTORICAL; section: `5. Current Global Sanitation Scenario`
+- `prototype-section-00465` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 33-33; KEEP_HISTORICAL; HISTORICAL; section: `6. Current Indian Sanitation Scenario`
+- `prototype-section-00466` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 34-35; KEEP_HISTORICAL; HISTORICAL; section: `7. Crisis in the Making`
+- `prototype-section-00467` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 36-36; KEEP; STATIC; section: `8. Concluding Remarks`
+- `prototype-section-00468` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 37-38; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Open defecation cannot be recommended under any circumstances. This practi ce`
+- `prototype-section-00469` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 39-39; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. UNICEF (Editor) (2012): Sanitation and Hygiene Advocacy and Communication`
+- `prototype-section-00470` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 40-40; KEEP; STATIC; section: `16. SPUHLER, D. Seecon International Gmbh, Composting Toilets, published on SSWM`
+- `prototype-section-00472` — `GRBMP-TR-040`; `23_039_EQP_Sanitation Current Scenario.pdf`; pages 42-42; KEEP; STATIC; section: `49. Goli, S., Arokiasamy, P., &Chattopadhayay, A. (2011). Living and health conditions of`
+- `prototype-section-00476` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 5-14; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-00477` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 15-16; KEEP_HISTORICAL; HISTORICAL; section: `“CWC-Z9”`
+- `prototype-section-00478` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 17-17; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00479` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 18-18; KEEP_HISTORICAL; HISTORICAL; section: `[MSU, 2013 ]`
+- `prototype-section-00483` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 23-23; KEEP; STATIC; section: `2.2. Geology`
+- `prototype-section-00486` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 28-28; KEEP_HISTORICAL; HISTORICAL; section: `2.5. Biodiversity of National River Ganga`
+- `prototype-section-00487` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 29-29; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Philosophy, Vision and Conceptual Framework`
+- `prototype-section-00488` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 30-30; KEEP; STATIC; section: `4. Ecological Entity : The Ganga River System is a delicately structured balance between`
+- `prototype-section-00489` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 31-32; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.3. Conceptual Framework`
+- `prototype-section-00490` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 33-33; KEEP; STATIC; section: `4. GRBMP Missions`
+- `prototype-section-00491` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 34-35; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(BCM)`
+- `prototype-section-00492` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 36-36; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.1.1. Water Storage`
+- `prototype-section-00494` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 39-39; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.1.2. Water Use Efficiency`
+- `prototype-section-00495` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 40-40; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.1.4. Environmental Flows`
+- `prototype-section-00497` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 43-50; KEEP_HISTORICAL; HISTORICAL; section: `D1 D2 D3`
+- `prototype-section-00499` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 52-53; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.2.1. ZLD and Reusable Water from Domestic Wastewaters`
+- `prototype-section-00500` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 54-54; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.2.2. Additional Recommendations for Actions on Sewage Treatment`
+- `prototype-section-00502` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 56-57; KEEP_HISTORICAL; HISTORICAL; section: `D* G* BG*`
+- `prototype-section-00504` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 59-59; KEEP; STATIC; section: `4.6. Sustainable Agriculture`
+- `prototype-section-00505` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 60-61; KEEP; STATIC; section: `4.7. Environmental Knowledge-Building and Sensitization`
+- `prototype-section-00506` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 62-62; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Recommendations of Interim GRBMP`
+- `prototype-section-00509` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 65-65; KEEP_HISTORICAL; HISTORICAL; section: `13. Regular collection, compilation and dissemination o f environmental data of NRGB`
+- `prototype-section-00510` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 66-66; KEEP_HISTORICAL; HISTORICAL; section: `5.6. Legislation for NRGBMC`
+- `prototype-section-00511` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 67-68; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.6.2. Objective of NRGBMC`
+- `prototype-section-00512` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 69-72; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.6.4. NRGB Fund Generated by`
+- `prototype-section-00513` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 73-73; KEEP_HISTORICAL; HISTORICAL; section: `1. ADB (Asian Development Bank), “Water Resources Deve lopment in India”, 2009.`
+- `prototype-section-00514` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 74-74; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `19. O’Connor, S, “Socioeconomics and the Murray Darling Basin: water allocation and`
+- `prototype-section-00515` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 75-76; KEEP; STATIC; section: `36. Wikipedia article on “Ganges river”, 2013. [ Accessed May 10, 2013 from :`
+- `prototype-section-00516` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 77-80; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. ADB : Asian Development Bank.`
+- `prototype-section-00517` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 81-81; KEEP_HISTORICAL; HISTORICAL; section: `TOTAL VALUE PER HECTARE: $3,335`
+- `prototype-section-00518` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 82-86; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `12. Some 4,771,000`
+- `prototype-section-00520` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 88-88; KEEP; STATIC; section: `3. Implementation of transparency related provisions b y making it mandatory for the PC`
+- `prototype-section-00521` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 89-108; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. To ensure transparency and accountability in the en vironmental clearance decision`
+- `prototype-section-00522` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 109-109; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `THE NATIONAL RIVER GANGA BASIN MANAGEMENT BILL, 2013`
+- `prototype-section-00523` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 110-110; KEEP; STATIC; section: `CHAPTER I`
+- `prototype-section-00524` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 111-111; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `10) “Commercial fishing” means large-scale fishing for commercial purposes by nets,`
+- `prototype-section-00527` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 114-114; KEEP; STATIC; section: `CHAPTER III`
+- `prototype-section-00529` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 116-116; KEEP_HISTORICAL; HISTORICAL; section: `CHAPTER V`
+- `prototype-section-00530` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 117-117; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6) higher efficiencies in institutional, commercial, i ndustrial, domestic, municipal`
+- `prototype-section-00531` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 118-118; KEEP; STATIC; section: `CHAPTER VII`
+- `prototype-section-00532` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 119-119; KEEP; STATIC; section: `4) The Chairperson and every other member shall, befor e entering upon his office,`
+- `prototype-section-00534` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 121-121; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `18. Procedure for Transaction of Business`
+- `prototype-section-00535` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 122-122; KEEP; STATIC; section: `21. General Administration and Finance Division`
+- `prototype-section-00536` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 123-123; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4) Regional units/branches shall be headed by the Joint Director and he shall report`
+- `prototype-section-00537` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 124-124; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c) Compile data and reports referred to in clause (a);`
+- `prototype-section-00538` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 125-125; KEEP_HISTORICAL; HISTORICAL; section: `POWERS OF INQUIRY AND INVESTIGATION`
+- `prototype-section-00539` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 126-126; KEEP; STATIC; section: `28. Power of Commission to Regulate its own Procedure`
+- `prototype-section-00540` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 127-127; KEEP; STATIC; section: `31. Power to grant interim relief`
+- `prototype-section-00541` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 128-128; KEEP; STATIC; section: `36. Protection of Action taken in good faith`
+- `prototype-section-00542` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 129-129; KEEP_HISTORICAL; HISTORICAL; section: `CHAPTER VIII`
+- `prototype-section-00543` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 130-130; KEEP; STATIC; section: `42. Composition of Tribunal`
+- `prototype-section-00546` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 133-133; KEEP; STATIC; section: `c. receiving evidence on affidavit;`
+- `prototype-section-00547` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 134-134; KEEP; STATIC; section: `54. Saving of inherent Powers of the Tribunal`
+- `prototype-section-00548` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 135-135; KEEP; STATIC; section: `59. Right to Legal Representation`
+- `prototype-section-00549` — `GRBMP-CORE-002`; `25_GRBMPInterim_Rep.pdf`; pages 136-136; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3) The National River Ganga Basin Management Fund shall be used for,`
+- `prototype-section-00555` — `GRBMP-TR-014`; `27_014EQP.pdf`; pages 11-11; KEEP; STATIC; section: `4. Feasibility of Zero Discharge Paradigm`
+- `prototype-section-00557` — `GRBMP-TR-014`; `27_014EQP.pdf`; pages 14-15; KEEP; STATIC; section: `5. Justification for Tertiary Treatment and Implementing`
+- `prototype-section-00559` — `GRBMP-TR-014`; `27_014EQP.pdf`; pages 17-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `8. Highlights`
+- `prototype-section-00563` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 9-14; KEEP; STATIC; section: `1. CGWB : Central Ground Water Board.`
+- `prototype-section-00564` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 15-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00565` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 16-16; KEEP; STATIC; section: `1.4. Functional Unity of the Ganga Basin`
+- `prototype-section-00567` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 18-18; KEEP; STATIC; section: `1.9. Impact on Humans`
+- `prototype-section-00569` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 21-21; KEEP_HISTORICAL; HISTORICAL; section: `2.3. Defining River Ganga`
+- `prototype-section-00571` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 23-23; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.7. River Biodiversity`
+- `prototype-section-00572` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 24-24; KEEP; STATIC; section: `i. “Aviral Dhara” (i.e. “Continuous Flow”): The flow of water, sediments`
+- `prototype-section-00573` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 25-25; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.3. Formulation of Missions`
+- `prototype-section-00574` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 26-26; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.5. Work Structure`
+- `prototype-section-00575` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 27-31; KEEP_HISTORICAL; HISTORICAL; section: `4. Mission Summaries`
+- `prototype-section-00576` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 32-34; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.2. Mission 2 – Nirmal Dhara`
+- `prototype-section-00577` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 35-36; KEEP; STATIC; section: `4.3. Mission 3 – Ecological Restoration`
+- `prototype-section-00578` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 37-38; KEEP; STATIC; section: `4.4. Mission 4 – Sustainable Agriculture`
+- `prototype-section-00579` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 39-39; KEEP; STATIC; section: `4.5. Mission 5 – Geological Safeguarding`
+- `prototype-section-00580` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 40-41; KEEP; STATIC; section: `4.7. Mission 7 – River Hazards Management`
+- `prototype-section-00581` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 42-42; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.8. Mission 8 – Environmental Knowledge-Building and`
+- `prototype-section-00582` — `GRBMP-CORE-003`; `27_GRBMP - Extended Summary.pdf`; pages 43-44; KEEP; STATIC; section: `5. Recommendations for Implementation`
+- `prototype-section-00583` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00586` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 7-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Brief Summary`
+- `prototype-section-00587` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.3. Methodology and Research Design`
+- `prototype-section-00588` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.4. Kanpur: Rationale for Choice`
+- `prototype-section-00590` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 11-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.7. Sanitation Component Under ‘Ganga Action Plan’ in Kanpur`
+- `prototype-section-00591` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 12-12; KEEP_HISTORICAL; HISTORICAL; section: `2.8. Findings: Performance Deficiencies in Kanpur Sewage System`
+- `prototype-section-00592` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 13-13; KEEP_HISTORICAL; HISTORICAL; section: `2.8.1. Deficiencies in Sectoral Responsibilities: Collection and Conveyance`
+- `prototype-section-00593` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 14-14; KEEP_HISTORICAL; HISTORICAL; section: `2.8.2. Deficiencies in Sectoral Responsibilities: Interception and Diversion`
+- `prototype-section-00594` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 15-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.8.3. Deficiencies in Performing Generic Functions`
+- `prototype-section-00595` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 16-16; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Analysis of Kanpur’s Sewage System using Policy and`
+- `prototype-section-00596` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 17-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.3. Lacunas in the Normative Frame for Governance of Sanitation`
+- `prototype-section-00597` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 19-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.3.3. Review and Analysis of National Urban Sanitation Policy`
+- `prototype-section-00598` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.3.4. Review and Analysis of Uttar Pradesh Urban Sanitation Policy (UPUSP)`
+- `prototype-section-00599` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 21-21; KEEP; STATIC; section: `3.3.5. Gaps Related to Standards`
+- `prototype-section-00600` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 22-23; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.4. Lacunas in the Governing Agencies in Kanpur’s Sewage System`
+- `prototype-section-00604` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 28-29; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.6. Misaligned Perceptions and Norms of Stakeholders`
+- `prototype-section-00605` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 30-30; KEEP_HISTORICAL; HISTORICAL; section: `3.7. Misaligned Interests`
+- `prototype-section-00607` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 36-36; KEEP; STATIC; section: `4. Recommendation and Conclusions`
+- `prototype-section-00611` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 40-40; KEEP; STATIC; section: `4.2.2. Feasibility and Efficacy of Retrofitting Governance Instruments`
+- `prototype-section-00613` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 42-42; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.2.4. Three-Pronged Strategy`
+- `prototype-section-00614` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 43-45; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.2.6. Addressing the Political Bottom-Line`
+- `prototype-section-00615` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 46-47; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00616` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 48-50; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Main Policy and Governance Features of the IDT`
+- `prototype-section-00617` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 51-52; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Context`
+- `prototype-section-00619` — `GRBMP-TR-015`; `28_010PLG.pdf`; pages 54-56; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Tentative Suggestions on Structure and Process of`
+- `prototype-section-00623` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00624` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Middle Ganga Basin: State of Uttar Pradesh`
+- `prototype-section-00625` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 9-11; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Characteristics`
+- `prototype-section-00626` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 12-13; KEEP_HISTORICAL; HISTORICAL; section: `3.2. Trends in Natural Growth Rate`
+- `prototype-section-00629` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 18-21; KEEP_HISTORICAL; HISTORICAL; section: `3.5. Population Composition`
+- `prototype-section-00632` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 27-28; KEEP_HISTORICAL; HISTORICAL; section: `4.2. Per Capita Gross Domestic Product`
+- `prototype-section-00633` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 29-31; KEEP_HISTORICAL; HISTORICAL; section: `4.3. Sectoral Composition of GSDP`
+- `prototype-section-00634` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 32-32; KEEP_HISTORICAL; HISTORICAL; section: `4.4. Trends in Occupational Structure`
+- `prototype-section-00635` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 33-33; KEEP_HISTORICAL; HISTORICAL; section: `4.5. Population Below Poverty Line`
+- `prototype-section-00636` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 34-36; KEEP_HISTORICAL; HISTORICAL; section: `4.6. Trends and Pattern in Banking`
+- `prototype-section-00638` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 40-42; KEEP_HISTORICAL; HISTORICAL; section: `5.2. Education`
+- `prototype-section-00639` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 43-44; KEEP_HISTORICAL; HISTORICAL; section: `5.3. Drinking Water and Sanitation`
+- `prototype-section-00640` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 45-45; KEEP_HISTORICAL; HISTORICAL; section: `5.4. Health Indicators`
+- `prototype-section-00641` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 46-49; KEEP_HISTORICAL; HISTORICAL; section: `2. Neo-natal deaths: Infant dying before age of 29 days.`
+- `prototype-section-00642` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 50-50; KEEP_HISTORICAL; HISTORICAL; section: `6. Population Projections for Various Regions of Uttar Pradesh`
+- `prototype-section-00643` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 51-51; KEEP_HISTORICAL; HISTORICAL; section: `7. Demand for and Supply of Water: Projections`
+- `prototype-section-00646` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 55-55; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. 3. Demand for Water and Supply of Water: Projections`
+- `prototype-section-00647` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 56-56; KEEP; STATIC; section: `DEMAND IN WITHDRAWAL TERMS 2025 2050`
+- `prototype-section-00648` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 57-61; KEEP; STATIC; section: `8. Conclusions and Policy Implications`
+- `prototype-section-00649` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 62-62; KEEP_HISTORICAL; HISTORICAL; section: `1. Haroun Er Rashid, Babar Kabir, Bangladesh: Water Resources and Population Pressures in the`
+- `prototype-section-00650` — `GRBMP-TR-041`; `28_DemographicandSocio-Economic analysis.pdf`; pages 63-66; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `15. Kale, Eshwer, 2010, ‘G roundwater Management: The Critical issue dealing with Normative`
+- `prototype-section-00664` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 2-4; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00666` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Vision, Mission, and Conceptual Framework`
+- `prototype-section-00667` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 9-10; KEEP; STATIC; section: `4. Ecological Entity: The Ganga River System is a delicately structured balance between`
+- `prototype-section-00668` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 11-11; KEEP; STATIC; section: `4. Mission Summaries`
+- `prototype-section-00669` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 12-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Water Storage and Demand Control: Aavailable data indicate that anthropogenic water`
+- `prototype-section-00670` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. Recommended Actions: The main recommendations are:`
+- `prototype-section-00671` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 14-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Ensuring Nirmal Dhara in Ganga: Anthropogenic wastes have been polluting the river`
+- `prototype-section-00672` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 15-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Municipal Wastewater Reuse: For municipal wastewaters it was found economically`
+- `prototype-section-00673` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 16-16; KEEP; STATIC; section: `5. Wastewater Treatment Plant Sizes: The overall sanitation costs are shown to be`
+- `prototype-section-00675` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 19-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `10. Recommended Actions: The main recommendations are:`
+- `prototype-section-00676` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 20-20; KEEP_HISTORICAL; HISTORICAL; section: `3. Major Threats to Ganga River ’s Biodiversity: The most important factors adversely`
+- `prototype-section-00677` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 21-21; KEEP; STATIC; section: `vi) Habitat encroachment by hu mans through river bed farming, disturbing the`
+- `prototype-section-00678` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 22-22; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Recommended Actions:`
+- `prototype-section-00679` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 23-23; KEEP; STATIC; section: `1. Significance of Natural Disasters: Natural disasters can have significant adverse`
+- `prototype-section-00680` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 24-24; KEEP; STATIC; section: `iii) Monitoring of the functioning of ecosystems with regard to damages caused by`
+- `prototype-section-00681` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 25-25; KEEP; STATIC; section: `4. Recommended Actions: The main actions recommended are:`
+- `prototype-section-00682` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 26-26; KEEP_HISTORICAL; HISTORICAL; section: `2. Recommended Actions: The main actions recommended are:`
+- `prototype-section-00683` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 27-27; KEEP; STATIC; section: `5. Composite Recommendations for Implementation`
+- `prototype-section-00684` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 28-29; KEEP; STATIC; section: `6. GRBMP Documentation`
+- `prototype-section-00685` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 30-30; KEEP; STATIC; section: `1. Short Title, Extent and Commencement`
+- `prototype-section-00686` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 31-31; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `10) “Commercial fishing” means large -scale fishing for commercial purposes by`
+- `prototype-section-00689` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 34-34; KEEP; STATIC; section: `3. Respect and Dignity`
+- `prototype-section-00691` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 36-36; KEEP; STATIC; section: `6) withdrawal of ground water by electric/diesel operated shallow and deep tube`
+- `prototype-section-00692` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 37-37; KEEP_HISTORICAL; HISTORICAL; section: `9. Promotion of Activities relating to the National River Ganga`
+- `prototype-section-00693` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 38-38; KEEP; STATIC; section: `10) eco-friendly tourism, pilgrimage, recreational and sporting activities in all rivers`
+- `prototype-section-00694` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 39-39; KEEP; STATIC; section: `4) The Commission may establish offices at other places in India.`
+- `prototype-section-00695` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 40-40; KEEP; STATIC; section: `14. Term of Office of Chairpersons and Other Members`
+- `prototype-section-00697` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 42-42; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2) All decisions shall be taken by majority;`
+- `prototype-section-00698` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 43-43; KEEP_HISTORICAL; HISTORICAL; section: `21. General Administration and Finance Division`
+- `prototype-section-00699` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 44-44; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4) Regional units/branches shall be headed by the Joint Director and he shall report`
+- `prototype-section-00700` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 45-45; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4) The Information and Communication wing`
+- `prototype-section-00701` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 46-46; KEEP_HISTORICAL; HISTORICAL; section: `c) Implement the policies, programs, etc. of the Commission, as may be decided,`
+- `prototype-section-00702` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 47-47; KEEP; STATIC; section: `28. Power of Commission to Regulate its own Procedure`
+- `prototype-section-00703` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 48-48; KEEP; STATIC; section: `30. Orders by Commission after Inquiry/ Investigation`
+- `prototype-section-00704` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 49-49; KEEP; STATIC; section: `2) For the sake of expeditious disposal or otherwise the Commission if deems fit,`
+- `prototype-section-00705` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 50-50; KEEP; STATIC; section: `3) Where any contravention under th is Act has been committed by an authority,`
+- `prototype-section-00706` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 51-51; KEEP; STATIC; section: `40. Limitation`
+- `prototype-section-00707` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 52-52; KEEP; STATIC; section: `43. Qualifications for appointment of Chairperson and Members`
+- `prototype-section-00710` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 55-55; KEEP; STATIC; section: `52. Procedures and Powers of Tribunal`
+- `prototype-section-00711` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 56-56; KEEP; STATIC; section: `2) Notwithstanding anything contained in sub -section (1), the Tribunal may`
+- `prototype-section-00712` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 57-57; KEEP; STATIC; section: `58. Vacancy in Tribunal not to invalidate acts or proceedings`
+- `prototype-section-00713` — `GRBMP-CORE-004`; `29_2014-06-13_GRBMP_Extended Summary.pdf`; pages 58-58; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `64. National River Ganga Basin Management Fund`
+- `prototype-section-00717` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 6-7; KEEP; STATIC; section: `1. Introduction:`
+- `prototype-section-00719` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 9-14; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Ganga Basin in the State`
+- `prototype-section-00720` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 15-20; KEEP_HISTORICAL; HISTORICAL; section: `4. Pollution Load`
+- `prototype-section-00721` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 21-21; KEEP_HISTORICAL; HISTORICAL; section: `COD TKN`
+- `prototype-section-00722` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 22-22; KEEP_HISTORICAL; HISTORICAL; section: `5. Conclusions:`
+- `prototype-section-00723` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 23-24; KEEP_HISTORICAL; HISTORICAL; section: `1. CPCB (2013). Pollution Assessment: River Ganga. [Accessed April 26, 2014 from:`
+- `prototype-section-00724` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 25-25; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD`
+- `prototype-section-00725` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 26-35; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-00726` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 36-36; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-00727` — `GRBMP-TR-042`; `29_59_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Haryana.pdf`; pages 37-41; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-00731` — `GRBMP-TR-043`; `29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf`; pages 5-5; KEEP_HISTORICAL; HISTORICAL; section: `1. Preamble`
+- `prototype-section-00733` — `GRBMP-TR-043`; `29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf`; pages 8-9; KEEP_HISTORICAL; HISTORICAL; section: `3. 2. Chemicalization of Agriculture and Non -point Source of`
+- `prototype-section-00734` — `GRBMP-TR-043`; `29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `3.3. Slow Pace of Diversification`
+- `prototype-section-00735` — `GRBMP-TR-043`; `29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf`; pages 11-11; KEEP_HISTORICAL; HISTORICAL; section: `3.4. Marginalization of Agricultural Holdings`
+- `prototype-section-00737` — `GRBMP-TR-043`; `29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf`; pages 13-14; KEEP_HISTORICAL; HISTORICAL; section: `4. Mission Interventions`
+- `prototype-section-00741` — `GRBMP-TR-043`; `29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Policy Consideration`
+- `prototype-section-00742` — `GRBMP-TR-043`; `29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf`; pages 21-21; KEEP; STATIC; section: `5. The mission should examine various issues, regulatory concerns, water laws and`
+- `prototype-section-00747` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 9-14; KEEP; STATIC; section: `1. CGWB : Central Ground Water Board.`
+- `prototype-section-00748` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 15-15; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00749` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 16-24; KEEP_HISTORICAL; HISTORICAL; section: `4. Problems and Their Remediation`
+- `prototype-section-00750` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 25-25; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Summary of Recommendations`
+- `prototype-section-00751` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 26-26; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Basin scale flood-risk maps should be prepared based on scientific data and`
+- `prototype-section-00752` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 27-28; KEEP; STATIC; section: `5. Sediment dynamics and its application in river management projects form`
+- `prototype-section-00753` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 29-29; KEEP_HISTORICAL; HISTORICAL; section: `1. Agarwal, R.P., Bhoj, R., 1992. Evolution of Kosi River fan, India: structural`
+- `prototype-section-00754` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 30-30; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `11. Mackey, S.D., Bridge, J.S., 1995. Three -dimensional model of alluvial`
+- `prototype-section-00755` — `GRBMP-M07`; `2_Mission 7_River Hazards Mgmt.pdf`; pages 31-31; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `23. Sinha, R., Priyanka, S., V. Jain and Malay Mukul (2014). Avulsion`
+- `prototype-section-00762` — `GRBMP-TR-016`; `30_2_002_EQP_S&R_01.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `4.2. Restriction / Banning of Undesirable Activities`
+- `prototype-section-00763` — `GRBMP-TR-016`; `30_2_002_EQP_S&R_01.pdf`; pages 9-9; KEEP_HISTORICAL; HISTORICAL; section: `4.3. Riverbank Beautification and Development`
+- `prototype-section-00765` — `GRBMP-TR-016`; `30_2_002_EQP_S&R_01.pdf`; pages 11-11; KEEP; STATIC; section: `1. Map of the town showing the locations of the existing sewage treatment plants,`
+- `prototype-section-00768` — `GRBMP-TR-016`; `30_2_002_EQP_S&R_01.pdf`; pages 14-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Work packages based on ‘actionable’ items 4.3.1 – 4.3.3 concerning riverbank`
+- `prototype-section-00769` — `GRBMP-TR-016`; `30_2_002_EQP_S&R_01.pdf`; pages 15-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.1. URMPs vs Other City‐Specific Development Plans`
+- `prototype-section-00773` — `GRBMP-TR-044`; `31_Measures for Ecological Revival of River Ganga.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00774` — `GRBMP-TR-044`; `31_Measures for Ecological Revival of River Ganga.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `i. Provide space to endemic flora and f auna for survival by maintaining longitudinal`
+- `prototype-section-00775` — `GRBMP-TR-044`; `31_Measures for Ecological Revival of River Ganga.pdf`; pages 9-9; KEEP_HISTORICAL; HISTORICAL; section: `IITC`
+- `prototype-section-00776` — `GRBMP-TR-044`; `31_Measures for Ecological Revival of River Ganga.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `RET`
+- `prototype-section-00779` — `GRBMP-TR-044`; `31_Measures for Ecological Revival of River Ganga.pdf`; pages 13-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Major Threats on River Ganga Ecosystem`
+- `prototype-section-00780` — `GRBMP-TR-044`; `31_Measures for Ecological Revival of River Ganga.pdf`; pages 16-17; KEEP_HISTORICAL; HISTORICAL; section: `1. Cyprinus carpio Introduce for`
+- `prototype-section-00781` — `GRBMP-TR-044`; `31_Measures for Ecological Revival of River Ganga.pdf`; pages 18-19; KEEP; STATIC; section: `6. Restoration Measures`
+- `prototype-section-00785` — `GRBMP-TR-017`; `32_035ENB.pdf`; pages 6-7; KEEP; STATIC; section: `Unidentified extracted structure`
+- `prototype-section-00786` — `GRBMP-TR-017`; `32_035ENB.pdf`; pages 8-9; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00787` — `GRBMP-TR-017`; `32_035ENB.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `2. Biological diversity of Ramganga river`
+- `prototype-section-00793` — `GRBMP-TR-017`; `32_035ENB.pdf`; pages 16-17; KEEP; STATIC; section: `2.6. Higher vertebrates`
+- `prototype-section-00797` — `GRBMP-TR-045`; `32_64_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin West Bengal.pdf`; pages 5-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00799` — `GRBMP-TR-045`; `32_64_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin West Bengal.pdf`; pages 9-18; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Ganga Basin in the State`
+- `prototype-section-00800` — `GRBMP-TR-045`; `32_64_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin West Bengal.pdf`; pages 19-19; KEEP; STATIC; section: `4. Religious Places and Their Importance`
+- `prototype-section-00801` — `GRBMP-TR-045`; `32_64_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin West Bengal.pdf`; pages 20-31; KEEP_HISTORICAL; HISTORICAL; section: `5. Pollution Load`
+- `prototype-section-00802` — `GRBMP-TR-045`; `32_64_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin West Bengal.pdf`; pages 32-32; KEEP_HISTORICAL; HISTORICAL; section: `MLD`
+- `prototype-section-00803` — `GRBMP-TR-045`; `32_64_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin West Bengal.pdf`; pages 33-34; KEEP; STATIC; section: `6. Conclusions`
+- `prototype-section-00807` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 5-6; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-00808` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 7-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Background and Review of Literature`
+- `prototype-section-00809` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.2.1. Collection of Information`
+- `prototype-section-00810` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.3. Cost Estimates of Sewerage Systems: Other Approaches`
+- `prototype-section-00811` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 10-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.3.3. Sewage Treatment`
+- `prototype-section-00813` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 12-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Methodology`
+- `prototype-section-00814` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.3. Estimation of Capex and Opex of Sewerage Pumping`
+- `prototype-section-00816` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 16-16; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Results and Discussion`
+- `prototype-section-00819` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 24-24; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.3. Sewage Pumping`
+- `prototype-section-00820` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 25-25; KEEP; STATIC; section: `5.4. Sewage Treatment`
+- `prototype-section-00821` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 26-26; KEEP_HISTORICAL; HISTORICAL; section: `5.5. Sewerage System`
+- `prototype-section-00822` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 27-31; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.6. Estimated Cost of Provisioning Sewerage Systems in Major`
+- `prototype-section-00824` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 35-35; KEEP_HISTORICAL; HISTORICAL; section: `5.7. Benefits of Provisioning Sewerage Systems`
+- `prototype-section-00826` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 41-41; KEEP_HISTORICAL; HISTORICAL; section: `6. Conclusions and Recommendations`
+- `prototype-section-00827` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 42-42; KEEP; STATIC; section: `6.2. Recommendations`
+- `prototype-section-00828` — `GRBMP-TR-018`; `33_036EQP.pdf`; pages 43-49; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Manual on Sewage and Sewage Treatment, Part A: Engineering, Central Public`
+- `prototype-section-00858` — `GRBMP-TR-019`; `33_43_001_GEN_DAT_01.pdf`; pages 5-5; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00863` — `GRBMP-TR-019`; `33_43_001_GEN_DAT_01.pdf`; pages 11-11; KEEP; STATIC; section: `1. Bheem Gauda Barrage 78.10 29.57 290`
+- `prototype-section-00865` — `GRBMP-TR-019`; `33_43_001_GEN_DAT_01.pdf`; pages 13-13; KEEP; STATIC; section: `3.1. Suggestions and Recommendations`
+- `prototype-section-00870` — `GRBMP-TR-020`; `34_020ENB.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00879` — `GRBMP-TR-021`; `34_026ENB.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00882` — `GRBMP-TR-021`; `34_026ENB.pdf`; pages 7-8; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00883` — `GRBMP-TR-021`; `34_026ENB.pdf`; pages 9-10; KEEP_HISTORICAL; HISTORICAL; section: `2. Biological Profile`
+- `prototype-section-00884` — `GRBMP-TR-021`; `34_026ENB.pdf`; pages 11-12; KEEP_HISTORICAL; HISTORICAL; section: `2.2. Zooplankton`
+- `prototype-section-00896` — `GRBMP-TR-022`; `35_029ENB.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00899` — `GRBMP-TR-022`; `35_029ENB.pdf`; pages 7-12; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00900` — `GRBMP-TR-022`; `35_029ENB.pdf`; pages 13-15; KEEP_HISTORICAL; HISTORICAL; section: `2. Conclusions`
+- `prototype-section-00901` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 1-1; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-00902` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 2-2; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00903` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 3-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Scope`
+- `prototype-section-00904` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 4-4; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `STEERING COMMITTEE`
+- `prototype-section-00905` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 5-5; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Activities carried out`
+- `prototype-section-00906` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 6-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `VIII. Khare, M, “The Governance and Institutional Structure of proposed NGRBMP” in one day`
+- `prototype-section-00907` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 8-8; KEEP; STATIC; section: `I. Nile Basin Tran boundary Action`
+- `prototype-section-00908` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6. What is governance?`
+- `prototype-section-00909` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 10-12; KEEP_HISTORICAL; HISTORICAL; section: `1. Efficient use of resources,`
+- `prototype-section-00910` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. Purpose of Restructuring the Institutional Framework of NGRBA`
+- `prototype-section-00911` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 14-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c. Restructuring to meet new legislative requirements`
+- `prototype-section-00913` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 17-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `v. Conduct collaborative action research`
+- `prototype-section-00916` — `GRBMP-TR-046`; `35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf`; pages 24-24; KEEP; STATIC; section: `STANDING COMMITTEE`
+- `prototype-section-00922` — `GRBMP-TR-047`; `36_35_River Style Framework for the Ganga River.pdf`; pages 8-8; KEEP; STATIC; section: `c) Main channel and bar distribution percentage for each River Style`
+- `prototype-section-00923` — `GRBMP-TR-047`; `36_35_River Style Framework for the Ganga River.pdf`; pages 9-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Preamble`
+- `prototype-section-00924` — `GRBMP-TR-047`; `36_35_River Style Framework for the Ganga River.pdf`; pages 11-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Data used`
+- `prototype-section-00925` — `GRBMP-TR-047`; `36_35_River Style Framework for the Ganga River.pdf`; pages 12-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Methodology`
+- `prototype-section-00927` — `GRBMP-TR-047`; `36_35_River Style Framework for the Ganga River.pdf`; pages 17-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. River Style® Framework For The Ganga River`
+- `prototype-section-00934` — `GRBMP-TR-047`; `36_35_River Style Framework for the Ganga River.pdf`; pages 41-43; KEEP_HISTORICAL; HISTORICAL; section: `6. Conclusions and Recommendations`
+- `prototype-section-00938` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 5-5; KEEP_HISTORICAL; HISTORICAL; section: `25MLD`
+- `prototype-section-00939` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 6-6; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items : Value`
+- `prototype-section-00940` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 7-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-00941` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items`
+- `prototype-section-00942` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `1. Adiganga River Basin`
+- `prototype-section-00943` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 11-11; KEEP_HISTORICAL; HISTORICAL; section: `3.5MLD`
+- `prototype-section-00944` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 12-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-00945` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `: 39.62 (ULB`
+- `prototype-section-00946` — `GRBMP-TR-048`; `36_68_Draft_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Hooghly Sub-Basin.pdf`; pages 14-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `: 135(ULB`
+- `prototype-section-00950` — `GRBMP-TR-049`; `36_Status of Urbanization and Industrialization in Lower Ganga Basin.pdf`; pages 6-6; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00951` — `GRBMP-TR-049`; `36_Status of Urbanization and Industrialization in Lower Ganga Basin.pdf`; pages 7-12; KEEP_HISTORICAL; HISTORICAL; section: `3. A Brief Profile of the Lower Ganga Basin (Bihar)`
+- `prototype-section-00953` — `GRBMP-TR-049`; `36_Status of Urbanization and Industrialization in Lower Ganga Basin.pdf`; pages 24-31; KEEP_HISTORICAL; HISTORICAL; section: `NVA/FC 0.33 0.33 0.84 0.44 155`
+- `prototype-section-00954` — `GRBMP-TR-049`; `36_Status of Urbanization and Industrialization in Lower Ganga Basin.pdf`; pages 32-32; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Annual Survey of Industries, Government of India`
+- `prototype-section-00958` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 6-6; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00959` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `3. A Brief Profile of the Middle Ganga Basin (Uttar Pradesh)`
+- `prototype-section-00960` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 8-17; KEEP_HISTORICAL; HISTORICAL; section: `4. Urbanization: Growth and Dimension`
+- `prototype-section-00961` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 18-19; KEEP; STATIC; section: `5. Urban Amenities`
+- `prototype-section-00962` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 20-20; KEEP_HISTORICAL; HISTORICAL; section: `5.2. Access to Bathroom Facilities`
+- `prototype-section-00967` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 25-26; KEEP_HISTORICAL; HISTORICAL; section: `MPCE`
+- `prototype-section-00968` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 27-27; KEEP_HISTORICAL; HISTORICAL; section: `RURAL`
+- `prototype-section-00969` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 28-34; KEEP; STATIC; section: `7.0. Urban Occupational Structure`
+- `prototype-section-00972` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 42-46; KEEP_HISTORICAL; HISTORICAL; section: `NVA/FC 0.41 0.24 0.39 0.31 0.36 0.28 0.5 0.39`
+- `prototype-section-00974` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 50-52; KEEP_HISTORICAL; HISTORICAL; section: `10.5. Regional Trends in Employment Generation in the Industries`
+- `prototype-section-00976` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 57-58; KEEP_HISTORICAL; HISTORICAL; section: `11.2. Industrial Effluents`
+- `prototype-section-00977` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 59-63; KEEP; STATIC; section: `12.0. Conclusions and Policy Implications`
+- `prototype-section-00978` — `GRBMP-TR-050`; `36_Status of Urbanization and Industrialization in Middle Ganga Basin.pdf`; pages 64-66; KEEP_HISTORICAL; HISTORICAL; section: `1. http://censusindia.gov.in/2011-prov-results/paper2/prov_results_paper2_indiavol2.html`
+- `prototype-section-00983` — `GRBMP-TR-023`; `38_023EQP.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-00984` — `GRBMP-TR-023`; `38_023EQP.pdf`; pages 8-21; KEEP_HISTORICAL; HISTORICAL; section: `2. Water Quality Trends of the Ganga River`
+- `prototype-section-00985` — `GRBMP-TR-023`; `38_023EQP.pdf`; pages 22-23; KEEP_HISTORICAL; HISTORICAL; section: `3. Monsoon and River Flow Characteristics – Western`
+- `prototype-section-00986` — `GRBMP-TR-023`; `38_023EQP.pdf`; pages 24-24; KEEP_HISTORICAL; HISTORICAL; section: `4. Microbial Pollution Removal Potential of Secondarylevel Sewage Treatment Technologies`
+- `prototype-section-00987` — `GRBMP-TR-023`; `38_023EQP.pdf`; pages 25-30; KEEP_HISTORICAL; HISTORICAL; section: `5. Techno-economic Assessment of Treatment Options for`
+- `prototype-section-00988` — `GRBMP-TR-023`; `38_023EQP.pdf`; pages 31-50; KEEP_HISTORICAL; HISTORICAL; section: `6. Concluding Remarks and Recommendations`
+- `prototype-section-00993` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 6-6; KEEP; STATIC; section: `7.2. Education Infrastructure 40`
+- `prototype-section-00994` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-00995` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 8-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Data Sources and Methodology`
+- `prototype-section-00996` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 12-14; KEEP_HISTORICAL; HISTORICAL; section: `3. An Overview of the Health Status`
+- `prototype-section-00997` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 15-23; KEEP; STATIC; section: `PART I: STATE-WISE ANALYSIS`
+- `prototype-section-00998` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 24-25; KEEP_HISTORICAL; HISTORICAL; section: `5. Water, Sanitation and Health`
+- `prototype-section-00999` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 26-26; KEEP_HISTORICAL; HISTORICAL; section: `5.1.1. Access to Safe Drinking Water`
+- `prototype-section-01000` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 27-29; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.1.2. Purified Water and its Sources`
+- `prototype-section-01001` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 30-33; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BIHAR`
+- `prototype-section-01002` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 34-37; KEEP_HISTORICAL; HISTORICAL; section: `5. 3 Morbidity`
+- `prototype-section-01003` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 38-42; KEEP; STATIC; section: `6. Healthcare Expenditure and Financing`
+- `prototype-section-01005` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 46-51; KEEP; STATIC; section: `7. 2 Health Educational and Hospital Infrastructure`
+- `prototype-section-01011` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 65-65; KEEP; STATIC; section: `1000) of persons hospitalised during 365 days in Bihar, 2004`
+- `prototype-section-01012` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 66-66; KEEP_HISTORICAL; HISTORICAL; section: `1. Overall health profile was found better in West Bengal and Uttarakhand than Uttar`
+- `prototype-section-01013` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 67-67; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1000) and urban (37 households per 1000) areas.`
+- `prototype-section-01014` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 68-68; KEEP; STATIC; section: `13. Number of persons hospitalised per 1000 population varies significantly across rural and`
+- `prototype-section-01015` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 69-69; KEEP_HISTORICAL; HISTORICAL; section: `2. In rural areas, Gram Panchayats should be entrusted the task of formulation and`
+- `prototype-section-01016` — `GRBMP-TR-051`; `38_44_State of Health in the Ganga River Basin.pdf`; pages 70-73; KEEP; STATIC; section: `3. Public toilets may not be effective in providing sanitation services due to maintenance`
+- `prototype-section-01021` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 6-8; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01028` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 23-25; KEEP_HISTORICAL; HISTORICAL; section: `3. INDUSTRIALIZATION IN WEST BENGAL`
+- `prototype-section-01029` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 26-26; KEEP_HISTORICAL; HISTORICAL; section: `3.2. Recent Trend in Industrial Growth in West Bengal`
+- `prototype-section-01030` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 27-29; KEEP; STATIC; section: `FIGURE 26: SHARE OF WEST BENGAL MANUFACTURING SECTOR IN ALL-INDIA NDP (%)`
+- `prototype-section-01033` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 37-37; KEEP_HISTORICAL; HISTORICAL; section: `EPI`
+- `prototype-section-01036` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 42-42; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. CONCLUSIONS`
+- `prototype-section-01037` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 43-43; KEEP_HISTORICAL; HISTORICAL; section: `1. Annual Report (2010 -11) Department of Commerce and Industries, Government of West`
+- `prototype-section-01038` — `GRBMP-TR-052`; `39_Status of Urbanization and Industrialization in West Bengal.pdf`; pages 44-45; KEEP_HISTORICAL; HISTORICAL; section: `14. Mishra, P. (1997) ‘Industrial Deceleration in West Bengal’, Unpublished M.Phil.`
+- `prototype-section-01040` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 7-7; KEEP; STATIC; section: `1. Environmental Quality and Pollution (EQP)`
+- `prototype-section-01041` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 8-8; KEEP; STATIC; section: `5. Socio Economic and Cultural (SEC)`
+- `prototype-section-01042` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 9-12; KEEP; STATIC; section: `1. CGWB : Central Ground Water Board.`
+- `prototype-section-01043` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 13-16; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `NRGB [IITC, 2011] 6`
+- `prototype-section-01044` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 17-18; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01045` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 19-19; KEEP; STATIC; section: `2. Objective`
+- `prototype-section-01046` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 20-21; KEEP_HISTORICAL; HISTORICAL; section: `4. Status of NRGB’s Agro-ecosystems`
+- `prototype-section-01047` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 22-24; KEEP; STATIC; section: `NRGB [IITC, 2011]`
+- `prototype-section-01048` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 25-25; KEEP; STATIC; section: `5. Agro-ecosystem Concerns in NRGB`
+- `prototype-section-01049` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 26-26; KEEP_HISTORICAL; HISTORICAL; section: `5.1. Soil Erosion`
+- `prototype-section-01050` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 27-30; KEEP; STATIC; section: `2-, H2PO4`
+- `prototype-section-01052` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 34-36; KEEP; STATIC; section: `6. Measures to Implement Sustainable Agricu lture in`
+- `prototype-section-01053` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 37-37; KEEP; STATIC; section: `6.2. Organic Farming`
+- `prototype-section-01054` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 38-38; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.3. Water and Nutrient Management Techniques in Rice`
+- `prototype-section-01055` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 39-39; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.6. Regional (Landscape -scale) Resource Conservation`
+- `prototype-section-01056` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 40-40; KEEP; STATIC; section: `6.8. Policy Issues`
+- `prototype-section-01057` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 41-41; KEEP; STATIC; section: `7. Summary of Recommended Actions`
+- `prototype-section-01058` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 42-42; KEEP; STATIC; section: `1. Adhya, T.K. et a l. [2014], “Wetting and Drying: Reducing Greenhouse Gas`
+- `prototype-section-01059` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 43-43; KEEP; STATIC; section: `11. FAO (Food and Agricultural Organization) [2014], “ What is C onservation`
+- `prototype-section-01060` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 44-44; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `23. IITC [ 2011]: “Agriculture in the Ganga River Basin: An Overview ”, GRBMP`
+- `prototype-section-01061` — `GRBMP-M04`; `3_Mission 4_Sustainable  Agriculture.pdf`; pages 45-45; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `38. Seufert, V., N. Ramankutty & J.A. Foley [2012], “ Comparing the yields of`
+- `prototype-section-01065` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 5-5; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01067` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `3. The tertiary treated water should be reused for various purposes, i.e., industrial,`
+- `prototype-section-01069` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 9-9; KEEP_HISTORICAL; HISTORICAL; section: `1. The land for the project was provided by the ULBs/State Governments.`
+- `prototype-section-01071` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 11-12; KEEP_HISTORICAL; HISTORICAL; section: `6. Sewage CDPTR Infrastructure: Proposed Changes`
+- `prototype-section-01072` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 13-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Creation and efficient operation of sewage pumping and treatment infrastructure`
+- `prototype-section-01073` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 15-16; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. Design‐Build‐Finance‐Operate (DBFO) Model`
+- `prototype-section-01075` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 18-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `iii. Prevailing sewage characteristics will be determined through composite sampling at`
+- `prototype-section-01076` — `GRBMP-TR-024`; `42_27_004_EQP_S&R_03.pdf`; pages 19-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `9. DBFO Model: Public Monitoring`
+- `prototype-section-01077` — `GRBMP-TR-053`; `46_032ENB.pdf`; pages 1-4; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01079` — `GRBMP-TR-053`; `46_032ENB.pdf`; pages 6-7; KEEP; STATIC; section: `Unidentified extracted structure`
+- `prototype-section-01080` — `GRBMP-TR-053`; `46_032ENB.pdf`; pages 8-8; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01083` — `GRBMP-TR-053`; `46_032ENB.pdf`; pages 11-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1.2. Forest cover in Ganga Basin area`
+- `prototype-section-01088` — `GRBMP-TR-053`; `46_032ENB.pdf`; pages 22-22; KEEP_HISTORICAL; HISTORICAL; section: `1.7. Effect of riparian flora on river Ganga`
+- `prototype-section-01091` — `GRBMP-TR-053`; `46_032ENB.pdf`; pages 29-29; KEEP; STATIC; section: `1. Rishikesh to Garhmukteshwar`
+- `prototype-section-01099` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 7-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-01107` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 16-16; KEEP; STATIC; section: `3. Technology Options for Cremation`
+- `prototype-section-01109` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 18-18; KEEP_HISTORICAL; HISTORICAL; section: `3.3.1. Principle of IWC`
+- `prototype-section-01111` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 20-20; KEEP_HISTORICAL; HISTORICAL; section: `3.3.5. Limitations`
+- `prototype-section-01112` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 21-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.4.1. Principle`
+- `prototype-section-01115` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 24-24; KEEP_HISTORICAL; HISTORICAL; section: `3.5. Other Technologies`
+- `prototype-section-01117` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 28-28; KEEP; STATIC; section: `5. Conclusions and Recommendations`
+- `prototype-section-01119` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 30-30; KEEP; STATIC; section: `5.3. Institutional Aspects`
+- `prototype-section-01120` — `GRBMP-TR-054`; `46_038_Cremation.pdf`; pages 31-32; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.4. Technical Aspects`
+- `prototype-section-01125` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 5-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01127` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 9-16; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Ganga Basin in the State`
+- `prototype-section-01128` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 17-26; KEEP; STATIC; section: `4. Religious Places and Their Importance`
+- `prototype-section-01129` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 27-27; KEEP_HISTORICAL; HISTORICAL; section: `c. d.`
+- `prototype-section-01130` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 28-29; KEEP_HISTORICAL; HISTORICAL; section: `6. Conclusions:`
+- `prototype-section-01131` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 30-31; KEEP_HISTORICAL; HISTORICAL; section: `1. CPCB (2013). Pollution Assessment: River Ganga. [Accessed April 26, 2014 from:`
+- `prototype-section-01132` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 32-57; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01133` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 58-58; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01134` — `GRBMP-TR-056`; `47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf`; pages 59-86; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01139` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-01140` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Concept of Aviral Dhara`
+- `prototype-section-01145` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 15-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Recommended Methodology`
+- `prototype-section-01146` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 16-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6. Determination of Average Flows and 90% Dependable Flows from historical`
+- `prototype-section-01147` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 19-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Illustration of E-Flows Assessment for Some Select Sites`
+- `prototype-section-01150` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 42-42; KEEP_HISTORICAL; HISTORICAL; section: `A B A B A B A B`
+- `prototype-section-01151` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 43-43; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. EFA, thus is essentially a scientific process while the choice to maintain`
+- `prototype-section-01152` — `GRBMP-TR-057`; `47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf`; pages 44-44; KEEP_HISTORICAL; HISTORICAL; section: `1. Brisbane Declaration (2007) Recommendations of the 10 th International`
+- `prototype-section-01155` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 7-7; KEEP; STATIC; section: `1. Environmental Quality and Pollution (EQP)`
+- `prototype-section-01156` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 8-8; KEEP; STATIC; section: `5. Socio Economic and Cultural (SEC)`
+- `prototype-section-01157` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 9-10; KEEP; STATIC; section: `1. CGWB : Central Ground Water Board.`
+- `prototype-section-01158` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 11-18; KEEP_HISTORICAL; HISTORICAL; section: `(NRGBMC)`
+- `prototype-section-01159` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 19-20; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01160` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 21-21; KEEP; STATIC; section: `2. Objective`
+- `prototype-section-01161` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 22-24; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Ganga River System: Sources of Pollutants`
+- `prototype-section-01162` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 25-28; KEEP; STATIC; section: `5. Ganga River System: Pollutant Ingress`
+- `prototype-section-01163` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 29-29; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. Mission ‘Nirmal’ Dhara: Broad Plan of Action`
+- `prototype-section-01164` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 30-30; KEEP; STATIC; section: `2) disposal of sludge derived thr ough treatment of sewage and industrial`
+- `prototype-section-01165` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 31-31; KEEP; STATIC; section: `2) Domestic sewage generated from all other sources should be collected`
+- `prototype-section-01166` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 32-32; KEEP; STATIC; section: `3) Slum clusters and other encroachments should be removed from river`
+- `prototype-section-01167` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 33-33; KEEP; STATIC; section: `9. Coordination: National River Ganga Basin`
+- `prototype-section-01168` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 34-34; KEEP; STATIC; section: `10. Project Planning: Urban River Management Plan`
+- `prototype-section-01169` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 35-35; KEEP; STATIC; section: `11. Project Planning: Other Cases`
+- `prototype-section-01170` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 36-42; KEEP; STATIC; section: `13. Important Projects from MND Perspective`
+- `prototype-section-01171` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 43-46; KEEP; STATIC; section: `14. Other MND Projects`
+- `prototype-section-01172` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 47-48; KEEP_HISTORICAL; HISTORICAL; section: `15. MND Projects: Financial Structuring, Project`
+- `prototype-section-01173` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 49-49; KEEP; STATIC; section: `16. MND: Cost of Implementation`
+- `prototype-section-01174` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 50-51; KEEP; STATIC; section: `CAPEX`
+- `prototype-section-01175` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 52-54; KEEP; STATIC; section: `17. MND: Immediate Actions`
+- `prototype-section-01176` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 55-56; KEEP; STATIC; section: `18. MND: Budget Outlay`
+- `prototype-section-01177` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 57-71; KEEP; STATIC; section: `OPEX 0 8 23 38 53 68 84 91 99 106114122129137144 1217`
+- `prototype-section-01178` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 72-74; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `19. Financing MND Projects`
+- `prototype-section-01179` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 75-75; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Open Book Planning`
+- `prototype-section-01180` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 76-76; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Having Skin in the Project`
+- `prototype-section-01181` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 77-77; KEEP; STATIC; section: `5. Default Backstops through Counterparty Guarantee`
+- `prototype-section-01182` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 78-78; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `10. Better Procurement through Export Credit Assistance Schemes`
+- `prototype-section-01183` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 79-79; KEEP; STATIC; section: `4. Long-term Low Cost Loans`
+- `prototype-section-01184` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 80-81; KEEP; STATIC; section: `9. Credit Risk Pooling`
+- `prototype-section-01185` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 82-82; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. IITC [2010a], “Guidelines for the Preparation of Urban River Management`
+- `prototype-section-01186` — `GRBMP-M02`; `47_Mission 2_Nirmal Dhara.pdf`; pages 83-83; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `14. IITC [2014g], “Assessment of Domestic Pollution Load from Urban`
+- `prototype-section-01190` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 9-9; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-01191` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 10-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1.1. Objectives`
+- `prototype-section-01192` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 11-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1.3. Methodology`
+- `prototype-section-01194` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.4. Environmental and Social Impacts of Hydropower`
+- `prototype-section-01195` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 14-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2.4.3. Seismicity and Possibility of Earthquake Disasters`
+- `prototype-section-01196` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 15-15; KEEP; STATIC; section: `3.1.1. Principles Forming Philosophy of PIs for EIA-EMP`
+- `prototype-section-01197` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 16-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.1. Ministry of Environment and Forests (MoEF)`
+- `prototype-section-01198` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 18-19; KEEP; STATIC; section: `4.5. MoEF Regional Offices (ROs)`
+- `prototype-section-01199` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6. Collation of Challenges and Opportunities`
+- `prototype-section-01200` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 21-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.4.1. Identified Geographical Boundary for EIA Studies`
+- `prototype-section-01201` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 22-22; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.4.4. Methodologies to conduct EIAs are Poorly Prescribed`
+- `prototype-section-01202` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 23-23; KEEP; STATIC; section: `6.6.1. Public Hearings are done in an uninformed Manner`
+- `prototype-section-01203` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 24-24; KEEP; STATIC; section: `6.6.4. Its only “Hearing” and “Consultation”`
+- `prototype-section-01204` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 25-25; KEEP; STATIC; section: `7. Tentative Recommendations`
+- `prototype-section-01205` — `GRBMP-TR-025`; `48_008PLG.pdf`; pages 26-26; KEEP_HISTORICAL; HISTORICAL; section: `3. Independent professionals having required competence in their respective subjects and`
+- `prototype-section-01208` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 1-6; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01209` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-01210` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 8-13; KEEP_HISTORICAL; HISTORICAL; section: `2.1. Regional Trend in Area under Forest`
+- `prototype-section-01211` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 14-14; KEEP_HISTORICAL; HISTORICAL; section: `3. Trends in Number of Operational Holdings`
+- `prototype-section-01212` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 15-30; KEEP_HISTORICAL; HISTORICAL; section: `4. Trends in Gross Irrigated Area by Sources of Irrigation`
+- `prototype-section-01213` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 31-34; KEEP_HISTORICAL; HISTORICAL; section: `5. Trends in Consumption of Fertilizers and Pesticides`
+- `prototype-section-01214` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 35-36; KEEP_HISTORICAL; HISTORICAL; section: `6. Trends in Farm Mechanization`
+- `prototype-section-01215` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 37-39; KEEP_HISTORICAL; HISTORICAL; section: `7. Trends in Area, Production and Yield of Major Crops`
+- `prototype-section-01216` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 40-51; KEEP_HISTORICAL; HISTORICAL; section: `8. Region-Wise Trends in Productivity of Major Crops`
+- `prototype-section-01217` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 52-52; KEEP_HISTORICAL; HISTORICAL; section: `9. Composition of Value of Agricultural Output`
+- `prototype-section-01218` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 53-54; KEEP_HISTORICAL; HISTORICAL; section: `10. Trends In Costs, Returns And Profitability In Agriculture`
+- `prototype-section-01225` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 68-68; KEEP_HISTORICAL; HISTORICAL; section: `1990-91 443.72 976.72 57.13 30.62 NA NA 11.48 0.02 221.10 1741`
+- `prototype-section-01227` — `GRBMP-TR-026`; `49_017SEC.pdf`; pages 70-79; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `16. Summary of Findings, Issues and Suggested Actions`
+- `prototype-section-01231` — `GRBMP-TR-003`; `4_013EQP.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01232` — `GRBMP-TR-003`; `4_013EQP.pdf`; pages 8-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `ADWG 2004`
+- `prototype-section-01233` — `GRBMP-TR-003`; `4_013EQP.pdf`; pages 12-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `ADWG`
+- `prototype-section-01239` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01240` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 8-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Ganga Action Plan: Components and Objectives`
+- `prototype-section-01241` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 10-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3.3. Institutional Arrangements for Implementation and`
+- `prototype-section-01243` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 12-12; KEEP_HISTORICAL; HISTORICAL; section: `4.1. Strengths of Design aspects of GAP`
+- `prototype-section-01244` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 13-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4.4. Strengths of Monitoring, Evaluation and Regulation Aspects of`
+- `prototype-section-01245` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 14-14; KEEP_HISTORICAL; HISTORICAL; section: `4.5.3. Awareness and Activity among the Non-Government Actors`
+- `prototype-section-01248` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 17-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.1.5. Inappropriate Policy of Discharging Water into the River`
+- `prototype-section-01249` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 18-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.1.6. Lack of a Clear Policy-Legal and Institutional Framework`
+- `prototype-section-01250` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 19-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Majority states could not acquire or provide land for constructing the sewage`
+- `prototype-section-01251` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 20-20; KEEP_HISTORICAL; HISTORICAL; section: `5.2.4. Over-Designed STPs`
+- `prototype-section-01252` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 21-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5.4. Weakness of Monitoring, Evaluation and Regulation`
+- `prototype-section-01254` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 23-23; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6.2. Adaption of River Basin Approach`
+- `prototype-section-01255` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 24-24; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7. Threats and Challenges`
+- `prototype-section-01256` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 25-25; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7.5. Wastage of Funds`
+- `prototype-section-01257` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 26-26; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `7.8. Evolving a Robust Regulatory Framework and Institutional`
+- `prototype-section-01258` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 27-29; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `GAP`
+- `prototype-section-01259` — `GRBMP-HS-001`; `50_006GEN.pdf`; pages 30-34; KEEP_HISTORICAL; HISTORICAL; section: `T A T A T A T A`
+- `prototype-section-01260` — `GRBMP-TR-027`; `50_033ENB.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01263` — `GRBMP-TR-027`; `50_033ENB.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01265` — `GRBMP-TR-027`; `50_033ENB.pdf`; pages 12-14; KEEP; STATIC; section: `4. Conclusions`
+- `prototype-section-01273` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 7-8; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01275` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 14-17; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Yamuna Basin`
+- `prototype-section-01278` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 28-29; KEEP; STATIC; section: `4. Religious Places and Their Importance`
+- `prototype-section-01279` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 30-50; KEEP_HISTORICAL; HISTORICAL; section: `5. Pollution Load`
+- `prototype-section-01280` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 51-52; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items`
+- `prototype-section-01281` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 53-105; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01282` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 106-107; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01283` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 108-109; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01284` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 110-121; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01285` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 122-134; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01286` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 135-135; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01287` — `GRBMP-TR-058`; `51_65_Assessment of Domestic Pollution Load from Urban Agglomeration in Yamuna Sub Basin.pdf`; pages 136-204; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01288` — `GRBMP-TR-028`; `53_027ENB.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01291` — `GRBMP-TR-028`; `53_027ENB.pdf`; pages 7-8; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-01292` — `GRBMP-TR-028`; `53_027ENB.pdf`; pages 9-9; KEEP_HISTORICAL; HISTORICAL; section: `1.1. Climate`
+- `prototype-section-01293` — `GRBMP-TR-028`; `53_027ENB.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `2. Biological profile of Lower Ganga Basin`
+- `prototype-section-01294` — `GRBMP-TR-028`; `53_027ENB.pdf`; pages 11-12; KEEP_HISTORICAL; HISTORICAL; section: `2.1. Phytoplankton`
+- `prototype-section-01300` — `GRBMP-TR-028`; `53_027ENB.pdf`; pages 24-27; KEEP_HISTORICAL; HISTORICAL; section: `2.7. Scenario a nalysis`
+- `prototype-section-01316` — `GRBMP-TR-028`; `53_027ENB.pdf`; pages 47-47; KEEP_HISTORICAL; HISTORICAL; section: `i. Dolphin`
+- `prototype-section-01321` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 6-8; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01323` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 13-25; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Ganga Basin in the State`
+- `prototype-section-01324` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 26-27; KEEP; STATIC; section: `4. Religious Places and Their Importance`
+- `prototype-section-01325` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 28-38; KEEP_HISTORICAL; HISTORICAL; section: `5. Pollution Load`
+- `prototype-section-01326` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 39-39; KEEP_HISTORICAL; HISTORICAL; section: `c. d.`
+- `prototype-section-01327` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 40-45; KEEP; STATIC; section: `6. Conclusions`
+- `prototype-section-01328` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 46-46; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items : Value`
+- `prototype-section-01330` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 48-49; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items`
+- `prototype-section-01332` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 51-51; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01334` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 53-54; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01336` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 56-57; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01338` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 59-59; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01340` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 61-61; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01341` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 62-63; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 NA`
+- `prototype-section-01342` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 64-64; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01344` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 66-66; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01346` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 68-68; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01348` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 70-70; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01349` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 71-71; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01350` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 72-72; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01351` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 73-73; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01352` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 74-75; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01354` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 77-77; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01356` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 79-79; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01358` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 81-81; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01360` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 83-83; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01362` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 85-85; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01364` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 87-87; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01366` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 89-89; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01368` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 91-91; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01370` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 93-93; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01372` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 95-95; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01374` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 97-97; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01376` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 99-99; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01378` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 101-101; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01380` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 103-104; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01382` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 106-109; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01384` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 111-111; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01386` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 113-114; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01388` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 116-116; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01390` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 118-124; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01391` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 125-125; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD5 NA`
+- `prototype-section-01392` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 126-126; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01393` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 127-127; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `BOD`
+- `prototype-section-01394` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 128-139; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01395` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 140-140; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01396` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 141-184; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01397` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 185-185; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD)`
+- `prototype-section-01398` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 186-190; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01399` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 191-191; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01400` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 192-195; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01401` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 196-196; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01402` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 197-198; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01403` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 199-204; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01404` — `GRBMP-TR-059`; `53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf`; pages 205-209; KEEP_HISTORICAL; HISTORICAL; section: `18) Kuccha drain 1.2`
+- `prototype-section-01407` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 5-5; KEEP_HISTORICAL; HISTORICAL; section: `III 33223.5 39868.2 1196.0`
+- `prototype-section-01408` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 6-6; KEEP_HISTORICAL; HISTORICAL; section: `BOD COD`
+- `prototype-section-01409` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 7-8; KEEP_HISTORICAL; HISTORICAL; section: `TKN`
+- `prototype-section-01410` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 9-9; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01411` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 10-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01412` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 11-11; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01413` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 12-13; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : NIL`
+- `prototype-section-01414` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 14-14; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : 6.0`
+- `prototype-section-01415` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 15-15; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : NA`
+- `prototype-section-01416` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 16-16; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : NIL`
+- `prototype-section-01417` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 17-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : 3.8`
+- `prototype-section-01418` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 18-18; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : NA`
+- `prototype-section-01419` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 19-19; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : 4.5`
+- `prototype-section-01420` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : 1.9`
+- `prototype-section-01421` — `GRBMP-TR-060`; `53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf`; pages 21-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(MLD) : 2.5`
+- `prototype-section-01425` — `GRBMP-TR-061`; `53_Status of Urbanization and Industrialization in Upper Ganga Basin.pdf`; pages 7-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Introduction`
+- `prototype-section-01426` — `GRBMP-TR-061`; `53_Status of Urbanization and Industrialization in Upper Ganga Basin.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `3. A Brief Profile of the Upper Ganga Basin (Uttarakhand)`
+- `prototype-section-01428` — `GRBMP-TR-061`; `53_Status of Urbanization and Industrialization in Upper Ganga Basin.pdf`; pages 13-13; KEEP_HISTORICAL; HISTORICAL; section: `III 20,000-50,000 15 16`
+- `prototype-section-01430` — `GRBMP-TR-061`; `53_Status of Urbanization and Industrialization in Upper Ganga Basin.pdf`; pages 15-15; KEEP_HISTORICAL; HISTORICAL; section: `5. Urban Amenities`
+- `prototype-section-01431` — `GRBMP-TR-061`; `53_Status of Urbanization and Industrialization in Upper Ganga Basin.pdf`; pages 16-17; KEEP_HISTORICAL; HISTORICAL; section: `5.2. Access to Toilet Facilities`
+- `prototype-section-01437` — `GRBMP-TR-061`; `53_Status of Urbanization and Industrialization in Upper Ganga Basin.pdf`; pages 31-37; KEEP_HISTORICAL; HISTORICAL; section: `10.0. Status of Industrialization in Uttarakhand`
+- `prototype-section-01443` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 7-7; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Preamble`
+- `prototype-section-01445` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 9-9; KEEP; STATIC; section: `c) Entry 36- Factories`
+- `prototype-section-01446` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 10-10; KEEP_HISTORICAL; HISTORICAL; section: `6. Upper Stretch`
+- `prototype-section-01447` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 11-11; KEEP; STATIC; section: `c. Enter and inspect under sec. 10 of`
+- `prototype-section-01449` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 13-13; KEEP; STATIC; section: `c. The power of the Board is to`
+- `prototype-section-01450` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 14-15; KEEP_HISTORICAL; HISTORICAL; section: `1. Entry for enquiry or examination`
+- `prototype-section-01452` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 19-19; KEEP; STATIC; section: `9. Analysis of Legislations Applicable in Upper, Middle and`
+- `prototype-section-01454` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 21-21; KEEP; STATIC; section: `5. To combine regulatory and developmental functions keeping in view the powers`
+- `prototype-section-01459` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 29-29; KEEP; STATIC; section: `vi) Violate or breach any rules under this Act, is liable for punishment.`
+- `prototype-section-01460` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 30-30; KEEP; STATIC; section: `c) Power and Function`
+- `prototype-section-01461` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 31-31; KEEP; STATIC; section: `c) Institution formed under the law`
+- `prototype-section-01462` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 32-33; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c) Institutions forms under the Law`
+- `prototype-section-01463` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 34-34; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c) Institution`
+- `prototype-section-01465` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 36-36; KEEP; STATIC; section: `c) Analysis`
+- `prototype-section-01466` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 37-37; KEEP_HISTORICAL; HISTORICAL; section: `ii) Section 35(k) prescribing the conditions subject to which lands and works shall vest`
+- `prototype-section-01467` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 38-38; KEEP; STATIC; section: `c) Institutions formed under the law`
+- `prototype-section-01469` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 40-41; KEEP; STATIC; section: `c) Institutions formed under the law`
+- `prototype-section-01470` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 42-42; KEEP; STATIC; section: `3. In addition to this provision another provision dealing with hygiene of water sources`
+- `prototype-section-01471` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 43-43; KEEP; STATIC; section: `1. The Corporation`
+- `prototype-section-01473` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 45-46; KEEP; STATIC; section: `i) Analysis`
+- `prototype-section-01474` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 47-47; KEEP_HISTORICAL; HISTORICAL; section: `c) Institutions formed under the law`
+- `prototype-section-01475` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 48-49; KEEP_HISTORICAL; HISTORICAL; section: `i) the measures undertaken by that Government for the regulation or development`
+- `prototype-section-01476` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 50-50; KEEP; STATIC; section: `c) Damage for which compensation shall not be awarded`
+- `prototype-section-01479` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 53-58; KEEP; STATIC; section: `c) Institutions formed under the law`
+- `prototype-section-01480` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 59-59; KEEP; STATIC; section: `3. The [State Government] may, by notification, declare which of the navigable`
+- `prototype-section-01481` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 60-60; KEEP; STATIC; section: `c) Institution formed under the law`
+- `prototype-section-01482` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 61-62; KEEP_HISTORICAL; HISTORICAL; section: `i) Clear, widen deepen, divert or otherwise improve existing channels which are under`
+- `prototype-section-01483` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 63-64; KEEP; STATIC; section: `c) Institutions formed under the law`
+- `prototype-section-01484` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 65-67; KEEP; STATIC; section: `c) Powers Granted Under the Law`
+- `prototype-section-01485` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 68-68; KEEP; STATIC; section: `1) that any embankment which connects public embankments, or forms by junction`
+- `prototype-section-01487` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 70-70; KEEP; STATIC; section: `ii) Every person who, within the limits of the tract included in any prohibitory`
+- `prototype-section-01488` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 71-71; KEEP; STATIC; section: `iv) And every person who without such permission shall cause or knowingly and willfully`
+- `prototype-section-01489` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 72-74; KEEP; STATIC; section: `c) Institutions formed under the law`
+- `prototype-section-01490` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 75-75; KEEP; STATIC; section: `i) Co-ordination of actions by the State Governments, officers and other authorities--`
+- `prototype-section-01491` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 76-77; KEEP; STATIC; section: `xiv) such other matters as the Central Government deems necessary or expedient for the`
+- `prototype-section-01492` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 78-81; KEEP; STATIC; section: `i) Analysis`
+- `prototype-section-01494` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 85-86; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1) Power of Board under section 33 to make application to courts for restraining`
+- `prototype-section-01495` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 87-89; KEEP; STATIC; section: `c) Institutions formed under the law`
+- `prototype-section-01496` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 90-90; KEEP; STATIC; section: `10. Relevant Provisions of State Legislatures in Upper,`
+- `prototype-section-01498` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 92-92; KEEP; STATIC; section: `1. Central Government [ The Environment (Protection) Act, 1986]`
+- `prototype-section-01500` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 94-94; KEEP; STATIC; section: `1. A Betterment Levy officer, a Collector, a Block development officer, Engineer, Canal`
+- `prototype-section-01505` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 99-99; KEEP; STATIC; section: `1. Canal Revenue Officer and Collector [The West Bengal Irrigation (Imposition of`
+- `prototype-section-01508` — `GRBMP-TR-029`; `54_011PLG.pdf`; pages 102-103; KEEP; STATIC; section: `11. Conclusion`
+- `prototype-section-01512` — `GRBMP-TR-062`; `54_040_EQP_Sanitation Recommendations.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01513` — `GRBMP-TR-062`; `54_040_EQP_Sanitation Recommendations.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Open defecation cannot be recommended under any circumstances. This practi ce`
+- `prototype-section-01514` — `GRBMP-TR-062`; `54_040_EQP_Sanitation Recommendations.pdf`; pages 9-12; KEEP; STATIC; section: `3. Recommendations for Urban Sanitation`
+- `prototype-section-01515` — `GRBMP-TR-062`; `54_040_EQP_Sanitation Recommendations.pdf`; pages 13-13; KEEP_HISTORICAL; HISTORICAL; section: `4. Recommendations for Rural Sanitation`
+- `prototype-section-01516` — `GRBMP-TR-062`; `54_040_EQP_Sanitation Recommendations.pdf`; pages 14-18; KEEP; STATIC; section: `5. Concluding Remarks`
+- `prototype-section-01517` — `GRBMP-TR-062`; `54_040_EQP_Sanitation Recommendations.pdf`; pages 19-26; KEEP; STATIC; section: `STP 5.13`
+- `prototype-section-01521` — `GRBMP-TR-063`; `54_30_Wetlands in Ganga River Basin.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `1. Introduction`
+- `prototype-section-01522` — `GRBMP-TR-063`; `54_30_Wetlands in Ganga River Basin.pdf`; pages 8-37; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1.3. A global look for wetland management`
+- `prototype-section-01523` — `GRBMP-TR-063`; `54_30_Wetlands in Ganga River Basin.pdf`; pages 38-39; KEEP_HISTORICAL; HISTORICAL; section: `3. Biodiversity of some wetlands in the Ganga river basin`
+- `prototype-section-01524` — `GRBMP-TR-063`; `54_30_Wetlands in Ganga River Basin.pdf`; pages 40-41; KEEP; STATIC; section: `11. Vikramshila Gangetic Dolphin Sanctuary: This wetland is present in the Bhagalpur`
+- `prototype-section-01530` — `GRBMP-TR-063`; `54_30_Wetlands in Ganga River Basin.pdf`; pages 47-47; KEEP; STATIC; section: `c) Pressure due developmental activities like industry or residential areas.`
+- `prototype-section-01532` — `GRBMP-TR-063`; `54_30_Wetlands in Ganga River Basin.pdf`; pages 53-56; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6. Conclusion`
+- `prototype-section-01533` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 1-6; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01534` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01536` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 9-9; KEEP; STATIC; section: `3.1. Uttarakhand`
+- `prototype-section-01537` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 10-11; KEEP_HISTORICAL; HISTORICAL; section: `3.2. Uttar Pradesh`
+- `prototype-section-01538` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 12-12; KEEP_HISTORICAL; HISTORICAL; section: `3.3. Bihar`
+- `prototype-section-01539` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 13-13; KEEP; STATIC; section: `3.4. West Bengal`
+- `prototype-section-01540` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 14-14; KEEP_HISTORICAL; HISTORICAL; section: `4. Data Sources`
+- `prototype-section-01541` — `GRBMP-TR-030`; `55_015SEC.pdf`; pages 15-16; KEEP_HISTORICAL; HISTORICAL; section: `5. Data Limitations`
+- `prototype-section-01550` — `GRBMP-TR-031`; `56_024ENB.pdf`; pages 7-9; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01551` — `GRBMP-TR-031`; `56_024ENB.pdf`; pages 10-12; KEEP_HISTORICAL; HISTORICAL; section: `1984) for proper functioning.`
+- `prototype-section-01553` — `GRBMP-TR-031`; `56_024ENB.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. In: D.N. Sen and K.J. Rajpurobit (Eds.). Dr. W. Junk Publishers, pp. 111-125.`
+- `prototype-section-01554` — `GRBMP-TR-032`; `56_034ENB.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01557` — `GRBMP-TR-032`; `56_034ENB.pdf`; pages 7-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01561` — `GRBMP-TR-032`; `56_034ENB.pdf`; pages 12-12; KEEP_HISTORICAL; HISTORICAL; section: `3.2. Periphyton`
+- `prototype-section-01566` — `GRBMP-TR-032`; `56_034ENB.pdf`; pages 17-17; KEEP_HISTORICAL; HISTORICAL; section: `3.5. Fishes`
+- `prototype-section-01567` — `GRBMP-TR-032`; `56_034ENB.pdf`; pages 18-18; KEEP_HISTORICAL; HISTORICAL; section: `i. Water abstraction`
+- `prototype-section-01568` — `GRBMP-TR-032`; `56_034ENB.pdf`; pages 19-19; KEEP_HISTORICAL; HISTORICAL; section: `C. mrigala contributed small proportions in the Ya`
+- `prototype-section-01570` — `GRBMP-TR-032`; `56_034ENB.pdf`; pages 21-26; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `viii. Apearence of number of Cladocerans and Rotifers in form of zooplankton and zoobenthos`
+- `prototype-section-01582` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 7-7; KEEP; STATIC; section: `1. Environmental Quality and Pollution (EQP)`
+- `prototype-section-01583` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 8-8; KEEP; STATIC; section: `5. Socio Economic and Cultural (SEC)`
+- `prototype-section-01584` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 9-10; KEEP; STATIC; section: `1. CGWB : Central Ground Water Board.`
+- `prototype-section-01585` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 11-12; KEEP; STATIC; section: `NRGB 11`
+- `prototype-section-01586` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 13-16; KEEP_HISTORICAL; HISTORICAL; section: `UNIDO, 2010] 5`
+- `prototype-section-01587` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 17-18; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01588` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 19-19; KEEP; STATIC; section: `2. Objective`
+- `prototype-section-01589` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 20-36; KEEP; STATIC; section: `4. Major Disasters of Concern for NRGB`
+- `prototype-section-01590` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 37-37; KEEP; STATIC; section: `5. Summary of Recommendations`
+- `prototype-section-01591` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 38-38; KEEP; STATIC; section: `vi) Like Forest Fires the ecology of Epidemics and Biolo gical Invasions in`
+- `prototype-section-01592` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 39-39; KEEP_HISTORICAL; HISTORICAL; section: `1. Bagchi, R. e t al. [2014], “ Pathogens and insect herbivores drive rainforest`
+- `prototype-section-01593` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 40-40; KEEP; STATIC; section: `14. Gewin, V. [2005], “Eco-Defense against Invasions,” PLoS Biology, Volume 3,`
+- `prototype-section-01594` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 41-41; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `26. Meyn, A. et al. [2007]. “Environmental drivers of large, infrequent wildfires:`
+- `prototype-section-01595` — `GRBMP-M06`; `56_Mission 6_BPAD.pdf`; pages 42-42; KEEP; STATIC; section: `40. Sundriyal, Y. P. et al. [2007], “ Landslide-dammed lakes in the Alaknanda`
+- `prototype-section-01599` — `GRBMP-TR-033`; `57_021FGM.pdf`; pages 7-12; KEEP; STATIC; section: `1. Preamble`
+- `prototype-section-01600` — `GRBMP-TR-033`; `57_021FGM.pdf`; pages 13-23; KEEP_HISTORICAL; HISTORICAL; section: `3. Results and Discussions`
+- `prototype-section-01602` — `GRBMP-TR-064`; `57_030ENB.pdf`; pages 1-3; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01605` — `GRBMP-TR-064`; `57_030ENB.pdf`; pages 7-8; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01614` — `GRBMP-TR-064`; `57_030ENB.pdf`; pages 22-24; KEEP; STATIC; section: `6. Riverine fisheries of the`
+- `prototype-section-01617` — `GRBMP-TR-064`; `57_030ENB.pdf`; pages 31-33; KEEP_HISTORICAL; HISTORICAL; section: `7. Estuarine fisheries`
+- `prototype-section-01619` — `GRBMP-TR-064`; `57_030ENB.pdf`; pages 35-38; KEEP_HISTORICAL; HISTORICAL; section: `7. There is a remarkable reduction in the production capacity of fresh water fishes,`
+- `prototype-section-01632` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 4-6; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Executive Summary`
+- `prototype-section-01633` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 7-12; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Policy Shifts, Investments and PPPs in UWSS`
+- `prototype-section-01634` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 13-17; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `• 25% BOT/BOOT`
+- `prototype-section-01635` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 18-21; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `3. Critical Review of GRBEMP reports`
+- `prototype-section-01636` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 22-26; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `8. Service provider responsible for uninterrupted power supply for the facility.`
+- `prototype-section-01637` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 27-30; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `2. Service provider will be interested in maintaining and operating the facilities throughout the`
+- `prototype-section-01638` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 31-33; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `4. Contemporary Policy debate and Implications for GRBEMP`
+- `prototype-section-01639` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 34-34; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Path Ahead`
+- `prototype-section-01640` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 35-35; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c. Without stringent regulation of current ground water use, is it possible to`
+- `prototype-section-01641` — `GRBMP-TR-065`; `57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf`; pages 36-38; KEEP_HISTORICAL; HISTORICAL; section: `CPCB. (2010). STATUS OF WATER SUPPLY , WASTEWATER GENERATION AND TREATMENT IN`
+- `prototype-section-01645` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 6-6; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01646` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 7-7; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Characteristics`
+- `prototype-section-01647` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 8-8; KEEP_HISTORICAL; HISTORICAL; section: `3.2. Trends in Natural Growth Rate`
+- `prototype-section-01648` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 9-9; KEEP; STATIC; section: `3.3. Distribution of Population`
+- `prototype-section-01652` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 17-17; KEEP_HISTORICAL; HISTORICAL; section: `4. Economic Indicators`
+- `prototype-section-01653` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 18-24; KEEP_HISTORICAL; HISTORICAL; section: `GSDP 2004-05 GSDP 2005-06 GSDP 2006-07 GSDP 2007-08 GSDP 2008-09`
+- `prototype-section-01654` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 25-27; KEEP_HISTORICAL; HISTORICAL; section: `5. Social and Health Components`
+- `prototype-section-01655` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 28-28; KEEP_HISTORICAL; HISTORICAL; section: `5.1.2. Number of Educational Institutions`
+- `prototype-section-01658` — `GRBMP-TR-066`; `57_Demographic & SocioEconomic Analysis_ In Lower Ganga Basin West Bengal.pdf`; pages 32-32; KEEP_HISTORICAL; HISTORICAL; section: `5.3. Health Status`
+- `prototype-section-01662` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 7-7; KEEP; STATIC; section: `1. Environmental Quality and Pollution (EQP)`
+- `prototype-section-01663` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 8-8; KEEP; STATIC; section: `5. Socio Economic and Cultural (SEC)`
+- `prototype-section-01664` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 9-16; KEEP; STATIC; section: `1. ET : Evapo-Transpiration.`
+- `prototype-section-01665` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 17-18; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01666` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 19-19; KEEP; STATIC; section: `2. Objective`
+- `prototype-section-01667` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 20-20; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `[IITC, 2014]`
+- `prototype-section-01668` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 21-22; KEEP_HISTORICAL; HISTORICAL; section: `4. Ecological Status of National River Ganga`
+- `prototype-section-01669` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 23-34; KEEP_HISTORICAL; HISTORICAL; section: `RET`
+- `prototype-section-01670` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 35-36; KEEP; STATIC; section: `6. Summary of Recommended Actions`
+- `prototype-section-01671` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 37-37; KEEP; STATIC; section: `1. Braulik, G.T. et al. [2014], “Habitat Fragmentation and Species Extirpation`
+- `prototype-section-01672` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 38-38; KEEP_HISTORICAL; HISTORICAL; section: `13. IITC [2012c]: “Floral and Faunal Diversity of Lower Ganga: Part B – Farakka`
+- `prototype-section-01673` — `GRBMP-M03`; `57_Mission 3_Ecological  Restoration.pdf`; pages 39-39; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `25. NIH (National Institute of Hydrology) [2014], “Ganga Basin.” [Accessed April`
+- `prototype-section-01676` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 4-5; KEEP_HISTORICAL; HISTORICAL; section: `8. Summary of Findings and Actionable Points 50`
+- `prototype-section-01677` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 6-7; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01678` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 8-9; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Characteristics`
+- `prototype-section-01679` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 10-11; KEEP_HISTORICAL; HISTORICAL; section: `3.2. Trends in Natural Growth Rate`
+- `prototype-section-01680` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 12-14; KEEP; STATIC; section: `T R U`
+- `prototype-section-01681` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 15-16; KEEP_HISTORICAL; HISTORICAL; section: `3.4. Population Concentration`
+- `prototype-section-01682` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 17-19; KEEP_HISTORICAL; HISTORICAL; section: `3.5. Population Composition`
+- `prototype-section-01683` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 20-21; KEEP_HISTORICAL; HISTORICAL; section: `3.6. Population Dependency`
+- `prototype-section-01684` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 22-22; KEEP_HISTORICAL; HISTORICAL; section: `4. Economic Indicators`
+- `prototype-section-01685` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 23-24; KEEP_HISTORICAL; HISTORICAL; section: `4.2. Per Capita Gross State Domestic Product`
+- `prototype-section-01686` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 25-26; KEEP_HISTORICAL; HISTORICAL; section: `4.3. Trends in Sectoral Composition of GSDP`
+- `prototype-section-01687` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 27-27; KEEP_HISTORICAL; HISTORICAL; section: `4.4. Trends in Occupational Structure`
+- `prototype-section-01689` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 30-30; KEEP_HISTORICAL; HISTORICAL; section: `4.6. Trends and Pattern in Banking`
+- `prototype-section-01694` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 38-40; KEEP_HISTORICAL; HISTORICAL; section: `5.2. Drinking Water and Sanitation`
+- `prototype-section-01695` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 41-44; KEEP_HISTORICAL; HISTORICAL; section: `5.3. Health Status`
+- `prototype-section-01696` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 45-45; KEEP_HISTORICAL; HISTORICAL; section: `6. Population Projections`
+- `prototype-section-01699` — `GRBMP-TR-067`; `59_DemographicandSocio-Economic analysis in Upper Ganga Basin Uttarakhand.pdf`; pages 50-55; KEEP_HISTORICAL; HISTORICAL; section: `8. Summary of Findings and Actionable Points`
+- `prototype-section-01704` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 13-20; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Ganga Basin in the State`
+- `prototype-section-01705` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 21-21; KEEP; STATIC; section: `4. Religious Places and Their Importance`
+- `prototype-section-01706` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 22-36; KEEP_HISTORICAL; HISTORICAL; section: `5. Pollution Load`
+- `prototype-section-01707` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 37-60; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01708` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 61-61; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01709` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 62-79; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01710` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 80-81; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `Unidentified extracted structure`
+- `prototype-section-01711` — `GRBMP-TR-068`; `8_63_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Madhya Pradesh.pdf`; pages 82-82; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01713` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 7-7; KEEP; STATIC; section: `1. Environmental Quality and Pollution (EQP)`
+- `prototype-section-01714` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 8-8; KEEP; STATIC; section: `5. Socio Economic and Cultural (SEC)`
+- `prototype-section-01715` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 9-16; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. BBM : Building Block Method.`
+- `prototype-section-01716` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 17-18; KEEP; STATIC; section: `1. Introduction`
+- `prototype-section-01717` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 19-19; KEEP; STATIC; section: `2. Objective`
+- `prototype-section-01718` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 20-26; KEEP_HISTORICAL; HISTORICAL; section: `4. Status of Aviral Dhara in the Ganga River Network`
+- `prototype-section-01719` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 27-27; KEEP_HISTORICAL; HISTORICAL; section: `(BCM)`
+- `prototype-section-01721` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 31-33; KEEP_HISTORICAL; HISTORICAL; section: `5. Measures to Restore Aviral Dhara of National River`
+- `prototype-section-01722` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 34-34; KEEP; STATIC; section: `LONG-TERM, IRREVERSIBLE IMPACTS OF LESS`
+- `prototype-section-01723` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 35-36; KEEP_HISTORICAL; HISTORICAL; section: `III`
+- `prototype-section-01724` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 37-37; KEEP; STATIC; section: `i) Realistic pricing of fresh water (especially for urban, industrial, commercial`
+- `prototype-section-01725` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 38-38; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `C) In recent decades, large -scale water (especially groundwater) abstractions`
+- `prototype-section-01726` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 39-42; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Generation of Stage -Discharge curve at`
+- `prototype-section-01727` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 43-45; KEEP_HISTORICAL; HISTORICAL; section: `D1 D2 D3`
+- `prototype-section-01728` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 46-51; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `6. Hydrological Modeling of GRBMP and Inferences`
+- `prototype-section-01729` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 52-55; KEEP; STATIC; section: `7. Sediment Resources of National River Ganga`
+- `prototype-section-01730` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 56-56; KEEP_HISTORICAL; HISTORICAL; section: `8. Summary of Recommended Actions`
+- `prototype-section-01731` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 57-58; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `5. Dams and barrages have altered or disrupted the flow of water, sediments,`
+- `prototype-section-01732` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 59-59; KEEP_HISTORICAL; HISTORICAL; section: `1. Abbas, N. & V. Subramanian [1984], “Erosion and Sediment Transport in the`
+- `prototype-section-01733` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 60-60; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `14. Elser, J.J. et al. [2007], “Global analysis of nitrogen and phosphorus`
+- `prototype-section-01734` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 61-61; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `30. Jha, P. K., V. Subramanian & R. Sitasawad [1988], “ Chemical and Sediment`
+- `prototype-section-01735` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 62-62; KEEP_HISTORICAL; HISTORICAL; section: `41. Rajvanshi, A. et al. [2012], “ Assessment of Cum ulative Impacts of`
+- `prototype-section-01736` — `GRBMP-M01`; `8_Mission 1_Aviral Dhara.pdf`; pages 63-82; KEEP_HISTORICAL; HISTORICAL; section: `51. UNICEF, FAO and SaciWATER [2013], “Wa ter in India: Situations and`
+- `prototype-section-01740` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 7-8; KEEP; STATIC; section: `1. Introduction:`
+- `prototype-section-01742` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 10-13; KEEP_HISTORICAL; HISTORICAL; section: `3. Demographic Profile of Ganga Basin in the States`
+- `prototype-section-01743` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 14-20; KEEP_HISTORICAL; HISTORICAL; section: `5. Pollution Load`
+- `prototype-section-01744` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 21-21; KEEP_HISTORICAL; HISTORICAL; section: `COD TKN`
+- `prototype-section-01745` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 22-22; KEEP_HISTORICAL; HISTORICAL; section: `5. Conclusions:`
+- `prototype-section-01746` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 23-24; KEEP_HISTORICAL; HISTORICAL; section: `1. Census, 2011: http://censusindia.gov.in/.`
+- `prototype-section-01747` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 25-30; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01748` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 31-31; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01749` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 32-36; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01750` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 37-37; KEEP_HISTORICAL; HISTORICAL; section: `Unidentified extracted structure`
+- `prototype-section-01751` — `GRBMP-TR-069`; `9_58_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttarakhand and Himachal Pradesh.pdf`; pages 38-55; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `S. No. Items Value`
+- `prototype-section-01752` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 1-1; KEEP; STATIC; section: `NATIONAL MISSION FOR CLEAN GANGA`
+- `prototype-section-01753` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 2-2; KEEP; STATIC; section: `NATIONAL MISSION FOR CLEAN GANGA (NMCG)`
+- `prototype-section-01754` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 3-4; KEEP; STATIC; section: `VISION`
+- `prototype-section-01756` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 8-8; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `MODERN SCIENCE AND TECHNOLOGY`
+- `prototype-section-01758` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 10-10; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `THE PROLIFERATION`
+- `prototype-section-01759` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 11-12; KEEP; STATIC; section: `TOTAL`
+- `prototype-section-01760` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 13-13; KEEP; STATIC; section: `LEGEND`
+- `prototype-section-01761` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 14-14; KEEP; STATIC; section: `I. “Aviral Dhara” (Uninterrupted Flow)`
+- `prototype-section-01762` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 15-15; KEEP; STATIC; section: `c. water and other aquatic resources of the Ganga river`
+- `prototype-section-01763` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 16-17; KEEP; STATIC; section: `GANGA RIVER HAS`
+- `prototype-section-01764` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 18-18; KEEP_HISTORICAL; HISTORICAL; section: `MISSION 1`
+- `prototype-section-01765` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 19-22; KEEP; STATIC; section: `IMPLEMENTATION MECHANISM`
+- `prototype-section-01766` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 23-23; KEEP; STATIC; section: `OF RIVER GANGA`
+- `prototype-section-01767` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 24-24; KEEP_HISTORICAL; HISTORICAL; section: `LEGEND`
+- `prototype-section-01768` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 25-25; KEEP_HISTORICAL; HISTORICAL; section: `CHANNELISATION`
+- `prototype-section-01769` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 26-26; KEEP; STATIC; section: `LARGE CITIES`
+- `prototype-section-01770` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 27-41; KEEP; STATIC; section: `CRITICAL IMPORTANCE`
+- `prototype-section-01772` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 57-66; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `(IWIS)`
+- `prototype-section-01774` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 69-69; KEEP_HISTORICAL; HISTORICAL; section: `1. it confirms that the technology`
+- `prototype-section-01775` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 70-70; KEEP; STATIC; section: `c. it must also continuously evaluate`
+- `prototype-section-01776` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 71-71; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `1. Factors affecting river zonation`
+- `prototype-section-01777` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 72-72; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `i. The linkage between bio-physical and`
+- `prototype-section-01778` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 73-73; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c. Valley-interfluve, partly confined`
+- `prototype-section-01779` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 74-75; KEEP_HISTORICAL; HISTORICAL; section: `c. mAPPInG AnD ASSeSSmenT of ITS`
+- `prototype-section-01780` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 76-77; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c. issues that should be addressed`
+- `prototype-section-01782` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 80-81; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c. The best way to make people aware`
+- `prototype-section-01784` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 83-83; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `c. lack of strong regulations and`
+- `prototype-section-01785` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 84-84; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 5554 IWIS • 2017`
+- `prototype-section-01787` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 86-86; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 5958 IWIS • 2017`
+- `prototype-section-01789` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 88-88; KEEP_HISTORICAL; HISTORICAL; section: `IWIS • 2017 6362 IWIS • 2017`
+- `prototype-section-01791` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 90-90; KEEP; STATIC; section: `IWIS • 2017 6766 IWIS • 2017`
+- `prototype-section-01792` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 91-91; KEEP_HISTORICAL; HISTORICAL; section: `IWIS • 2017 6968 IWIS • 2017`
+- `prototype-section-01793` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 92-92; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 7170 IWIS • 2017`
+- `prototype-section-01795` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 94-94; KEEP; STATIC; section: `IWIS • 2017 7574 IWIS • 2017`
+- `prototype-section-01796` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 95-95; KEEP; STATIC; section: `IWIS • 2017 7776 IWIS • 2017`
+- `prototype-section-01798` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 97-97; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 8180 IWIS • 2017`
+- `prototype-section-01800` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 99-99; KEEP; STATIC; section: `IWIS • 2017 8584 IWIS • 2017`
+- `prototype-section-01802` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 101-101; KEEP_HISTORICAL; HISTORICAL; section: `IWIS • 2017 8988 IWIS • 2017`
+- `prototype-section-01803` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 102-102; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 9190 IWIS • 2017`
+- `prototype-section-01806` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 105-105; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 9796 IWIS • 2017`
+- `prototype-section-01807` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 106-106; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 9998 IWIS • 2017`
+- `prototype-section-01808` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 107-107; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 101100 IWIS • 2017`
+- `prototype-section-01809` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 108-108; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 103102 IWIS • 2017`
+- `prototype-section-01810` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 109-109; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 105104 IWIS • 2017`
+- `prototype-section-01811` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 110-110; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 107106 IWIS • 2017`
+- `prototype-section-01813` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 112-112; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 111110 IWIS • 2017`
+- `prototype-section-01814` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 113-113; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 113112 IWIS • 2017`
+- `prototype-section-01815` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 114-114; KEEP_HISTORICAL; HISTORICAL; section: `IWIS • 2017 115114 IWIS • 2017`
+- `prototype-section-01816` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 115-115; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 117116 IWIS • 2017`
+- `prototype-section-01817` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 116-116; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 119118 IWIS • 2017`
+- `prototype-section-01818` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 117-117; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 121120 IWIS • 2017`
+- `prototype-section-01819` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 118-118; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 123122 IWIS • 2017`
+- `prototype-section-01820` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 119-119; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 125124 IWIS • 2017`
+- `prototype-section-01821` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 120-120; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 127126 IWIS • 2017`
+- `prototype-section-01822` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 121-121; KEEP; STATIC; section: `IWIS • 2017 129128 IWIS • 2017`
+- `prototype-section-01823` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 122-122; KEEP; STATIC; section: `IWIS • 2017 131130 IWIS • 2017`
+- `prototype-section-01825` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 124-124; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 135134 IWIS • 2017`
+- `prototype-section-01830` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 129-129; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 145144 IWIS • 2017`
+- `prototype-section-01831` — `GRBMP-CORE-005`; `Vision Ganga Eng_Compressed.pdf`; pages 130-130; KEEP_METHODOLOGICAL; METHODOLOGICAL; section: `IWIS • 2017 147146 IWIS • 2017`

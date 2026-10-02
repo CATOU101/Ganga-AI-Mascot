@@ -1,0 +1,227 @@
+{
+  "total_pdfs_discovered": 86,
+  "successfully_processed_pdfs": 86,
+  "pdfs_with_extraction_warnings": 13,
+  "pdfs_failed": 0,
+  "total_pages_processed": 4609,
+  "pages_with_no_extractable_text": 112,
+  "total_extracted_text_size": 8038430,
+  "failed_files": [],
+  "warning_files": [
+    {
+      "file_name": "11_Mission 8 - Environmental Knowledge (1).pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/11_Mission 8 - Environmental Knowledge (1).pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 38 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "11_Mission 8 - Environmental Knowledge.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/11_Mission 8 - Environmental Knowledge.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 38 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 37 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 38 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "23_72_M Tech Thesis, 2014 Assessment of Approaches for Eliminating Use of Fresh Water in Tanneries at.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/23_72_M Tech Thesis, 2014 Assessment of Approaches for Eliminating Use of Fresh Water in Tanneries at.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 67 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+      "warnings": [
+        "page 23: no extractable text; OCR/manual review may be required",
+        "page 27: no extractable text; OCR/manual review may be required",
+        "2 of 29 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "36_35_River Style Framework for the Ganga River.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/36_35_River Style Framework for the Ganga River.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 43 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "38_44_State of Health in the Ganga River Basin.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/38_44_State of Health in the Ganga River Basin.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 83 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "warnings": [
+        "page 1: no extractable text; OCR/manual review may be required",
+        "page 2: no extractable text; OCR/manual review may be required",
+        "page 3: no extractable text; OCR/manual review may be required",
+        "page 4: no extractable text; OCR/manual review may be required",
+        "page 5: no extractable text; OCR/manual review may be required",
+        "page 6: no extractable text; OCR/manual review may be required",
+        "page 7: no extractable text; OCR/manual review may be required",
+        "page 8: no extractable text; OCR/manual review may be required",
+        "page 9: no extractable text; OCR/manual review may be required",
+        "page 10: no extractable text; OCR/manual review may be required",
+        "page 11: no extractable text; OCR/manual review may be required",
+        "page 12: no extractable text; OCR/manual review may be required",
+        "page 13: no extractable text; OCR/manual review may be required",
+        "page 14: no extractable text; OCR/manual review may be required",
+        "page 15: no extractable text; OCR/manual review may be required",
+        "page 16: no extractable text; OCR/manual review may be required",
+        "page 17: no extractable text; OCR/manual review may be required",
+        "page 18: no extractable text; OCR/manual review may be required",
+        "page 19: no extractable text; OCR/manual review may be required",
+        "page 20: no extractable text; OCR/manual review may be required",
+        "page 21: no extractable text; OCR/manual review may be required",
+        "page 22: no extractable text; OCR/manual review may be required",
+        "page 23: no extractable text; OCR/manual review may be required",
+        "page 24: no extractable text; OCR/manual review may be required",
+        "page 25: no extractable text; OCR/manual review may be required",
+        "page 26: no extractable text; OCR/manual review may be required",
+        "page 27: no extractable text; OCR/manual review may be required",
+        "page 28: no extractable text; OCR/manual review may be required",
+        "page 29: no extractable text; OCR/manual review may be required",
+        "page 30: no extractable text; OCR/manual review may be required",
+        "page 31: no extractable text; OCR/manual review may be required",
+        "page 32: no extractable text; OCR/manual review may be required",
+        "page 33: no extractable text; OCR/manual review may be required",
+        "page 34: no extractable text; OCR/manual review may be required",
+        "page 35: no extractable text; OCR/manual review may be required",
+        "page 36: no extractable text; OCR/manual review may be required",
+        "page 37: no extractable text; OCR/manual review may be required",
+        "page 38: no extractable text; OCR/manual review may be required",
+        "page 39: no extractable text; OCR/manual review may be required",
+        "page 40: no extractable text; OCR/manual review may be required",
+        "page 41: no extractable text; OCR/manual review may be required",
+        "page 42: no extractable text; OCR/manual review may be required",
+        "page 43: no extractable text; OCR/manual review may be required",
+        "page 44: no extractable text; OCR/manual review may be required",
+        "page 45: no extractable text; OCR/manual review may be required",
+        "page 46: no extractable text; OCR/manual review may be required",
+        "page 47: no extractable text; OCR/manual review may be required",
+        "page 48: no extractable text; OCR/manual review may be required",
+        "page 49: no extractable text; OCR/manual review may be required",
+        "page 50: no extractable text; OCR/manual review may be required",
+        "page 51: no extractable text; OCR/manual review may be required",
+        "page 52: no extractable text; OCR/manual review may be required",
+        "page 53: no extractable text; OCR/manual review may be required",
+        "page 54: no extractable text; OCR/manual review may be required",
+        "page 55: no extractable text; OCR/manual review may be required",
+        "page 56: no extractable text; OCR/manual review may be required",
+        "page 57: no extractable text; OCR/manual review may be required",
+        "page 58: no extractable text; OCR/manual review may be required",
+        "page 59: no extractable text; OCR/manual review may be required",
+        "page 60: no extractable text; OCR/manual review may be required",
+        "page 61: no extractable text; OCR/manual review may be required",
+        "page 62: no extractable text; OCR/manual review may be required",
+        "page 63: no extractable text; OCR/manual review may be required",
+        "page 64: no extractable text; OCR/manual review may be required",
+        "page 65: no extractable text; OCR/manual review may be required",
+        "page 66: no extractable text; OCR/manual review may be required",
+        "page 67: no extractable text; OCR/manual review may be required",
+        "page 68: no extractable text; OCR/manual review may be required",
+        "page 69: no extractable text; OCR/manual review may be required",
+        "page 70: no extractable text; OCR/manual review may be required",
+        "page 71: no extractable text; OCR/manual review may be required",
+        "page 72: no extractable text; OCR/manual review may be required",
+        "page 73: no extractable text; OCR/manual review may be required",
+        "page 74: no extractable text; OCR/manual review may be required",
+        "page 75: no extractable text; OCR/manual review may be required",
+        "page 76: no extractable text; OCR/manual review may be required",
+        "page 77: no extractable text; OCR/manual review may be required",
+        "page 78: no extractable text; OCR/manual review may be required",
+        "page 79: no extractable text; OCR/manual review may be required",
+        "page 80: no extractable text; OCR/manual review may be required",
+        "page 81: no extractable text; OCR/manual review may be required",
+        "page 82: no extractable text; OCR/manual review may be required",
+        "page 83: no extractable text; OCR/manual review may be required",
+        "page 84: no extractable text; OCR/manual review may be required",
+        "page 85: no extractable text; OCR/manual review may be required",
+        "page 86: no extractable text; OCR/manual review may be required",
+        "page 87: no extractable text; OCR/manual review may be required",
+        "page 88: no extractable text; OCR/manual review may be required",
+        "page 89: no extractable text; OCR/manual review may be required",
+        "page 90: no extractable text; OCR/manual review may be required",
+        "page 91: no extractable text; OCR/manual review may be required",
+        "page 92: no extractable text; OCR/manual review may be required",
+        "page 93: no extractable text; OCR/manual review may be required",
+        "page 94: no extractable text; OCR/manual review may be required",
+        "page 95: no extractable text; OCR/manual review may be required",
+        "page 96: no extractable text; OCR/manual review may be required",
+        "page 97: no extractable text; OCR/manual review may be required",
+        "page 98: no extractable text; OCR/manual review may be required",
+        "page 99: no extractable text; OCR/manual review may be required",
+        "document contains no extractable text; OCR/manual review is required"
+      ]
+    },
+    {
+      "file_name": "47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 45 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 21 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "54_30_Wetlands in Ganga River Basin.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/54_30_Wetlands in Ganga River Basin.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 56 pages have no extractable text"
+      ]
+    },
+    {
+      "file_name": "57_71_M Tech Thesis Assessment of Provisioning an Appropriate Solid Waste Management Approach in.pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/57_71_M Tech Thesis Assessment of Provisioning an Appropriate Solid Waste Management Approach in.pdf",
+      "warnings": [
+        "page 2: no extractable text; OCR/manual review may be required",
+        "1 of 110 pages have no extractable text"
+      ]
+    }
+  ],
+  "ocr_candidates": [
+    {
+      "file_name": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "relative_path": "knowledge_base/raw_documents/GRBMP/46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "pages_processed": 99,
+      "pages_with_no_extractable_text": 99,
+      "reason": "little or no extractable text; OCR/manual review may be required"
+    }
+  ],
+  "input_directory": "knowledge_base/raw_documents/GRBMP",
+  "output_directory": "knowledge_base/processed",
+  "processed_documents_directory": "knowledge_base/processed/processed_documents"
+}

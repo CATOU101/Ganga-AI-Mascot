@@ -1,0 +1,2749 @@
+{
+  "analysis_version": "stage-2-deterministic-extraction-repair-analysis",
+  "generated_date": "2026-09-12",
+  "input_review": "knowledge_base/processed/section_review.json",
+  "input_analysis": "knowledge_base/processed/review_required_analysis.json",
+  "scope": "Primary NOISY_EXTRACTION records only; no content classification was changed.",
+  "summary": {
+    "deterministic_repair_candidates": 109,
+    "high_confidence_repairs": 2,
+    "uncertain_repairs": 107,
+    "classification_changes": 0,
+    "duplicate_section_ids": 0,
+    "missing_source_ids": 0
+  },
+  "repairs": [
+    {
+      "section_id": "GRBMP-TR-005|10_019SEC.pdf|46-46|N P K",
+      "source_id": "GRBMP-TR-005",
+      "file_name": "10_019SEC.pdf",
+      "page_start": 46,
+      "page_end": 46,
+      "original_section": "N P K",
+      "repaired_heading": "Table A.16: Consumption of Fertilizers and Pesticides in West Bengal",
+      "heading_candidates": [
+        "Table A.16: Consumption of Fertilizers and Pesticides in West Bengal",
+        "N P K",
+        "Table A.17: Use of Chemical Fertilizers in West Bengal Across Various Districts (in \u2018000"
+      ],
+      "original_text_excerpt": "46 | P a g e Table A.16: Consumption of Fertilizers and Pesticides in West Bengal Year Total Fertilizer Consumption in tones Fertilizer Pesticide Consumption Ingredient Active N P K Consumption (in kg) per unit of Gross Cropped Area (kg/ha) Quantity consumed in MT Coverage (lakh hectares) Per ha in kg 1980-81 167321 70844 44669 _ _ _ _ 1990-91 411896 206782 134330 86.93 4040 46.48 0.47 2000-01 561880 296959 226252 119.02 3180 49.00 0.44 2001-02 586841 329785 261556 120.48 3170 52.00 0.42 2002-03",
+      "repaired_text_excerpt": "46 | P a g e Table A.16: Consumption of Fertilizers and Pesticides in West Bengal Year Total Fertilizer Consumption in tones Fertilizer Pesticide Consumption Ingredient Active N P K Consumption (in kg) per unit of Gross Cropped Area (kg/ha) Quantity consumed in MT Coverage (lakh hectares) Per ha in kg 1980-81 167321 70844 44669 _ _ _ _ 1990-91 411896 206782 134330 86.93 4040 46.48 0.47 2000-01 561880 296959 226252 119.02 3180 49.00 0.44 2001-02 586841 329785 261556 120.48 3170 52.00 0.42 2002-03",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-006|10_037_ Implementation Mechanism.pdf|50-50|i. any other matter which may be prescribed.",
+      "source_id": "GRBMP-TR-006",
+      "file_name": "10_037_ Implementation Mechanism.pdf",
+      "page_start": 50,
+      "page_end": 50,
+      "original_section": "i. any other matter which may be prescribed.",
+      "repaired_heading": "3) Every proceeding before the Tribunal shall be deemed to be judicial",
+      "heading_candidates": [
+        "3) Every proceeding before the Tribunal shall be deemed to be judicial",
+        "53. Execution of Orders of Tribunal",
+        "1) Every order made by the Tribunal shall be enforced by it in the same man ner",
+        "2) Notwithstanding anything contained in sub-section (1), the Tribun al may",
+        "54. Saving of inherent Powers of the Tribunal",
+        "55. Suo-moto Powers of the Tribunal"
+      ],
+      "original_text_excerpt": "Report Code: 037_GBP_IIT_PLG_S&R_01_Ver 1_Dec 2013 50 | P a g e h. setting aside any order of dismissal of any representation for default or any order passed by it ex parte; i. any other matter which may be prescribed. 3) Every proceeding before the Tribunal shall be deemed to be judicial proceeding within the meaning of Sections 193 and 228, and for the purposes of Section 196, of the Indian Penal Code (45 of 1860) and the Tribunal shall be deemed to be a Civil Court for the purposes of Secti o",
+      "repaired_text_excerpt": "Report Code: 037_GBP_IIT_PLG_S&R_01_Ver 1_Dec 2013 50 | P a g e h. setting aside any order of dismissal of any representation for default or any order passed by it ex parte; i. any other matter which may be prescribed. 3) Every proceeding before the Tribunal shall be deemed to be judicial proceeding within the meaning of Sections 193 and 228, and for the purposes of Section 196, of the Indian Penal Code (45 of 1860) and the Tribunal shall be deemed to be a Civil Court for the purposes of Secti o",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-M08|11_Mission 8 - Environmental Knowledge (1).pdf|19-21|[ICPDR, 2005]",
+      "source_id": "GRBMP-M08",
+      "file_name": "11_Mission 8 - Environmental Knowledge (1).pdf",
+      "page_start": 19,
+      "page_end": 21,
+      "original_section": "[ICPDR, 2005]",
+      "repaired_heading": "Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta",
+      "heading_candidates": [
+        "Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta",
+        "[ICPDR, 2005]",
+        "Figure 4.6a: Degraded and Wastelands of Uttar Pradesh [ICAR, 2010]",
+        "Figure 4.6b: Degraded and Wastelands of Jharkhand [ICAR, 2010]"
+      ],
+      "original_text_excerpt": "11 Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta [ICPDR, 2005] For river basin management it should be clearly noted that the data types listed above are required mainly for water resource management in the basin [CWC, 2007; CWC, 2010]. For comprehensive environmental management of NRGB, the data needs are much more \u2013 especially those pertaining to other natural resources such as soils, nutrients and biota, as well as those of harmful substances and wastes. Among non-m",
+      "repaired_text_excerpt": "11 Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta [ICPDR, 2005] For river basin management it should be clearly noted that the data types listed above are required mainly for water resource management in the basin [CWC, 2007; CWC, 2010]. For comprehensive environmental management of NRGB, the data needs are much more \u2013 especially those pertaining to other natural resources such as soils, nutrients and biota, as well as those of harmful substances and wastes. Among non-m",
+      "repair_reason": "REFERENCE_OR_SYMBOL_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-M08|11_Mission 8 - Environmental Knowledge.pdf|19-21|[ICPDR, 2005]",
+      "source_id": "GRBMP-M08",
+      "file_name": "11_Mission 8 - Environmental Knowledge.pdf",
+      "page_start": 19,
+      "page_end": 21,
+      "original_section": "[ICPDR, 2005]",
+      "repaired_heading": "Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta",
+      "heading_candidates": [
+        "Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta",
+        "[ICPDR, 2005]",
+        "Figure 4.6a: Degraded and Wastelands of Uttar Pradesh [ICAR, 2010]",
+        "Figure 4.6b: Degraded and Wastelands of Jharkhand [ICAR, 2010]"
+      ],
+      "original_text_excerpt": "11 Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta [ICPDR, 2005] For river basin management it should be clearly noted that the data types listed above are required mainly for water resource management in the basin [CWC, 2007; CWC, 2010]. For comprehensive environmental management of NRGB, the data needs are much more \u2013 especially those pertaining to other natural resources such as soils, nutrients and biota, as well as those of harmful substances and wastes. Among non-m",
+      "repaired_text_excerpt": "11 Figure 4.5: Number of Macro-Benthic Species In Front of the Danube Delta [ICPDR, 2005] For river basin management it should be clearly noted that the data types listed above are required mainly for water resource management in the basin [CWC, 2007; CWC, 2010]. For comprehensive environmental management of NRGB, the data needs are much more \u2013 especially those pertaining to other natural resources such as soils, nutrients and biota, as well as those of harmful substances and wastes. Among non-m",
+      "repair_reason": "REFERENCE_OR_SYMBOL_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-001|13_GRBMP - MPD.pdf|1-2|Unidentified extracted structure",
+      "source_id": "GRBMP-CORE-001",
+      "file_name": "13_GRBMP - MPD.pdf",
+      "page_start": 1,
+      "page_end": 2,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Ganga River Basin Management Plan - 2015 Main Plan Document January 2015 by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee In Collaboration with IIT BHU IIT Gandhinagar CIFRI NEERI JNU PU NIT-K DU NIH Roorkee ISI Kolkata Allahabad University WWF India Consortium of 7 \u201cIndian Institute of Technology\u201ds (IITs) GRBMP Work Structure",
+      "repaired_text_excerpt": "Ganga River Basin Management Plan - 2015 Main Plan Document January 2015 by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee In Collaboration with IIT BHU IIT Gandhinagar CIFRI NEERI JNU PU NIT-K DU NIH Roorkee ISI Kolkata Allahabad University WWF India Consortium of 7 \u201cIndian Institute of Technology\u201ds (IITs) GRBMP Work Structure",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-001|13_GRBMP - MPD.pdf|40-40|1.4. Issues and Concerns of the NRGB Environment",
+      "source_id": "GRBMP-CORE-001",
+      "file_name": "13_GRBMP - MPD.pdf",
+      "page_start": 40,
+      "page_end": 40,
+      "original_section": "1.4. Issues and Concerns of the NRGB Environment",
+      "repaired_heading": "1) Industrialization: (i) Over-withdrawal of resources (especially fresh water",
+      "heading_candidates": [
+        "1.4. Issues and Concerns of the NRGB Environment",
+        "1) Industrialization: (i) Over-withdrawal of resources (especially fresh water",
+        "2) Urbanization: (i) Over-withdrawal of fresh water fro m surface and ground",
+        "3) LifestyleChanges: (i) Over -withdrawal of resources (especially fresh water"
+      ],
+      "original_text_excerpt": "GRBMP \u2013 January 2015: Main Plan Document 8 this GRBMP. However, to give an idea of the economic value of river basin environments, some estimates for the Murray -Darling Basin and the Yarra Valley in Australia have been given in Appendix I. 1.4. Issues and Concerns of the NRGB Environment Various anthropogenic factors have contributed directly to thedegradation of NRGB\u2019s aquatic environment in recent ti mes. Broadly, fivemajor types of degradationfactors are noticeable : (i) over-extraction of n",
+      "repaired_text_excerpt": "GRBMP \u2013 January 2015: Main Plan Document 8 this GRBMP. However, to give an idea of the economic value of river basin environments, some estimates for the Murray -Darling Basin and the Yarra Valley in Australia have been given in Appendix I. 1.4. Issues and Concerns of the NRGB Environment Various anthropogenic factors have contributed directly to thedegradation of NRGB\u2019s aquatic environment in recent ti mes. Broadly, fivemajor types of degradationfactors are noticeable : (i) over-extraction of n",
+      "repair_reason": "TABLE_OR_FIGURE_HEADING_SEPARATION",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-001|13_GRBMP - MPD.pdf|186-186|i. a co -operative society registered under any law relating to",
+      "source_id": "GRBMP-CORE-001",
+      "file_name": "13_GRBMP - MPD.pdf",
+      "page_start": 186,
+      "page_end": 186,
+      "original_section": "i. a co -operative society registered under any law relating to",
+      "repaired_heading": "41) Ritual Bathing means taking dip in the water for religious or",
+      "heading_candidates": [
+        "41) Ritual Bathing means taking dip in the water for religious or",
+        "42) River Bed Farming includes seasonal agriculture/farming on the",
+        "43) Rivers in National River Ganga Basin include, but is not restricted",
+        "44) River Bank means the land at the side of a river which retains the",
+        "45) River Bed means dried portion of the river, the place where the",
+        "46) River Port means a place on a waterway with facilities for loading",
+        "47) River System means network of rivers rather than a single river;",
+        "48) Rivulets includes very small tributaries of a major river;",
+        "49) Sand Mining means large scale removal of river sand from the",
+        "50) Sewage means as provided in the Act;",
+        "51) Small Scale Industries as provided in the Act;",
+        "52) Solid Waste as provided in the Act;",
+        "53) Sludge as provided in the Act;"
+      ],
+      "original_text_excerpt": "GRBMP \u2013 January 2015: Main Plan Document 154 f. an association of persons or a body of individuals, whether incorporated or not, in India or outside India; g. any corporation established by or under any Central, State or Provincial Act or a Government company as defined in section 617 of the Companies Act, 1956 (1 of 1956); h. any body corporate incorporated by or under the laws of a country outside India; i. a co -operative society registered under any law relating to cooperative societies; j. ",
+      "repaired_text_excerpt": "GRBMP \u2013 January 2015: Main Plan Document 154 f. an association of persons or a body of individuals, whether incorporated or not, in India or outside India; g. any corporation established by or under any Central, State or Provincial Act or a Government company as defined in section 617 of the Companies Act, 1956 (1 of 1956); h. any body corporate incorporated by or under the laws of a country outside India; i. a co -operative society registered under any law relating to cooperative societies; j. ",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-001|13_GRBMP - MPD.pdf|188-188|CHAPTER IV",
+      "source_id": "GRBMP-CORE-001",
+      "file_name": "13_GRBMP - MPD.pdf",
+      "page_start": 188,
+      "page_end": 188,
+      "original_section": "CHAPTER IV",
+      "repaired_heading": "PROHIBITION AND RESTRICTION OF ACTIVITIES",
+      "heading_candidates": [
+        "CHAPTER IV",
+        "PROHIBITION AND RESTRICTION OF ACTIVITIES",
+        "6. Prohibition of Activities relating to the National River Ganga Basin",
+        "1) engineered diversion and/or storage of water in any river unless E -",
+        "2) discontinuity in the flow due to engineered diversion/storage in any",
+        "3) discharge of sewage (either treated or untreated) from Class I towns,",
+        "4) discharge of industrial effluents (either treated or untreated) from",
+        "5) direct injection of sewage and industrial effluents (either treated or",
+        "6) disposal of un-burnt and partially burnt corpses and animal carcasses",
+        "7) open defecation and dumping of municipal/industrial solid wastes or",
+        "8) setting up of or continuation in dwellings or other encroachments in",
+        "9) construction of new permanent structures fo r residential,",
+        "10) any other like activities as may be prescribed by the commission"
+      ],
+      "original_text_excerpt": "GRBMP \u2013 January 2015: Main Plan Document 156 CHAPTER IV PROHIBITION AND RESTRICTION OF ACTIVITIES 6. Prohibition of Activities relating to the National River Ganga Basin Notwithstanding anything contained in any law whatsoever, no person or authorityshall indulge in any activity relating to any of the following: 1) engineered diversion and/or storage of water in any river unless E - Flows are maintained in the immediate downstream of the diversion/storage; or 2) discontinuity in the flow due to ",
+      "repaired_text_excerpt": "GRBMP \u2013 January 2015: Main Plan Document 156 CHAPTER IV PROHIBITION AND RESTRICTION OF ACTIVITIES 6. Prohibition of Activities relating to the National River Ganga Basin Notwithstanding anything contained in any law whatsoever, no person or authorityshall indulge in any activity relating to any of the following: 1) engineered diversion and/or storage of water in any river unless E - Flows are maintained in the immediate downstream of the diversion/storage; or 2) discontinuity in the flow due to ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-035|14_culturalrelegiousaspects.pdf|14-15|XC) which describe the attribute due to which the place is considered sacred.",
+      "source_id": "GRBMP-TR-035",
+      "file_name": "14_culturalrelegiousaspects.pdf",
+      "page_start": 14,
+      "page_end": 15,
+      "original_section": "XC) which describe the attribute due to which the place is considered sacred.",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Report Code: 045_GBP_IIT_SEC_ANL_07_Ver 1_Dec 2013 14 | P a g e Being in the foot hills of the Himalayas, the place has its own charms and significance. It represents \u2018the gateway to the Himalayas\u2019 as all journeys to the pilgrimage centres described in the preceding section commence from here. There are number of temples and spiritual centres ( math and ashram) along both the banks of the river where devotees can enhance spiritual quotient and aspire towards salvation. Year round religious activ",
+      "repaired_text_excerpt": "Report Code: 045_GBP_IIT_SEC_ANL_07_Ver 1_Dec 2013 14 | P a g e Being in the foot hills of the Himalayas, the place has its own charms and significance. It represents \u2018the gateway to the Himalayas\u2019 as all journeys to the pilgrimage centres described in the preceding section commence from here. There are number of temples and spiritual centres ( math and ashram) along both the banks of the river where devotees can enhance spiritual quotient and aspire towards salvation. Year round religious activ",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-007|15_012EQP.pdf|1-3|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-007",
+      "file_name": "15_012EQP.pdf",
+      "page_start": 1,
+      "page_end": 3,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "GRB EMP"
+      ],
+      "original_text_excerpt": "1 | P a g e Report Code Review of Wastewater Reuse Projects Worldwide Collation of Selected International GRB EMP Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Report Code : 012_GBP_IIT_EQP_SOA_01_V er Review of Wastewater Reuse Projects Worldwide Collation of Selected International Case Studies and Experiences GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology er 1_Dec 2",
+      "repaired_text_excerpt": "1 | P a g e Report Code Review of Wastewater Reuse Projects Worldwide Collation of Selected International GRB EMP Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Report Code : 012_GBP_IIT_EQP_SOA_01_V er Review of Wastewater Reuse Projects Worldwide Collation of Selected International Case Studies and Experiences GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology er 1_Dec 2",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-007|15_012EQP.pdf|20-20|USA",
+      "source_id": "GRBMP-TR-007",
+      "file_name": "15_012EQP.pdf",
+      "page_start": 20,
+      "page_end": 20,
+      "original_section": "USA",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "20 | P a g e 3.6 Pomona Water Reclamation Plant With Integrated AquaCulture Wetland Ecosystem, Los Angeles County, California, USA Title of Case Study: Pomona Water Reclamation Plant with Integrated Aquaculture-Wetland Ecosystem (AWE), Los Angeles County, California, USA Type of Case Study: Reuse of municipal wastewater for irrigation purposes. Objective of Case Study: To demonstrate an effluent reuse system with significant health and ecological benefits. Background of Case Study: Los Angeles (",
+      "repaired_text_excerpt": "20 | P a g e 3.6 Pomona Water Reclamation Plant With Integrated AquaCulture Wetland Ecosystem, Los Angeles County, California, USA Title of Case Study: Pomona Water Reclamation Plant with Integrated Aquaculture-Wetland Ecosystem (AWE), Los Angeles County, California, USA Type of Case Study: Reuse of municipal wastewater for irrigation purposes. Objective of Case Study: To demonstrate an effluent reuse system with significant health and ecological benefits. Background of Case Study: Los Angeles (",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-007|15_012EQP.pdf|53-55|AUD1.60",
+      "source_id": "GRBMP-TR-007",
+      "file_name": "15_012EQP.pdf",
+      "page_start": 53,
+      "page_end": 55,
+      "original_section": "AUD1.60",
+      "repaired_heading": "Table 7: Comparison of Subsidized and Real Costs of Recycled Water for Some",
+      "heading_candidates": [
+        "Table 7: Comparison of Subsidized and Real Costs of Recycled Water for Some",
+        "AUD1.0 = INR48.50",
+        "Table 8: Comparative Energy Consumption for Various Technologies for Potable"
+      ],
+      "original_text_excerpt": "Report Code : 012_GBP_IIT_EQP_SOA_01_Ver 1_Dec 2011 53 | P a g e water does not imply that wastewater reuse schemes are uneconomic: the costs of wastewater reuse schemes may be justified in terms of broad economic, social, and environmental objectives where the overall target is wise use of available water supplies in support of local, regional, or national development objectives. Wastewater recycling improves the economic conditions of any region by creating employment and increasing the proper",
+      "repaired_text_excerpt": "Report Code : 012_GBP_IIT_EQP_SOA_01_Ver 1_Dec 2011 53 | P a g e water does not imply that wastewater reuse schemes are uneconomic: the costs of wastewater reuse schemes may be justified in terms of broad economic, social, and environmental objectives where the overall target is wise use of available water supplies in support of local, regional, or national development objectives. Wastewater recycling improves the economic conditions of any region by creating employment and increasing the proper",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-008|15_018SEC.pdf|69-70|(VOP)",
+      "source_id": "GRBMP-TR-008",
+      "file_name": "15_018SEC.pdf",
+      "page_start": 69,
+      "page_end": 70,
+      "original_section": "(VOP)",
+      "repaired_heading": "Table A.44. Cost and Returns in Major Crops in Bihar (Rs./ha)",
+      "heading_candidates": [
+        "Table A.44. Cost and Returns in Major Crops in Bihar (Rs./ha)",
+        "CAGR 8.66 10.54 -216.56 1.91 4.88 -0.68 -12.06",
+        "CAGR 6.26 1.74 62.77 -2.26 -0.99 -5.4 -7.36",
+        "CAGR 5.25 7.67 -9.26 5.59 2.79 0.26 -8.25",
+        "CAGR 9.83 4.44 22.66 3.14 -5.35 -0.62 0.98",
+        "CAGR 7.1 5.28 9.99 -1.7 10.11 1.84 -15.87"
+      ],
+      "original_text_excerpt": "Report Code: 018_GBP_IIT_SEC_ANL_04_Ver 1_Dec 2011 69 | P a g e Table A.44. Cost and Returns in Major Crops in Bihar (Rs./ha) Total Value of Production (VOP) Cost of Cultivation (CC) Net Income Ratio of VOP to CC yield qntl. per ha Fertilizer Kg per ha Human labor Hrs/ha Animal Labour hrs/ha Paddy 1990-91 5819.69 5501.61 318.08 1.06 20.95 49.3 893.3 177.54 1996-97 10313.51 9395.03 918.48 1.1 21.43 72.37 885.08 107.43 1997-98 10918.55 9827.74 1090.81 1.11 22.61 80.07 845.13 99.62 1998-99 12310.7 ",
+      "repaired_text_excerpt": "Report Code: 018_GBP_IIT_SEC_ANL_04_Ver 1_Dec 2011 69 | P a g e Table A.44. Cost and Returns in Major Crops in Bihar (Rs./ha) Total Value of Production (VOP) Cost of Cultivation (CC) Net Income Ratio of VOP to CC yield qntl. per ha Fertilizer Kg per ha Human labor Hrs/ha Animal Labour hrs/ha Paddy 1990-91 5819.69 5501.61 318.08 1.06 20.95 49.3 893.3 177.54 1996-97 10313.51 9395.03 918.48 1.1 21.43 72.37 885.08 107.43 1997-98 10918.55 9827.74 1090.81 1.11 22.61 80.07 845.13 99.62 1998-99 12310.7 ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-038|15_Hydrological Flow Health Assessment of the River Ganga.pdf|20-21|25% - 75%, FHS =1",
+      "source_id": "GRBMP-TR-038",
+      "file_name": "15_Hydrological Flow Health Assessment of the River Ganga.pdf",
+      "page_start": 20,
+      "page_end": 21,
+      "original_section": "25% - 75%, FHS =1",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "25% - 75%, FHS =1"
+      ],
+      "original_text_excerpt": "20 | P age ii) occasional increased flows in the high flow sea son were not detrimental to river health. Flow health adopts the inter-quartile range (25 th to 75 th percentile) for different flow metrics (hydrological attribute) as the range within which the hydrological health score is 1. Any deviations in an attribute outside this range could potentially affect the flow health and hence assigned a value less than 1. High Flow (HF): HF is the sum of the monthly flows in the natural high flow pe",
+      "repaired_text_excerpt": "20 | P age ii) occasional increased flows in the high flow sea son were not detrimental to river health. Flow health adopts the inter-quartile range (25 th to 75 th percentile) for different flow metrics (hydrological attribute) as the range within which the hydrological health score is 1. Any deviations in an attribute outside this range could potentially affect the flow health and hence assigned a value less than 1. High Flow (HF): HF is the sum of the monthly flows in the natural high flow pe",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-038|15_Hydrological Flow Health Assessment of the River Ganga.pdf|31-34|(PVL)",
+      "source_id": "GRBMP-TR-038",
+      "file_name": "15_Hydrological Flow Health Assessment of the River Ganga.pdf",
+      "page_start": 31,
+      "page_end": 34,
+      "original_section": "(PVL)",
+      "repaired_heading": "Table 1: Median flow Health scores based on 29 year s of simulation assuming virgin",
+      "heading_candidates": [
+        "Table 1: Median flow Health scores based on 29 year s of simulation assuming virgin",
+        "A. B. Road X-ing 1 1 0.75 0.75 1 1 0.88 0.69"
+      ],
+      "original_text_excerpt": "31 | P age Table 1: Median flow Health scores based on 29 year s of simulation assuming virgin flow conditions Stream flow station High flow (HF) Highest monthly (HM) Low flow (LF) Lowest monthly (LM) Persistently lower (PL) Persistently very low (PVL) Flood flow interval (FFI) Flow health score (FH) Very Good Good Moderate Poor Worst Upper Ganga Basin Badrinath 1 1 0.75 0.75 1 1 0.89 0.7 Joshimath 1 1 0.75 0.75 1 1 0.88 0.69 Nandkeshri 1 1 0.75 0.75 1 1 0.5 0.62 Karanprayag 1 1 0.75 0.75 1 1 0.",
+      "repaired_text_excerpt": "31 | P age Table 1: Median flow Health scores based on 29 year s of simulation assuming virgin flow conditions Stream flow station High flow (HF) Highest monthly (HM) Low flow (LF) Lowest monthly (LM) Persistently lower (PL) Persistently very low (PVL) Flood flow interval (FFI) Flow health score (FH) Very Good Good Moderate Poor Worst Upper Ganga Basin Badrinath 1 1 0.75 0.75 1 1 0.89 0.7 Joshimath 1 1 0.75 0.75 1 1 0.88 0.69 Nandkeshri 1 1 0.75 0.75 1 1 0.5 0.62 Karanprayag 1 1 0.75 0.75 1 1 0.",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-038|15_Hydrological Flow Health Assessment of the River Ganga.pdf|35-35|(HF)(HF) (HF)(HF)",
+      "source_id": "GRBMP-TR-038",
+      "file_name": "15_Hydrological Flow Health Assessment of the River Ganga.pdf",
+      "page_start": 35,
+      "page_end": 35,
+      "original_section": "(HF)(HF) (HF)(HF)",
+      "repaired_heading": "Table 2: Median flow Health scores based on 29 years of simulation with the",
+      "heading_candidates": [
+        "Table 2: Median flow Health scores based on 29 years of simulation with the",
+        "(HF)(HF) (HF)(HF)",
+        "(LF)(LF) (LF)(LF)",
+        "(FH)(FH) (FH)(FH)"
+      ],
+      "original_text_excerpt": "35 | P age Table 2: Median flow Health scores based on 29 years of simulation with the current state of management Stream flow station Stream flow station Stream flow station Stream flow station High High High High flow flow flow flow (HF)(HF) (HF)(HF) High High High Highest est est est monthly monthly monthly monthly (HM)(HM)(HM)(HM) Low Low Low Low flow flow flow flow (LF)(LF) (LF)(LF) Lowest Lowest Lowest Lowest monthly monthly monthly monthly (LM)(LM)(LM)(LM) Persistently Persistently Persis",
+      "repaired_text_excerpt": "35 | P age Table 2: Median flow Health scores based on 29 years of simulation with the current state of management Stream flow station Stream flow station Stream flow station Stream flow station High High High High flow flow flow flow (HF)(HF) (HF)(HF) High High High Highest est est est monthly monthly monthly monthly (HM)(HM)(HM)(HM) Low Low Low Low flow flow flow flow (LF)(LF) (LF)(LF) Lowest Lowest Lowest Lowest monthly monthly monthly monthly (LM)(LM)(LM)(LM) Persistently Persistently Persis",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-038|15_Hydrological Flow Health Assessment of the River Ganga.pdf|36-59|(PVL)",
+      "source_id": "GRBMP-TR-038",
+      "file_name": "15_Hydrological Flow Health Assessment of the River Ganga.pdf",
+      "page_start": 36,
+      "page_end": 59,
+      "original_section": "(PVL)",
+      "repaired_heading": "A. B. Road X-ing 0 0 0.75 0.75 1 1 0 0.34",
+      "heading_candidates": [
+        "A. B. Road X-ing 0 0 0.75 0.75 1 1 0 0.34",
+        "Table 3: Median flow Health scores based on 29 ye ars of simulation with the current",
+        "Table 4: Median flow Health scores based on 29 years of simulation with the",
+        "Table 5: Q 95 and Q 90 flows for four scenarios for 146 stations in Ganga Basin",
+        "Q95 Q90",
+        "Table 6: Q 75 and Q 50 flows for four scenarios for 146 stations in Ganga Basin",
+        "Q75 Q50",
+        "Figure 5: Median flow Health scores based on 29 yea rs of simulation a) Virgin state",
+        "Figure 6 : Median flow Health scores based on 29 years of s imulation a) Increase",
+        "Figure 7: Percentages of MMF attained 100% time on monthly basis-Virgin",
+        "Figure 8: Percentages of MMF attained 100% time on monthly basis-Present Scenario",
+        "Figure 9: Percentages of MMF attained 100% time on monthly basis-Future Scenario",
+        "Figure 10: Percentages of MMF attained 100% time o n monthly basis-Increased"
+      ],
+      "original_text_excerpt": "36 | P age \u2026 \u2026 \u2026 Table 2 continued form previous page Stream flow station High flow (HF) Highest monthly (HM) Low flow (LF) Lowest monthly (LM) Persistently lower (PL) Persistently very low (PVL) Flood flow interval (FFI) Flow health score (FH) Very Good Good Moderate Poor Worst Middle Yamuna basin Delhi Rly. Bridge 0 0 0.75 0.75 1 1 0 0.34 Mohana_UY 0 0 0.75 0.75 1 1 0 0.34 Mathura 0 0 0.75 0.75 1 1 0 0.34 Agra Poiyghat 0 0 0.75 0.75 1 1 0 0.34 Banas Chittorgarh 0 0 0.75 0.75 1 1 0 0.43 Bigod 0",
+      "repaired_text_excerpt": "36 | P age \u2026 \u2026 \u2026 Table 2 continued form previous page Stream flow station High flow (HF) Highest monthly (HM) Low flow (LF) Lowest monthly (LM) Persistently lower (PL) Persistently very low (PVL) Flood flow interval (FFI) Flow health score (FH) Very Good Good Moderate Poor Worst Middle Yamuna basin Delhi Rly. Bridge 0 0 0.75 0.75 1 1 0 0.34 Mohana_UY 0 0 0.75 0.75 1 1 0 0.34 Mathura 0 0 0.75 0.75 1 1 0 0.34 Agra Poiyghat 0 0 0.75 0.75 1 1 0 0.34 Banas Chittorgarh 0 0 0.75 0.75 1 1 0 0.43 Bigod 0",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-010|16_022EFL.pdf|1-3|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-010",
+      "file_name": "16_022EFL.pdf",
+      "page_start": 1,
+      "page_end": 3,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Report Code State-of-the Rivers in the Ganga River Basi GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi Guwahati Indian Institutes of Technology Report Code: 022_GBP_IIT_EFL_SOA_01_Ver 1_ Environmental Flows the-Art with special reference to Rivers in the Ganga River Basi GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology _SOA_01_Ver 1_Dec 2011 Environmental Flows Art with specia",
+      "repaired_text_excerpt": "Report Code State-of-the Rivers in the Ganga River Basi GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi Guwahati Indian Institutes of Technology Report Code: 022_GBP_IIT_EFL_SOA_01_Ver 1_ Environmental Flows the-Art with special reference to Rivers in the Ganga River Basi GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology _SOA_01_Ver 1_Dec 2011 Environmental Flows Art with specia",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-011|16_31_003_EQP_S&R_02.pdf|18-20|MBBR I MBBR II",
+      "source_id": "GRBMP-TR-011",
+      "file_name": "16_31_003_EQP_S&R_02.pdf",
+      "page_start": 18,
+      "page_end": 20,
+      "original_section": "MBBR I MBBR II",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "MBBR\u00a0I\u00a0 MBBR\u00a0II"
+      ],
+      "original_text_excerpt": "Report Code: 003_GBP_IIT_EQP_S&R_02_Ver 1_Dec 2010 18 | Page Exhibit 2: MBBR \u2010 Moving Bed Biofilm Reactor Schematic Diagram of a Moving Bed Bio\u2010Reactor Moving Bed Biofilm Reactor is an aerobic attached biological growth process. It does not require primary clarifier and sludge recirculation. Raw sewage, after screening and de\u2010 gritting, is fed to the biological reactor. In the reactor, floating plastic media is provided which remains in suspension. Biological mass is generated on the surface of ",
+      "repaired_text_excerpt": "Report Code: 003_GBP_IIT_EQP_S&R_02_Ver 1_Dec 2010 18 | Page Exhibit 2: MBBR \u2010 Moving Bed Biofilm Reactor Schematic Diagram of a Moving Bed Bio\u2010Reactor Moving Bed Biofilm Reactor is an aerobic attached biological growth process. It does not require primary clarifier and sludge recirculation. Raw sewage, after screening and de\u2010 gritting, is fed to the biological reactor. In the reactor, floating plastic media is provided which remains in suspension. Biological mass is generated on the surface of ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-011|16_31_003_EQP_S&R_02.pdf|21-23|BIOREACTOR",
+      "source_id": "GRBMP-TR-011",
+      "file_name": "16_31_003_EQP_S&R_02.pdf",
+      "page_start": 21,
+      "page_end": 23,
+      "original_section": "BIOREACTOR",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Report Code: 003_GBP_IIT_EQP_S&R_02_Ver 1_Dec 2010 21 | Page Exhibit 5: MBR \u2010 Membrane Bioreactor Schematic Diagram of a Membrane Bioreactor It is a biological reactor with a suspended biomass. The solid\u2010liquid separation in membrane bioreactor is achieved by a microfiltration membrane with pore sizes ranging from 0.1 to 0. 4 \u00b5m. No secondary clarifier is used and has the ability to operate at high MLSS concentrations. Membranes are patented and not available in the open market, leading to singl",
+      "repaired_text_excerpt": "Report Code: 003_GBP_IIT_EQP_S&R_02_Ver 1_Dec 2010 21 | Page Exhibit 5: MBR \u2010 Membrane Bioreactor Schematic Diagram of a Membrane Bioreactor It is a biological reactor with a suspended biomass. The solid\u2010liquid separation in membrane bioreactor is achieved by a microfiltration membrane with pore sizes ranging from 0.1 to 0. 4 \u00b5m. No secondary clarifier is used and has the ability to operate at high MLSS concentrations. Membranes are patented and not available in the open market, leading to singl",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-013|22_016SEC.pdf|41-41|(VOP)",
+      "source_id": "GRBMP-TR-013",
+      "file_name": "22_016SEC.pdf",
+      "page_start": 41,
+      "page_end": 41,
+      "original_section": "(VOP)",
+      "repaired_heading": "Table 1: Costs and Returns in Sugarcane, Uttarakhand (Rs /ha)",
+      "heading_candidates": [
+        "Table 1: Costs and Returns in Sugarcane, Uttarakhand (Rs /ha)",
+        "10.2. Economics of Wheat Cultivation",
+        "Table 2. Human labour absorption does not show any trend. The number of labour hours",
+        "Table 2: Costs and Returns in Wheat, Uttarakhand (Rs /ha)"
+      ],
+      "original_text_excerpt": "Report Code: 016_GBP_IIT_SEC_ANL_02_Ver 1_Dec 2011 41 | P a g e Table 1: Costs and Returns in Sugarcane, Uttarakhand (Rs /ha) Year Value of Output (VOP) Cost of Cultivation (C), Rs Net Income,Rs Ratio of VOP to C Yield, kg./ha Chemical Fertilizer, kg/ha Human labour, hours/ha Draught power, hours/ha 2002-03 52,018 30,845 21,173 1.69 57,900 264 1159 - 2003-04 52,093 25,164 26,928 2.07 59,200 134 991 - 2004-05 57,079 29,568 27,511 1.93 50,400 315 1145 - 2005-06 62,343 30,995 31,349 2.01 49,100 134",
+      "repaired_text_excerpt": "Report Code: 016_GBP_IIT_SEC_ANL_02_Ver 1_Dec 2011 41 | P a g e Table 1: Costs and Returns in Sugarcane, Uttarakhand (Rs /ha) Year Value of Output (VOP) Cost of Cultivation (C), Rs Net Income,Rs Ratio of VOP to C Yield, kg./ha Chemical Fertilizer, kg/ha Human labour, hours/ha Draught power, hours/ha 2002-03 52,018 30,845 21,173 1.69 57,900 264 1159 - 2003-04 52,093 25,164 26,928 2.07 59,200 134 991 - 2004-05 57,079 29,568 27,511 1.93 50,400 315 1145 - 2005-06 62,343 30,995 31,349 2.01 49,100 134",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-013|22_016SEC.pdf|43-44|(VOP)",
+      "source_id": "GRBMP-TR-013",
+      "file_name": "22_016SEC.pdf",
+      "page_start": 43,
+      "page_end": 44,
+      "original_section": "(VOP)",
+      "repaired_heading": "Table 5: Costs and Returns in Mustard, Uttarakhand (Rs /ha)",
+      "heading_candidates": [
+        "Table 5: Costs and Returns in Mustard, Uttarakhand (Rs /ha)",
+        "10.6. Economics of Gram Cultivation",
+        "Table 6: Costs and Returns in Gram, Uttarakhand (Rs /ha)",
+        "10.7. Economics of Maize Cultivation",
+        "Table 7: Costs and Returns in Maize, Uttarakhand (Rs /ha)",
+        "11. Organic Farming"
+      ],
+      "original_text_excerpt": "Report Code: 016_GBP_IIT_SEC_ANL_02_Ver 1_Dec 2011 43 | P a g e profit. However, the farmers growing this crop during 2004-05 incurred losses, as VOP was much lower than C. The ratio of VOP to C varies significantly across years, indicating to the volatility in the net income of farmers from the crop. Yield of mustard ranges between 500kg/ha to 1,100 kg/ha. Low yield during 2004-05 is the main reason for the negative profitability. Fertilizer consumption was also much lower during 2007-08 than d",
+      "repaired_text_excerpt": "Report Code: 016_GBP_IIT_SEC_ANL_02_Ver 1_Dec 2011 43 | P a g e profit. However, the farmers growing this crop during 2004-05 incurred losses, as VOP was much lower than C. The ratio of VOP to C varies significantly across years, indicating to the volatility in the net income of farmers from the crop. Yield of mustard ranges between 500kg/ha to 1,100 kg/ha. Low yield during 2004-05 is the main reason for the negative profitability. Fertilizer consumption was also much lower during 2007-08 than d",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-002|25_GRBMPInterim_Rep.pdf|1-1|BHU NIH CIFRI",
+      "source_id": "GRBMP-CORE-002",
+      "file_name": "25_GRBMPInterim_Rep.pdf",
+      "page_start": 1,
+      "page_end": 1,
+      "original_section": "BHU NIH CIFRI",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "BHU NIH CIFRI",
+        "CIFRI NEERI JNU PU NIT- K",
+        "K DU"
+      ],
+      "original_text_excerpt": "IIT Bombay IIT Delhi IIT Guwahati IIT BHU NIH CIFRI Consortium of 7 \u201cIndian Institute of Technology\u201ds Ganga River Basin Management Plan Interim Report September by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras In Collaboration with CIFRI NEERI JNU PU NIT- K ISI Kolkata Allahabad University WWF India Consortium of 7 \u201cIndian Institute of Technology\u201ds Ganga River Basin Management Plan Report September 2013 IIT Roorkee K DU Consortium of 7 \u201cIndian Institute of Technology\u201ds (IITs)",
+      "repaired_text_excerpt": "IIT Bombay IIT Delhi IIT Guwahati IIT BHU NIH CIFRI Consortium of 7 \u201cIndian Institute of Technology\u201ds Ganga River Basin Management Plan Interim Report September by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras In Collaboration with CIFRI NEERI JNU PU NIT- K ISI Kolkata Allahabad University WWF India Consortium of 7 \u201cIndian Institute of Technology\u201ds Ganga River Basin Management Plan Report September 2013 IIT Roorkee K DU Consortium of 7 \u201cIndian Institute of Technology\u201ds (IITs)",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-002|25_GRBMPInterim_Rep.pdf|4-4|1. Vinod Tare, IIT Kanpur vinod@iitk.ac.in",
+      "source_id": "GRBMP-CORE-002",
+      "file_name": "25_GRBMPInterim_Rep.pdf",
+      "page_start": 4,
+      "page_end": 4,
+      "original_section": "1. Vinod Tare, IIT Kanpur vinod@iitk.ac.in",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "1. Vinod Tare, IIT Kanpur vinod@iitk.ac.in",
+        "2. Gautam Roy, IIT Kanpur gautamwho@gmail.com",
+        "3. Purnendu Bose, IIT Kanpur pbose @iitk .ac.in"
+      ],
+      "original_text_excerpt": "\u2022 iv \u2022 Lead Authors 1. Vinod Tare, IIT Kanpur vinod@iitk.ac.in 2. Gautam Roy, IIT Kanpur gautamwho@gmail.com 3. Purnendu Bose, IIT Kanpur pbose @iitk .ac.in",
+      "repaired_text_excerpt": "\u2022 iv \u2022 Lead Authors 1. Vinod Tare, IIT Kanpur vinod@iitk.ac.in 2. Gautam Roy, IIT Kanpur gautamwho@gmail.com 3. Purnendu Bose, IIT Kanpur pbose @iitk .ac.in",
+      "repair_reason": "HEADING_NORMALIZATION",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-002|25_GRBMPInterim_Rep.pdf|19-19|1.2. Issues and Concerns of the NRGB Environment",
+      "source_id": "GRBMP-CORE-002",
+      "file_name": "25_GRBMPInterim_Rep.pdf",
+      "page_start": 19,
+      "page_end": 19,
+      "original_section": "1.2. Issues and Concerns of the NRGB Environment",
+      "repaired_heading": "Figure 1.2: Schematic of Hydraulic",
+      "heading_candidates": [
+        "Figure 1.2: Schematic of Hydraulic",
+        "1.2. Issues and Concerns of the NRGB Environment"
+      ],
+      "original_text_excerpt": "connected in most of the alluvial basin ground water reservoirs are water sources during the long dry periods depends much on the water table aquifers \u2013 water - suck out the surface waters ( see River Ganga (along with her tributaries region\u2019s water needs, but is also whole. Hence, the GRBMP adopts the Ganga indicator of NRGB. Figure 1.2: Schematic of Hydraulic 1.2. Issues and Concerns of the NRGB Environment Various anthropogenic factors have contributed dire ctly to aquatic environment in rece",
+      "repaired_text_excerpt": "connected in most of the alluvial basin ground water reservoirs are water sources during the long dry periods depends much on the water table aquifers \u2013 water - suck out the surface waters ( see River Ganga (along with her tributaries region\u2019s water needs, but is also whole. Hence, the GRBMP adopts the Ganga indicator of NRGB. Figure 1.2: Schematic of Hydraulic 1.2. Issues and Concerns of the NRGB Environment Various anthropogenic factors have contributed dire ctly to aquatic environment in rece",
+      "repair_reason": "TABLE_OR_FIGURE_HEADING_SEPARATION",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-002|25_GRBMPInterim_Rep.pdf|37-38|DEFINITELY \u201cNO\u201d",
+      "source_id": "GRBMP-CORE-002",
+      "file_name": "25_GRBMPInterim_Rep.pdf",
+      "page_start": 37,
+      "page_end": 38,
+      "original_section": "DEFINITELY \u201cNO\u201d",
+      "repaired_heading": "Table 4.2: Criteria for Permissibility of Dams and Other Projects on Rivers",
+      "heading_candidates": [
+        "Table 4.2: Criteria for Permissibility of Dams and Other Projects on Rivers",
+        "DEFINITELY \u201cNO\u201d",
+        "GENERALLY \u201cNO\u201d,",
+        "Figure 4.2). NRGB has a vast groundwater storage c apacity which can be annually",
+        "Figure 4.2: Storm-water Runoff"
+      ],
+      "original_text_excerpt": "Interim GRBMP: IIT Consortium: Spetember 2013 \u2022 21 \u2022 Table 4.2: Criteria for Permissibility of Dams and Other Projects on Rivers Category Environmental Impact Environmental Clearance I MAJOR LONG-TERM, IRREVERSIBLE IMPACTS: Break in Longitudinal River Connectivity, leading t o : (i) loss of habitat of rare or endangered species in river; and /or (ii) disruption in movement of biota along the river len gth; and/or (iii) disruption in sediment transport in the river. Critical Flow Reductions, lead",
+      "repaired_text_excerpt": "Interim GRBMP: IIT Consortium: Spetember 2013 \u2022 21 \u2022 Table 4.2: Criteria for Permissibility of Dams and Other Projects on Rivers Category Environmental Impact Environmental Clearance I MAJOR LONG-TERM, IRREVERSIBLE IMPACTS: Break in Longitudinal River Connectivity, leading t o : (i) loss of habitat of rare or endangered species in river; and /or (ii) disruption in movement of biota along the river len gth; and/or (iii) disruption in sediment transport in the river. Critical Flow Reductions, lead",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-014|27_014EQP.pdf|12-13|MLD",
+      "source_id": "GRBMP-TR-014",
+      "file_name": "27_014EQP.pdf",
+      "page_start": 12,
+      "page_end": 13,
+      "original_section": "MLD",
+      "repaired_heading": "Table 5: Estimated Capital and Operation and Maintenance Costs for ETPs",
+      "heading_candidates": [
+        "Table 5: Estimated Capital and Operation and Maintenance Costs for ETPs",
+        "5 - 20 15-10 100",
+        "Table 6: Estimated Production Cost and Selling Price for different grades of paper",
+        "Table 7: Estimated cost of water reuse/ recycle after tertiary treatment in a typical mill",
+        "1) Increase in average production cost for B1 and B2 categories of industry is in the range",
+        "2) Increase in average production cost for A1 and A2 categories of industry to attain zero"
+      ],
+      "original_text_excerpt": "Report Code : 014_GBP_IIT_EQP_S&R_04_Ver 1_Dec 2011 12 | P a g e The capital and operation and maintenance cost of effluent treatment plants can be estimated based on information gathered from existing sewage and effluent treatment plants (STPs and ETPs) in India (reference report 003_GBP_IIT_EQP_S&R 02 Ver 1_Dec 2010). Three stage treatment, consisting of preliminary/pre treatment, primary and secondary treatment, and tertiary treatment without and with RO treatment as the case may be, has been",
+      "repaired_text_excerpt": "Report Code : 014_GBP_IIT_EQP_S&R_04_Ver 1_Dec 2011 12 | P a g e The capital and operation and maintenance cost of effluent treatment plants can be estimated based on information gathered from existing sewage and effluent treatment plants (STPs and ETPs) in India (reference report 003_GBP_IIT_EQP_S&R 02 Ver 1_Dec 2010). Three stage treatment, consisting of preliminary/pre treatment, primary and secondary treatment, and tertiary treatment without and with RO treatment as the case may be, has been",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-015|28_010PLG.pdf|25-26|(KNN)",
+      "source_id": "GRBMP-TR-015",
+      "file_name": "28_010PLG.pdf",
+      "page_start": 25,
+      "page_end": 26,
+      "original_section": "(KNN)",
+      "repaired_heading": "Table 3: Agencies Involved in Sewage Management in Kanpur",
+      "heading_candidates": [
+        "Table 3: Agencies Involved in Sewage Management in Kanpur",
+        "Table 4: Overlap in Functions of Sewage Management Agencies in Kanpur",
+        "KNN, UPJN, KDA,",
+        "UPHDB, DUDA",
+        "UPHDB, DUDA UPJN, KDA, KNN UPJN",
+        "UPHDB, DUDA UPJN, KDA UPJN",
+        "O & M KJS (KNN) KJS (KNN) UPJN UPJN"
+      ],
+      "original_text_excerpt": "Report Code : 010_GBP_IIT_PLG_ANL_04_Ver 1_Dec 2011 25 | P a g e Table 3: Agencies Involved in Sewage Management in Kanpur Agency Functions U.P Jal Nigam (UPJN) Mainly responsible for construction, operation and management of water supply and sanitation related infrastructure across the state, on behalf of the state government Kanpur Jal Sansthan (KJS) Construction and management of the water supply and sewage infrastructure Kanpur Nagar Nigam (KNN) Local government agency, responsible for provi",
+      "repaired_text_excerpt": "Report Code : 010_GBP_IIT_PLG_ANL_04_Ver 1_Dec 2011 25 | P a g e Table 3: Agencies Involved in Sewage Management in Kanpur Agency Functions U.P Jal Nigam (UPJN) Mainly responsible for construction, operation and management of water supply and sanitation related infrastructure across the state, on behalf of the state government Kanpur Jal Sansthan (KJS) Construction and management of the water supply and sewage infrastructure Kanpur Nagar Nigam (KNN) Local government agency, responsible for provi",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-015|28_010PLG.pdf|31-35|UPJN",
+      "source_id": "GRBMP-TR-015",
+      "file_name": "28_010PLG.pdf",
+      "page_start": 31,
+      "page_end": 35,
+      "original_section": "UPJN",
+      "repaired_heading": "Table 5: Stakeholders and their Interests in Sanitation Sector (Kanpur)",
+      "heading_candidates": [
+        "Table 5: Stakeholders and their Interests in Sanitation Sector (Kanpur)"
+      ],
+      "original_text_excerpt": "Report Code : 010_GBP_IIT_PLG_ANL_04_Ver 1_Dec 2011 31 | P a g e to think and behave in a particular direction, using various incentives and disincentives through policy instruments and in order to achieve the policy objectives. If these two directions are not aligned, then the actual behavior of the stakeholder depends on its relative responses to, on one hand, to policy incentives, and, on the other hand, the lure of interests. If the lure of interest overwhelms the motivation provided by the ",
+      "repaired_text_excerpt": "Report Code : 010_GBP_IIT_PLG_ANL_04_Ver 1_Dec 2011 31 | P a g e to think and behave in a particular direction, using various incentives and disincentives through policy instruments and in order to achieve the policy objectives. If these two directions are not aligned, then the actual behavior of the stakeholder depends on its relative responses to, on one hand, to policy incentives, and, on the other hand, the lure of interests. If the lure of interest overwhelms the motivation provided by the ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "HIGH",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "DETERMINISTIC_REPAIR_CANDIDATE"
+    },
+    {
+      "section_id": "GRBMP-CORE-004|29_2014-06-13_GRBMP_Extended Summary.pdf|1-1|BHU NIH CIFRI NEERI JNU PU NIT-K DU",
+      "source_id": "GRBMP-CORE-004",
+      "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+      "page_start": 1,
+      "page_end": 1,
+      "original_section": "BHU NIH CIFRI NEERI JNU PU NIT-K DU",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "BHU NIH CIFRI NEERI JNU PU NIT-K DU"
+      ],
+      "original_text_excerpt": "Ganga River Basin Management Plan Extended Summary by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee In Collaboration with IIT BHU NIH CIFRI NEERI JNU PU NIT-K DU ISI Kolkata Allahabad University WWF India Consortium of 7 \u201cIndian Institute of Technology\u201ds (IITs)",
+      "repaired_text_excerpt": "Ganga River Basin Management Plan Extended Summary by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee In Collaboration with IIT BHU NIH CIFRI NEERI JNU PU NIT-K DU ISI Kolkata Allahabad University WWF India Consortium of 7 \u201cIndian Institute of Technology\u201ds (IITs)",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-004|29_2014-06-13_GRBMP_Extended Summary.pdf|17-18|INR",
+      "source_id": "GRBMP-CORE-004",
+      "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+      "page_start": 17,
+      "page_end": 18,
+      "original_section": "INR",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "Table 1: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class I Towns of NRGB",
+        "Table 2: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class II Towns of NRGB"
+      ],
+      "original_text_excerpt": "Table 1: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class I Towns of NRGB S No State Number of Class I Towns Population in Millions Estimated STP Land Required Per Capita in m2 Estimated Energy Demand in MW Estimated Annual Estimated Per Capita Per Day Energy Consumption in GWH Expenditure on Sewerage System in Millions of INR Energy Consumptio n in KWH (Unit of Electricity) Expenditure in INR 01 Uttarakhand 8 2.121 0.1 51.0 0.087 2257.3 0.03-0.05 2.2-4",
+      "repaired_text_excerpt": "Table 1: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class I Towns of NRGB S No State Number of Class I Towns Population in Millions Estimated STP Land Required Per Capita in m2 Estimated Energy Demand in MW Estimated Annual Estimated Per Capita Per Day Energy Consumption in GWH Expenditure on Sewerage System in Millions of INR Energy Consumptio n in KWH (Unit of Electricity) Expenditure in INR 01 Uttarakhand 8 2.121 0.1 51.0 0.087 2257.3 0.03-0.05 2.2-4",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-004|29_2014-06-13_GRBMP_Extended Summary.pdf|33-33|i. a co -operative society registered under any law relating to cooperative",
+      "source_id": "GRBMP-CORE-004",
+      "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+      "page_start": 33,
+      "page_end": 33,
+      "original_section": "i. a co -operative society registered under any law relating to cooperative",
+      "repaired_heading": "41) Ritual Bathing means taking dip in the water for religious or spiritual purposes;",
+      "heading_candidates": [
+        "41) Ritual Bathing means taking dip in the water for religious or spiritual purposes;",
+        "42) River Bed Farming includes seasonal agriculture/farming on the river bed",
+        "43) Rivers in National River Ga nga Basin include, but is not restricted to, all major",
+        "44) River Bank means the land at the side of a river which retains the river in its",
+        "45) River Bed means dried portion of the river, the place where the river run its",
+        "46) River Port means a place on a waterway with facilities for loading and",
+        "47) River System means network of rivers rather than a single river;",
+        "48) Rivulets includes very small tributaries of a major river;",
+        "49) Sand Mining means large scale removal of river sand from the dried channel",
+        "50) Sewage means as provided in the Act;",
+        "51) Small Scale Industries as provided in the Act;",
+        "52) Solid Waste as provided in the Act;",
+        "53) Sludge as provided in the Act;",
+        "54) Tribunal means the National River Ganga Basin Management Tribunal;",
+        "55) \u201cWater Body\u201d (or \u201cSurface Water Body\u201d) is a depression on land or a lowland",
+        "56) \u201cWater Course\u201d (or \u201cSurface Water Course\u201d) is an overland channel (natural or",
+        "57) Water Recha rge Structures includes arrangements made for enhancement of"
+      ],
+      "original_text_excerpt": "GRBMP Extended Summary: June 2014 \u2022 33 \u2022 i. a co -operative society registered under any law relating to cooperative societies; j. a local authority; k. every artificial juridical person, not falling within any of the preceding sub - clauses; 41) Ritual Bathing means taking dip in the water for religious or spiritual purposes; 42) River Bed Farming includes seasonal agriculture/farming on the river bed during low flows when the bed is exposed; 43) Rivers in National River Ga nga Basin include, b",
+      "repaired_text_excerpt": "GRBMP Extended Summary: June 2014 \u2022 33 \u2022 i. a co -operative society registered under any law relating to cooperative societies; j. a local authority; k. every artificial juridical person, not falling within any of the preceding sub - clauses; 41) Ritual Bathing means taking dip in the water for religious or spiritual purposes; 42) River Bed Farming includes seasonal agriculture/farming on the river bed during low flows when the bed is exposed; 43) Rivers in National River Ga nga Basin include, b",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-004|29_2014-06-13_GRBMP_Extended Summary.pdf|41-41|c. Has been convicted of an offence which, in the opinion of the Central",
+      "source_id": "GRBMP-CORE-004",
+      "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+      "page_start": 41,
+      "page_end": 41,
+      "original_section": "c. Has been convicted of an offence which, in the opinion of the Central",
+      "repaired_heading": "3) Notwithstanding anything contained herein before, no member shall be removed",
+      "heading_candidates": [
+        "3) Notwithstanding anything contained herein before, no member shall be removed",
+        "16. Restrictions on Employment of Members in certain cases",
+        "17. Salary and Allowances and other terms and conditions of",
+        "1) The salary and other terms and condit ions of service, of the Chairperson and",
+        "2) The salary allowances and other terms and co ndition of service of the",
+        "18. Procedure for Transaction of Business",
+        "1) The Commission shall meet regularly at its Office at such time as the Chairperson"
+      ],
+      "original_text_excerpt": "GRBMP Extended Summary: June 2014 \u2022 41 \u2022 b. Has engaged at any time, dur ing his term of office, in any paid employment; or c. Has been convicted of an offence which, in the opinion of the Central Government involved moral turpitude; or d. Has acquired such financial or other interest as his likely to affect prejudicially his functio ns of a member; or so abused his position as to render his continuance in office prejudicial to public interest; or e. Has become physically or mentally incapable a",
+      "repaired_text_excerpt": "GRBMP Extended Summary: June 2014 \u2022 41 \u2022 b. Has engaged at any time, dur ing his term of office, in any paid employment; or c. Has been convicted of an offence which, in the opinion of the Central Government involved moral turpitude; or d. Has acquired such financial or other interest as his likely to affect prejudicially his functio ns of a member; or so abused his position as to render his continuance in office prejudicial to public interest; or e. Has become physically or mentally incapable a",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-043|29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf|1-1|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-043",
+      "file_name": "29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf",
+      "page_start": 1,
+      "page_end": 1,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Report Code: 055_GBP_IIT_SEC_ANL_16_Ver 1_May 2014 Reform Imperatives for Agricultural Sustainability in Ganga Basin GRBMP: Ganga River Basin Management Plan by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee Indian Institutes of Technology",
+      "repaired_text_excerpt": "Report Code: 055_GBP_IIT_SEC_ANL_16_Ver 1_May 2014 Reform Imperatives for Agricultural Sustainability in Ganga Basin GRBMP: Ganga River Basin Management Plan by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee Indian Institutes of Technology",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-017|32_035ENB.pdf|1-4|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-017",
+      "file_name": "32_035ENB.pdf",
+      "page_start": 1,
+      "page_end": 4,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Report Code Floral and Faunal Diversity of River Ramganga GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code : 035_GBP_IIT_ENB_DAT_13_ Ver Floral and Faunal Diversity of River Ramganga GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology Ver 1_Jun 2012 Floral and Faunal Diversity of River Ramganga GRB EMP : Ganga River Basin Env",
+      "repaired_text_excerpt": "Report Code Floral and Faunal Diversity of River Ramganga GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code : 035_GBP_IIT_ENB_DAT_13_ Ver Floral and Faunal Diversity of River Ramganga GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology Ver 1_Jun 2012 Floral and Faunal Diversity of River Ramganga GRB EMP : Ganga River Basin Env",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-018|33_036EQP.pdf|32-34|MLD",
+      "source_id": "GRBMP-TR-018",
+      "file_name": "33_036EQP.pdf",
+      "page_start": 32,
+      "page_end": 34,
+      "original_section": "MLD",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "Table 5.06: Estimated Annual Capital (Capex) and Operation and Maintenance (Opex) Expenditure on Sewerage Infrastructure",
+        "Table 5.07: Estimated Annual Capital (Capex) and Operation and Maintenance (Opex) Expenditure on Sewerage Infrastructure",
+        "Table 5.08: Estimated Annual Expenditure on Sewerage Infrastructure in Class I (Population > 0.1 Millions) and Class II"
+      ],
+      "original_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 32 | P a g e Table 5.06: Estimated Annual Capital (Capex) and Operation and Maintenance (Opex) Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Millions) of NRGB S No State Population in Millions Estimated Sewage Generation, MLD Estimated Annual Expenditure, Millions of INR Estimated Total Annual Expenditure, Millions of INR Sewerage Network Sewage Pumping Sewage Treatment Capex Opex Capex Opex Capex Opex 01 Uttarakhan",
+      "repaired_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 32 | P a g e Table 5.06: Estimated Annual Capital (Capex) and Operation and Maintenance (Opex) Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Millions) of NRGB S No State Population in Millions Estimated Sewage Generation, MLD Estimated Annual Expenditure, Millions of INR Estimated Total Annual Expenditure, Millions of INR Sewerage Network Sewage Pumping Sewage Treatment Capex Opex Capex Opex Capex Opex 01 Uttarakhan",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-018|33_036EQP.pdf|36-40|INR",
+      "source_id": "GRBMP-TR-018",
+      "file_name": "33_036EQP.pdf",
+      "page_start": 36,
+      "page_end": 40,
+      "original_section": "INR",
+      "repaired_heading": "Table 5.11",
+      "heading_candidates": [
+        "Table 5.09: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class I Towns (Population",
+        "Table 5.10: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class II Towns",
+        "Table 5.11",
+        "Figure 5.13: Schematic Representation of GRB showing a Few Rivers of the Basin,",
+        "Table 5.11: Comparison of Dry Weather Flow with Estimated Available Water from Treated Sewage at Select Locations in"
+      ],
+      "original_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 36 | P a g e Table 5.09: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Millions) of NRGB S No State Number of Class I Towns Population in Millions Estimated STP Land Required Per Capita in m2 Estimated Energy Demand in MW Estimated Annual Estimated Per Capita Per Day Energy Consumption in GWH Expenditure on Sewerage System in Millions of INR Energy Consumpti on in KWH (Uni",
+      "repaired_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 36 | P a g e Table 5.09: Estimated Footprint, Energy Consumption and Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Millions) of NRGB S No State Number of Class I Towns Population in Millions Estimated STP Land Required Per Capita in m2 Estimated Energy Demand in MW Estimated Annual Estimated Per Capita Per Day Energy Consumption in GWH Expenditure on Sewerage System in Millions of INR Energy Consumpti on in KWH (Uni",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-018|33_036EQP.pdf|69-71|INR",
+      "source_id": "GRBMP-TR-018",
+      "file_name": "33_036EQP.pdf",
+      "page_start": 69,
+      "page_end": 71,
+      "original_section": "INR",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "Table A2.01: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of",
+        "Table A2.02: Estimated Capital Expenditure on Sewerage Infrastructure in Class II Towns (Population between 0.05 and 0.1",
+        "Table A2.03: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of Uttar",
+        "Table A2.03 continued to next page \u2026 \u2026 \u2026 \u2026"
+      ],
+      "original_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 69 | P a g e Table A2.01: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of Uttarakhand in NRGB S No Town Population in Thousands Estimated Sewage Generation, MLD Town Area in km2 Estimated Length of Sewer Network, km Estimated Capital Expenditure, Millions of INR Estimated Total Expenditure, Millions of INR Sewerage Network Sewage Pumping Sewage Treatment 01 Dehradun 870.519 94.0 52.29 495",
+      "repaired_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 69 | P a g e Table A2.01: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of Uttarakhand in NRGB S No Town Population in Thousands Estimated Sewage Generation, MLD Town Area in km2 Estimated Length of Sewer Network, km Estimated Capital Expenditure, Millions of INR Estimated Total Expenditure, Millions of INR Sewerage Network Sewage Pumping Sewage Treatment 01 Dehradun 870.519 94.0 52.29 495",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-018|33_036EQP.pdf|76-77|NRGB",
+      "source_id": "GRBMP-TR-018",
+      "file_name": "33_036EQP.pdf",
+      "page_start": 76,
+      "page_end": 77,
+      "original_section": "NRGB",
+      "repaired_heading": "01 B J 197.150 21.3 6.70 94 660.8 4.4 234.2 899.4",
+      "heading_candidates": [
+        "Table A2.07: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of Haryana in",
+        "Table A2.08: Estimated Capital Expenditure on Sewerage Infrastructure in Class II Towns (Population between 0.05 and 0.1",
+        "Table A2.09: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of Delhi in",
+        "01 B J 197.150 21.3 6.70 94 660.8 4.4 234.2 899.4",
+        "05 DMC 11007.835 1188.8 431.09 4572 32002.2 1986.2 13077.3 47065.7",
+        "10 K S N 282.598 30.5 4.74 93 651.2 5.3 335.7 992.2",
+        "14 NDMC 249.998 27.0 42.74 263 1842.4 14.2 297.0 2153.6",
+        "01. B J \u2013 Bhalswa Jahangirpur",
+        "05. DMC \u2013 Delhi Municipal Corporation",
+        "10. K S N \u2013 Kirari Suleman Nagar",
+        "14. NDMC \u2013 New Delhi Municipal Corporation"
+      ],
+      "original_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 76 | P a g e Table A2.07: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of Haryana in NRGB S No Town Population in Thousands Estimated Sewage Generation, MLD Town Area in km2 Estimated Length of Sewer Network, km Estimated Capital Expenditure, Millions of INR Estimated Total Expenditure, Millions of INR Sewerage Network Sewage Pumping Sewage Treatment 01 Bhadur Garh 170.426 18.4 50.00 245 ",
+      "repaired_text_excerpt": "Report Code : 036_GBP_IIT_EQP_S&R_02_V er 1_Dec 2013 76 | P a g e Table A2.07: Estimated Capital Expenditure on Sewerage Infrastructure in Class I Towns (Population > 0.1 Million) of Haryana in NRGB S No Town Population in Thousands Estimated Sewage Generation, MLD Town Area in km2 Estimated Length of Sewer Network, km Estimated Capital Expenditure, Millions of INR Estimated Total Expenditure, Millions of INR Sewerage Network Sewage Pumping Sewage Treatment 01 Bhadur Garh 170.426 18.4 50.00 245 ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-019|33_43_001_GEN_DAT_01.pdf|6-6|C. The river in the third segment has experienced considerable changes in the sediment",
+      "source_id": "GRBMP-TR-019",
+      "file_name": "33_43_001_GEN_DAT_01.pdf",
+      "page_start": 6,
+      "page_end": 6,
+      "original_section": "C. The river in the third segment has experienced considerable changes in the sediment",
+      "repaired_heading": "A. The\u00a0 river\u00a0 in\u00a0 the\u00a0 upper\u00a0 segment\u00a0 flows\u00a0 on\u00a0 steep\u00a0 and\u00a0 narrow\u00a0 bed,\u00a0 mostly\u00a0 rocks\u00a0 and",
+      "heading_candidates": [
+        "A. The\u00a0 river\u00a0 in\u00a0 the\u00a0 upper\u00a0 segment\u00a0 flows\u00a0 on\u00a0 steep\u00a0 and\u00a0 narrow\u00a0 bed,\u00a0 mostly\u00a0 rocks\u00a0 and",
+        "B. The\u00a0 river\u00a0 in\u00a0 the\u00a0 middle\u00a0 segment\u00a0 enters\u00a0 and\u00a0 flows\u00a0 in\u00a0 plains,\u00a0 meandering\u00a0 mostly\u00a0 on",
+        "C. The\u00a0river\u00a0in\u00a0the\u00a0third\u00a0segment\u00a0has\u00a0experienced\u00a0considerable\u00a0changes\u00a0in\u00a0the\u00a0sediment",
+        "Figure\u00a02:\u00a0 Major\u00a0Tributaries\u00a0of\u00a0River\u00a0Ganga\u00a0(Bhagirathi)\u00a0in\u00a0the\u00a0Upper\u00a0Ganga\u00a0Segment"
+      ],
+      "original_text_excerpt": "Report Code: 001_GBP_IIT_GEN_DAT_01_Ver 1_Dec 2010 6 | Page A. The river in the upper segment flows on steep and narrow bed, mostly rocks and boulders, carries cold water, is subjected to much less anthropogenic pollution, has highly sensitive and fragile ecosystem and biodiversity, and most importantly considered to have potential for harnessing hydropower. B. The river in the middle segment enters and flows in plains, meandering mostly on bed of fine sand, has wide river bed and flood plain, a",
+      "repaired_text_excerpt": "Report Code: 001_GBP_IIT_GEN_DAT_01_Ver 1_Dec 2010 6 | Page A. The river in the upper segment flows on steep and narrow bed, mostly rocks and boulders, carries cold water, is subjected to much less anthropogenic pollution, has highly sensitive and fragile ecosystem and biodiversity, and most importantly considered to have potential for harnessing hydropower. B. The river in the middle segment enters and flows in plains, meandering mostly on bed of fine sand, has wide river bed and flood plain, a",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-020|34_020ENB.pdf|1-3|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-020",
+      "file_name": "34_020ENB.pdf",
+      "page_start": 1,
+      "page_end": 3,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "1 | P a g e Report Code Floral and Faunal Diversity in Upper Ganga Segment Gangotri \u2013 Haridwar (Upstream Bhimgoda Barrage) GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code : 020_GBP_IIT_ENB_ DAT_01_Ver Floral and Faunal Diversity in Upper Ganga Segment Haridwar (Upstream Bhimgoda Barrage) GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes",
+      "repaired_text_excerpt": "1 | P a g e Report Code Floral and Faunal Diversity in Upper Ganga Segment Gangotri \u2013 Haridwar (Upstream Bhimgoda Barrage) GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code : 020_GBP_IIT_ENB_ DAT_01_Ver Floral and Faunal Diversity in Upper Ganga Segment Haridwar (Upstream Bhimgoda Barrage) GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-046|35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf|16-16|i. Define the problem/ scope the issues",
+      "source_id": "GRBMP-TR-046",
+      "file_name": "35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+      "page_start": 16,
+      "page_end": 16,
+      "original_section": "i. Define the problem/ scope the issues",
+      "repaired_heading": "A. Planning stage",
+      "heading_candidates": [
+        "A. Planning stage",
+        "B. Research stage"
+      ],
+      "original_text_excerpt": "Report Code: 070_GBP_IIT_PLG_ANL_06_Ver 1_Dec 2014 16 | P a g e \u2022 Management work in a co-operative work environment, rather than using confrontational and directive management. \u2022 Management encourages commitment in staff rather than using command-and-control management. \u2022 Management empowering the local and regional decision-making rather than centralizing decisions and directive staff. \u2022 Management is based on a problem-solving rather than functionality. \u2022 Management provides appropriate, rele",
+      "repaired_text_excerpt": "Report Code: 070_GBP_IIT_PLG_ANL_06_Ver 1_Dec 2014 16 | P a g e \u2022 Management work in a co-operative work environment, rather than using confrontational and directive management. \u2022 Management encourages commitment in staff rather than using command-and-control management. \u2022 Management empowering the local and regional decision-making rather than centralizing decisions and directive staff. \u2022 Management is based on a problem-solving rather than functionality. \u2022 Management provides appropriate, rele",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-023|38_023EQP.pdf|1-3|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-023",
+      "file_name": "38_023EQP.pdf",
+      "page_start": 1,
+      "page_end": 3,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "1 | P a g e Report Code: 023_GBP_IIT_EQP_ANL_01 Water Quality in the Ganga River and Efficacy of Sewage Treatment Processes in A Case for Adopting Tertiary Treatment GRB EMP : Ganga River Basin Environment Management IIT Bombay IIT Delhi Guwahati Indian Institutes of Technology : 023_GBP_IIT_EQP_ANL_01_ Ver 1_June 2012 Water Quality in the Ganga River and Efficacy of Sewage Treatment Processes in Coliform Removal: A Case for Adopting Tertiary Treatment GRB EMP : Ganga River Basin Environment Man",
+      "repaired_text_excerpt": "1 | P a g e Report Code: 023_GBP_IIT_EQP_ANL_01 Water Quality in the Ganga River and Efficacy of Sewage Treatment Processes in A Case for Adopting Tertiary Treatment GRB EMP : Ganga River Basin Environment Management IIT Bombay IIT Delhi Guwahati Indian Institutes of Technology : 023_GBP_IIT_EQP_ANL_01_ Ver 1_June 2012 Water Quality in the Ganga River and Efficacy of Sewage Treatment Processes in Coliform Removal: A Case for Adopting Tertiary Treatment GRB EMP : Ganga River Basin Environment Man",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-051|38_44_State of Health in the Ganga River Basin.pdf|43-45|PART II: DISAGGREGATED ANALYSIS",
+      "source_id": "GRBMP-TR-051",
+      "file_name": "38_44_State of Health in the Ganga River Basin.pdf",
+      "page_start": 43,
+      "page_end": 45,
+      "original_section": "PART II: DISAGGREGATED ANALYSIS",
+      "repaired_heading": "7. Health Care Infrastructure",
+      "heading_candidates": [
+        "PART II: DISAGGREGATED ANALYSIS",
+        "7. Health Care Infrastructure",
+        "Figure 12: Region-wise Population (\u2018000) served per Sub-centre, PHC, CHC in Uttar",
+        "Figure 13: District- wise Population (\u2018000)",
+        "Figure 14: District- wise Population (\u2018000) Served per Sub",
+        "Figure 15: District-wise Population (\u2018000)"
+      ],
+      "original_text_excerpt": "37 PART II: DISAGGREGATED ANALYSIS In this section, we have made disaggregated (district-wise/region-wise) analysis of data related to healthcare infrastructure, water, sanitation and other health related aspects. Since Uttar Pradesh is very large in terms of area and population, it has been divided into five regions for analysis purpose. All districts of West Bengal and Bihar, however, were bifurcated into River Bank and Non- River Bank districts. 7. Health Care Infrastructure 7.1 Service Infra",
+      "repaired_text_excerpt": "37 PART II: DISAGGREGATED ANALYSIS In this section, we have made disaggregated (district-wise/region-wise) analysis of data related to healthcare infrastructure, water, sanitation and other health related aspects. Since Uttar Pradesh is very large in terms of area and population, it has been divided into five regions for analysis purpose. All districts of West Bengal and Bihar, however, were bifurcated into River Bank and Non- River Bank districts. 7. Health Care Infrastructure 7.1 Service Infra",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-051|38_44_State of Health in the Ganga River Basin.pdf|55-62|WEST BENGAL BIHAR",
+      "source_id": "GRBMP-TR-051",
+      "file_name": "38_44_State of Health in the Ganga River Basin.pdf",
+      "page_start": 55,
+      "page_end": 62,
+      "original_section": "WEST BENGAL BIHAR",
+      "repaired_heading": "Table A9. Among \u2018bank districts \u2019",
+      "heading_candidates": [
+        "WEST BENGAL BIHAR",
+        "Table A9. Among \u2018bank districts \u2019",
+        "Figure 24: Distribution of Households by Main Sources of Latrine, Uttar Pradesh",
+        "Figure 25: Distribution of Households by Main sources of Latrine, Uttarakhand",
+        "Figure 26: Distribution of Households by Main",
+        "Figure 28: Region-wise Distribution of Househo",
+        "Figure 27: Distribution of Households by Main Types of Drainage in Uttarak",
+        "Figure 29: Distribution of Households by Main Types of Drainage in West Bengal",
+        "Figure 30: Distribution of Households by Main Types of Drainage in Bihar (2011)"
+      ],
+      "original_text_excerpt": "49 reported use of bottled water for drinking water . This is rather anamolous and can be attributed to error in sampling or data collection and analysis. WEST BENGAL BIHAR Source: NSS unit level data 60 th round \u2018MORBIDITY AND HEALTH CARE\u2019, 2004 Figure 23 (a, b) : Proportion of Households having \u2018Water Bottles\u2019 as Source of Drinking water within West Bengal and Bihar, 2004 8.2 Access to Toilets Figure 24 shows that in all the regions of Uttar Pradesh, percentage of households without toilet fac",
+      "repaired_text_excerpt": "49 reported use of bottled water for drinking water . This is rather anamolous and can be attributed to error in sampling or data collection and analysis. WEST BENGAL BIHAR Source: NSS unit level data 60 th round \u2018MORBIDITY AND HEALTH CARE\u2019, 2004 Figure 23 (a, b) : Proportion of Households having \u2018Water Bottles\u2019 as Source of Drinking water within West Bengal and Bihar, 2004 8.2 Access to Toilets Figure 24 shows that in all the regions of Uttar Pradesh, percentage of households without toilet fac",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-052|39_Status of Urbanization and Industrialization in West Bengal.pdf|39-41|(MLD)",
+      "source_id": "GRBMP-TR-052",
+      "file_name": "39_Status of Urbanization and Industrialization in West Bengal.pdf",
+      "page_start": 39,
+      "page_end": 41,
+      "original_section": "(MLD)",
+      "repaired_heading": "Table 15: Fly Ash utilization in Ganga River Basin Area of West Bengal",
+      "heading_candidates": [
+        "Table 15: Fly Ash utilization in Ganga River Basin Area of West Bengal",
+        "( MW)"
+      ],
+      "original_text_excerpt": "Report Code: 050_GBP_IIT_SEC_ANL_15_Ver 1_Dec 2013 39 | P a g e Districts Sub-sector Number of Units Materials Produced Effluent Quantity (MLD) BOD after Treatment Howrah Steel, Industrial Glass, Food Products & Floor Mills Aasiatic Oxygen & Acetylene, Berger Paints, Shalimar Paints, Seth Chemical, C & W Workshop Chemical, Paints, Dye, Engineering 25.82 <100 Kolkata Steel Foundry, Engineering Industry & Printing Eastern Distillery, Keshoram Cotton Mill, Stone India, GEC,AEI Works, ESAB India, EL",
+      "repaired_text_excerpt": "Report Code: 050_GBP_IIT_SEC_ANL_15_Ver 1_Dec 2013 39 | P a g e Districts Sub-sector Number of Units Materials Produced Effluent Quantity (MLD) BOD after Treatment Howrah Steel, Industrial Glass, Food Products & Floor Mills Aasiatic Oxygen & Acetylene, Berger Paints, Shalimar Paints, Seth Chemical, C & W Workshop Chemical, Paints, Dye, Engineering 25.82 <100 Kolkata Steel Foundry, Engineering Industry & Printing Eastern Distillery, Keshoram Cotton Mill, Stone India, GEC,AEI Works, ESAB India, EL",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-053|46_032ENB.pdf|10-10|GANGA \u2013A SCIENTIFIC",
+      "source_id": "GRBMP-TR-053",
+      "file_name": "46_032ENB.pdf",
+      "page_start": 10,
+      "page_end": 10,
+      "original_section": "GANGA \u2013A SCIENTIFIC",
+      "repaired_heading": "2006 ) and Gangwar and Gangwar (2011) explored the Ganga",
+      "heading_candidates": [
+        "2006 ) and Gangwar and Gangwar (2011) explored the Ganga",
+        "Figure 3: Riparian flora along Ganga river",
+        "GANGA \u2013A SCIENTIFIC"
+      ],
+      "original_text_excerpt": "10 | P a g e There is no systematic account Ganga. The first written account of journey to Gangotri date Subsequently, Pallis (1934), Auden ( Goel (1982), Groffman et al. (2008), Gangwar and Joshi ( 2006 river biodiversity. In this report effort available on riparian floral diversity. Total 475 riparian species have been STUDY \u201d, edited by Krishanmurti represented riparian flora is presented in medicinal value. Total climbers have total taxa of 55 with 15 number of 317 in which 13 are medicinal ",
+      "repaired_text_excerpt": "10 | P a g e There is no systematic account Ganga. The first written account of journey to Gangotri date Subsequently, Pallis (1934), Auden ( Goel (1982), Groffman et al. (2008), Gangwar and Joshi ( 2006 river biodiversity. In this report effort available on riparian floral diversity. Total 475 riparian species have been STUDY \u201d, edited by Krishanmurti represented riparian flora is presented in medicinal value. Total climbers have total taxa of 55 with 15 number of 317 in which 13 are medicinal ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-056|47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf|87-93|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-056",
+      "file_name": "47_62_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Bihar.pdf",
+      "page_start": 87,
+      "page_end": 93,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "87 | P a g e Appendix-3 Compilation of the total sewage discharge through point sources in river Ganga basin (Adopted from CPCB, 2013) 88 | P a g e State Region Name of the Drains Discharge Remark Uttarakhand Uttarkashi &Devprayag 1 Storm Water Drain Uttarkashi 1.73 Domestic, industrial wastewater 2 Kodianala, Devprayag 1.73 Rishikesh 1 Triveni Drain/ SaraswatiNala 11.5 2 Rambha nadi/drain 152 3 LakkarGhat STP Drain 12 4 IDPL- STP Drain 3 5 Swarg Ashram STP Drain 2.5 6 GadhiShyampur Drain 0 Hari",
+      "repaired_text_excerpt": "87 | P a g e Appendix-3 Compilation of the total sewage discharge through point sources in river Ganga basin (Adopted from CPCB, 2013) 88 | P a g e State Region Name of the Drains Discharge Remark Uttarakhand Uttarkashi &Devprayag 1 Storm Water Drain Uttarkashi 1.73 Domestic, industrial wastewater 2 Kodianala, Devprayag 1.73 Rishikesh 1 Triveni Drain/ SaraswatiNala 11.5 2 Rambha nadi/drain 152 3 LakkarGhat STP Drain 12 4 IDPL- STP Drain 3 5 Swarg Ashram STP Drain 2.5 6 GadhiShyampur Drain 0 Hari",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-057|47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf|14-14|c) The maintenance of ecological processes: To maintain river health, in",
+      "source_id": "GRBMP-TR-057",
+      "file_name": "47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf",
+      "page_start": 14,
+      "page_end": 14,
+      "original_section": "c) The maintenance of ecological processes: To maintain river health, in",
+      "repaired_heading": "3.4. Environmental Flows",
+      "heading_candidates": [
+        "3.4. Environmental Flows"
+      ],
+      "original_text_excerpt": "8 a) The diversity of the habitats, flora and fauna: Rivers and streams support a huge diversity of life. This is to a large extent because they provide a great range of habitats and link aquatic and terrestrial ecosystems. At the broader scale, river habitats include the river channels, the riverside (or riparian) vegetation, the floodplains, wetlands and lakes. Sustaining this diverse range of habitats and the species they support is a key component to maintaining the ecological health of a ri",
+      "repaired_text_excerpt": "8 a) The diversity of the habitats, flora and fauna: Rivers and streams support a huge diversity of life. This is to a large extent because they provide a great range of habitats and link aquatic and terrestrial ecosystems. At the broader scale, river habitats include the river channels, the riverside (or riparian) vegetation, the floodplains, wetlands and lakes. Sustaining this diverse range of habitats and the species they support is a key component to maintaining the ecological health of a ri",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "HIGH",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "DETERMINISTIC_REPAIR_CANDIDATE"
+    },
+    {
+      "section_id": "GRBMP-TR-025|48_008PLG.pdf|1-3|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-025",
+      "file_name": "48_008PLG.pdf",
+      "page_start": 1,
+      "page_end": 3,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "GRB EMP"
+      ],
+      "original_text_excerpt": "Report Code Mapping of Policy Instruments and for Environmental Clearance of Hydropower Projects in Upper Ganga Segment GRB EMP Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code: 008_GBP_IIT_PLG_ANL_02_Ver 1_ Mapping of Policy Instruments and Governance Agencies for Environmental Clearance of Hydropower Projects in Upper Ganga Segment GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras",
+      "repaired_text_excerpt": "Report Code Mapping of Policy Instruments and for Environmental Clearance of Hydropower Projects in Upper Ganga Segment GRB EMP Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code: 008_GBP_IIT_PLG_ANL_02_Ver 1_ Mapping of Policy Instruments and Governance Agencies for Environmental Clearance of Hydropower Projects in Upper Ganga Segment GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-026|49_017SEC.pdf|55-62|(VOP)",
+      "source_id": "GRBMP-TR-026",
+      "file_name": "49_017SEC.pdf",
+      "page_start": 55,
+      "page_end": 62,
+      "original_section": "(VOP)",
+      "repaired_heading": "CAGR 8.47* 8.81* 7.67* -0.31 1.47* 2.96* 0.24 -8.20*",
+      "heading_candidates": [
+        "CAGR 8.47* 8.81* 7.67* -0.31 1.47* 2.96* 0.24 -8.20*",
+        "R-2 0.59",
+        "N 17"
+      ],
+      "original_text_excerpt": "Report Code : 017_GBP_IIT_SEC_ANL_03_Ver 1_Dec 2011 55 | P a g e Uttar Pradesh alone has the potential to produce about 25 million tons of additional sugarcane production if the improved farm practices are followed. Table8: Cost and Returns from Sugarcane Crop (Rs./ha) Year Value of Output (VOP) Cost of cultivation (C2) Net income Ratio of VOP to C2 Yield Q/ha Chem. Fertilizer kg/ha Human labour hours/ha Draught power hrs/ha 1990-91 18081 10965 7116 1.65 452 119 1266 60 1991-92 18102 11299 6803 ",
+      "repaired_text_excerpt": "Report Code : 017_GBP_IIT_SEC_ANL_03_Ver 1_Dec 2011 55 | P a g e Uttar Pradesh alone has the potential to produce about 25 million tons of additional sugarcane production if the improved farm practices are followed. Table8: Cost and Returns from Sugarcane Crop (Rs./ha) Year Value of Output (VOP) Cost of cultivation (C2) Net income Ratio of VOP to C2 Yield Q/ha Chem. Fertilizer kg/ha Human labour hours/ha Draught power hrs/ha 1990-91 18081 10965 7116 1.65 452 119 1266 60 1991-92 18102 11299 6803 ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-003|4_013EQP.pdf|1-3|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-003",
+      "file_name": "4_013EQP.pdf",
+      "page_start": 1,
+      "page_end": 3,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Report Code Emerging Contaminants with Special Emphasis on Pesticides GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code : 013_GBP_IIT_EQP_SOA_02_V er Emerging Contaminants in Ganga River Basin with Special Emphasis on Pesticides GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology er 1_Dec 2011 Emerging Contaminants in Ganga Ri",
+      "repaired_text_excerpt": "Report Code Emerging Contaminants with Special Emphasis on Pesticides GRB EMP : Ganga River Basin Environment Management Plan IIT Bombay IIT Delhi IIT Guwahati Indian Institutes of Technology Report Code : 013_GBP_IIT_EQP_SOA_02_V er Emerging Contaminants in Ganga River Basin with Special Emphasis on Pesticides GRB EMP : Ganga River Basin Environment Management Plan by IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras Indian Institutes of Technology er 1_Dec 2011 Emerging Contaminants in Ganga Ri",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|47-47|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 47,
+      "page_end": 47,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "47 | P a g e",
+      "repaired_text_excerpt": "47 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|50-50|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 50,
+      "page_end": 50,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "50 | P a g e",
+      "repaired_text_excerpt": "50 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|52-52|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 52,
+      "page_end": 52,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "52 | P a g e",
+      "repaired_text_excerpt": "52 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|55-55|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 55,
+      "page_end": 55,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "55 | P a g e",
+      "repaired_text_excerpt": "55 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|58-58|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 58,
+      "page_end": 58,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "58 | P a g e",
+      "repaired_text_excerpt": "58 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|60-60|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 60,
+      "page_end": 60,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "60 | P a g e",
+      "repaired_text_excerpt": "60 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|65-65|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 65,
+      "page_end": 65,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "65 | P a g e",
+      "repaired_text_excerpt": "65 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|67-67|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 67,
+      "page_end": 67,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "67 | P a g e",
+      "repaired_text_excerpt": "67 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|69-69|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 69,
+      "page_end": 69,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "69 | P a g e",
+      "repaired_text_excerpt": "69 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|76-76|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 76,
+      "page_end": 76,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "76 | P a g e",
+      "repaired_text_excerpt": "76 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|78-78|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 78,
+      "page_end": 78,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "78 | P a g e",
+      "repaired_text_excerpt": "78 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|80-80|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 80,
+      "page_end": 80,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "80 | P a g e",
+      "repaired_text_excerpt": "80 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|82-82|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 82,
+      "page_end": 82,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "82 | P a g e",
+      "repaired_text_excerpt": "82 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|84-84|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 84,
+      "page_end": 84,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "84 | P a g e",
+      "repaired_text_excerpt": "84 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|86-86|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 86,
+      "page_end": 86,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "86 | P a g e",
+      "repaired_text_excerpt": "86 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|88-88|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 88,
+      "page_end": 88,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "88 | P a g e",
+      "repaired_text_excerpt": "88 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|90-90|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 90,
+      "page_end": 90,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "90 | P a g e",
+      "repaired_text_excerpt": "90 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|92-92|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 92,
+      "page_end": 92,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "92 | P a g e",
+      "repaired_text_excerpt": "92 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|94-94|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 94,
+      "page_end": 94,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "94 | P a g e",
+      "repaired_text_excerpt": "94 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|96-96|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 96,
+      "page_end": 96,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "96 | P a g e",
+      "repaired_text_excerpt": "96 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|98-98|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 98,
+      "page_end": 98,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "98 | P a g e",
+      "repaired_text_excerpt": "98 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|100-100|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 100,
+      "page_end": 100,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "100 | P a g e",
+      "repaired_text_excerpt": "100 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|102-102|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 102,
+      "page_end": 102,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "102 | P a g e",
+      "repaired_text_excerpt": "102 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|105-105|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 105,
+      "page_end": 105,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "105 | P a g e",
+      "repaired_text_excerpt": "105 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|110-110|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 110,
+      "page_end": 110,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "110 | P a g e .",
+      "repaired_text_excerpt": "110 | P a g e .",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|112-112|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 112,
+      "page_end": 112,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "112 | P a g e",
+      "repaired_text_excerpt": "112 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|115-115|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 115,
+      "page_end": 115,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "115 | P a g e",
+      "repaired_text_excerpt": "115 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-059|53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf|117-117|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-059",
+      "file_name": "53_60_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Uttar Pradesh.pdf",
+      "page_start": 117,
+      "page_end": 117,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "117 | P a g e",
+      "repaired_text_excerpt": "117 | P a g e",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-029|54_011PLG.pdf|39-39|ii) to extend, expand and develop existing facilities and to construct and operate new",
+      "source_id": "GRBMP-TR-029",
+      "file_name": "54_011PLG.pdf",
+      "page_start": 39,
+      "page_end": 39,
+      "original_section": "ii) to extend, expand and develop existing facilities and to construct and operate new",
+      "repaired_heading": "1) The Board of directors so constituting the Authority shall appoint an Engineer as",
+      "heading_candidates": [
+        "1) The Board of directors so constituting the Authority shall appoint an Engineer as",
+        "2) The Board shall appoint for the Authority a General Manager, who shall have",
+        "3) The General Manager shall be the chief executive officer of the Authority who shall",
+        "4) The Board may appoint such other officers and employees as it considers necessary"
+      ],
+      "original_text_excerpt": "Report Code: 011_GBP_IIT_PLG_DAT_01_Ver 1_Dec 2011 39 | P a g e d) Powers granted under the law Under section 9 of the Act the clauses granting powers to Authority relating to sanitation arei) to take over all existing municipal responsibilities, powers, controls, facilities, services, and administration within the District relating to water-supply, sewerage, drainage, and collection and disposal of night-soil and to manage them so as to provide all the people of the area with water, sewerage an",
+      "repaired_text_excerpt": "Report Code: 011_GBP_IIT_PLG_DAT_01_Ver 1_Dec 2011 39 | P a g e d) Powers granted under the law Under section 9 of the Act the clauses granting powers to Authority relating to sanitation arei) to take over all existing municipal responsibilities, powers, controls, facilities, services, and administration within the District relating to water-supply, sewerage, drainage, and collection and disposal of night-soil and to manage them so as to provide all the people of the area with water, sewerage an",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-029|54_011PLG.pdf|51-51|i) When drainage works necessary, Government may order scheme to be drawn up",
+      "source_id": "GRBMP-TR-029",
+      "file_name": "54_011PLG.pdf",
+      "page_start": 51,
+      "page_end": 51,
+      "original_section": "i) When drainage works necessary, Government may order scheme to be drawn up",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Report Code: 011_GBP_IIT_PLG_DAT_01_Ver 1_Dec 2011 51 | P a g e person shall be entitled to claim any further compensation in respect of the said deterioration or diminution. e) Power to inspect and regulate water-supply Under Section 34, such canal-officer or other person may also enter upon any land, building or village-channel on account of which any water-rate is chargeable for the purpose of inspecting or regulating the use of the water supplied, or of measuring the lands irrigated thereby ",
+      "repaired_text_excerpt": "Report Code: 011_GBP_IIT_PLG_DAT_01_Ver 1_Dec 2011 51 | P a g e person shall be entitled to claim any further compensation in respect of the said deterioration or diminution. e) Power to inspect and regulate water-supply Under Section 34, such canal-officer or other person may also enter upon any land, building or village-channel on account of which any water-rate is chargeable for the purpose of inspecting or regulating the use of the water supplied, or of measuring the lands irrigated thereby ",
+      "repair_reason": "BODY_FRAGMENT_AS_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-030|55_015SEC.pdf|27-27|GRB, 1962-65",
+      "source_id": "GRBMP-TR-030",
+      "file_name": "55_015SEC.pdf",
+      "page_start": 27,
+      "page_end": 27,
+      "original_section": "GRB, 1962-65",
+      "repaired_heading": "Figure 20: Average use of tractors (per thousand hectare of net sown area) per district in",
+      "heading_candidates": [
+        "Figure 20: Average use of tractors (per thousand hectare of net sown area) per district in",
+        "GRB, 1962-65",
+        "Figure 21: Average use of pump-sets (per thousand hectares of net sown area) per"
+      ],
+      "original_text_excerpt": "Report Code : 015_GBP_IIT_SEC_ANL_01_Ver 1_Dec 2011 27 | P a g e content of the soil rich and refreshing. So was the relief provided by the increasing use of diesel-based/electric pump-sets to take out the ground water, especially when the rain water falls deficient. In this regard, it would be interesting to have a look at the growth of these power-based equipments in the Ganga River Basin area. Figures 20 and 21 demonstrate the growth pattern in the average use of tractors and pump-sets per di",
+      "repaired_text_excerpt": "Report Code : 015_GBP_IIT_SEC_ANL_01_Ver 1_Dec 2011 27 | P a g e content of the soil rich and refreshing. So was the relief provided by the increasing use of diesel-based/electric pump-sets to take out the ground water, especially when the rain water falls deficient. In this regard, it would be interesting to have a look at the growth of these power-based equipments in the Ganga River Basin area. Figures 20 and 21 demonstrate the growth pattern in the average use of tractors and pump-sets per di",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-064|57_030ENB.pdf|12-15|030_GBP_IIT_ENB_DAT_08_",
+      "source_id": "GRBMP-TR-064",
+      "file_name": "57_030ENB.pdf",
+      "page_start": 12,
+      "page_end": 15,
+      "original_section": "030_GBP_IIT_ENB_DAT_08_",
+      "repaired_heading": "S. plagiostomus, S. richardsonii, S. sinuatus , S. niger",
+      "heading_candidates": [
+        "S. plagiostomus, S. richardsonii, S. sinuatus , S. niger",
+        "2) is inhabited by hill stream fishes. The",
+        "S. niger , S. micropogan",
+        "Figure 1a: The distribution of fish families i",
+        "Figure 1b: The distributio",
+        "Figure 2: Family wise distribution of fishes in th e middle Ganga"
+      ],
+      "original_text_excerpt": "12 | P a g e The reach between Gangnani to Devprayag (UG most prominent, being snow of both the genera have been reported out of which seven species of Schizothorax curvifrons , S. plagiostomus, and S. intermedius and two species of prominent. Other fishes reported are (1 sp.), Labeo (2 sp.), Tor (3 sp.), Nemacheilus (6 sp.). The snow t of this stretch of Ganga . The population of some hill stream fishes (UG wintering (Snow trout) has been severely impeded by a series of hydro flow conditions in",
+      "repaired_text_excerpt": "12 | P a g e The reach between Gangnani to Devprayag (UG most prominent, being snow of both the genera have been reported out of which seven species of Schizothorax curvifrons , S. plagiostomus, and S. intermedius and two species of prominent. Other fishes reported are (1 sp.), Labeo (2 sp.), Tor (3 sp.), Nemacheilus (6 sp.). The snow t of this stretch of Ganga . The population of some hill stream fishes (UG wintering (Snow trout) has been severely impeded by a series of hydro flow conditions in",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-064|57_030ENB.pdf|21-21|030_GBP_IIT_ENB_DAT_08_",
+      "source_id": "GRBMP-TR-064",
+      "file_name": "57_030ENB.pdf",
+      "page_start": 21,
+      "page_end": 21,
+      "original_section": "030_GBP_IIT_ENB_DAT_08_",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "21 | P a g e Exotic fishes Ctenopharyngdon idella Cyprinus carpio Hypophthalmichthys molitrix Aristichthys nobilis Oreochromis niloticus Plate 5: Some exotic and commercially important fishes of Hooghly estuary 030_GBP_IIT_ENB_DAT_08_ Hooghly estuary fishes Ctenopharyngdon idella Ilisha elongate Setipinna p hasa Hypophthalmichthys molitrix Hilsa ilisha Aristichthys nobilis Tachysurus jella Oreochromis niloticus Harpodon nehereus Some exotic and commercially important fishes of Hooghly estuary _G",
+      "repaired_text_excerpt": "21 | P a g e Exotic fishes Ctenopharyngdon idella Cyprinus carpio Hypophthalmichthys molitrix Aristichthys nobilis Oreochromis niloticus Plate 5: Some exotic and commercially important fishes of Hooghly estuary 030_GBP_IIT_ENB_DAT_08_ Hooghly estuary fishes Ctenopharyngdon idella Ilisha elongate Setipinna p hasa Hypophthalmichthys molitrix Hilsa ilisha Aristichthys nobilis Tachysurus jella Oreochromis niloticus Harpodon nehereus Some exotic and commercially important fishes of Hooghly estuary _G",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-064|57_030ENB.pdf|25-29|030_GBP_IIT_ENB_DAT_08_",
+      "source_id": "GRBMP-TR-064",
+      "file_name": "57_030ENB.pdf",
+      "page_start": 25,
+      "page_end": 29,
+      "original_section": "030_GBP_IIT_ENB_DAT_08_",
+      "repaired_heading": "Figure 5: Fish landing at var",
+      "heading_candidates": [
+        "Figure 5: Fish landing at var",
+        "Table 5: Market arrivals (tons) of major carps (MC), selected catfishes (CF), Hilsa (H) and other (O)",
+        "Table 6: Change in the catch composition downstream from Allahabad between 1958 and 1994",
+        "MC 38.0 29.0 21.6 16.4 26.5 4.0",
+        "CF 22.6 23.7 21.8 44.3 17.5 7.5",
+        "H 9.4 4.9 1.3 0.1 12.1 0.6",
+        "O 30.0 42.2 55.5 39.2 43.9 87.9",
+        "Table 7: Fish landing (m tons) at different centres (compiled from CIFRI Reports: 1961-2010)",
+        "Figure 6: The trend in fish yield (kg/ha) from",
+        "Figure 7: Average annual yield (tons) of major",
+        "Figure 8: Average annual yield (tons) of catfishes",
+        "Figure 9: Average annual yield (tons) of Hilsa",
+        "Figure 10: Annual average yield (tons) of miscellaneous fishes from",
+        "Table 8: Catch composition (%) at Lalgola, pre and post Farakka period",
+        "Table 9: Market arrivals (tons) of major carps (MC), selected catfishes (CF), Hilsa (H) and other (O)"
+      ],
+      "original_text_excerpt": "25 | P a g e There is paucity of data at many centres and pie diagram (Figure 4a) and bar diagram (Figure were available for almost the entire period whereas f very little and it does not show up 6.2 Catch composition The fish yield of major C arps and other 1968-69 was reported by Jhing change in the catch composition at Allahabad and Pa tna between 1958 and 1994 was reported by Payne et al. (2003) (Table 6 Barrackpore, for Kanpur during the period Buxar upto 1985-89, Patna upto in Table 5. The",
+      "repaired_text_excerpt": "25 | P a g e There is paucity of data at many centres and pie diagram (Figure 4a) and bar diagram (Figure were available for almost the entire period whereas f very little and it does not show up 6.2 Catch composition The fish yield of major C arps and other 1968-69 was reported by Jhing change in the catch composition at Allahabad and Pa tna between 1958 and 1994 was reported by Payne et al. (2003) (Table 6 Barrackpore, for Kanpur during the period Buxar upto 1985-89, Patna upto in Table 5. The",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-064|57_030ENB.pdf|40-41|LGB",
+      "source_id": "GRBMP-TR-064",
+      "file_name": "57_030ENB.pdf",
+      "page_start": 40,
+      "page_end": 41,
+      "original_section": "LGB",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "030_GBP_IIT_ENB_DAT_08_Ver 1_Jun 2012 40 | P a g e LGB Protococcus, Schroederia, Selenastrum, Scenedesmus, Sorastrum, Sphaeroplea, Spirogyra, Stigeoclonium, Tetraedron, Treubaria, Ulothrix, Volvox, Zygnema Bambusina, Boodleopsis, Chaetomorpha, Chara, Chlore lla, Cladophora, Cladophorella, Closterium, Cosmarium, Desmidium, Dicty osphaerium, Enteromorpha, Euastrum, Eudorina, Franceia, Gonatozy gon, Heterosiphonia, Hyalotheca, Lola, Micrasterias, Netrium, Nitella, Oe dogonium, Onychonema, Pediastru",
+      "repaired_text_excerpt": "030_GBP_IIT_ENB_DAT_08_Ver 1_Jun 2012 40 | P a g e LGB Protococcus, Schroederia, Selenastrum, Scenedesmus, Sorastrum, Sphaeroplea, Spirogyra, Stigeoclonium, Tetraedron, Treubaria, Ulothrix, Volvox, Zygnema Bambusina, Boodleopsis, Chaetomorpha, Chara, Chlore lla, Cladophora, Cladophorella, Closterium, Cosmarium, Desmidium, Dicty osphaerium, Enteromorpha, Euastrum, Eudorina, Franceia, Gonatozy gon, Heterosiphonia, Hyalotheca, Lola, Micrasterias, Netrium, Nitella, Oe dogonium, Onychonema, Pediastru",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-064|57_030ENB.pdf|52-52|ANGUILLIDAE",
+      "source_id": "GRBMP-TR-064",
+      "file_name": "57_030ENB.pdf",
+      "page_start": 52,
+      "page_end": 52,
+      "original_section": "ANGUILLIDAE",
+      "repaired_heading": "N. chitala*",
+      "heading_candidates": [
+        "N. chitala*",
+        "A. chacunda",
+        "I. feligera",
+        "I. megaloptera",
+        "C. ramcorti",
+        "C. reynalidy",
+        "S. taty",
+        "S. brevifilis",
+        "C. reba*",
+        "D. dangila",
+        "L. calbasu*",
+        "L. rohita*",
+        "P. sarana sarana*",
+        "P. sophore*",
+        "P. ticto*",
+        "B. dario*",
+        "M. cavasius",
+        "M. gulio*",
+        "S. seenghala*",
+        "O. pabo*",
+        "O. pabda*",
+        "A. gagora",
+        "A. jella",
+        "A. sagar",
+        "A. sona",
+        "A. commersoni",
+        "P. lala*",
+        "S. insidiator",
+        "G. oyena",
+        "L. argenti maculates",
+        "C. lalius",
+        "T. cirraatus"
+      ],
+      "original_text_excerpt": "030_GBP_IIT_ENB_DAT_08_Ver 1_Jun 2012 52 | P a g e Appendix-III Combined list of fishes from the estuary: ANGUILLIDAE Anguilla bengalensis* OPHICHTHDAE Psidodonophis boro NOTOPTERIDAE Notopterus notopterus* N. chitala* CLUPEIDAE Andontostaoma manmina A. chacunda Corica soborna Gadusia chapra* Gonealosa manmina* Hilsa kelee Sardinella melanura Tenualosa ilisha* CHIROCENTRIDAE Chirocentrus dorab PRISTIGASTERIDAE Ilisha elongata I. feligera I. megaloptera Raconda russeliana ENGRAULIDAE Coilia dussu",
+      "repaired_text_excerpt": "030_GBP_IIT_ENB_DAT_08_Ver 1_Jun 2012 52 | P a g e Appendix-III Combined list of fishes from the estuary: ANGUILLIDAE Anguilla bengalensis* OPHICHTHDAE Psidodonophis boro NOTOPTERIDAE Notopterus notopterus* N. chitala* CLUPEIDAE Andontostaoma manmina A. chacunda Corica soborna Gadusia chapra* Gonealosa manmina* Hilsa kelee Sardinella melanura Tenualosa ilisha* CHIROCENTRIDAE Chirocentrus dorab PRISTIGASTERIDAE Ilisha elongata I. feligera I. megaloptera Raconda russeliana ENGRAULIDAE Coilia dussu",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-064|57_030ENB.pdf|53-56|STROMATEIDAE",
+      "source_id": "GRBMP-TR-064",
+      "file_name": "57_030ENB.pdf",
+      "page_start": 53,
+      "page_end": 56,
+      "original_section": "STROMATEIDAE",
+      "repaired_heading": "U. Sulphureus",
+      "heading_candidates": [
+        "U. Sulphureus",
+        "T. savala",
+        "J. gangeticus",
+        "P. argenteus",
+        "L. tade",
+        "L. macrolepis",
+        "M. pancalus",
+        "M. puncalus",
+        "C. orientalis*",
+        "C. punctatus*",
+        "C. striatus*",
+        "C. cyanoglossus",
+        "C. lingua"
+      ],
+      "original_text_excerpt": "030_GBP_IIT_ENB_DAT_08_Ver 1_Jun 2012 53 | P a g e STROMATEIDAE Pompus argenteus Stromateus cinereus EPHIPPIDIDAE Drepene punctata MULLIDAE Parupeneus indicus Upeneus vittatus U. Sulphureus TERAPONIDAE Terapon jarbua Terapon theraps TRITURIDAE Triturus haumala T. savala SCIAENIDAE Johinus coitor J. gangeticus Pama pama* Otolithoides biauritus Sciaena biauritus LOBOTIDAE Lobotes surinamensis HAEMULIDAE Pomadasys maculatus P. argenteus SPARIDAE Acanthopagrus latus CICHLIDAE Oreochromis nloticus MU",
+      "repaired_text_excerpt": "030_GBP_IIT_ENB_DAT_08_Ver 1_Jun 2012 53 | P a g e STROMATEIDAE Pompus argenteus Stromateus cinereus EPHIPPIDIDAE Drepene punctata MULLIDAE Parupeneus indicus Upeneus vittatus U. Sulphureus TERAPONIDAE Terapon jarbua Terapon theraps TRITURIDAE Triturus haumala T. savala SCIAENIDAE Johinus coitor J. gangeticus Pama pama* Otolithoides biauritus Sciaena biauritus LOBOTIDAE Lobotes surinamensis HAEMULIDAE Pomadasys maculatus P. argenteus SPARIDAE Acanthopagrus latus CICHLIDAE Oreochromis nloticus MU",
+      "repair_reason": "REFERENCE_OR_SYMBOL_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-065|57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf|1-1|Unidentified extracted structure",
+      "source_id": "GRBMP-TR-065",
+      "file_name": "57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf",
+      "page_start": 1,
+      "page_end": 1,
+      "original_section": "Unidentified extracted structure",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "Policy and Governance Issues in Urban Water and Sanitation Sector A review and lessons for Ganga Basin GRBMP : Ganga River Basin Management Plan by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee Indian Institutes of Technology",
+      "repaired_text_excerpt": "Policy and Governance Issues in Urban Water and Sanitation Sector A review and lessons for Ganga Basin GRBMP : Ganga River Basin Management Plan by IIT Bombay IIT Delhi IIT Guwahati IIT Kanpur IIT Kharagpur IIT Madras IIT Roorkee Indian Institutes of Technology",
+      "repair_reason": "MISSING_OR_GENERIC_HEADING",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-065|57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf|39-39|(UWSS, 2012)",
+      "source_id": "GRBMP-TR-065",
+      "file_name": "57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf",
+      "page_start": 39,
+      "page_end": 39,
+      "original_section": "(UWSS, 2012)",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "(UWSS, 2012)"
+      ],
+      "original_text_excerpt": "39 Appendix II \u2013 Case Studies from literature review S.No. Case Type of PSP Purpose Features 1 Delhi Water Supply & Sewerage Project, Delhi Jal Board Management Contract Domestic & Commercial Delhi Jal Board had invited pre-qualification bids for management contract for Water Supply & Sanitation in operation zones South II & III on 12 Feb. 2005. The population served in these two zones is respectively, 8,00,000 & 6,00,000. DJB had short listed 4 water companies for management contracts - Suez, S",
+      "repaired_text_excerpt": "39 Appendix II \u2013 Case Studies from literature review S.No. Case Type of PSP Purpose Features 1 Delhi Water Supply & Sewerage Project, Delhi Jal Board Management Contract Domestic & Commercial Delhi Jal Board had invited pre-qualification bids for management contract for Water Supply & Sanitation in operation zones South II & III on 12 Feb. 2005. The population served in these two zones is respectively, 8,00,000 & 6,00,000. DJB had short listed 4 water companies for management contracts - Suez, S",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-TR-065|57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf|40-41|(NMC)",
+      "source_id": "GRBMP-TR-065",
+      "file_name": "57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf",
+      "page_start": 40,
+      "page_end": 41,
+      "original_section": "(NMC)",
+      "repaired_heading": null,
+      "heading_candidates": [],
+      "original_text_excerpt": "40 4 Belgaum, Gulbarga and Hubli-Dharwad - Karnataka Management Contract Urban Water Supply Govt. of India has received a loan of US$ 39.5 million from the World Bank to finance Karnataka Urban Water Sector Improvement Project (KUWASIP). As a part of this, privatisation of operation and maintanence of selected demonstration zones in the towns of Belgaum, Gulbarga and Hubli-Dharwad. The total project cost is about Rs. 235.10 crores, of which the World Bank contribution is Rs. 181.70 crores and of",
+      "repaired_text_excerpt": "40 4 Belgaum, Gulbarga and Hubli-Dharwad - Karnataka Management Contract Urban Water Supply Govt. of India has received a loan of US$ 39.5 million from the World Bank to finance Karnataka Urban Water Sector Improvement Project (KUWASIP). As a part of this, privatisation of operation and maintanence of selected demonstration zones in the towns of Belgaum, Gulbarga and Hubli-Dharwad. The total project cost is about Rs. 235.10 crores, of which the World Bank contribution is Rs. 181.70 crores and of",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|9-9|EXAMPLE-1",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 9,
+      "page_end": 9,
+      "original_section": "EXAMPLE-1",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "THE GANGA",
+        "1.08 MILLION",
+        "OVER 625 MILLION"
+      ],
+      "original_text_excerpt": "citations on river Ganga are presented as follows: EXAMPLE-1 Ganga River\u2019s water quality in ancient literature Ganga river\u2019s water quality had been acclaimed in ancient times. its life-giving and healing qualities are evident from the following description in (~300 ad) meaning \u201cthe qualities of Ganga water are: coolness, sweetness, transparency, high tonic property, wholesomeness, potability, ability to remove evils, ability to resuscitate from swoon caused by dehydration, digestive property and",
+      "repaired_text_excerpt": "citations on river Ganga are presented as follows: EXAMPLE-1 Ganga River\u2019s water quality in ancient literature Ganga river\u2019s water quality had been acclaimed in ancient times. its life-giving and healing qualities are evident from the following description in (~300 ad) meaning \u201cthe qualities of Ganga water are: coolness, sweetness, transparency, high tonic property, wholesomeness, potability, ability to remove evils, ability to resuscitate from swoon caused by dehydration, digestive property and",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|85-85|IWIS \u2022 2017 5756 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 85,
+      "page_end": 85,
+      "original_section": "IWIS \u2022 2017 5756 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 5756 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 5756 IWIS \u2022 2017 A1.1. PRobING THoUGHTS India\u2019s wastewater generation has been increasing rapidly over the past decades with increasing industrial and urban activities. This has led to the growing problem of protecting the environment from being overloaded by sewage discharges from urban centers. The main control mechanism adopted in India to tackle this problem has been to prescribe increasingly stringent standards of wastewater release into inland areas. But these standards prescri",
+      "repaired_text_excerpt": "IWIS \u2022 2017 5756 IWIS \u2022 2017 A1.1. PRobING THoUGHTS India\u2019s wastewater generation has been increasing rapidly over the past decades with increasing industrial and urban activities. This has led to the growing problem of protecting the environment from being overloaded by sewage discharges from urban centers. The main control mechanism adopted in India to tackle this problem has been to prescribe increasingly stringent standards of wastewater release into inland areas. But these standards prescri",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|87-87|IWIS \u2022 2017 6160 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 87,
+      "page_end": 87,
+      "original_section": "IWIS \u2022 2017 6160 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 6160 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 6160 IWIS \u2022 2017 A2.1. PRobING THoUGHTS The agriculture sector in India is vital not only for the nation\u2019s food security, but also because it provides direct and indirect employment and livelihood to more than half the country\u2019s population. Its contribution to the nation\u2019s GDP , however, is less than even 20%. And, yet, in terms of natural resource use, agriculture occupies the greater part of India\u2019s land area and consumes nearly 85% of water every year. Moreover, India\u2019s agricultur",
+      "repaired_text_excerpt": "IWIS \u2022 2017 6160 IWIS \u2022 2017 A2.1. PRobING THoUGHTS The agriculture sector in India is vital not only for the nation\u2019s food security, but also because it provides direct and indirect employment and livelihood to more than half the country\u2019s population. Its contribution to the nation\u2019s GDP , however, is less than even 20%. And, yet, in terms of natural resource use, agriculture occupies the greater part of India\u2019s land area and consumes nearly 85% of water every year. Moreover, India\u2019s agricultur",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|89-89|IWIS \u2022 2017 6564 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 89,
+      "page_end": 89,
+      "original_section": "IWIS \u2022 2017 6564 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 6564 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 6564 IWIS \u2022 2017 A3.1. PRobING THoUGHTS One of the significant ecosystem services provided by rivers is the removal of wastes or excess materials accumulating in the basin and their eventual transport in the sea. Every river has a natural capacity to carry such wastes, and we take advantage of this function in many ways. However, one type of waste that is often overlooked is soluble solids or salts generated from various activities in terrestrial environment. The removal of excess sa",
+      "repaired_text_excerpt": "IWIS \u2022 2017 6564 IWIS \u2022 2017 A3.1. PRobING THoUGHTS One of the significant ecosystem services provided by rivers is the removal of wastes or excess materials accumulating in the basin and their eventual transport in the sea. Every river has a natural capacity to carry such wastes, and we take advantage of this function in many ways. However, one type of waste that is often overlooked is soluble solids or salts generated from various activities in terrestrial environment. The removal of excess sa",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|93-93|IWIS \u2022 2017 7372 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 93,
+      "page_end": 93,
+      "original_section": "IWIS \u2022 2017 7372 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 7372 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 7372 IWIS \u2022 2017 \u2022 Delivering on Sustainable Hydropower \u2013 Run of the River and E-Flows \u2022 Developing Canals and Urban Natural Drains for Recreation and Surface Transport \u2022 Urban River Management and Interlinking of Water Bodies at City Scale \u2022 Compact/Packaged Wastewater and Solid Waste Treatment Solutions SESSIoN B Tehri Reservoir, Uttarakhand",
+      "repaired_text_excerpt": "IWIS \u2022 2017 7372 IWIS \u2022 2017 \u2022 Delivering on Sustainable Hydropower \u2013 Run of the River and E-Flows \u2022 Developing Canals and Urban Natural Drains for Recreation and Surface Transport \u2022 Urban River Management and Interlinking of Water Bodies at City Scale \u2022 Compact/Packaged Wastewater and Solid Waste Treatment Solutions SESSIoN B Tehri Reservoir, Uttarakhand",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|96-96|IWIS \u2022 2017 7978 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 96,
+      "page_end": 96,
+      "original_section": "IWIS \u2022 2017 7978 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 7978 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 7978 IWIS \u2022 2017 B2.1. PRoBINg THoUgHTS Canal irrigation has been a major factor in India\u2019s agricultural growth since the nineteenth century. The Ganga river basin itself has a huge network of canals in North India. Other major rivers like the Narmada, Brahmaputra, Godavari, Kaveri and Krishna also irrigate vast agricultural tracts through their canal networks. But canal waters are used not only for irrigation; they are also tapped by industries and municipalities (for urban water su",
+      "repaired_text_excerpt": "IWIS \u2022 2017 7978 IWIS \u2022 2017 B2.1. PRoBINg THoUgHTS Canal irrigation has been a major factor in India\u2019s agricultural growth since the nineteenth century. The Ganga river basin itself has a huge network of canals in North India. Other major rivers like the Narmada, Brahmaputra, Godavari, Kaveri and Krishna also irrigate vast agricultural tracts through their canal networks. But canal waters are used not only for irrigation; they are also tapped by industries and municipalities (for urban water su",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|98-98|IWIS \u2022 2017 8382 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 98,
+      "page_end": 98,
+      "original_section": "IWIS \u2022 2017 8382 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 8382 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 8382 IWIS \u2022 2017 B3.1. PRoBINg THoUgHTS Managing a river as it flows through the urban spaces has become very challenging due to two main reasons: (i) abstraction of water for fulfilling increasing demand due to unplanned and often runaway urban growth, and (ii) discharge of untreated or partially treated sewage and trade effluents into the river. Further, a number of water bodies within the cities are disappearing as they become dry due to loss of catchment areas (due to greater bui",
+      "repaired_text_excerpt": "IWIS \u2022 2017 8382 IWIS \u2022 2017 B3.1. PRoBINg THoUgHTS Managing a river as it flows through the urban spaces has become very challenging due to two main reasons: (i) abstraction of water for fulfilling increasing demand due to unplanned and often runaway urban growth, and (ii) discharge of untreated or partially treated sewage and trade effluents into the river. Further, a number of water bodies within the cities are disappearing as they become dry due to loss of catchment areas (due to greater bui",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|100-100|IWIS \u2022 2017 8786 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 100,
+      "page_end": 100,
+      "original_section": "IWIS \u2022 2017 8786 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 8786 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 8786 IWIS \u2022 2017 B4.1. PRoBINg THoUgHTS Long distance conveyance of water, sewage and solid waste imposes a major burden on cities not only in terms of expenditure but also operational problems. City water intake structures and water treatment plants are often located outside cities or near city boundary, from where they are delivered and distributed by pipelines (often by pumping) to sprawling city areas. Likewise, domestic sewage tapped from households and establishments is transpo",
+      "repaired_text_excerpt": "IWIS \u2022 2017 8786 IWIS \u2022 2017 B4.1. PRoBINg THoUgHTS Long distance conveyance of water, sewage and solid waste imposes a major burden on cities not only in terms of expenditure but also operational problems. City water intake structures and water treatment plants are often located outside cities or near city boundary, from where they are delivered and distributed by pipelines (often by pumping) to sprawling city areas. Likewise, domestic sewage tapped from households and establishments is transpo",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|103-103|IWIS \u2022 2017 9392 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 103,
+      "page_end": 103,
+      "original_section": "IWIS \u2022 2017 9392 IWIS \u2022 2017",
+      "repaired_heading": "1. Falling sensor and microcontroller",
+      "heading_candidates": [
+        "IWIS \u2022 2017 9392 IWIS \u2022 2017",
+        "1. Falling sensor and microcontroller",
+        "2. Internet of Things (IoT) has improved",
+        "3. New technologies for data generation",
+        "C. Continuous sensor data for monitoring",
+        "A. Imagery Data for monitoring river"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 9392 IWIS \u2022 2017 Data Generation through Sensor Networks, Remote Sensing through Satellites, Drones and LIDAR C1.1. PRobING ThouGhTS Data is today changing depending on how we work, decide and allocate budgets - It might be helping to cure a disease, increase revenue, target ads or improving the environment around you. In general, data is simply another word for information. But when it comes to remote sensing, especially in the context of environmental monitoring, the data refers to",
+      "repaired_text_excerpt": "IWIS \u2022 2017 9392 IWIS \u2022 2017 Data Generation through Sensor Networks, Remote Sensing through Satellites, Drones and LIDAR C1.1. PRobING ThouGhTS Data is today changing depending on how we work, decide and allocate budgets - It might be helping to cure a disease, increase revenue, target ads or improving the environment around you. In general, data is simply another word for information. But when it comes to remote sensing, especially in the context of environmental monitoring, the data refers to",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "normalize whitespace",
+        "remove duplicated adjacent lines",
+        "repair line-break hyphenation"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|104-104|IWIS \u2022 2017 9594 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 104,
+      "page_end": 104,
+      "original_section": "IWIS \u2022 2017 9594 IWIS \u2022 2017",
+      "repaired_heading": "D. human generated data by community",
+      "heading_candidates": [
+        "IWIS \u2022 2017 9594 IWIS \u2022 2017",
+        "D. human generated data by community"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 9594 IWIS \u2022 2017 for Water Quality parameters such as Temperature, pH, Dissolved Oxygen, BOD, COD, TSS, etc. Today multi-parameter water quality sonde are available at affordable prices. Coupled with this IoT data loggers and external power connectivity allow data acquisition in real time. A typical monitoring system would consist of the following: l Multi-Parameter Sonde l IoT Data logger l Power Supply - Solar and Battery Bank l Monitoring Software - IoT device management, Big Data",
+      "repaired_text_excerpt": "IWIS \u2022 2017 9594 IWIS \u2022 2017 for Water Quality parameters such as Temperature, pH, Dissolved Oxygen, BOD, COD, TSS, etc. Today multi-parameter water quality sonde are available at affordable prices. Coupled with this IoT data loggers and external power connectivity allow data acquisition in real time. A typical monitoring system would consist of the following: l Multi-Parameter Sonde l IoT Data logger l Power Supply - Solar and Battery Bank l Monitoring Software - IoT device management, Big Data",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|111-111|IWIS \u2022 2017 109108 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 111,
+      "page_end": 111,
+      "original_section": "IWIS \u2022 2017 109108 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 109108 IWIS \u2022 2017",
+        "IN 2025"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 109108 IWIS \u2022 2017 Inspiring Entrepreneurship in the Water Sector C4.1. PRobING ThouGhTS If there is a need and people are prepared to pay to satisfy it and the consideration paid leaves enough on table for the person who came forward to organise it -There is a business. Person who takes the risk to organise is an Entrepreneur. Water is a Business. Water used to be free. In fact, it still is \u2014 at least in nations blessed with plentiful clean tap water like the U.S. \u2014 but that doesn\u2019t",
+      "repaired_text_excerpt": "IWIS \u2022 2017 109108 IWIS \u2022 2017 Inspiring Entrepreneurship in the Water Sector C4.1. PRobING ThouGhTS If there is a need and people are prepared to pay to satisfy it and the consideration paid leaves enough on table for the person who came forward to organise it -There is a business. Person who takes the risk to organise is an Entrepreneur. Water is a Business. Water used to be free. In fact, it still is \u2014 at least in nations blessed with plentiful clean tap water like the U.S. \u2014 but that doesn\u2019t",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|123-123|IWIS \u2022 2017 133132 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 123,
+      "page_end": 123,
+      "original_section": "IWIS \u2022 2017 133132 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 133132 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 133132 IWIS \u2022 2017 SESSIon D3 Wholesale and Retail Financing Instruments and Strategies for Capital Investment in Ganga River Basin definitely attract yield-seeking investors. As an initial step, progressive global investors, particularly sovereign wealth and pension funds, should partner with NMCG to establish take-out financing vehicles which will give the necessary exit to development and construction investors to redeploy their investment returns into a newer pipeline. HoW To JoI",
+      "repaired_text_excerpt": "IWIS \u2022 2017 133132 IWIS \u2022 2017 SESSIon D3 Wholesale and Retail Financing Instruments and Strategies for Capital Investment in Ganga River Basin definitely attract yield-seeking investors. As an initial step, progressive global investors, particularly sovereign wealth and pension funds, should partner with NMCG to establish take-out financing vehicles which will give the necessary exit to development and construction investors to redeploy their investment returns into a newer pipeline. HoW To JoI",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|125-125|IWIS \u2022 2017 137136 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 125,
+      "page_end": 125,
+      "original_section": "IWIS \u2022 2017 137136 IWIS \u2022 2017",
+      "repaired_heading": "B) For Water Asset operators",
+      "heading_candidates": [
+        "IWIS \u2022 2017 137136 IWIS \u2022 2017",
+        "B) For Water Asset operators",
+        "C) For Corporate users of Water &"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 137136 IWIS \u2022 2017 comparison of the economic viability and lifecycle cost of various water supply technologies compared with current practice, enabling selection of the most efficient and economically and environmentally sustainable. \u2022 Policy Innovation: Enhances infrastructure planning capabilities and provides benchmark for better informing tariff setting objectives. B) For Water Asset operators \u2022 Greater insight into outcomes: A holistic view of the financial costs and impact of ",
+      "repaired_text_excerpt": "IWIS \u2022 2017 137136 IWIS \u2022 2017 comparison of the economic viability and lifecycle cost of various water supply technologies compared with current practice, enabling selection of the most efficient and economically and environmentally sustainable. \u2022 Policy Innovation: Enhances infrastructure planning capabilities and provides benchmark for better informing tariff setting objectives. B) For Water Asset operators \u2022 Greater insight into outcomes: A holistic view of the financial costs and impact of ",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|126-126|IWIS \u2022 2017 139138 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 126,
+      "page_end": 126,
+      "original_section": "IWIS \u2022 2017 139138 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 139138 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 139138 IWIS \u2022 2017 SESSIon D4 Water Trading, Valuation, Pricing and an Effective Tariff Regime The ULB could use the ongoing benchmark supply cost as the basis for the price that it charges retail water suppliers. Revenue from such wholesale water sales would provide the ULB/ infrastructure operator with a revenue stream that is above cost recovery levels, helping sustain supply infrastructure and a continued subsidy regime for customers less able to pay full cost i.e. lower income r",
+      "repaired_text_excerpt": "IWIS \u2022 2017 139138 IWIS \u2022 2017 SESSIon D4 Water Trading, Valuation, Pricing and an Effective Tariff Regime The ULB could use the ongoing benchmark supply cost as the basis for the price that it charges retail water suppliers. Revenue from such wholesale water sales would provide the ULB/ infrastructure operator with a revenue stream that is above cost recovery levels, helping sustain supply infrastructure and a continued subsidy regime for customers less able to pay full cost i.e. lower income r",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|127-127|IWIS \u2022 2017 141140 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 127,
+      "page_end": 127,
+      "original_section": "IWIS \u2022 2017 141140 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 141140 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 141140 IWIS \u2022 2017 PILoT/ DEMonSTRATIon PRoJECTS UK Canada USA Luxemberg Norway Japan New Zealand Slovenia There is tremendous interest globally in introducing new environmental technologies and smart systems in the Ganga River Basin in India.",
+      "repaired_text_excerpt": "IWIS \u2022 2017 141140 IWIS \u2022 2017 PILoT/ DEMonSTRATIon PRoJECTS UK Canada USA Luxemberg Norway Japan New Zealand Slovenia There is tremendous interest globally in introducing new environmental technologies and smart systems in the Ganga River Basin in India.",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|128-128|IWIS \u2022 2017 143142 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 128,
+      "page_end": 128,
+      "original_section": "IWIS \u2022 2017 143142 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "IWIS \u2022 2017 143142 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "IWIS \u2022 2017 143142 IWIS \u2022 2017 GMEX Group uK TECHnoLoGy/SoLuTIon The solution provides an aggregation and trading platform dedicated for residues/wastes including dung, biomass, solids, sludge, ash and any other such materials that has an intrinsic resource recovery value. IMPACT on GAnGA It solves the problem of identifying and managing residues/wastes. A very large number of small entrepreneurs can generate income by selling residues/wastes to larger industrial organisations that can process s",
+      "repaired_text_excerpt": "IWIS \u2022 2017 143142 IWIS \u2022 2017 GMEX Group uK TECHnoLoGy/SoLuTIon The solution provides an aggregation and trading platform dedicated for residues/wastes including dung, biomass, solids, sludge, ash and any other such materials that has an intrinsic resource recovery value. IMPACT on GAnGA It solves the problem of identifying and managing residues/wastes. A very large number of small entrepreneurs can generate income by selling residues/wastes to larger industrial organisations that can process s",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    },
+    {
+      "section_id": "GRBMP-CORE-005|Vision Ganga Eng_Compressed.pdf|131-131|148 IWIS \u2022 2017",
+      "source_id": "GRBMP-CORE-005",
+      "file_name": "Vision Ganga Eng_Compressed.pdf",
+      "page_start": 131,
+      "page_end": 131,
+      "original_section": "148 IWIS \u2022 2017",
+      "repaired_heading": null,
+      "heading_candidates": [
+        "148 IWIS \u2022 2017"
+      ],
+      "original_text_excerpt": "148 IWIS \u2022 2017",
+      "repaired_text_excerpt": "148 IWIS \u2022 2017",
+      "repair_reason": "ABBREVIATION_OR_TABLE_FRAGMENT",
+      "confidence": "UNCERTAIN",
+      "original_classification": "REVIEW_REQUIRED",
+      "classification_affected": false,
+      "classification_change": "none; representation only",
+      "repair_operations": [
+        "heading candidate extraction only"
+      ],
+      "review_status": "RETAIN_HUMAN_REVIEW"
+    }
+  ]
+}

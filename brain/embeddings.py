@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.metadata
 import math
 import os
 import re
@@ -20,6 +21,8 @@ os.environ.setdefault("NUMEXPR_NUM_THREADS", _ORT_THREADS)
 
 TOKEN_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]*")
 _EMBEDDING_CACHE: dict[str, Any] = {}
+MINILM_MODEL_NAME = "all-MiniLM-L6-v2"
+MINILM_MODEL_ARCHIVE_SHA256 = "913d7300ceae3b2dbc2c50d1de4baacab4be7b9380491c27fab7418616a16ec3"
 
 
 class LocalHashEmbedding:
@@ -30,6 +33,8 @@ class LocalHashEmbedding:
     """
 
     def __init__(self, dimensions: int = 384) -> None:
+        if dimensions < 1:
+            raise ValueError("Embedding dimensions must be at least 1")
         self.dimensions = dimensions
         self.name = "local-hash-embedding-v1"
 
@@ -56,7 +61,10 @@ class ONNXSemanticEmbedding:
     Requires no paid API keys and produces 384-dimensional dense semantic vectors.
     """
 
-    def __init__(self, ort_threads: int = 2) -> None:
+    def __init__(self, ort_threads: int = 2, model_name: str = MINILM_MODEL_NAME) -> None:
+        if model_name not in {MINILM_MODEL_NAME, "onnx-semantic-embedding-v1"}:
+            raise ValueError(f"Unsupported ONNX embedding model: {model_name}")
+        self.model_name = MINILM_MODEL_NAME
         str_threads = str(ort_threads)
         os.environ.setdefault("OMP_NUM_THREADS", str_threads)
         os.environ.setdefault("ONNXRUNTIME_SESSION_THREAD_POOL_SIZE", str_threads)
@@ -81,15 +89,20 @@ class ONNXSemanticEmbedding:
         return [float(x) for x in res[0]]
 
 
-def get_embedding_function(provider: str = "semantic", dimensions: int = 384, ort_threads: int = 2):
+def get_embedding_function(
+    provider: str = "semantic",
+    dimensions: int = 384,
+    ort_threads: int = 2,
+    model_name: str = MINILM_MODEL_NAME,
+):
     provider_clean = (provider or "semantic").lower().strip()
-    cache_key = f"{provider_clean}:{dimensions}:{ort_threads}"
+    cache_key = f"{provider_clean}:{dimensions}:{ort_threads}:{model_name}"
 
     if cache_key in _EMBEDDING_CACHE:
         return _EMBEDDING_CACHE[cache_key]
 
     if provider_clean in ("semantic", "onnx", "default"):
-        instance = ONNXSemanticEmbedding(ort_threads=ort_threads)
+        instance = ONNXSemanticEmbedding(ort_threads=ort_threads, model_name=model_name)
     elif provider_clean in ("local-hash", "hash", "baseline"):
         instance = LocalHashEmbedding(dimensions)
     else:
@@ -97,3 +110,29 @@ def get_embedding_function(provider: str = "semantic", dimensions: int = 384, or
 
     _EMBEDDING_CACHE[cache_key] = instance
     return instance
+
+
+def embedding_provenance(provider: str, model_name: str) -> dict[str, str]:
+    """Return stable implementation and model identity for an index manifest."""
+    provider_clean = (provider or "semantic").lower().strip()
+    if provider_clean in {"semantic", "onnx", "default"}:
+        return {
+            "provider": "semantic",
+            "model": MINILM_MODEL_NAME,
+            "model_archive_sha256": MINILM_MODEL_ARCHIVE_SHA256,
+            "implementation": "chromadb.utils.embedding_functions.DefaultEmbeddingFunction",
+            "chromadb_version": importlib.metadata.version("chromadb"),
+            "onnxruntime_version": importlib.metadata.version("onnxruntime"),
+            "configured_model": model_name,
+        }
+    if provider_clean in {"local-hash", "hash", "baseline"}:
+        return {
+            "provider": "local-hash",
+            "model": "local-hash-embedding-v1",
+            "model_archive_sha256": "not-applicable",
+            "implementation": "brain.embeddings.LocalHashEmbedding",
+            "chromadb_version": importlib.metadata.version("chromadb"),
+            "onnxruntime_version": "not-applicable",
+            "configured_model": model_name,
+        }
+    raise ValueError(f"Unsupported embedding provider: {provider}")

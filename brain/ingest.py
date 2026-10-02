@@ -30,24 +30,6 @@ def load_document_pages(processed_documents_dir: Path, file_name: str) -> dict[i
     return pages
 
 
-def load_page_text(
-    processed_documents_dir: Path,
-    file_name: str,
-    page_start: int,
-    page_end: int,
-) -> str:
-    """Load text for a page range from one processed JSONL document."""
-    pages = load_document_pages(processed_documents_dir, file_name)
-
-    selected = []
-    for page in range(page_start, page_end + 1):
-        text = pages.get(page)
-        if text:
-            selected.append(f"[Page {page}]\n{text}")
-
-    return "\n\n".join(selected).strip()
-
-
 def build_manifest(config: BrainConfig) -> dict:
     review = json.loads(
         config.section_review_path.read_text(encoding="utf-8")

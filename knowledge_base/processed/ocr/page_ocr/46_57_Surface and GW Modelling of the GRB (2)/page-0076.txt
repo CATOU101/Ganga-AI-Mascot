@@ -1,0 +1,52 @@
+MODFLOW groundwater model were used to map the Ganga basin and were followed with
+calibration and validation procedure as described and Chapters 2 and 3 respectively. Thus, both the
+validated SWAT and MODFLOW models have been used for developing other scenarios in a reliable
+manner and the results of the sarne are discussed in the subsequent sections.
+
+Scenario 2 - Virgin condition
+
+The Virgin scenario is required to get an estimate of the hydrological condition prior to the water
+resources development as prevalent presently in the basin. This scenario has been developed for
+both surface and groundwater. The virgin condition shall also serve as the guiding condition for the
+assessment of environmental flows in various stretches of the basin and the implication of the water
+resources Gevelopment thereof.
+
+In order to get an estimate of the virgin surface water hydrological condition of the Ganga basin, the
+calibrated SWAT model was used after switching off all the projects and reservoirs that are existing
+in the basin and are being used for distributing water for irrigation and various other purposes.
+Accordingly, all the irrigation management practices were also changed in the Virgin Scenario. All the
+irrigation practices are assumed to be absent in case of virgin condition.
+
+In the case of the MOFLOW model, the virgin conditions were obtained assuming that there is no
+pumping from the groundwater. Through this analysis using the results from the virgin flows it can
+be evaluated as to how much extent to which the basin has been exploited because of
+anthropogenic groundwater abstraction. More importantly, this study will reveal the stretches that
+were originally effiuent (gaining) stretches and how these stretches have been converted to influent
+(loosing) due to over exploitation of groundwater resources in some areas of the basin. Another
+important fact which is of interest te us is to know as to which of the stretches where losing
+stretches even under virgin conditions.
+
+Scenario- 3 - Implementation of Planned Projects (Future Scenario)
+
+In this scenario, the effect of the future projects on the overall hydrologic health of the system is
+evaluated. This is implemented by adding the future planned projects in SWAT model. In the
+absence of the detailed information on the future project details, such as command areas and
+utilization policies appropriate assumptions have been incorporated wherever required.
+
+Scenario -4 - Business as Usual with increased Irrigation Efficiency
+condition
+Under this scenario, the main objective is to unearth the effect of increase in the Irrigation efficiency
+
+while demand, rainfall, developments remain same as per the Present Scenario. Also, this scenario
+can be used to see the effect of the advancement of irrigation practices on the surface runoff.
+
+Attributing impact of increased Irrigation Efficiency condition
+
+The advantage of purported increase in irrigation efficiency can be thought to have circumvented
+the demand on surface or groundwater. The increase in irrigation efficiency implemented in SWAT
+model is synonymous with reduction in water usage of about 33% of the actual water utilization
+under the present condition. This reduction in water usage concomitant to the increase in efficiency
+of irrigation may be attributed to surface water usage and/or ground water extraction, The following
+two sub-scenarias are, hence, generated:
+
+76

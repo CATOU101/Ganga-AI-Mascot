@@ -1,0 +1,267 @@
+{
+  "manifest_version": "stage-2-ocr-required-manifest",
+  "generated_date": "2026-09-12",
+  "source": "knowledge_base/processed/section_review.json plus extraction_report.json no-text warnings",
+  "ocr_execution_performed": false,
+  "documents": [
+    {
+      "filename": "11_Mission 8 - Environmental Knowledge (1).pdf",
+      "source_id": "GRBMP-M08",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "11_Mission 8 - Environmental Knowledge.pdf",
+      "source_id": "GRBMP-M08",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "15_37_Stream Power Distribution Pattern for the Ganga River to Determine the Effects of River Energy and.pdf",
+      "source_id": "GRBMP-TR-036",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "15_66_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga Basin Ramganga Kali and Gomati Sub-Basin.pdf",
+      "source_id": "GRBMP-TR-037",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+      "source_id": "GRBMP-TR-046",
+      "affected_pages": [
+        23,
+        27
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "36_35_River Style Framework for the Ganga River.pdf",
+      "source_id": "GRBMP-TR-047",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "38_44_State of Health in the Ganga River Basin.pdf",
+      "source_id": "GRBMP-TR-051",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "source_id": "GRBMP-TR-055",
+      "affected_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99
+      ],
+      "reason": "The complete document has no usable extracted text across all pages; current analysis marks it OCR_REQUIRED.",
+      "ocr_scope": "FULL_DOCUMENT",
+      "priority": "HIGH",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "47_73_Assessment of E Flows at Some Select Sites in Upper Ganga Segment.pdf",
+      "source_id": "GRBMP-TR-057",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "53_67_Assessment of Domestic Pollution Load from Urban Agglomeration in Ganga BasinGandak and Kosi Sub-Basin.pdf",
+      "source_id": "GRBMP-TR-060",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    },
+    {
+      "filename": "54_30_Wetlands in Ganga River Basin.pdf",
+      "source_id": "GRBMP-TR-063",
+      "affected_pages": [
+        2
+      ],
+      "reason": "One or more pages have no usable extracted text; current analysis marks the affected section OCR_REQUIRED.",
+      "ocr_scope": "PAGE_LEVEL",
+      "priority": "MEDIUM",
+      "provenance_note": "Any OCR output must preserve source_id, filename, original page number, section context, and a link to the authoritative PDF. OCR output must remain a derived artifact and must not overwrite the extracted JSONL or source PDF.",
+      "existing_recorded_reasons": [
+        "The affected page has no usable extracted text; substantive content cannot be reviewed without OCR."
+      ]
+    }
+  ],
+  "summary": {
+    "documents_requiring_ocr": 11,
+    "full_document_candidates": 1,
+    "page_level_candidates": 10,
+    "affected_pages": 110
+  }
+}
