@@ -5,39 +5,27 @@ from __future__ import annotations
 import argparse
 import json
 
-from .chunking import chunks_from_sections
 from .config import load_config
 from .generator import build_generator, current_information_response, insufficient_evidence_response
-from .ingest import write_manifest
 from .retriever import Retriever, asks_for_current_information
-from .vector_store import SQLiteVectorStore, generate_semantic_vectors
-
-
-def load_manifest_sections(config):
-    if not config.prototype_manifest_path.exists():
-        write_manifest(config)
-    return json.loads(config.prototype_manifest_path.read_text(encoding="utf-8"))["sections"]
+from .translator import normalize_language, translate_text
+from .vector_store import build_index as build_vector_index
 
 
 def build_index() -> dict:
-    """Build or rebuild the portable semantic vector index from approved sections."""
-    config = load_config()
-    manifest = write_manifest(config)
-    return generate_semantic_vectors(config)
-
-
-from .translator import translate_text
+    """Build the complete SQLite/NumPy index from reviewed sections."""
+    return build_vector_index(load_config())
 
 
 def answer_question(
     question: str,
     top_k: int | None = None,
-    input_language: str = "hi",
-    output_language: str = "hi"
+    input_language: str | None = None,
+    output_language: str | None = None,
 ) -> dict:
-    """Answer a user question through the complete grounded RAG pipeline supporting separate input and output languages."""
-    input_lang = (input_language or "hi").lower().strip()
-    output_lang = (output_language or "hi").lower().strip()
+    """Answer a question; unspecified language defaults to English."""
+    input_lang = normalize_language(input_language, default="en")
+    output_lang = normalize_language(output_language, default=input_lang)
 
     if not question or not question.strip():
         resp = insufficient_evidence_response()
@@ -98,7 +86,7 @@ def answer_question(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--build-index", action="store_true", help="Generate portable semantic_vectors.npy index.")
+    parser.add_argument("--build-index", action="store_true", help="Build the complete reviewed-data SQLite/NumPy index.")
     parser.add_argument("--ask", help="Ask the prototype Brain a question.")
     parser.add_argument("--top-k", type=int, help="Override retriever top-k.")
     args = parser.parse_args()

@@ -1,0 +1,138 @@
+{
+  "manifest_version": "stage-3-ocr-execution",
+  "generated_at_utc": "2026-09-12T07:13:43.567386+00:00",
+  "requested_manifest": "knowledge_base/processed/ocr_required_manifest.json",
+  "execution_performed": true,
+  "environment": {
+    "pdftoppm": "/opt/homebrew/bin/pdftoppm",
+    "tesseract": "/opt/homebrew/bin/tesseract"
+  },
+  "records": [
+    {
+      "attempt_id": "46_57_Surface and GW Modelling of the GRB (2).pdf|page=1|mode=PAGE_LEVEL",
+      "source_id": "GRBMP-TR-055",
+      "filename": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "title": "Surface and Groundwater Modelling of the GRB",
+      "page": 1,
+      "ocr_mode": "PAGE_LEVEL",
+      "input_path": "knowledge_base/raw_documents/GRBMP/46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "output_path": "knowledge_base/processed/ocr/page_ocr/46_57_Surface and GW Modelling of the GRB (2)/page-0001.txt",
+      "ocr_engine": "tesseract via pdftoppm",
+      "ocr_configuration": {
+        "render_dpi": 300,
+        "image_format": "png",
+        "tesseract_config": [
+          "--psm",
+          "3"
+        ]
+      },
+      "timestamp_utc": "2026-09-12T07:13:28.464480+00:00",
+      "status": "SUCCESS",
+      "attempted": true,
+      "character_count": 212,
+      "confidence": 82.21,
+      "input_sha256": "cf5b9736024b0719e303b8020cb949453fb00f8cecc07e6cae3663f564b6b376"
+    },
+    {
+      "attempt_id": "46_57_Surface and GW Modelling of the GRB (2).pdf|page=26|mode=PAGE_LEVEL",
+      "source_id": "GRBMP-TR-055",
+      "filename": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "title": "Surface and Groundwater Modelling of the GRB",
+      "page": 26,
+      "ocr_mode": "PAGE_LEVEL",
+      "input_path": "knowledge_base/raw_documents/GRBMP/46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "output_path": "knowledge_base/processed/ocr/page_ocr/46_57_Surface and GW Modelling of the GRB (2)/page-0026.txt",
+      "ocr_engine": "tesseract via pdftoppm",
+      "ocr_configuration": {
+        "render_dpi": 300,
+        "image_format": "png",
+        "tesseract_config": [
+          "--psm",
+          "3"
+        ]
+      },
+      "timestamp_utc": "2026-09-12T07:13:31.005679+00:00",
+      "status": "SUCCESS",
+      "attempted": true,
+      "character_count": 26,
+      "confidence": 91.28,
+      "input_sha256": "cf5b9736024b0719e303b8020cb949453fb00f8cecc07e6cae3663f564b6b376"
+    },
+    {
+      "attempt_id": "46_57_Surface and GW Modelling of the GRB (2).pdf|page=51|mode=PAGE_LEVEL",
+      "source_id": "GRBMP-TR-055",
+      "filename": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "title": "Surface and Groundwater Modelling of the GRB",
+      "page": 51,
+      "ocr_mode": "PAGE_LEVEL",
+      "input_path": "knowledge_base/raw_documents/GRBMP/46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "output_path": "knowledge_base/processed/ocr/page_ocr/46_57_Surface and GW Modelling of the GRB (2)/page-0051.txt",
+      "ocr_engine": "tesseract via pdftoppm",
+      "ocr_configuration": {
+        "render_dpi": 300,
+        "image_format": "png",
+        "tesseract_config": [
+          "--psm",
+          "3"
+        ]
+      },
+      "timestamp_utc": "2026-09-12T07:13:35.674137+00:00",
+      "status": "SUCCESS",
+      "attempted": true,
+      "character_count": 2728,
+      "confidence": 91.29,
+      "input_sha256": "cf5b9736024b0719e303b8020cb949453fb00f8cecc07e6cae3663f564b6b376"
+    },
+    {
+      "attempt_id": "46_57_Surface and GW Modelling of the GRB (2).pdf|page=76|mode=PAGE_LEVEL",
+      "source_id": "GRBMP-TR-055",
+      "filename": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "title": "Surface and Groundwater Modelling of the GRB",
+      "page": 76,
+      "ocr_mode": "PAGE_LEVEL",
+      "input_path": "knowledge_base/raw_documents/GRBMP/46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "output_path": "knowledge_base/processed/ocr/page_ocr/46_57_Surface and GW Modelling of the GRB (2)/page-0076.txt",
+      "ocr_engine": "tesseract via pdftoppm",
+      "ocr_configuration": {
+        "render_dpi": 300,
+        "image_format": "png",
+        "tesseract_config": [
+          "--psm",
+          "3"
+        ]
+      },
+      "timestamp_utc": "2026-09-12T07:13:41.354856+00:00",
+      "status": "SUCCESS",
+      "attempted": true,
+      "character_count": 3429,
+      "confidence": 94.5,
+      "input_sha256": "cf5b9736024b0719e303b8020cb949453fb00f8cecc07e6cae3663f564b6b376"
+    },
+    {
+      "attempt_id": "46_57_Surface and GW Modelling of the GRB (2).pdf|page=99|mode=PAGE_LEVEL",
+      "source_id": "GRBMP-TR-055",
+      "filename": "46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "title": "Surface and Groundwater Modelling of the GRB",
+      "page": 99,
+      "ocr_mode": "PAGE_LEVEL",
+      "input_path": "knowledge_base/raw_documents/GRBMP/46_57_Surface and GW Modelling of the GRB (2).pdf",
+      "output_path": "knowledge_base/processed/ocr/page_ocr/46_57_Surface and GW Modelling of the GRB (2)/page-0099.txt",
+      "ocr_engine": "tesseract via pdftoppm",
+      "ocr_configuration": {
+        "render_dpi": 300,
+        "image_format": "png",
+        "tesseract_config": [
+          "--psm",
+          "3"
+        ]
+      },
+      "timestamp_utc": "2026-09-12T07:13:43.567148+00:00",
+      "status": "SUCCESS",
+      "attempted": true,
+      "character_count": 33,
+      "confidence": 89.69,
+      "input_sha256": "cf5b9736024b0719e303b8020cb949453fb00f8cecc07e6cae3663f564b6b376"
+    }
+  ],
+  "note": "Explicit OCR execution completed; inspect per-page records and validation report."
+}

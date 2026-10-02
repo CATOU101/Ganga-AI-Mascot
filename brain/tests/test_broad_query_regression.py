@@ -12,7 +12,7 @@ from brain.retriever import (
     is_broad_ganga_query,
     asks_for_current_information,
 )
-from brain.vector_store import get_chroma_vector_store
+from brain.vector_store import get_vector_store
 
 
 class TestBroadQueryRegression(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestBroadQueryRegression(unittest.TestCase):
             cls.config.embedding_dimensions,
             cls.config.ort_threads,
         )
-        cls.store = get_chroma_vector_store(cls.config)
+        cls.store = get_vector_store(cls.config)
         cls.retriever = Retriever(cls.config, cls.store)
         cls.generator = build_generator(cls.config.llm_provider, cls.config.llm_model)
 

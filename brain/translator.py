@@ -9,6 +9,19 @@ import urllib.request
 
 logger = logging.getLogger("brain.translator")
 
+
+class TranslationError(RuntimeError):
+    """Raised when a requested translation cannot be completed."""
+
+
+def normalize_language(language: str | None, *, default: str) -> str:
+    """Normalize and validate the supported English/Hindi language codes."""
+    normalized = (language or default).lower().strip()
+    if normalized not in {"en", "hi"}:
+        raise ValueError(f"Unsupported language code: {language!r}; expected 'en' or 'hi'")
+    return normalized
+
+
 # Pre-defined domain fallback phrases for common GRBMP / RAG messages
 DOMAIN_TRANSLATIONS = {
     "en_to_hi": {
@@ -53,14 +66,14 @@ def _http_translate(text: str, source_lang: str, target_lang: str) -> str | None
 
 
 def translate_text(text: str, source_lang: str, target_lang: str) -> str:
-    """Translate text between 'en' and 'hi'. Preserves formatting, domain prefixes, and citations."""
+    """Translate text between English and Hindi or raise if translation fails."""
     if not text or not text.strip():
         return text
 
-    src = (source_lang or "en").lower().strip()
-    tgt = (target_lang or "en").lower().strip()
+    src = normalize_language(source_lang, default="en")
+    tgt = normalize_language(target_lang, default="en")
 
-    if src not in ("en", "hi") or tgt not in ("en", "hi") or src == tgt:
+    if src == tgt:
         return text
 
     # Check exact domain phrases first
@@ -83,7 +96,9 @@ def translate_text(text: str, source_lang: str, target_lang: str) -> str:
 
     translated_core = _http_translate(core_text, src, tgt)
     if not translated_core:
-        translated_core = core_text  # Graceful fallback
+        raise TranslationError(
+            f"Translation failed ({src}->{tgt}); returning the untranslated text would be misleading"
+        )
 
     if tgt == "hi":
         prefix = prefix_hi if (has_prefix_en or has_prefix_hi) else ""

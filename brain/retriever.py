@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 
 from .config import BrainConfig
-from .vector_store import ChromaVectorStore, get_chroma_vector_store
+from .vector_store import SQLiteVectorStore, get_vector_store
 
 
 CURRENT_TERMS = (
@@ -100,28 +100,24 @@ def extract_keywords(question: str) -> list[str]:
     return [token for token in tokens if len(token) >= 3 and token not in STOPWORDS]
 
 
-def extract_all_query_terms(question: str) -> list[str]:
-    """Extract all query words >= 3 chars including domain words for strict entity checks."""
-    tokens = re.findall(r"[A-Za-z0-9][A-Za-z0-9_-]*", question.lower())
-    ignore = {"what", "is", "are", "was", "were", "the", "a", "an", "in", "on", "at", "of", "to", "for", "with", "by", "from", "according"}
-    return [token for token in tokens if len(token) >= 3 and token not in ignore]
-
-
 class Retriever:
-    def __init__(self, config: BrainConfig, store: ChromaVectorStore | None = None) -> None:
+    def __init__(self, config: BrainConfig, store: SQLiteVectorStore | None = None) -> None:
         self.config = config
-        self.store = store or get_chroma_vector_store(config)
+        self.store = store or get_vector_store(config)
 
     def retrieve_candidates(self, question: str, candidate_k: int | None = None) -> list[dict]:
-        """Retrieve candidates from Chroma vector store."""
-        k = candidate_k or self.config.candidate_top_k
+        """Retrieve vector candidates from the configured SQLite/NumPy collection."""
+        k = self.config.candidate_top_k if candidate_k is None else candidate_k
+        if k < 1:
+            raise ValueError("candidate_k must be at least 1")
         return self.store.query(question, k)
 
     def rerank_and_filter(self, question: str, hits: list[dict], top_k: int | None = None) -> tuple[bool, list[dict]]:
         """Rerank candidates using vector similarity and lexical term coverage, then evaluate evidence gate."""
-        target_k = top_k or self.config.top_k
+        target_k = self.config.top_k if top_k is None else top_k
+        if target_k < 1:
+            raise ValueError("top_k must be at least 1")
         keywords = extract_keywords(question)
-        all_terms = extract_all_query_terms(question)
 
         if not hits or not question.strip():
             return False, []
@@ -151,7 +147,11 @@ class Retriever:
 
             distance = hit.get("distance", 999.0)
             # Distance threshold depending on embedding type
-            is_semantic = getattr(self.store.embedding, "name", "").startswith("onnx")
+            is_semantic = self.config.embedding_provider.lower().strip() in {
+                "semantic",
+                "onnx",
+                "default",
+            }
             max_dist = self.config.evidence_max_distance if is_semantic else 1.35
 
             if distance > max_dist:
@@ -171,7 +171,7 @@ class Retriever:
         scored_hits.sort(key=lambda item: item[0], reverse=True)
 
         # Evidence Gate Check: top result must have sufficient relevance
-        top_score, top_overlap, top_hit = scored_hits[0]
+        _, top_overlap, _ = scored_hits[0]
         if keywords and top_overlap < self.config.min_keyword_overlap and len(keywords) > 1:
             return False, []
 
@@ -203,4 +203,3 @@ def assemble_context(hits: list[dict], max_chars: int = 6000) -> str:
         parts.append(block)
         used += len(block)
     return "\n\n---\n\n".join(parts)
-

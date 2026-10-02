@@ -145,6 +145,8 @@ class OpenAIChatGenerator(Generator):
             headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
             method="POST",
         )
+        request.remove_header("Authorization")
+        request.add_header("Authorization", f"Bearer {self.api_key}")
         with urllib.request.urlopen(request, timeout=60) as response:
             data = json.loads(response.read().decode("utf-8"))
 
