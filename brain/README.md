@@ -77,10 +77,19 @@ GANGA_BRAIN_ORT_THREADS=2
 # Generator provider: 'groq' or 'extractive'
 LLM_PROVIDER=groq
 GROQ_MODEL=openai/gpt-oss-120b
-# Set GROQ_API_KEY privately in the process environment or ignored local .env.
+# GROQ_API_KEY must be set in the process environment.
 ```
 
-The Groq provider uses the OpenAI Python SDK with Groq's OpenAI-compatible API. `.env` values are not loaded automatically; load them into the process environment before starting the API. The embedding model setting applies to the `semantic` provider; the `local-hash` provider always uses its fixed hash-embedding implementation. Index paths, collection name, and chunk-size defaults are defined in `BrainConfig` rather than loaded from environment variables.
+The Groq provider uses the OpenAI Python SDK with Groq's OpenAI-compatible API. `.env` values are not loaded automatically. For local development, copy `.env.example` to `.env`, set `GROQ_API_KEY` privately, and export the file in the same shell before starting the API:
+
+```bash
+set -a
+source .env
+set +a
+python -m brain.api --host 127.0.0.1 --port 8000
+```
+
+The key is never written to logs. If it is missing or a Groq request fails, generation falls back to the existing extractive generator; the API can start normally. `/health` checks the index and embedding readiness, not Groq connectivity, so `ready: true` does not guarantee that Groq credentials are configured. The embedding model setting applies to the `semantic` provider; the `local-hash` provider always uses its fixed hash-embedding implementation. Index paths, collection name, and chunk-size defaults are defined in `BrainConfig` rather than loaded from environment variables.
 
 ---
 
@@ -99,7 +108,7 @@ Copy `.env.example` to the ignored local `.env` file, add `GROQ_API_KEY` there, 
 
 ```bash
 cp .env.example .env
-# Add GROQ_API_KEY=your_secret_key to the local .env file.
+# Set GROQ_API_KEY privately in the local .env file.
 set -a
 source .env
 set +a
