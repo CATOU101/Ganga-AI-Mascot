@@ -1,4 +1,4 @@
-"""Modular grounded answer generation and provenance citation assembly."""
+﻿"""Modular grounded answer generation and provenance citation assembly."""
 
 from __future__ import annotations
 
@@ -89,24 +89,26 @@ class ExtractiveGenerator(Generator):
             hit_contributed = False
             clean_text = clean_hit_text(text)
 
-            for sentence in re.split(r"(?<=[.!?])\s+", clean_text):
+            for sentence in re.split(r"(?<=[.!?\n])\s+", clean_text):
                 clean = sentence.strip()
                 clean = re.sub(r"^\s*\d+(\.\d+)*\s+", "", clean)
                 clean = re.sub(r"\s+", " ", clean).strip()
                 if len(clean) < 35 or clean in seen_sentences:
                     continue
-
-                # Check match against query keywords or general relevance
+                if re.search(r"(?:DAY \d+|VenUe:|cHAIr:|PAneLIST:|moDerATor:|\d+:\d+\s*-\s*\d+:\d+|Session \w+|Report Code)", clean, re.IGNORECASE):
+                    continue
+                if clean.count(":") >= 3 or clean.count(";") >= 3:
+                    continue
                 clean_lower = clean.lower()
                 matches = sum(1 for kw in keywords if kw in clean_lower) if keywords else 1
-
                 if matches > 0:
                     sentences.append(clean)
                     seen_sentences.add(clean)
                     hit_contributed = True
-                    if len(sentences) >= 4:
+                    if len(sentences) >= 2 and sum(len(s) for s in sentences) >= 180:
                         break
-
+                    if len(sentences) >= 3:
+                        break
             if hit_contributed and hit not in contributing_hits:
                 contributing_hits.append(hit)
             if len(sentences) >= 4:

@@ -1,80 +1,86 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ganga AI Mascot — Chacha Interactive Experience</title>
+  <meta name="description" content="Interactive 3D AI Mascot for Ganga River Conservation with grounded RAG brain and real-time voice speech." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌊</text></svg>">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=chacha-new-v7" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
   <div class="app-container">
-    <!-- Header -->
+    <!-- Top Header Navigation -->
     <header class="app-header">
       <div class="brand">
-        <div class="logo-icon">🌊</div>
+        <div class="logo-icon" aria-hidden="true">🌊</div>
         <div>
           <h1>Ganga AI Mascot</h1>
-          <p class="subtitle">Chacha Chaudhary Digital Avatar (Member 2 Production) ↔ Grounded RAG Brain ↔ Voice</p>
+          <p class="subtitle">Chacha Chaudhary Digital Avatar • Grounded RAG Brain • Neural Voice</p>
         </div>
       </div>
-      <div class="header-controls" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+      
+      <div class="header-controls">
         <div class="lang-selector-group">
-          <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 3px;">Input Lang</span>
+          <span class="control-label">Input Lang</span>
           <div class="lang-selector">
-            <button id="inputLangHi" class="lang-btn active" data-lang="hi">हिंदी</button>
-            <button id="inputLangEn" class="lang-btn" data-lang="en">English</button>
+            <button id="inputLangHi" class="lang-btn active" data-lang="hi" aria-label="Set input language to Hindi">हिंदी</button>
+            <button id="inputLangEn" class="lang-btn" data-lang="en" aria-label="Set input language to English">English</button>
           </div>
         </div>
 
         <div class="lang-selector-group">
-          <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; display: block; margin-bottom: 3px;">Output Lang</span>
+          <span class="control-label">Output Lang</span>
           <div class="lang-selector">
-            <button id="outputLangHi" class="lang-btn active" data-lang="hi">हिंदी</button>
-            <button id="outputLangEn" class="lang-btn" data-lang="en">English</button>
+            <button id="outputLangHi" class="lang-btn active" data-lang="hi" aria-label="Set output language to Hindi">हिंदी</button>
+            <button id="outputLangEn" class="lang-btn" data-lang="en" aria-label="Set output language to English">English</button>
           </div>
         </div>
 
-        <div id="statusBadge" class="status-badge state-idle">
+        <div id="statusBadge" class="status-badge state-idle" aria-live="polite">
           <span class="status-dot"></span>
           <span id="statusText">IDLE</span>
         </div>
       </div>
     </header>
 
-    <!-- Main Grid Layout -->
+    <!-- Main Content Workspace -->
     <main class="main-grid">
-      <!-- Mascot Stage Section -->
-      <section class="mascot-stage-card">
+      <!-- 3D Mascot Stage Section -->
+      <section class="mascot-stage-card" aria-label="3D Avatar Stage">
         <div class="stage-header">
-          <div class="character-tag">CHACHA 3D AVATAR (MEMBER 2 PRODUCTION)</div>
+          <div class="character-tag">CHACHA CHAUDHARY 3D MASCOT</div>
           <div class="indicators">
-            <span id="avatarVersionBadge" class="tag avatar-version-tag">Avatar: Member 2 Chacha</span>
+            <span id="avatarVersionBadge" class="tag avatar-version-tag">Avatar: Chacha New</span>
             <span id="emotionBadge" class="tag emotion-tag">Emotion: Neutral</span>
             <span id="gestureBadge" class="tag gesture-tag">Gesture: Idle</span>
             <span id="modeBadge" class="tag mode-tag mode-grounded">Mode: Grounded</span>
           </div>
         </div>
 
-        <div class="stage-canvas-wrapper" style="position: relative;">
-          <div id="avatarLoadingOverlay" class="avatar-loading-overlay">
+        <!-- 3D Viewport Box -->
+        <div class="stage-canvas-wrapper">
+          <div id="avatarLoadingOverlay" class="avatar-loading-overlay" aria-live="polite">
             <div class="avatar-spinner"></div>
-            <span class="loading-label">Loading Member 2 Chacha (GLB)...</span>
+            <span class="loading-label">Loading Chacha New (3D GLB)...</span>
+            <span class="loading-sub">Initializing 28 skeletal animations & PBR textures</span>
           </div>
-          <canvas id="mascotCanvas3D" class="mascot-canvas-3d"></canvas>
+          <canvas id="mascotCanvas3D" class="mascot-canvas-3d" width="360" height="380"></canvas>
         </div>
 
-        <!-- Audio Output Visualizer -->
-        <div class="audio-visualizer-bar">
-          <div class="viz-label">RMS Audio Lip-Sync Signal</div>
+        <!-- Audio Output & Lip-Sync Visualizer -->
+        <div class="audio-visualizer-bar" aria-label="Audio Visualizer">
+          <div class="viz-header">
+            <span class="viz-label">Audio Speech Signal</span>
+            <span id="vizLevel" class="viz-level">0%</span>
+          </div>
           <div class="viz-track">
             <div id="vizFill" class="viz-fill" style="width: 0%;"></div>
           </div>
@@ -82,23 +88,24 @@
       </section>
 
       <!-- Interactive Q&A and Citations Panel -->
-      <section class="interaction-card">
+      <section class="interaction-card" aria-label="Conversation and Citations Panel">
         <!-- Answer Display -->
         <div class="answer-display-box">
           <div class="box-header">
-            <h3>Response & Source Provenance</h3>
-            <span id="responseLangBadge" class="lang-tag">Lang: HI</span>
+            <h3>Response &amp; Source Provenance</h3>
+            <span id="responseLangBadge" class="lang-tag">In: HI | Out: HI</span>
           </div>
 
           <div id="questionPromptView" class="question-prompt-view" style="display: none;">
-            <strong>Q:</strong> <span id="userQuestionText"></span>
+            <span class="q-badge">Q</span>
+            <span id="userQuestionText"></span>
           </div>
 
-          <div id="answerText" class="answer-text">
-            Namaste! I am Chacha, your river conservation mascot. Ask me anything about the Ganga River, pollution sources, water quality, or Namami Gange programs.
+          <div id="answerText" class="answer-text" tabindex="0">
+            Namaste! I am Chacha Chaudhary, your river conservation mascot. Ask me anything about the Ganga River basin, pollution sources, water quality standards, or Namami Gange programs.
           </div>
 
-          <!-- Thinking / Loading Wave -->
+          <!-- Thinking / Loading Indicator -->
           <div id="thinkingWave" class="thinking-wave" style="display: none;">
             <div class="dot"></div>
             <div class="dot"></div>
@@ -123,19 +130,20 @@
                 type="text"
                 id="questionInput"
                 class="question-input"
-                placeholder="Type your question about Ganga, GRBMP, or pollution..."
+                placeholder="गंगा नदी या नमामि गंगे से जुड़ा प्रश्न पूछें..."
                 autocomplete="off"
+                aria-label="Question input"
               />
-              <button type="button" id="micBtn" class="mic-btn" title="Click to speak (Voice STT)">
-                🎙️
+              <button type="button" id="micBtn" class="mic-btn" title="Click to speak (Voice STT)" aria-label="Voice input">
+                🎤
               </button>
             </div>
-            <button type="submit" id="submitBtn" class="submit-btn">
+            <button type="submit" id="submitBtn" class="submit-btn" aria-label="Submit question">
               <span>Ask Brain</span>
               <span class="btn-arrow">→</span>
             </button>
           </form>
-          <div id="voiceStatusMsg" class="voice-status-msg"></div>
+          <div id="voiceStatusMsg" class="voice-status-msg" aria-live="polite"></div>
         </div>
       </section>
     </main>
@@ -146,7 +154,7 @@
     </footer>
   </div>
 
-  <script src="mascot.js?v=member2-final5"></script>
-  <script src="app.js?v=member2-final5"></script>
+  <script src="mascot.js?v=chacha-new-v7"></script>
+  <script src="app.js?v=chacha-new-v7"></script>
 </body>
 </html>

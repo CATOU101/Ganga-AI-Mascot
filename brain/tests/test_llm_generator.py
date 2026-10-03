@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import urllib.error
 import unittest
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
@@ -18,6 +19,7 @@ from brain.generator import (
 )
 from brain.prompts import GROUNDING_SYSTEM_PROMPT, INSUFFICIENT_EVIDENCE
 from brain.rag_pipeline import answer_question
+from brain.translator import TranslationError, translate_text
 
 
 HITS = [
@@ -105,6 +107,7 @@ class GroqGeneratorTests(unittest.TestCase):
             generator = GroqGenerator(model=DEFAULT_GROQ_MODEL)
             result = generator.generate("What is Aviral Dhara?", HITS)
 
+        self.assertIsNone(generator.client)
         self.assertEqual(result, ExtractiveGenerator().generate("What is Aviral Dhara?", HITS))
 
     def test_evidence_context_is_bounded(self):
@@ -239,6 +242,139 @@ class PipelineLLMGateTests(unittest.TestCase):
         build.assert_not_called()
         self.assertEqual(result["mode"], "current-info-fallback")
         self.assertEqual(result["answer"], current_information_response()["answer"])
+
+
+class PipelineLanguageHandlingTests(unittest.TestCase):
+    def setUp(self):
+        self.config = SimpleNamespace(llm_provider="groq", llm_model=DEFAULT_GROQ_MODEL)
+
+    def test_supported_language_pairs_translate_only_at_required_boundaries(self):
+        cases = (
+            ("en", "en", "What is the Ganga River?", []),
+            (
+                "hi",
+                "hi",
+                "गंगा नदी क्या है?",
+                [
+                    ("गंगा नदी क्या है?", "hi", "en"),
+                    ("A grounded answer.", "en", "hi"),
+                ],
+            ),
+            (
+                "hi",
+                "en",
+                "गंगा नदी क्या है?",
+                [("गंगा नदी क्या है?", "hi", "en")],
+            ),
+            (
+                "en",
+                "hi",
+                "What is the Ganga River?",
+                [("A grounded answer.", "en", "hi")],
+            ),
+        )
+
+        for input_language, output_language, question, expected_translations in cases:
+            with self.subTest(input_language=input_language, output_language=output_language):
+                retriever = Mock()
+                retriever.retrieve.return_value = (True, HITS)
+                generator = Mock()
+                generator.generate.return_value = {
+                    "answer": "A grounded answer.",
+                    "citations": [{"file_name": "grbmp.pdf"}],
+                    "mode": "grounded",
+                }
+
+                def fake_translate(text, source, target):
+                    if (source, target) == ("hi", "en"):
+                        return "What is the Ganga River?"
+                    if (source, target) == ("en", "hi"):
+                        return "गंगा नदी का उत्तर।"
+                    raise AssertionError(f"Unexpected translation: {source}->{target}")
+
+                with (
+                    patch("brain.rag_pipeline.load_config", return_value=self.config),
+                    patch("brain.rag_pipeline.Retriever", return_value=retriever),
+                    patch("brain.rag_pipeline.build_generator", return_value=generator),
+                    patch("brain.rag_pipeline.translate_text", side_effect=fake_translate) as translate,
+                ):
+                    result = answer_question(
+                        question,
+                        input_language=input_language,
+                        output_language=output_language,
+                    )
+
+                self.assertEqual(
+                    [(call.args[0], call.args[1], call.args[2]) for call in translate.call_args_list],
+                    expected_translations,
+                )
+                retriever.retrieve.assert_called_once_with("What is the Ganga River?", None)
+                generator.generate.assert_called_once()
+                self.assertEqual(generator.generate.call_args.args[0], "What is the Ganga River?")
+                self.assertEqual(result["mode"], "grounded")
+                self.assertEqual(result["citations"], [{"file_name": "grbmp.pdf"}])
+                if output_language == "hi":
+                    self.assertEqual(result["answer"], "गंगा नदी का उत्तर।")
+                else:
+                    self.assertEqual(result["answer"], "A grounded answer.")
+
+    def test_hindi_input_translation_failure_stops_before_retrieval_and_groq(self):
+        with (
+            patch("brain.rag_pipeline.load_config", return_value=self.config),
+            patch("brain.rag_pipeline.translate_text", side_effect=TranslationError("HTTP 429")) as translate,
+            patch("brain.rag_pipeline.Retriever") as retriever,
+            patch("brain.rag_pipeline.build_generator") as build,
+        ):
+            with self.assertRaises(TranslationError):
+                answer_question(
+                    "गंगा नदी क्या है?",
+                    input_language="hi",
+                    output_language="hi",
+                )
+
+        translate.assert_called_once_with("गंगा नदी क्या है?", "hi", "en")
+        retriever.assert_not_called()
+        build.assert_not_called()
+
+    def test_output_translation_failure_occurs_after_generation(self):
+        retriever = Mock()
+        retriever.retrieve.return_value = (True, HITS)
+        generator = Mock()
+        generator.generate.return_value = {
+            "answer": "A grounded answer.",
+            "citations": [{"file_name": "grbmp.pdf"}],
+            "mode": "grounded",
+        }
+
+        with (
+            patch("brain.rag_pipeline.load_config", return_value=self.config),
+            patch("brain.rag_pipeline.Retriever", return_value=retriever),
+            patch("brain.rag_pipeline.build_generator", return_value=generator),
+            patch("brain.rag_pipeline.translate_text", side_effect=TranslationError("HTTP 429")),
+        ):
+            with self.assertRaises(TranslationError):
+                answer_question(
+                    "What is the Ganga River?",
+                    input_language="en",
+                    output_language="hi",
+                )
+
+        generator.generate.assert_called_once()
+
+    def test_google_translation_429_is_reported_as_translation_error(self):
+        http_429 = urllib.error.HTTPError(
+            "https://translate.googleapis.com/translate_a/single",
+            429,
+            "Too Many Requests",
+            hdrs=None,
+            fp=None,
+        )
+        with patch("brain.translator.urllib.request.urlopen", side_effect=http_429):
+            with self.assertLogs("brain.translator", level="WARNING") as captured:
+                with self.assertRaises(TranslationError):
+                    translate_text("गंगा नदी क्या है?", "hi", "en")
+
+        self.assertIn("429", "\n".join(captured.output))
 
 
 if __name__ == "__main__":

@@ -1,18 +1,18 @@
-/**
+﻿/**
  * Main Application Orchestrator for Ganga AI Mascot UI
- * Production Integration: Member 2 Digital Avatar + Voice System
+ * Production Integration: Chacha New 3D Avatar + Grounded RAG + Voice
  * 
  * Pipeline:
- * - Typed Question -> POST /api/integration/ask -> Brain -> EdgeTTS -> Rhubarb -> Three.js GLB
- * - Microphone -> MediaRecorder -> POST /api/integration/stt -> Vosk STT -> Brain -> EdgeTTS -> Rhubarb -> Three.js GLB
- * - Full 35 Morph Targets + 9 Mixamo Actions + Procedural Blinking
- * - Preserves Web Speech API and SpeechSynthesis as emergency fallbacks
+ * - User Question (Text/Voice) -> POST /api/integration/ask / /api/integration/stt
+ * - Grounded RAG Brain -> EdgeTTS Audio -> Rhubarb Visemes Timeline
+ * - MascotController: 28 Mixamo Skeletal Actions, Dynamic Viewport Framing, Zero T-Pose
+ * - Audio Playback & Real-Time Lip-Sync Visualizer Synchronization
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   const mascot = new MascotController();
 
-  // UI Elements
+  // DOM Elements
   const statusBadge = document.getElementById('statusBadge');
   const statusText = document.getElementById('statusText');
   const emotionBadge = document.getElementById('emotionBadge');
@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const outputLangHiBtn = document.getElementById('outputLangHi');
   const outputLangEnBtn = document.getElementById('outputLangEn');
   const vizFill = document.getElementById('vizFill');
+  const vizLevel = document.getElementById('vizLevel');
   const voiceStatusMsg = document.getElementById('voiceStatusMsg');
 
   let currentInputLanguage = 'hi';
@@ -94,115 +95,146 @@ document.addEventListener('DOMContentLoaded', () => {
   // Update UI State Badges & Synchronize Avatar State Machine
   function setState(state) {
     currentState = state;
-    statusBadge.className = `status-badge state-${state.toLowerCase()}`;
-    statusText.textContent = state;
-
-    if (state === 'THINKING' || state === 'PROCESSING') {
-      thinkingWave.style.display = 'flex';
-      submitBtn.disabled = true;
-    } else {
-      thinkingWave.style.display = 'none';
-      submitBtn.disabled = false;
+    if (statusBadge) {
+      statusBadge.className = `status-badge state-${state.toLowerCase()}`;
+    }
+    if (statusText) {
+      statusText.textContent = state;
     }
 
-    // Forward state to Member 2 avatar state machine
+    if (state === 'THINKING' || state === 'PROCESSING') {
+      if (thinkingWave) thinkingWave.style.display = 'flex';
+      if (submitBtn) submitBtn.disabled = true;
+    } else {
+      if (thinkingWave) thinkingWave.style.display = 'none';
+      if (submitBtn) submitBtn.disabled = false;
+    }
+
+    // Forward state to Mascot 3D Engine
     if (mascot && mascot.setState) {
       mascot.setState(state);
     }
   }
 
   // Form Submission (Typed Question Pipeline)
-  askForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const question = questionInput.value.trim();
-    if (!question) return;
+  if (askForm) {
+    askForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = questionInput.value.trim();
+      if (!question) return;
 
-    await processQuestion(question);
-  });
+      await processQuestion(question);
+    });
+  }
 
   // Main Question Pipeline (Typed Text)
   async function processQuestion(question) {
-    if (currentState === 'SPEAKING' || currentState === 'THINKING') return;
+    if (currentState === 'SPEAKING' || currentState === 'THINKING') {
+      stopCurrentSpeech();
+    }
 
-    // 1. Update UI to PROCESSING -> THINKING
-    questionPromptView.style.display = 'block';
-    userQuestionText.textContent = question;
-    answerText.textContent = '';
+    // 1. Immediate visible reaction -> THINKING
+    if (questionPromptView) questionPromptView.style.display = 'flex';
+    if (userQuestionText) userQuestionText.textContent = question;
+    if (answerText) {
+      answerText.innerHTML = '<span class="progress-step searching">Consulting official GRBMP knowledge base...</span>';
+    }
     setState('THINKING');
+
+    const t_start = performance.now();
+
+    // Progressive status update
+    const progressTimer = setTimeout(() => {
+      if (currentState === 'THINKING' && answerText) {
+        answerText.innerHTML = '<span class="progress-step synthesizing">Synthesizing verified answer & neural voice...</span>';
+      }
+    }, 1500);
 
     try {
       // 2. Call Integration API endpoint (/api/integration/ask)
       const response = await fetch('/api/integration/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: question, input_language: currentInputLanguage, output_language: currentOutputLanguage })
-      }).catch(async () => {
-        // Fallback to direct Brain FastAPI /ask endpoint if integration endpoint isn't mounted
-        return fetch('/ask', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: question, input_language: currentInputLanguage, output_language: currentOutputLanguage })
-        });
+        body: JSON.stringify({ 
+          question: question, 
+          input_language: currentInputLanguage, 
+          output_language: currentOutputLanguage 
+        })
       });
+
+      clearTimeout(progressTimer);
 
       if (!response.ok) {
         throw new Error(`Server returned status ${response.status}`);
       }
 
+      const t_response = performance.now();
       const data = await response.json();
-      renderResponse(data);
+      renderResponse(data, t_start, t_response);
 
     } catch (err) {
+      clearTimeout(progressTimer);
       console.error('[Frontend] Error querying Brain API:', err);
       setState('ERROR');
-      answerText.textContent = "Sorry, I'm having trouble connecting to the Brain API server right now.";
-      setTimeout(() => setState('IDLE'), 2500);
+      if (answerText) {
+        answerText.textContent = "Sorry, I am having trouble connecting to the Ganga AI Brain server right now. Please verify the backend service is running.";
+      }
+      setTimeout(() => setState('IDLE'), 2800);
     }
   }
 
   // Render Response Payload & Start Speech / Lip-Sync
-  function renderResponse(data) {
+  function renderResponse(data, t_start = null, t_response = null) {
     const answer = data.answer || data.text || "No response received.";
     const mode = data.mode || "grounded";
-    const emotion = data.emotion || "happy";
-    const gesture = data.gesture || "nod";
+    const emotion = (data.emotion || "happy").toLowerCase();
+    const gesture = (data.gesture || "explaining").toLowerCase();
     const citations = data.citations || [];
 
-    // Display Text
-    answerText.textContent = answer;
+    // Display Answer Text
+    if (answerText) {
+      answerText.textContent = answer;
+    }
     
-    // Update Mode & Mascot Tags
-    modeBadge.textContent = `Mode: ${mode}`;
-    modeBadge.className = `tag mode-tag ${mode === 'grounded' ? 'mode-grounded' : 'mode-insufficient'}`;
-    emotionBadge.textContent = `Emotion: ${emotion}`;
-    gestureBadge.textContent = `Gesture: ${gesture}`;
+    // Update Mode & Mascot Indicators
+    if (modeBadge) {
+      modeBadge.textContent = `Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`;
+      modeBadge.className = `tag mode-tag ${mode === 'grounded' ? 'mode-grounded' : 'mode-insufficient'}`;
+    }
+    if (emotionBadge) {
+      emotionBadge.textContent = `Emotion: ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}`;
+    }
+    if (gestureBadge) {
+      gestureBadge.textContent = `Gesture: ${gesture}`;
+    }
 
-    // Apply Member 2 composite emotion & body gesture
-    mascot.setEmotion(emotion, 0.85);
-    mascot.setGesture(gesture);
+    // Synchronize deterministic state machine to SPEAKING with active emotion and gesture
+    mascot.setState('SPEAKING', { emotion: emotion, gesture: gesture });
 
     // Render Citations
     renderCitations(citations);
 
-    // Trigger Real Member 2 Acoustic Audio & Lip-Sync Playback
-    playProductionSpeech(data, answer);
+    // Trigger Real Acoustic Audio & Rhubarb Lip-Sync Playback
+    playProductionSpeech(data, answer, gesture, t_start, t_response);
   }
 
   // Render Provenance Citations
   function renderCitations(citations) {
-    citationCount.textContent = citations.length;
+    if (citationCount) citationCount.textContent = citations ? citations.length : 0;
+    if (!citationsList) return;
+
     citationsList.innerHTML = '';
 
     if (!citations || citations.length === 0) {
-      citationsList.innerHTML = '<div class="empty-citations">No explicit citations returned for this query.</div>';
+      citationsList.innerHTML = '<div class="empty-citations">No citations returned for this query. Response synthesized from conversational context.</div>';
       return;
     }
 
-    citations.forEach(c => {
+    citations.forEach((c) => {
       const card = document.createElement('div');
       card.className = 'citation-card';
       card.innerHTML = `
-        <div class="citation-source">${c.source || 'GRBMP Document'}</div>
+        <div class="citation-source">${c.source || 'GRBMP Knowledge Document'}</div>
         <div class="citation-meta">
           ${c.file_name ? `File: ${c.file_name}` : ''} 
           ${c.page ? `• Page ${c.page}` : ''} 
@@ -217,8 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Production Audio & Rhubarb Lip-Sync Player
   // =========================================================================
 
-  function playProductionSpeech(data, fallbackText) {
-    // Cancel any previous speech playback
+  function playProductionSpeech(data, fallbackText, initialGesture = 'nod', t_start = null, t_response = null) {
+    // Cancel any previous speech playback cleanly
     stopCurrentSpeech();
 
     let src = null;
@@ -243,13 +275,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setState('SPEAKING');
 
+// One-shot gesture transitions to Talking loop via mascot mixer finished event
+
       activeAudio.onplay = () => {
+        if (t_start) {
+          const t_first_audio = performance.now();
+          const backendMs = data.timing ? data.timing.total_backend_ms : (t_response ? (t_response - t_start).toFixed(1) : 'N/A');
+          const t11Ms = t_response ? (t_response - t_start).toFixed(1) : 'N/A';
+          const t12Ms = (t_first_audio - t_start).toFixed(1);
+          console.log(`[LATENCY BREAKDOWN] T0->T10 Backend: ${backendMs}ms | T11 Browser Received: ${t11Ms}ms | T12 Time-to-First-Audio: ${t12Ms}ms`);
+          if (data.timing) {
+            console.log('[STAGE TIMESTAMPS]', data.timing);
+          }
+        }
         syncRhubarbLipSync(cues, data.rms_lip_sync);
       };
 
       activeAudio.onended = () => {
         stopCurrentSpeech();
         setState('IDLE');
+        mascot.setState('IDLE');
       };
 
       activeAudio.onerror = (err) => {
@@ -259,9 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       activeAudio.play().then(() => {
-        console.log('[Frontend Audio] Active neural voice audio playing successfully.');
+        console.log('[Frontend Audio] Neural voice audio playing successfully.');
       }).catch((err) => {
-        console.warn('[Frontend Audio] Autoplay blocked or failed, using fallback if not playing:', err);
+        console.warn('[Frontend Audio] Autoplay blocked, falling back to speech synthesis:', err);
         if (!activeAudio || activeAudio.paused) {
           fallbackBrowserTTS(fallbackText);
         }
@@ -290,19 +335,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeCue) {
           matchedViseme = activeCue.viseme || activeCue.value || 'Viseme_A';
         }
+      } else {
+        // Syllabic speech cadence fallback (~4.5 Hz speech articulation rhythm)
+        const cycle = Math.sin(currentTime * 16.0);
+        if (cycle > 0.08) {
+          matchedViseme = cycle > 0.60 ? 'Viseme_A' : 'Viseme_O';
+        } else {
+          matchedViseme = 'Viseme_Silence';
+        }
       }
 
-      // Apply to 35 Morph Targets
+      // Forward to mascot controller
       mascot.setViseme(matchedViseme, 1.0);
 
-      // Update Visualizer
+      // 2. Real-Time RMS Audio Visualizer Update
       if (vizFill) {
         if (matchedViseme !== 'Viseme_Silence') {
-          vizFill.style.width = '75%';
+          const simulatedLevel = 60 + Math.floor(Math.sin(currentTime * 18) * 25 + 10);
+          vizFill.style.width = `${simulatedLevel}%`;
+          if (vizLevel) vizLevel.textContent = `${simulatedLevel}%`;
           vizFill.style.backgroundColor = '#38bdf8';
         } else {
-          vizFill.style.width = '10%';
-          vizFill.style.backgroundColor = '#94a3b8';
+          vizFill.style.width = '8%';
+          if (vizLevel) vizLevel.textContent = '8%';
+          vizFill.style.backgroundColor = '#64748b';
         }
       }
 
@@ -322,9 +378,14 @@ document.addEventListener('DOMContentLoaded', () => {
       activeAudio.currentTime = 0;
       activeAudio = null;
     }
-    mascot.clearViseme();
+    if (mascot) {
+      mascot.clearViseme();
+    }
     if (vizFill) {
       vizFill.style.width = '0%';
+    }
+    if (vizLevel) {
+      vizLevel.textContent = '0%';
     }
   }
 
@@ -336,30 +397,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.speechSynthesis.cancel();
     setState('SPEAKING');
+    mascot.playAction('Talking', 0.35);
 
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    utter.lang = currentOutputLanguage === 'hi' ? 'hi-IN' : 'en-US';
     utter.rate = 1.0;
 
     let simInterval = setInterval(() => {
       if (window.speechSynthesis.speaking) {
         const ap = Math.sin(Date.now() / 90) * 0.4 + 0.5;
         mascot.setMouthAperture(ap);
-        if (vizFill) vizFill.style.width = `${ap * 100}%`;
+        if (vizFill) vizFill.style.width = `${Math.round(ap * 100)}%`;
+        if (vizLevel) vizLevel.textContent = `${Math.round(ap * 100)}%`;
       }
     }, 60);
 
     utter.onend = () => {
       clearInterval(simInterval);
-      mascot.clearViseme();
-      if (vizFill) vizFill.style.width = '0%';
+      stopCurrentSpeech();
       setState('IDLE');
     };
 
     utter.onerror = () => {
       clearInterval(simInterval);
-      mascot.clearViseme();
-      if (vizFill) vizFill.style.width = '0%';
+      stopCurrentSpeech();
       setState('IDLE');
     };
 
@@ -370,16 +431,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Production Hardware Microphone (MediaRecorder -> Backend Vosk STT)
   // =========================================================================
 
-  micBtn.addEventListener('click', async () => {
-    if (isRecording) {
-      stopMicrophoneRecording();
-    } else {
-      await startMicrophoneRecording();
-    }
-  });
+  if (micBtn) {
+    micBtn.addEventListener('click', async () => {
+      if (isRecording) {
+        stopMicrophoneRecording();
+      } else {
+        await startMicrophoneRecording();
+      }
+    });
+  }
 
   async function startMicrophoneRecording() {
-    if (currentState === 'SPEAKING' || currentState === 'THINKING') return;
+    if (currentState === 'SPEAKING' || currentState === 'THINKING') {
+      stopCurrentSpeech();
+    }
 
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.warn('[Frontend Mic] MediaDevices API not supported, trying Web Speech API fallback.');
@@ -403,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stream.getTracks().forEach((track) => track.stop());
 
         const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-        voiceStatusMsg.textContent = 'Transcribing with local Vosk STT...';
+        if (voiceStatusMsg) voiceStatusMsg.textContent = 'Transcribing with local Vosk STT...';
         setState('THINKING');
 
         // Send to production backend STT endpoint
@@ -414,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
       isRecording = true;
       micBtn.classList.add('mic-listening');
       setState('LISTENING');
-      voiceStatusMsg.textContent = 'Listening (Member 2 Vosk)... Click mic again to send.';
+      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Listening... Speak clearly, click mic again to send.';
 
     } catch (err) {
       console.warn('[Frontend Mic] getUserMedia failed or denied. Falling back to Web Speech API:', err);
@@ -426,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mediaRecorder && isRecording) {
       mediaRecorder.stop();
       isRecording = false;
-      micBtn.classList.remove('mic-listening');
+      if (micBtn) micBtn.classList.remove('mic-listening');
     }
   }
 
@@ -445,16 +510,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const data = await response.json();
-      voiceStatusMsg.textContent = data.question ? `Heard: "${data.question}"` : 'Transcription complete.';
-      if (data.question) {
+      if (voiceStatusMsg) {
+        voiceStatusMsg.textContent = data.question ? `Heard: "${data.question}"` : 'Transcription complete.';
+      }
+      if (data.question && questionInput) {
         questionInput.value = data.question;
+      }
+      if (data.question && userQuestionText) {
         userQuestionText.textContent = data.question;
       }
       renderResponse(data);
 
     } catch (err) {
       console.error('[Frontend STT] Failed to transcribe with backend Vosk:', err);
-      voiceStatusMsg.textContent = 'STT transcription failed. Please try typing.';
+      if (voiceStatusMsg) voiceStatusMsg.textContent = 'STT transcription failed. Please try typing.';
       setState('ERROR');
       setTimeout(() => setState('IDLE'), 2000);
     }
@@ -471,30 +540,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const rec = new SpeechRec();
     rec.continuous = false;
     rec.interimResults = false;
-    rec.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    rec.lang = currentInputLanguage === 'hi' ? 'hi-IN' : 'en-US';
 
     rec.onstart = () => {
-      micBtn.classList.add('mic-listening');
+      if (micBtn) micBtn.classList.add('mic-listening');
       setState('LISTENING');
-      voiceStatusMsg.textContent = 'Listening (Browser fallback)... Speak clearly.';
+      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Listening (Browser fallback)... Speak clearly.';
     };
 
     rec.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      voiceStatusMsg.textContent = `Transcribed: "${transcript}"`;
-      questionInput.value = transcript;
-      micBtn.classList.remove('mic-listening');
+      if (voiceStatusMsg) voiceStatusMsg.textContent = `Transcribed: "${transcript}"`;
+      if (questionInput) questionInput.value = transcript;
+      if (micBtn) micBtn.classList.remove('mic-listening');
       processQuestion(transcript);
     };
 
     rec.onerror = (e) => {
       console.warn('[Frontend STT Fallback] Error:', e.error);
-      micBtn.classList.remove('mic-listening');
+      if (micBtn) micBtn.classList.remove('mic-listening');
       setState('IDLE');
     };
 
     rec.onend = () => {
-      micBtn.classList.remove('mic-listening');
+      if (micBtn) micBtn.classList.remove('mic-listening');
       if (currentState === 'LISTENING') {
         setState('IDLE');
       }

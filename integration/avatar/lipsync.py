@@ -1,4 +1,4 @@
-"""Acoustic Rhubarb Lip-Sync & RMS Amplitude analyzers for avatar mouth visemes and aperture."""
+﻿"""Acoustic Rhubarb Lip-Sync & RMS Amplitude analyzers for avatar mouth visemes and aperture."""
 
 from __future__ import annotations
 
@@ -80,7 +80,7 @@ class RhubarbLipSyncAnalyzer:
                 n_frames = w.getnframes()
                 exact_duration = round(n_frames / float(sample_rate), 4)
 
-            cmd = [self.rhubarb_bin, "-f", "json", audio_path]
+            cmd = [self.rhubarb_bin, "-f", "json", "-r", "phonetic", "--threads", "4", audio_path]
             proc = subprocess.run(cmd, capture_output=True, text=True)
             if proc.returncode != 0:
                 logger.error(f"[LipSync] Rhubarb process failed: {proc.stderr}")

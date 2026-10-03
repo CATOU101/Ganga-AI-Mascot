@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import argparse
 import os
+import time
+import logging
+logger = logging.getLogger("integration.server")
 import uvicorn
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, File, UploadFile, Response
@@ -62,22 +65,62 @@ def integration_health():
 
 @app.post("/api/integration/ask", response_model=AvatarPresentation)
 def integration_ask(req: BrainRequest):
+    t0 = time.perf_counter()
     q_text = req.get_question()
     if not q_text:
         raise HTTPException(status_code=400, detail="Question string must not be empty.")
 
     in_lang = req.get_input_language()
     out_lang = req.get_output_language()
+    t1 = time.perf_counter()
 
-    # Process question through conversation state machine
+    # T2: Brain/RAG start
+    t2 = time.perf_counter()
     pres = controller.process_text_question(q_text, input_language=in_lang, output_language=out_lang, top_k=req.top_k)
+    t5 = time.perf_counter()
 
-    # Synthesize optional TTS audio using output_language & compute lip-sync frames
+    # T6: TTS synthesis
+    t6 = time.perf_counter()
     tts_result = tts_adapter.synthesize_speech(pres.answer, language=out_lang)
-    final_pres = presenter.attach_audio_and_lipsync(pres, tts_result=tts_result)
-    final_pres.question = q_text
+    t7 = time.perf_counter()
 
+    # T8: Rhubarb lip-sync analysis
+    t8 = time.perf_counter()
+    final_pres = presenter.attach_audio_and_lipsync(pres, tts_result=tts_result)
+    t9 = time.perf_counter()
+
+    final_pres.question = q_text
     controller.finish_speaking(input_language=in_lang, output_language=out_lang)
+    t10 = time.perf_counter()
+
+    timing_info = {
+        "t0_received": round(t0, 4),
+        "t1_validation_ms": round((t1 - t0) * 1000, 2),
+        "t2_rag_start_ms": round((t2 - t0) * 1000, 2),
+        "t3_to_t5_brain_ms": round((t5 - t2) * 1000, 2),
+        "t6_tts_start_ms": round((t6 - t0) * 1000, 2),
+        "t7_tts_ms": round((t7 - t6) * 1000, 2),
+        "t8_rhubarb_start_ms": round((t8 - t0) * 1000, 2),
+        "t9_rhubarb_ms": round((t9 - t8) * 1000, 2),
+        "t10_serialization_ms": round((t10 - t9) * 1000, 2),
+        "total_backend_ms": round((t10 - t0) * 1000, 2),
+    }
+    final_pres.timing = timing_info
+
+    logger.info(
+        f"[PIPELINE LATENCY] Total: {timing_info['total_backend_ms']}ms | "
+        f"Validation: {timing_info['t1_validation_ms']}ms | "
+        f"Brain RAG: {timing_info['t3_to_t5_brain_ms']}ms | "
+        f"TTS: {timing_info['t7_tts_ms']}ms | "
+        f"Rhubarb: {timing_info['t9_rhubarb_ms']}ms"
+    )
+    print(
+        f"[PIPELINE LATENCY] Total: {timing_info['total_backend_ms']}ms | "
+        f"RAG: {timing_info['t3_to_t5_brain_ms']}ms | "
+        f"TTS: {timing_info['t7_tts_ms']}ms | "
+        f"Rhubarb: {timing_info['t9_rhubarb_ms']}ms",
+        flush=True
+    )
     return final_pres
 
 
@@ -114,6 +157,19 @@ async def integration_stt(
 
 # Mount the core Brain FastAPI router endpoints (/ask, /health) directly
 app.mount("/brain", brain_app)
+
+@app.on_event("startup")
+def startup_warmup():
+    try:
+        from brain.config import load_config
+        from brain.retriever import Retriever
+        cfg = load_config()
+        r = Retriever(cfg)
+        r.retrieve("warmup query", top_k=1)
+        print("[Startup] Vector Store and ONNX embeddings pre-warmed successfully.", flush=True)
+    except Exception as e:
+        print(f"[Startup] Warmup warning: {e}", flush=True)
+
 
 # Serve Web Mascot frontend if avatar directory exists
 if AVATAR_DIR.exists() and (AVATAR_DIR / "index.html").exists():
