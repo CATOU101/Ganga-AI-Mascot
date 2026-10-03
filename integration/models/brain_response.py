@@ -1,4 +1,4 @@
-"""Domain models and data transfer contracts for Integration layer."""
+﻿"""Domain models and data transfer contracts for Integration layer."""
 
 from __future__ import annotations
 
@@ -108,3 +108,4 @@ class AvatarPresentation(BaseModel):
     rhubarb_lipsync: dict | None = Field(None, description="Phonetic mouth cues timeline from Rhubarb")
     lip_sync: dict | None = Field(None, description="Standardized lip_sync alias containing source and mouth_cues")
     error_message: str | None = Field(None, description="User-facing error details if failed")
+    timing: dict[str, Any] | None = Field(None, description="Detailed stage latency breakdown")

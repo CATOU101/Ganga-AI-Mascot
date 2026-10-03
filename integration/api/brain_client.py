@@ -58,6 +58,31 @@ class BrainClient:
             logger.info("[Integration] MOCK_MODE active. Returning mock Brain response.")
             return self._mock_response(question, in_lang, out_lang)
 
+        # If configured for local unified server, execute RAG pipeline in-process to avoid 405/network overhead
+        is_local = any(h in self.config.brain_base_url for h in ("127.0.0.1", "localhost", "0.0.0.0"))
+        if is_local:
+            try:
+                from brain.rag_pipeline import answer_question
+                rag_res = answer_question(question.strip(), top_k=top_k, input_language=in_lang, output_language=out_lang)
+                mode = rag_res.get("mode", "insufficient-evidence")
+                gesture = "explaining" if mode == "grounded" else ("thinking" if mode == "insufficient-evidence" else "idle")
+                return self._parse_response(
+                    json.dumps({
+                        "answer": rag_res.get("answer", ""),
+                        "mode": mode,
+                        "citations": rag_res.get("citations", []),
+                        "input_language": in_lang,
+                        "output_language": out_lang,
+                        "language": out_lang,
+                        "emotion": "neutral",
+                        "gesture": gesture,
+                    }).encode("utf-8"),
+                    in_lang,
+                    out_lang
+                )
+            except Exception as direct_err:
+                logger.warning(f"[Integration] Direct in-process RAG call failed: {direct_err}; falling back to HTTP.")
+
         url = f"{self.config.brain_base_url}/ask"
         payload = {
             "question": question.strip(),
