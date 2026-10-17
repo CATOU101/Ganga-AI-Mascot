@@ -124,8 +124,8 @@ It defines `/api/integration/health`, `/api/integration/ask`, and `/api/integrat
 
 ## Avatar, voice, and integration components
 
-- **Avatar and browser UI:** `avatar/index.html`, `avatar/app.js`, and `avatar/mascot.js` provide the web interface and Three.js avatar controller. The model asset is `avatar/Member2_Chacha/Chacha_Master.glb`. The controller includes mappings for facial morph targets, Mixamo actions, avatar states, and speech visemes.
-- The avatar implementation documents 35 morph targets, nine Mixamo actions, and a 57-bone model rig; its controller also includes procedural blinking and animation/state handling.
+- **Avatar and browser UI:** `avatar/index.html`, `avatar/app.js`, and `avatar/mascot.js` provide the web interface and Three.js avatar controller. The active production asset is `avatar/Chacha_New/Chacha_New.glb` (65-bone Mixamo armature, 28 skeletal animations, 31,058 draw vertices, calibrated for an 80.5% vertical character viewport occupancy). The previous high-fidelity asset `avatar/Member2_Chacha/Chacha_Master.glb` (57-bone armature, 35 morph targets, 9 Mixamo actions) is preserved intact for backward compatibility.
+- The avatar controller includes procedural blinking, frame-by-frame 60 FPS LERP lip-sync smoothing, speech head cadence, and state management.
 - **Speech recognition:** `integration/voice/stt_adapter.py` provides the Vosk adapter for English and Hindi, along with mock and browser-delegation adapters. Audio upload is handled by the integration STT route.
 - **Speech synthesis:** `integration/voice/tts_adapter.py` provides Edge TTS and Windows SAPI-backed adapters, a synthetic WAV adapter for testing, and browser Web Speech delegation. Actual provider availability depends on the host environment.
 - **Lip-sync and presentation:** `integration/avatar/lipsync.py` wraps Rhubarb when its binary is available and includes fallback timelines and RMS-based mouth-aperture analysis. `mascot_presenter.py` combines Brain responses with optional audio and lip-sync data for the browser.
@@ -144,7 +144,7 @@ python -m pytest -q integration/tests
 
 The Brain provider tests mock Groq. These test commands do not require a real Groq request.
 
-The Brain suite on the integrated `main` branch was most recently verified with 38 passing tests. Run the commands above to check the current checkout; no fixed result is claimed for the integration suite here.
+The Brain suite on the integrated `main` branch is verified with 42 passing tests (including Brain hardening, broad query regression, and Groq LLM generator suites). Run the commands above to check the current checkout; no fixed result is claimed for the integration suite here.
 
 ## Project workstreams
 
