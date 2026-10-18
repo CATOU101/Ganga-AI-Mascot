@@ -51,10 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const questionInput = document.getElementById('questionInput');
   const micBtn = document.getElementById('micBtn');
   const submitBtn = document.getElementById('submitBtn');
-  const inputLangHiBtn = document.getElementById('inputLangHi');
-  const inputLangEnBtn = document.getElementById('inputLangEn');
-  const outputLangHiBtn = document.getElementById('outputLangHi');
-  const outputLangEnBtn = document.getElementById('outputLangEn');
+  const inputLangBtns = document.querySelectorAll('#inputLangSelector .lang-btn');
+  const outputLangBtns = document.querySelectorAll('#outputLangSelector .lang-btn');
   const vizFill = document.getElementById('vizFill');
   const vizLevel = document.getElementById('vizLevel');
   const voiceStatusMsg = document.getElementById('voiceStatusMsg');
@@ -73,38 +71,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let isRecording = false;
 
   // Language selection handlers
-  if (inputLangHiBtn && inputLangEnBtn) {
-    inputLangHiBtn.addEventListener('click', () => setInputLanguage('hi'));
-    inputLangEnBtn.addEventListener('click', () => setInputLanguage('en'));
-  }
-  if (outputLangHiBtn && outputLangEnBtn) {
-    outputLangHiBtn.addEventListener('click', () => setOutputLanguage('hi'));
-    outputLangEnBtn.addEventListener('click', () => setOutputLanguage('en'));
-  }
+  inputLangBtns.forEach((button) => button.addEventListener('click', () => setInputLanguage(button.dataset.lang)));
+  outputLangBtns.forEach((button) => button.addEventListener('click', () => setOutputLanguage(button.dataset.lang)));
+
+  const placeholders = {
+    en: 'Type your question about Ganga, GRBMP, or pollution...',
+    hi: 'गंगा नदी या नमामि गंगे से जुड़ा प्रश्न पूछें...',
+    kn: 'ಗಂಗಾ ನದಿ ಅಥವಾ ನಮಾಮಿ ಗಂಗೆ ಕುರಿತು ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ...',
+    ta: 'கங்கை நதி அல்லது நமாமி கங்கை குறித்த உங்கள் கேள்வியைத் தட்டச்சு செய்யவும்...'
+  };
 
   function setInputLanguage(lang) {
     currentInputLanguage = lang;
-    if (lang === 'hi') {
-      inputLangHiBtn.classList.add('active');
-      inputLangEnBtn.classList.remove('active');
-      questionInput.placeholder = 'गंगा नदी या नमामि गंगे से जुड़ा प्रश्न पूछें...';
-    } else {
-      inputLangEnBtn.classList.add('active');
-      inputLangHiBtn.classList.remove('active');
-      questionInput.placeholder = 'Type your question about Ganga, GRBMP, or pollution...';
-    }
+    inputLangBtns.forEach((button) => button.classList.toggle('active', button.dataset.lang === lang));
+    if (questionInput) questionInput.placeholder = placeholders[lang] || placeholders.en;
     updateLangBadge();
   }
 
   function setOutputLanguage(lang) {
     currentOutputLanguage = lang;
-    if (lang === 'hi') {
-      outputLangHiBtn.classList.add('active');
-      outputLangEnBtn.classList.remove('active');
-    } else {
-      outputLangEnBtn.classList.add('active');
-      outputLangHiBtn.classList.remove('active');
-    }
+    outputLangBtns.forEach((button) => button.classList.toggle('active', button.dataset.lang === lang));
     updateLangBadge();
   }
 
@@ -164,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setState('THINKING');
 
     const t_start = performance.now();
-
     // Progressive status update
     const progressTimer = setTimeout(() => {
       if (currentState === 'THINKING' && answerText) {
@@ -180,14 +165,19 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ 
           question: question, 
           input_language: currentInputLanguage, 
-          output_language: currentOutputLanguage 
+          output_language: currentOutputLanguage
         })
       });
 
       clearTimeout(progressTimer);
 
       if (!response.ok) {
-        throw new Error(`Server returned status ${response.status}`);
+        let detail = `Server returned status ${response.status}`;
+        try {
+          const errorBody = await response.json();
+          if (typeof errorBody.detail === 'string') detail = errorBody.detail;
+        } catch (_) {}
+        throw new Error(detail);
       }
 
       const t_response = performance.now();
@@ -199,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('[Frontend] Error querying Brain API:', err);
       setState('ERROR');
       if (answerText) {
-        answerText.textContent = "Sorry, I am having trouble connecting to the Ganga AI Brain server right now. Please verify the backend service is running.";
+        answerText.textContent = err.message || "Sorry, I am having trouble connecting to the Ganga AI Brain server right now.";
       }
       setTimeout(() => setState('IDLE'), 2800);
     }
@@ -422,7 +412,8 @@ document.addEventListener('DOMContentLoaded', () => {
     mascot.playAction('Talking', 0.35);
 
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = currentOutputLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    const speechLocale = { en: 'en-IN', hi: 'hi-IN', kn: 'kn-IN', ta: 'ta-IN' };
+    utter.lang = speechLocale[currentOutputLanguage] || 'en-IN';
     utter.rate = 1.0;
 
     let simInterval = setInterval(() => {
@@ -528,7 +519,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (!response.ok) {
-        throw new Error(`STT server returned status ${response.status}`);
+        let detail = `STT server returned status ${response.status}`;
+        try {
+          const errorBody = await response.json();
+          if (typeof errorBody.detail === 'string') detail = errorBody.detail;
+        } catch (_) {}
+        throw new Error(detail);
       }
 
       const data = await response.json();
@@ -545,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (err) {
       console.error('[Frontend STT] Failed to transcribe with backend Vosk:', err);
-      if (voiceStatusMsg) voiceStatusMsg.textContent = 'STT transcription failed. Please try typing.';
+      if (voiceStatusMsg) voiceStatusMsg.textContent = `${err.message} Please try typing.`;
       setState('ERROR');
       setTimeout(() => setState('IDLE'), 2000);
     }
@@ -562,7 +558,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const rec = new SpeechRec();
     rec.continuous = false;
     rec.interimResults = false;
-    rec.lang = currentInputLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    const speechLocale = { en: 'en-IN', hi: 'hi-IN', kn: 'kn-IN', ta: 'ta-IN' };
+    rec.lang = speechLocale[currentInputLanguage] || 'en-IN';
 
     rec.onstart = () => {
       if (micBtn) micBtn.classList.add('mic-listening');

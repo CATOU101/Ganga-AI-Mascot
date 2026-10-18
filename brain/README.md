@@ -169,7 +169,7 @@ python -m brain.api --host 0.0.0.0 --port 8000
 }
 ```
 
-Omitting language fields defaults both input and output to English. Supported codes are `en` and `hi`. `top_k` controls the maximum number of reranked evidence results returned (1–100); candidate retrieval remains controlled by `GANGA_BRAIN_CANDIDATE_TOP_K`.
+Omitting the input language triggers deterministic Unicode-script detection (English, Hindi, Kannada, or Tamil); an explicit `input_language` or legacy `language` field takes precedence. Output language defaults to the selected/detected input language. Supported codes are `en`, `hi`, `kn`, and `ta`. API requests allow external translation by default when the input or output language requires it. Translation can send the question and/or generated answer to Google's public Translate endpoint; the optional `translation_consent: false` field disables external translation for that request. Exact known system phrases use a small local dictionary. No translation cache is retained. The endpoint-specific data handling/retention terms have not been verified by this project; do not send personal or confidential text. `top_k` controls the maximum number of reranked evidence results returned (1–100); candidate retrieval remains controlled by `GANGA_BRAIN_CANDIDATE_TOP_K`.
 
 - **Grounded Response (`mode: "grounded"`)**:
 
@@ -214,5 +214,5 @@ Omitting language fields defaults both input and output to English. Supported co
 ## Limitations
 
 - Prototype uses static GRBMP PDF material; live telemetry/water quality sensor APIs should be integrated behind a dedicated realtime service.
-- Groq-assisted phrasing is not a guarantee of factual correctness or claim-level entailment. Translation between English and Hindi uses the existing external Google Translate GTX endpoint; when that endpoint fails, translation raises an explicit error and the API returns HTTP 503 rather than presenting untranslated text as translated.
+- Groq/OpenRouter-assisted phrasing is not a guarantee of factual correctness or claim-level entailment. Translation supports text codes `en`, `hi`, `kn`, and `ta`; script detection is heuristic and does not reliably identify transliterated or mixed-language text. API routes allow general translation by default when needed. It uses Google's public Translate endpoint, not the documented Cloud Translation API; endpoint-specific terms and availability are unverified. Requests that explicitly disable required translation return HTTP 428, and provider failures return HTTP 503 without logging provider exception text. No translation cache is retained.
 - `REVIEW_REQUIRED`, `OCR_REQUIRED`, `FILTER`, and `EXCLUDE` sections are excluded.

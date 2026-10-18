@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 from pydantic import BaseModel, Field
+from brain.translator import detect_language, normalize_language
 
 
 class ConversationState(str, Enum):
@@ -55,9 +56,10 @@ class CitationItem(BaseModel):
 class BrainRequest(BaseModel):
     question: str = Field("", description="Question prompt to Ganga Brain RAG")
     query: str | None = Field(None, description="Alias for question")
-    input_language: str | None = Field(None, description="Input language ('en' | 'hi')")
-    output_language: str | None = Field(None, description="Output language ('en' | 'hi')")
-    language: str | None = Field(None, description="Legacy language fallback ('en' | 'hi')")
+    input_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Input language ('en' | 'hi' | 'kn' | 'ta')")
+    output_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Output language ('en' | 'hi' | 'kn' | 'ta')")
+    language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Legacy language fallback ('en' | 'hi' | 'kn' | 'ta')")
+    translation_consent: bool = Field(True, description="Allow external translation when needed; defaults to true. Set false to disable it.")
     top_k: int | None = Field(None, description="Retriever candidate override")
 
     def get_question(self) -> str:
@@ -65,17 +67,17 @@ class BrainRequest(BaseModel):
 
     def get_input_language(self) -> str:
         if self.input_language:
-            return self.input_language.lower().strip()
+            return normalize_language(self.input_language)
         if self.language:
-            return self.language.lower().strip()
-        return "hi"
+            return normalize_language(self.language)
+        return detect_language(self.get_question(), default="en")
 
     def get_output_language(self) -> str:
         if self.output_language:
-            return self.output_language.lower().strip()
+            return normalize_language(self.output_language)
         if self.language:
-            return self.language.lower().strip()
-        return "hi"
+            return normalize_language(self.language)
+        return self.get_input_language()
 
 
 class BrainResponse(BaseModel):

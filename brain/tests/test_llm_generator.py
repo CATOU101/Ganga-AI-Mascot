@@ -478,7 +478,7 @@ class PipelineLanguageHandlingTests(unittest.TestCase):
                     "mode": "grounded",
                 }
 
-                def fake_translate(text, source, target):
+                def fake_translate(text, source, target, *, allow_external=False):
                     if (source, target) == ("hi", "en"):
                         return "What is the Ganga River?"
                     if (source, target) == ("en", "hi"):
@@ -495,6 +495,7 @@ class PipelineLanguageHandlingTests(unittest.TestCase):
                         question,
                         input_language=input_language,
                         output_language=output_language,
+                        allow_external_translation=True,
                     )
 
                 self.assertEqual(
@@ -525,7 +526,7 @@ class PipelineLanguageHandlingTests(unittest.TestCase):
                     output_language="hi",
                 )
 
-        translate.assert_called_once_with("गंगा नदी क्या है?", "hi", "en")
+        translate.assert_called_once_with("गंगा नदी क्या है?", "hi", "en", allow_external=False)
         retriever.assert_not_called()
         build.assert_not_called()
 
@@ -550,6 +551,7 @@ class PipelineLanguageHandlingTests(unittest.TestCase):
                     "What is the Ganga River?",
                     input_language="en",
                     output_language="hi",
+                    allow_external_translation=True,
                 )
 
         generator.generate.assert_called_once()
@@ -565,7 +567,7 @@ class PipelineLanguageHandlingTests(unittest.TestCase):
         with patch("brain.translator.urllib.request.urlopen", side_effect=http_429):
             with self.assertLogs("brain.translator", level="WARNING") as captured:
                 with self.assertRaises(TranslationError):
-                    translate_text("गंगा नदी क्या है?", "hi", "en")
+                    translate_text("गंगा नदी क्या है?", "hi", "en", allow_external=True)
 
         self.assertIn("429", "\n".join(captured.output))
 

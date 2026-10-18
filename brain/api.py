@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 
 from .config import MAX_API_TOP_K, load_config
 from .rag_pipeline import answer_question
-from .translator import TranslationError
+from .translator import TranslationConsentRequired, TranslationError, detect_language, normalize_language
 from .vector_store import get_vector_store
 
 
@@ -26,30 +26,31 @@ app = FastAPI(
 
 
 class AskRequest(BaseModel):
-    question: str = Field(..., description="User question about River Ganga / GRBMP material", example="What are the major sources of pollution in the Ganga?")
-    input_language: Literal["en", "hi"] | None = Field(None, description="Input language ('en' | 'hi')", example="en")
-    output_language: Literal["en", "hi"] | None = Field(None, description="Output language ('en' | 'hi')", example="en")
-    language: Literal["en", "hi"] | None = Field(None, description="Legacy language fallback ('en' | 'hi')")
+    question: str = Field(..., description="User question about River Ganga / GRBMP material", json_schema_extra={"example": "What are the major sources of pollution in the Ganga?"})
+    input_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Input language ('en' | 'hi' | 'kn' | 'ta')", json_schema_extra={"example": "en"})
+    output_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Output language ('en' | 'hi' | 'kn' | 'ta')", json_schema_extra={"example": "en"})
+    language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Legacy language fallback ('en' | 'hi' | 'kn' | 'ta')")
+    translation_consent: bool = Field(True, description="Allow external translation when needed; defaults to true. Set false to disable it.")
     top_k: int | None = Field(
         None,
         ge=1,
         le=MAX_API_TOP_K,
         description="Maximum number of reranked evidence results returned (default from Brain configuration).",
-        example=5,
+        json_schema_extra={"example": 5},
     )
 
     def get_input_language(self) -> str:
         if self.input_language:
-            return self.input_language.lower().strip()
+            return normalize_language(self.input_language)
         if self.language:
-            return self.language.lower().strip()
-        return "en"
+            return normalize_language(self.language)
+        return detect_language(self.question, default="en")
 
     def get_output_language(self) -> str:
         if self.output_language:
-            return self.output_language.lower().strip()
+            return normalize_language(self.output_language)
         if self.language:
-            return self.language.lower().strip()
+            return normalize_language(self.language)
         return self.get_input_language()
 
 
@@ -105,9 +106,12 @@ def ask(req: AskRequest):
             top_k=req.top_k,
             input_language=in_lang,
             output_language=out_lang,
+            allow_external_translation=req.translation_consent,
         )
+    except TranslationConsentRequired as exc:
+        raise HTTPException(status_code=428, detail="External translation is disabled for this request.") from exc
     except TranslationError as exc:
-        raise HTTPException(status_code=503, detail="Requested answer translation is unavailable.") from exc
+        raise HTTPException(status_code=503, detail="Requested translation is unavailable.") from exc
     return {
         "answer": res.get("answer", ""),
         "mode": res.get("mode", "insufficient-evidence"),
