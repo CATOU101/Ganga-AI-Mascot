@@ -13,6 +13,8 @@ from brain.config import DEFAULT_GROQ_MODEL, BrainConfig
 from brain.generator import (
     ExtractiveGenerator,
     GroqGenerator,
+    OpenRouterGenerator,
+    ProviderChainGenerator,
     build_generator,
     current_information_response,
     insufficient_evidence_response,
@@ -89,11 +91,13 @@ class GroqGeneratorTests(unittest.TestCase):
     def test_groq_failure_uses_extractive_fallback(self):
         self.client.chat.completions.create.side_effect = TimeoutError("request timed out")
 
-        result = self.generator.generate("What is Aviral Dhara?", HITS)
+        with self.assertLogs("brain.generator", level="WARNING") as captured:
+            result = self.generator.generate("What is Aviral Dhara?", HITS)
         expected = ExtractiveGenerator().generate("What is Aviral Dhara?", HITS)
 
         self.assertEqual(self.client.chat.completions.create.call_count, 1)
         self.assertEqual(result, expected)
+        self.assertIn("groq failed: timeout", "\n".join(captured.output))
 
     def test_empty_groq_output_uses_extractive_fallback(self):
         self.client.chat.completions.create.return_value = fake_chat_response("  ")
@@ -105,10 +109,12 @@ class GroqGeneratorTests(unittest.TestCase):
     def test_missing_api_key_uses_fallback_without_creating_client(self):
         with patch.dict(os.environ, {"GROQ_API_KEY": ""}):
             generator = GroqGenerator(model=DEFAULT_GROQ_MODEL)
-            result = generator.generate("What is Aviral Dhara?", HITS)
+            with self.assertLogs("brain.generator", level="WARNING") as captured:
+                result = generator.generate("What is Aviral Dhara?", HITS)
 
         self.assertIsNone(generator.client)
         self.assertEqual(result, ExtractiveGenerator().generate("What is Aviral Dhara?", HITS))
+        self.assertIn("missing_credentials", "\n".join(captured.output))
 
     def test_evidence_context_is_bounded(self):
         many_hits = [
@@ -166,7 +172,8 @@ class GroqGeneratorTests(unittest.TestCase):
         with patch.dict(os.environ, {"GROQ_API_KEY": "test-key"}):
             with patch("openai.OpenAI", return_value=sdk_client) as openai_client:
                 generator = GroqGenerator(model=DEFAULT_GROQ_MODEL)
-                result = generator.generate("What is Aviral Dhara?", HITS)
+                with self.assertLogs("brain.generator", level="INFO") as captured:
+                    result = generator.generate("What is Aviral Dhara?", HITS)
 
         openai_client.assert_called_once_with(
             api_key="test-key",
@@ -176,6 +183,7 @@ class GroqGeneratorTests(unittest.TestCase):
         )
         self.assertEqual(sdk_client.chat.completions.create.call_count, 1)
         self.assertEqual(result["answer"], "Grounded output.")
+        self.assertIn("LLM provider groq succeeded", "\n".join(captured.output))
 
     def test_api_key_is_not_logged_on_failure(self):
         secret = "test-groq-secret"
@@ -186,6 +194,190 @@ class GroqGeneratorTests(unittest.TestCase):
 
         self.assertNotIn(secret, "\n".join(captured.output))
 
+
+class ProviderChainTests(unittest.TestCase):
+    def test_groq_success_does_not_call_openrouter(self):
+        groq_client = Mock()
+        groq_client.chat.completions.create.return_value = fake_chat_response("Groq answer.")
+        with patch.dict(os.environ, {"GROQ_API_KEY": "fake-groq", "OPENROUTER_API_KEY": "fake-or"}):
+            generator = ProviderChainGenerator([
+                ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+            ])
+            with patch("brain.generator._hosted_generator", return_value=GroqGenerator(client=groq_client)) as factory:
+                result = generator.generate("What is Aviral Dhara?", HITS)
+
+        self.assertEqual(result["answer"], "Groq answer.")
+        factory.assert_called_once_with("groq", DEFAULT_GROQ_MODEL)
+
+    def test_groq_failure_then_openrouter_success_passes_equivalent_context(self):
+        groq_client, openrouter_client = Mock(), Mock()
+        groq_client.chat.completions.create.side_effect = TimeoutError("private prompt and evidence")
+        openrouter_client.chat.completions.create.return_value = fake_chat_response("OpenRouter answer.")
+        with patch.dict(os.environ, {"GROQ_API_KEY": "fake-groq", "OPENROUTER_API_KEY": "fake-or"}):
+            chain = ProviderChainGenerator([
+                ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+            ])
+            with patch("brain.generator._hosted_generator", side_effect=[
+                GroqGenerator(DEFAULT_GROQ_MODEL, groq_client, propagate_failures=True),
+                OpenRouterGenerator("nvidia/nemotron-3.5-super-vl:free", openrouter_client, propagate_failures=True),
+            ]):
+                result = chain.generate("Private prompt", HITS)
+
+        self.assertEqual(result["answer"], "OpenRouter answer.")
+        groq_call = groq_client.chat.completions.create.call_args.kwargs
+        router_call = openrouter_client.chat.completions.create.call_args.kwargs
+        self.assertEqual(groq_call["messages"], router_call["messages"])
+        self.assertEqual(groq_call["temperature"], router_call["temperature"])
+        self.assertEqual(groq_call["max_tokens"], router_call["max_tokens"])
+        self.assertNotIn("reasoning", groq_call)
+        self.assertEqual(router_call["extra_body"]["reasoning"], {"enabled": False})
+        self.assertEqual(result["citations"], ExtractiveGenerator().generate("q", HITS)["citations"])
+        self.assertEqual(result["mode"], "grounded")
+
+    def test_missing_groq_key_skips_to_openrouter(self):
+        client = Mock()
+        client.chat.completions.create.return_value = fake_chat_response("Router answer.")
+        with patch.dict(os.environ, {"GROQ_API_KEY": "", "OPENROUTER_API_KEY": "fake-or"}):
+            chain = ProviderChainGenerator([
+                ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+            ])
+            with patch("brain.generator._hosted_generator", side_effect=[
+                GroqGenerator(DEFAULT_GROQ_MODEL, propagate_failures=True),
+                OpenRouterGenerator("nvidia/nemotron-3.5-super-vl:free", client, propagate_failures=True),
+            ]) as factory:
+                result = chain.generate("question", HITS)
+
+        self.assertEqual(result["answer"], "Router answer.")
+        self.assertEqual(factory.call_count, 2)
+        client.chat.completions.create.assert_called_once()
+
+    def test_both_provider_failures_return_extractive_schema_and_citations(self):
+        clients = [Mock(), Mock()]
+        for client in clients:
+            client.chat.completions.create.side_effect = RuntimeError("secret prompt/evidence")
+        with patch.dict(os.environ, {"GROQ_API_KEY": "fake-groq", "OPENROUTER_API_KEY": "fake-or"}):
+            chain = ProviderChainGenerator([
+                ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+            ])
+            with patch("brain.generator._hosted_generator", side_effect=[
+                GroqGenerator(DEFAULT_GROQ_MODEL, clients[0], propagate_failures=True),
+                OpenRouterGenerator("nvidia/nemotron-3.5-super-vl:free", clients[1], propagate_failures=True),
+            ]):
+                result = chain.generate("secret prompt", HITS)
+
+        expected = ExtractiveGenerator().generate("secret prompt", HITS)
+        self.assertEqual(result, expected)
+        self.assertEqual(set(result), {"answer", "citations", "mode"})
+
+    def test_neither_key_constructs_sdk_client(self):
+        with patch.dict(os.environ, {"GROQ_API_KEY": "", "OPENROUTER_API_KEY": ""}):
+            chain = ProviderChainGenerator([
+                ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+            ])
+            with patch("openai.OpenAI") as sdk:
+                result = chain.generate("question", HITS)
+
+        sdk.assert_not_called()
+        self.assertEqual(result, ExtractiveGenerator().generate("question", HITS))
+
+    def test_openrouter_first_ordering(self):
+        router = Mock()
+        router.chat.completions.create.return_value = fake_chat_response("Router primary.")
+        with patch.dict(os.environ, {"OPENROUTER_API_KEY": "fake-or", "GROQ_API_KEY": "fake-groq"}):
+            chain = ProviderChainGenerator([
+                ("openrouter", "nvidia/nemotron-3.5-super-vl:free"), ("groq", DEFAULT_GROQ_MODEL)
+            ])
+            with patch("brain.generator._hosted_generator", return_value=OpenRouterGenerator(
+                "nvidia/nemotron-3.5-super-vl:free", router
+            )) as factory:
+                result = chain.generate("question", HITS)
+
+        self.assertEqual(result["answer"], "Router primary.")
+        factory.assert_called_once_with("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+
+    def test_extractive_mode_never_constructs_hosted_providers(self):
+        with patch("brain.generator._hosted_generator") as factory:
+            result = build_generator("extractive", DEFAULT_GROQ_MODEL).generate("question", HITS)
+        factory.assert_not_called()
+        self.assertEqual(result, ExtractiveGenerator().generate("question", HITS))
+
+    def test_openrouter_sdk_configuration_and_disabled_reasoning(self):
+        client = Mock()
+        client.chat.completions.create.return_value = fake_chat_response("OpenRouter answer.")
+        with patch.dict(os.environ, {"OPENROUTER_API_KEY": "fake-openrouter"}):
+            with patch("openai.OpenAI", return_value=client) as sdk:
+                generator = OpenRouterGenerator()
+                generator.generate("question", HITS)
+
+        sdk.assert_called_once_with(
+            api_key="fake-openrouter",
+            base_url="https://openrouter.ai/api/v1",
+            timeout=30.0,
+            max_retries=0,
+        )
+        call = client.chat.completions.create.call_args.kwargs
+        self.assertEqual(call["model"], "nvidia/nemotron-3.5-super-vl:free")
+        self.assertEqual(call["extra_body"]["reasoning"], {"enabled": False})
+
+    def test_safe_fallback_logs_exclude_keys_prompts_evidence_and_exception_text(self):
+        client = Mock()
+        secret_values = ["fake-groq-secret", "prompt-private", "evidence-private", "exception-private"]
+        client.chat.completions.create.side_effect = RuntimeError(secret_values[-1])
+        with patch.dict(os.environ, {"GROQ_API_KEY": secret_values[0]}):
+            chain = ProviderChainGenerator([("groq", DEFAULT_GROQ_MODEL)])
+            with patch("brain.generator._hosted_generator", return_value=GroqGenerator(
+                DEFAULT_GROQ_MODEL, client, propagate_failures=True
+            )):
+                with self.assertLogs("brain.generator", level="WARNING") as logs:
+                    chain.generate(secret_values[1], [{**HITS[0], "text": secret_values[2]}])
+
+        rendered = "\n".join(logs.output)
+        for secret in secret_values:
+            self.assertNotIn(secret, rendered)
+
+    def test_provider_errors_all_fall_through_to_next_adapter(self):
+        from openai import (
+            APIConnectionError,
+            AuthenticationError,
+            BadRequestError,
+            InternalServerError,
+            RateLimitError,
+        )
+
+        failures = [
+            (AuthenticationError("do not log", response=Mock(), body=None), "authentication_or_permission_error"),
+            (BadRequestError("do not log", response=Mock(), body=None), "invalid_request_or_model"),
+            (fake_chat_response(""), "malformed_response"),
+            (RuntimeError("do not log"), "unexpected_provider_error"),
+            (TimeoutError("do not log"), "timeout"),
+            (APIConnectionError(request=Mock()), "connection_error"),
+            (RateLimitError("do not log", response=Mock(), body=None), "rate_limited"),
+            (InternalServerError("do not log", response=Mock(), body=None), "provider_server_error"),
+        ]
+        for failed, expected_category in failures:
+            with self.subTest(failure=type(failed).__name__):
+                first, second = Mock(), Mock()
+                first.chat.completions.create.side_effect = failed if isinstance(failed, Exception) else None
+                if not isinstance(failed, Exception):
+                    first.chat.completions.create.return_value = failed
+                second.chat.completions.create.return_value = fake_chat_response("second succeeded")
+                with patch.dict(os.environ, {"GROQ_API_KEY": "fake-groq", "OPENROUTER_API_KEY": "fake-or"}):
+                    chain = ProviderChainGenerator([
+                        ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+                    ])
+                    with patch("brain.generator._hosted_generator", side_effect=[
+                        GroqGenerator(DEFAULT_GROQ_MODEL, first, propagate_failures=True),
+                        OpenRouterGenerator("nvidia/nemotron-3.5-super-vl:free", second, propagate_failures=True),
+                    ]):
+                        with self.assertLogs("brain.generator", level="WARNING") as logs:
+                            result = chain.generate("question", HITS)
+                self.assertEqual(result["answer"], "second succeeded")
+                first.chat.completions.create.assert_called_once()
+                second.chat.completions.create.assert_called_once()
+                log_text = "\n".join(logs.output)
+                self.assertIn("LLM provider groq failed:", log_text)
+                self.assertNotIn("do not log", log_text)
+                self.assertIn(expected_category, log_text)
 
 class PipelineLLMGateTests(unittest.TestCase):
     def setUp(self):
@@ -211,7 +403,8 @@ class PipelineLLMGateTests(unittest.TestCase):
 
     def test_build_generator_selects_groq(self):
         generator = build_generator("groq", DEFAULT_GROQ_MODEL)
-        self.assertIsInstance(generator, GroqGenerator)
+        self.assertIsInstance(generator, ProviderChainGenerator)
+        self.assertEqual(generator.providers, [("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")])
 
     def test_rejected_evidence_never_builds_or_calls_groq(self):
         retriever = Mock()

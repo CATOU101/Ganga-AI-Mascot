@@ -6,11 +6,10 @@ import json
 import logging
 import os
 import re
-import time
 from abc import ABC, abstractmethod
 from typing import Any
 
-from .config import DEFAULT_GROQ_MODEL
+from .config import DEFAULT_GROQ_MODEL, DEFAULT_OPENROUTER_MODEL
 from .prompts import CURRENT_INFO_MESSAGE, GROUNDING_SYSTEM_PROMPT, INSUFFICIENT_EVIDENCE
 from .retriever import extract_keywords
 
@@ -18,6 +17,10 @@ from .retriever import extract_keywords
 logger = logging.getLogger(__name__)
 MAX_LLM_EVIDENCE_CHARS = 6000
 MAX_LLM_OUTPUT_TOKENS = 700
+
+
+class MissingProviderAPIKey(RuntimeError):
+    """Raised internally when a hosted provider has no configured credential."""
 
 
 class Generator(ABC):
@@ -140,15 +143,35 @@ class ExtractiveGenerator(Generator):
         }
 
 
-class GroqGenerator(Generator):
-    """Groq chat-completions generator using the official OpenAI SDK."""
+class OpenAICompatibleGenerator(Generator):
+    """Grounded chat-completions adapter for OpenAI-compatible providers."""
 
-    def __init__(self, model: str | None = None, client: Any | None = None) -> None:
-        self.api_key = os.getenv("GROQ_API_KEY", "").strip()
-        if self.api_key.lower() in {"your_groq_api_key_here", "replace_me", "changeme"}:
+    provider = ""
+    key_name = ""
+    base_url = ""
+    default_model = ""
+    extra_parameters: dict[str, Any] = {}
+
+    def __init__(
+        self,
+        model: str | None = None,
+        client: Any | None = None,
+        *,
+        propagate_failures: bool = False,
+    ) -> None:
+        self.api_key = os.getenv(self.key_name, "").strip()
+        if self.api_key.lower() in {
+            "your_groq_api_key_here",
+            "your_openrouter_api_key_here",
+            "your_api_key_here",
+            "replace_me",
+            "changeme",
+        }:
             self.api_key = ""
-        self.model = (model or os.getenv("GROQ_MODEL", DEFAULT_GROQ_MODEL)).strip() or DEFAULT_GROQ_MODEL
+        configured_model = os.getenv(f"{self.provider.upper()}_MODEL", self.default_model)
+        self.model = (model or configured_model).strip() or self.default_model
         self.client = client
+        self.propagate_failures = propagate_failures
         self.fallback = ExtractiveGenerator()
 
     @staticmethod
@@ -185,12 +208,12 @@ class GroqGenerator(Generator):
         if self.client is not None:
             return self.client
         if not self.api_key:
-            raise RuntimeError("GROQ_API_KEY is not configured")
+            raise MissingProviderAPIKey(f"{self.key_name} is not configured")
         from openai import OpenAI
 
         self.client = OpenAI(
             api_key=self.api_key,
-            base_url="https://api.groq.com/openai/v1",
+            base_url=self.base_url,
             timeout=30.0,
             max_retries=0,
         )
@@ -234,29 +257,34 @@ class GroqGenerator(Generator):
             "document titles, file names, page numbers, URLs, or other source references in the "
             "answer; trusted citation metadata is attached separately."
         )
-        started = time.perf_counter()
-        logger.info("Attempting grounded Groq generation with model %s.", self.model)
         try:
-            response = self._get_client().chat.completions.create(
-                model=self.model,
-                messages=[
+            parameters = {
+                "model": self.model,
+                "messages": [
                     {"role": "system", "content": instructions},
                     {"role": "user", "content": request_input},
                 ],
-                temperature=0,
-                max_tokens=MAX_LLM_OUTPUT_TOKENS,
+                "temperature": 0,
+                "max_tokens": MAX_LLM_OUTPUT_TOKENS,
+                **self.extra_parameters,
+            }
+            response = self._get_client().chat.completions.create(
+                **parameters,
             )
             answer = response.choices[0].message.content
             if not isinstance(answer, str) or not answer.strip():
-                raise ValueError("Groq returned no usable output text")
+                raise ValueError("Provider returned no usable output text")
         except Exception as exc:
-            logger.warning(
-                "Groq generation failed (%s); using extractive fallback.",
-                type(exc).__name__,
-            )
-            return self.fallback.generate(question, hits, is_sufficient)
+            if isinstance(exc, MissingProviderAPIKey):
+                category = "missing_credentials"
+            else:
+                category = _safe_error_category(exc)
+            logger.warning("LLM provider %s failed: %s.", self.provider, category)
+            if not self.propagate_failures:
+                return self.fallback.generate(question, hits, is_sufficient)
+            raise ProviderGenerationError(self.provider, category) from None
 
-        logger.info("Groq generation completed in %.3f seconds.", time.perf_counter() - started)
+        logger.info("LLM provider %s succeeded.", self.provider)
         return {
             "answer": answer.strip(),
             "citations": citations_from_hits(cited_hits),
@@ -264,13 +292,121 @@ class GroqGenerator(Generator):
         }
 
 
-def build_generator(provider: str, model: str) -> Generator:
+class ProviderGenerationError(RuntimeError):
+    """Safe provider failure marker with no request or credential details."""
+
+    def __init__(self, provider: str, category: str) -> None:
+        super().__init__(category)
+        self.provider = provider
+        self.category = category
+
+
+def _safe_error_category(exc: Exception) -> str:
+    """Map SDK failures to non-sensitive categories without logging exception text."""
+    try:
+        from openai import APIConnectionError, APITimeoutError, AuthenticationError, PermissionDeniedError
+        from openai import BadRequestError, RateLimitError, InternalServerError
+
+        if isinstance(exc, (APITimeoutError, TimeoutError)):
+            return "timeout"
+        if isinstance(exc, APIConnectionError):
+            return "connection_error"
+        if isinstance(exc, RateLimitError):
+            return "rate_limited"
+        if isinstance(exc, (AuthenticationError, PermissionDeniedError)):
+            return "authentication_or_permission_error"
+        if isinstance(exc, BadRequestError):
+            return "invalid_request_or_model"
+        if isinstance(exc, InternalServerError):
+            return "provider_server_error"
+    except ImportError:
+        pass
+    if isinstance(exc, ValueError):
+        return "malformed_response"
+    return "unexpected_provider_error"
+
+
+class GroqGenerator(OpenAICompatibleGenerator):
+    """Groq chat-completions adapter using the official OpenAI SDK."""
+
+    provider = "groq"
+    key_name = "GROQ_API_KEY"
+    base_url = "https://api.groq.com/openai/v1"
+    default_model = DEFAULT_GROQ_MODEL
+
+
+class OpenRouterGenerator(OpenAICompatibleGenerator):
+    """OpenRouter chat-completions adapter using the official OpenAI SDK."""
+
+    provider = "openrouter"
+    key_name = "OPENROUTER_API_KEY"
+    base_url = "https://openrouter.ai/api/v1"
+    default_model = DEFAULT_OPENROUTER_MODEL
+    # Avoid spending the fixed output budget and additional latency on hidden reasoning.
+    extra_parameters = {"extra_body": {"reasoning": {"enabled": False}}}
+
+
+class ProviderChainGenerator(Generator):
+    """Try configured hosted providers once each, then use grounded extraction."""
+
+    def __init__(self, providers: list[tuple[str, str]]) -> None:
+        self.providers = providers
+        self.fallback = ExtractiveGenerator()
+
+    def generate(self, question, hits, is_sufficient=True, *, input_language="en", output_language="en"):
+        last_category = "no_configured_credentials"
+        attempted = set()
+        for provider, model in self.providers:
+            if provider in attempted:
+                continue
+            attempted.add(provider)
+            try:
+                generator = _hosted_generator(provider, model)
+            except Exception as exc:
+                last_category = _safe_error_category(exc)
+                logger.warning("LLM provider %s failed: %s.", provider, last_category)
+                continue
+            if not generator.api_key:
+                last_category = "missing_credentials"
+                logger.warning("LLM provider %s skipped: missing_credentials.", provider)
+                continue
+            try:
+                return generator.generate(
+                    question, hits, is_sufficient,
+                    input_language=input_language,
+                    output_language=output_language,
+                )
+            except ProviderGenerationError as exc:
+                last_category = exc.category
+                continue
+            except Exception as exc:
+                last_category = _safe_error_category(exc)
+                logger.warning("LLM provider %s failed: %s.", provider, last_category)
+        logger.warning("LLM hosted generation exhausted: %s; using extractive generation.", last_category)
+        return self.fallback.generate(question, hits, is_sufficient)
+
+
+def _hosted_generator(provider: str, model: str) -> OpenAICompatibleGenerator:
+    if provider == "groq":
+        return GroqGenerator(model, propagate_failures=True)
+    if provider == "openrouter":
+        return OpenRouterGenerator(model, propagate_failures=True)
+    raise ValueError(f"Unsupported hosted generator provider: {provider}")
+
+
+def build_generator(provider: str, model: str, provider_order: tuple[str, ...] | None = None) -> Generator:
     prov_clean = (provider or "extractive").lower().strip()
     if prov_clean == "extractive":
         return ExtractiveGenerator()
-    if prov_clean == "groq":
-        return GroqGenerator(model)
-    raise ValueError(f"Unsupported generator provider: {provider}")
+    if prov_clean not in {"groq", "openrouter"}:
+        raise ValueError(f"Unsupported generator provider: {provider}")
+    order = provider_order or (prov_clean, "openrouter" if prov_clean == "groq" else "groq")
+    providers = []
+    for name in order:
+        default = DEFAULT_GROQ_MODEL if name == "groq" else DEFAULT_OPENROUTER_MODEL
+        configured = os.getenv(f"{name.upper()}_MODEL", default).strip() or default
+        providers.append((name, model if name == prov_clean else configured))
+    return ProviderChainGenerator(providers)
 
 
 def current_information_response() -> dict:

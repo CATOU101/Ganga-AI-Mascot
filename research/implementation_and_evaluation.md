@@ -28,7 +28,7 @@ The codebase is organized into four core architectural components:
 |    - `retriever.py`: Vector similarity retrieval, lexical overlap reranking, evidence gate.    |
 |    - `vector_store.py`: Thread-safe SQLite metadata and memory-mapped NumPy vector index.     |
 |    - `embeddings.py`: Local CPU ONNX execution of all-MiniLM-L6-v2 (384d).                    |
-|    - `generator.py`: Grounded Groq generation (gpt-oss-120b) and local ExtractiveGenerator.   |
+|    - `generator.py`: Evidence-gated Groq → OpenRouter → extractive generation chain.          |
 |    - `translator.py`: Bilingual translation between English and Hindi.                        |
 |    - `chunking.py`: Paragraph-preserving character chunking with overlap and metadata.        |
 +-----------------------------------------------------------------------------------------------+
@@ -111,7 +111,7 @@ The codebase is organized into four core architectural components:
                ├─► [Post-Rerank Gate 2: Top Candidate Overlap >= 15%]
                │        │ (if < 15%) ──► Return Insufficient Evidence
                │
-               ├─► [Grounded Generation: Groq gpt-oss-120b or Extractive Fallback]
+               ├─► [Evidence-Gated Generation: Groq → OpenRouter → Extractive Fallback]
                │
                ├─► [Decoupled Citation Assembly: metadata bound directly from chunks]
                │
@@ -143,9 +143,12 @@ All settings are configured via environment variables or specified with sensible
 
 | Variable Name | Default Value | Description | Production Scope |
 | :--- | :--- | :--- | :--- |
-| `LLM_PROVIDER` | `groq` | Generator backend (`groq` or `extractive`) | Standalone Brain |
+| `LLM_PROVIDER` | `groq` | Generator selection (`groq`, `openrouter`, or strict local-only `extractive`) | Standalone Brain |
+| `LLM_PROVIDER_ORDER` | `groq,openrouter` | Comma-separated hosted order; `openrouter,groq` reverses priority | Standalone Brain |
 | `GROQ_MODEL` | `openai/gpt-oss-120b` | Groq chat completion model | Standalone Brain |
 | `GROQ_API_KEY` | *(None)* | Secret Groq API authentication key | Standalone Brain |
+| `OPENROUTER_MODEL` | `nvidia/nemotron-3.5-super-vl:free` | OpenRouter chat completion model | Standalone Brain |
+| `OPENROUTER_API_KEY` | *(None)* | Secret OpenRouter API authentication key | Standalone Brain |
 | `GANGA_BRAIN_EMBEDDING_PROVIDER` | `semantic` | Embedding backend (`semantic` or `local-hash`) | Standalone Brain |
 | `GANGA_BRAIN_EMBEDDING_MODEL` | `all-MiniLM-L6-v2`| ONNX semantic embedding model | Standalone Brain |
 | `GANGA_BRAIN_TOP_K` | `5` | Maximum verified evidence chunks returned | Standalone Brain |
@@ -155,6 +158,8 @@ All settings are configured via environment variables or specified with sensible
 | `GANGA_BRAIN_ORT_THREADS` | `2` | CPU thread allocation for ONNX Runtime | Standalone Brain |
 | `BRAIN_URL` | `http://127.0.0.1:8000` | URL for integration service to reach Brain | Integration Server |
 | `MOCK_MODE` | `False` | When True, bypasses heavy models for mock tests | Integration Server |
+
+The project-root `.env` is loaded at startup when present, without replacing explicitly exported environment variables. Groq and OpenRouter use independent keys and models. Each configured hosted provider is tried at most once after the static retrieval evidence gate accepts the query; missing credentials and provider errors advance to the next provider. Local extractive output is the final fallback. Current-information and evidence-rejection branches bypass hosted generation, while CPCB water-quality requests are routed separately by the integration controller. Citations are assembled from retrieved metadata; the extractive fallback can return a different citation subset because it cites the hits that contributed extracted sentences. No live-provider compatibility or availability is implied by these implementation details.
 
 ---
 
@@ -199,23 +204,23 @@ Open `http://127.0.0.1:8080/` in a WebGL-compatible browser to interact with the
 ## 5. Test Catalog & Verified Outcomes
 
 ### 5.1 Brain Subsystem Automated Test Suite
-- **Command:** `PYTHONPATH=. ./.venv/bin/pytest brain/tests`
-- **Verified Execution Outcome:** **42 passed** in 2.17 seconds (0 failures, 0 errors).
+- **Command:** `env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q brain/tests`
+- **Verified Execution Outcome:** **58 passed, 19 subtests passed, 6 warnings** in 1.61s (current checkout; explicit extractive mode and blank hosted keys).
 
 | Test Module | Test File | Items | Primary Assertions |
 | :--- | :--- | :--- | :--- |
 | **Brain Hardening** | `brain/tests/test_brain_hardening.py` | 12 | Tests `/health`, `/ask` validation, out-of-domain rejection, empty string safety, language parameter handling, and distance boundary edge cases. |
 | **Broad Query Routing**| `brain/tests/test_broad_query_regression.py` | 11 | Tests broad Ganga query detection, overview document matching, overview boost calculations, and regression protection for general inquiries. |
-| **LLM Generator & Mocks**| `brain/tests/test_llm_generator.py` | 19 | Tests Groq chat client initialization, prompt bounding (6,000 char limit), temperature configuration, citation assembly, and seamless fallback to `ExtractiveGenerator`. |
+| **LLM Generator & Mocks**| `brain/tests/test_llm_generator.py` | Current checkout | Mocks Groq and OpenRouter clients and checks provider ordering, fallback, request compatibility, citations, and safe logging. |
 
 ### 5.2 Integration Subsystem Automated Test Suite
-- **Command:** `PYTHONPATH=. ./.venv/bin/pytest integration/tests -k "not test_end_to_end"`
-- **Verified Execution Outcome:** **49 passed, 4 deselected** in ~1.00 second.
+- **Command:** `env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q integration/tests --ignore=integration/tests/test_end_to_end.py`
+- **Verified Execution Outcome:** **50 passed, 8 warnings** in 0.80s (current checkout; explicit extractive mode and blank hosted keys). The network-dependent end-to-end module is excluded.
 
 | Test Module | Test File | Items | Primary Assertions |
 | :--- | :--- | :--- | :--- |
 | **Avatar Mapping** | `integration/tests/test_avatar_mapping.py` | 2 | Verifies legacy animation alias mappings (`explaining` $\to$ `point`, `namaste` $\to$ `thankful`, `greet` $\to$ `wave`). |
-| **Brain Client** | `integration/tests/test_brain_client.py` | 4 | Verifies direct in-process RAG calling, HTTP client fallbacks, and error handling. |
+| **Brain Client & LLM Route** | `integration/tests/test_brain_client.py`, `integration/tests/test_llm_route.py` | Current checkout | Verifies direct in-process RAG calling, HTTP client fallbacks, error handling, and mocked eligible-question routing. |
 | **Chacha New Integration**| `integration/tests/test_chacha_new_integration.py` | 6 | Validates `Chacha_New.glb` binary integrity, non-zero file size, bone hierarchy (65 bones), and 28 embedded animation clips. |
 | **Conversation Controller**| `integration/tests/test_conversation_controller.py`| 3 | Validates session dialogue history, context turns, and state machine transitions. |
 | **Member2 Asset Guard** | `integration/tests/test_member2_integration.py` | 12 | Validates `Chacha_Master.glb` file size (>100MB), 57 bones, 35 shape keys, and 9 skeletal actions. |
@@ -238,6 +243,12 @@ Open `http://127.0.0.1:8080/` in a WebGL-compatible browser to interact with the
 | **F_provenance** | "What does the knowledge base say about environmental flows, and which source page supports it?" | `grounded` | `grounded` | 3 | Binds valid report title and page range metadata. |
 | **G_citations** | "What are the key functions of National Ganga River Basin Authority?" | `grounded` | `grounded` | 3 | Binds NGRBA institutional mandate with 0 hallucinated sources. |
 | **H_empty_query** | "" | `insufficient-evidence` | `insufficient-evidence` | 0 | Immediate safety rejection. |
+
+### 5.4 Provider-Chain Validation
+- **Command:** `./.venv/bin/python -m pytest -q brain/tests/test_config_environment.py brain/tests/test_llm_generator.py`
+- **Verified Execution Outcome:** **34 passed, 12 subtests passed** in 0.56s, no warnings.
+
+The Brain and integration commands above use explicit extractive mode and blank hosted keys so suite behavior cannot depend on local credentials. Provider SDK calls in automated tests are mocked; these suites do not perform a live-provider smoke test. Results are from this checkout on 2026-10-18 and do not establish that a live endpoint is available or compatible.
 
 ---
 

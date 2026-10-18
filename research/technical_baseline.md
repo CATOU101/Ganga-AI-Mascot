@@ -7,6 +7,8 @@
 **Active Working Branch:** `research/repository-preparation`  
 **Document Status:** Complete & Verified Technical Baseline  
 
+This document preserves the technical snapshot anchored to the baseline SHA above. Subsequent implementation changes on `research/repository-preparation` are recorded in the dated post-baseline addendum at the end of this document; historical baseline test counts below are not current-checkout validation results.
+
 ---
 
 ## 1. Project Scope and Purpose
@@ -22,7 +24,7 @@ The system couples a source-grounded conversational AI "Brain" with an interacti
 The runtime architecture is decoupled into three primary layers:
 1. **Interactive Client Layer (Avatar & Web UI):** A client-side WebGL application built on Three.js (`avatar/index.html`, `avatar/app.js`, `avatar/mascot.js`) rendering the 3D Chacha Chaudhary mascot, managing skeletal animations, procedural blinking, speech cadence, and audio playback.
 2. **Integration Service Layer (`integration/server.py`):** A FastAPI service operating on port 8080 that coordinates user requests, manages conversational state, exposes speech-to-text (STT) and text-to-speech (TTS) pipelines, generates acoustic/viseme lip-sync timelines, and mounts the Brain API. It also intercepts real-time water-quality queries via `integration/water_quality.py` to retrieve verified live telemetry from CPCB monitoring stations (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip) with 60-second in-memory caching and freshness labelling.
-3. **Knowledge & Reasoning Brain Layer (`brain/api.py`, `brain/rag_pipeline.py`):** A standalone FastAPI service (typically port 8000) hosting a Retrieval-Augmented Generation (RAG) pipeline over curated government documents, featuring hybrid semantic/lexical retrieval, heuristic evidence gating, Groq-hosted LLM generation, extractive fallback, and deterministic citation assembly.
+3. **Knowledge & Reasoning Brain Layer (`brain/api.py`, `brain/rag_pipeline.py`):** A standalone FastAPI service (typically port 8000) hosting a Retrieval-Augmented Generation (RAG) pipeline over curated government documents, featuring hybrid semantic/lexical retrieval, heuristic evidence gating, hosted generation, extractive fallback, and deterministic citation assembly. The post-baseline provider-chain update is described in the addendum.
 
 ```
 +---------------------------------------------------------------------------------------+
@@ -249,7 +251,17 @@ The pipeline implements explicit branching before and during retrieval:
 ## 11. Known Technical Limitations & Research Considerations
 
 1. **Static Corpus Horizon:** The knowledge base reflects GRBMP documents published between 2010 and 2015. It lacks contemporary post-2020 NMCG project data.
-2. **Absence of Real-Time IoT Sensors:** The system does not integrate live river sensor feeds or CPCB telemetry.
-3. **External Network Reliance:** Groq generation, Google translation, and EdgeTTS require live internet access.
+2. **Absence of Direct IoT Sensor Feeds:** The application does not directly connect to river sensors. CPCB station readings are handled by a separate integration-layer route, as described in the post-baseline update.
+3. **External Network Reliance:** Hosted Groq/OpenRouter generation, Google translation, and EdgeTTS require live internet access when selected.
 4. **Heuristic Gating:** Lexical overlap and distance thresholds filter irrelevant queries effectively but do not constitute formal semantic entailment proofs.
 5. **Cross-Platform Audio/Tooling Gaps:** SAPI speech synthesis and Rhubarb binary analysis are Windows-dependent, requiring fallback paths on macOS/Linux.
+
+---
+
+## 12. Post-Baseline Generation-Layer Resilience Update (2026-10-18)
+
+The working branch adds a configurable hosted-provider chain after the existing Brain retrieval and evidence-quality gate: Groq is the default first provider, OpenRouter is attempted next, and the existing extractive generator is the final fallback. Each configured provider is attempted at most once per request. Missing credentials and provider errors advance to the next provider. `LLM_PROVIDER_ORDER=openrouter,groq` makes OpenRouter primary, while `LLM_PROVIDER=extractive` keeps generation local-only. Groq and OpenRouter keys and model settings remain independent, and project-root `.env` loading does not override exported variables.
+
+The change is confined to generation/configuration orchestration; it does not change retrieval scoring, evidence acceptance, or the citation assembly algorithm. Hosted citation metadata continues to be built from retrieved evidence, while extractive fallback cites only hits contributing selected sentences and may therefore return a different citation list. Current-information and evidence-rejection branches still bypass hosted generation, and CPCB water-quality routing remains in the integration controller.
+
+Provider tests use mocked SDK clients and fake credentials. No real-provider smoke test or comparative quality, latency, or availability experiment is claimed. OpenRouter free endpoints may be rate limited and have provider-specific data-handling terms. See `research/implementation_and_evaluation.md` for current-checkout validation commands and results.

@@ -316,6 +316,8 @@ LLM            → Reasoning and Language Generation
 ```
 This separation makes the system easier to maintain, evaluate, and improve, and is consistent with R2's separation of retriever and generator as independently replaceable components.
 
+**Current generation behavior:** Hosted generation is constructed only after retrieval and the existing evidence-quality gate accept the question. The default provider order is Groq followed by OpenRouter, with each configured provider attempted at most once; missing credentials or a provider error advances to the next provider. If hosted generation is unavailable, the local extractive generator is the final fallback. `LLM_PROVIDER=extractive` selects local-only generation. Current-information requests bypass this chain, and CPCB water-quality requests are routed separately by the integration controller. Citation objects are built from retrieved metadata. The hosted generators cite the bounded evidence supplied to them; the extractive fallback cites hits that contributed extracted sentences, so the citation list can differ while the response schema remains the same.
+
 ⸻
 
 ## 9. Application and API Layer
@@ -446,16 +448,13 @@ Evaluation results should be used to improve the knowledge base, retrieval confi
 ## 13. Logging and Monitoring
 During development, the system should record useful technical information to support debugging and evaluation.
 
-Potential information includes:
+Potential diagnostic information includes:
 
-- User query
-- Retrieved documents/chunks
-- Retrieval scores
-- Generated response
-- Response latency
-- System errors
-- Evaluation results
-The logging system should avoid storing unnecessary sensitive user information — a point reinforced by R3's identification of data privacy and security as a top-five ethical concern for educational conversational AI.
+- Provider and safe outcome/error category
+- Non-sensitive retrieval and evaluation metrics
+- System errors and timing measurements
+
+Provider diagnostics must not log API keys, authorization headers, prompts, retrieved evidence, generated responses, exception messages, or other private request data. The logging system should avoid storing unnecessary sensitive user information — a point reinforced by R3's identification of data privacy and security as a top-five ethical concern for educational conversational AI.
 
 Monitoring should help identify where problems occur in the pipeline. For example:
 
@@ -640,7 +639,7 @@ The architecture defined here represents the active working implementation of th
 - **Vector Retrieval Backend**: Crash-proof SQLite metadata (`chroma.sqlite3`) + NumPy vector matrix (`semantic_vectors.npy`).
 - **Retriever**: Hybrid (ONNX dense similarity + lexical reranking).
 - **Quality Gate**: Multi-Factor Evidence Gate (unsupported query rejection + current-info fallback).
-- **Generator**: Local Extractive grounded synthesizer default / OpenAI LLM option.
+- **Generator**: Evidence-gated Groq → OpenRouter → extractive fallback chain; `LLM_PROVIDER=extractive` selects local-only generation. Provider keys and models are configured independently with `GROQ_API_KEY` / `GROQ_MODEL` and `OPENROUTER_API_KEY` / `OPENROUTER_MODEL`; `LLM_PROVIDER_ORDER` can reverse provider order. The project-root `.env` is loaded without replacing exported environment variables.
 - **API Boundary**: FastAPI HTTP Server (`POST /ask`, `GET /health`).
 - **Live Environmental Telemetry**: Real-time CPCB water-quality monitoring (pH, DO, BOD) integrated at the conversation controller layer for 5 verified main-stem Ganga stations (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip) with 60s in-memory caching and freshness labeling.
 
