@@ -170,7 +170,7 @@ The retrieval pipeline in `brain/retriever.py` executes in four sequential stage
 - **System Prompt:** `GROUNDING_SYSTEM_PROMPT` enforces strict grounding on retrieved evidence, third-person objective tone, and forbids fabricating external references or dates.
 - **Evidence Formatting:** Retrieved text is bounded to a maximum of 6,000 characters (`MAX_LLM_EVIDENCE_CHARS`), with structured metadata (`title`, `file_name`, `page_start`, `page_end`, `section`, `knowledge_type`). Output tokens are capped at 700 (`MAX_LLM_OUTPUT_TOKENS`), temperature set to 0.
 - **Deterministic Extractive Fallback:** If `GROQ_API_KEY` is not provided or the network call fails, `ExtractiveGenerator` activates automatically. It performs sentence segmentation, cleans OCR and running headers, scores sentences by keyword overlap, selects up to 4 supported sentences, and prepends a historical disclaimer if historical sources are cited.
-- **Citation Assembly:** Citations are constructed programmatically from the contributing chunks' verified metadata (`citations_from_hits`) and returned in the JSON payload under `citations`. The LLM is instructed **not** to generate source strings inline, preventing hallucinated bibliographic records.
+- **Citation Assembly:** Citation objects are constructed programmatically from contributing-hit metadata (`citations_from_hits`) and returned in the JSON payload under `citations`. The LLM is instructed not to generate source strings inline, so citation records are not authored by the model; this does not establish claim-level support or metadata correctness.
 
 ---
 

@@ -72,7 +72,7 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
   1. Multi-tier curated government corpus processing and section review.
   2. Hybrid Euclidean semantic retrieval with query-type-conditioned overview boosting.
   3. Two-stage pre-generation evidence quality gating (candidate pool coverage + lexical overlap).
-  4. Hallucination-resistant decoupled citation assembly guaranteeing verifiable source provenance.
+  4. Decoupled citation assembly supporting traceable source provenance.
   5. Interactive bilingual 3D mascot interface grounded on authoritative conservation data.
 - [x] **Task 3.5:** Update `research/research_gap.md` separating literature gaps, observed patterns, and current limitations.
 - **Deliverable:** Formalized Research Gap & Contribution Statement (`research/research_gap.md`).

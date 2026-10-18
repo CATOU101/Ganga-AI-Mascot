@@ -123,7 +123,7 @@ Addressing the hallucination and unreliability challenges highlighted by Ganguly
 - A temporal-predicate filter that intercepts real-time/current inquiries and transparently returns static knowledge disclaimers, preventing misleading answers.
 
 #### Contribution 4: Hallucination-Resistant Decoupled Citation Provenance
-We demonstrate an architectural pattern wherein the generative model is strictly prohibited from generating source references in its response string. Instead, verified citation objects (`file_name`, `page_start-page_end`, `section`, `knowledge_type`) are deterministically assembled from the metadata of chunks passed through the evidence gate. This guarantees that 100% of attached citations correspond to genuine, inspectable source documents.
+The implementation instructs the generative model not to generate source references in its response string. Citation objects are instead assembled deterministically from metadata associated with chunks passed through the evidence gate. This makes returned citation metadata traceable to retrieved hits; it does not by itself validate claim-level entailment or prove that every source record is correct.
 
 #### Contribution 5: Culturally Grounded Multimodal Avatar Architecture for Public Environmental Literacy
 Extending the pedagogical agent findings of Schroeder et al. (R7, R10) and persona design principles of Tao et al. (R9), the system integrates the AI Brain with an interactive, browser-native Three.js WebGL mascot (Chacha Chaudhary) featuring 65 bones, 28 body gestures, and acoustic/cadence viseme mapping. Crucially, the architecture strictly decouples factual reasoning from character presentation, ensuring that visual engagement never compromises scientific veracity.

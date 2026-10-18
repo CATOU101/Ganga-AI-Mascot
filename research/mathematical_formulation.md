@@ -15,7 +15,7 @@
 
 ## 1. Document Chunking and Segmentation
 
-The text chunking algorithm processes reviewed sections to produce bounded passages while preserving paragraph boundaries and semantic continuity.
+The text chunking algorithm processes reviewed sections to produce target-sized passages while preserving paragraph boundaries and semantic continuity where possible. A single paragraph longer than the target is not split and can produce an oversized chunk.
 
 ### Mathematical Formulation
 Let a reviewed document section $S$ be represented as a raw character string of length $|S|$.
@@ -33,9 +33,11 @@ Paragraphs $p_m$ are appended to $A_j$ while:
 $$\text{len}(A_j \cup \{p_m\}) \le L_{\text{target}}$$
 where $L_{\text{target}} = 1,400$ characters.
 
-When the target bound is exceeded, chunk $c_j$ is finalized as $c_j = \text{join}(A_j, \text{"\textbackslash n\textbackslash n"})$. The subsequent chunk $A_{j+1}$ is initialized with an overlap prefix $o_j$ extracted from the terminal suffix of $c_j$:
+When appending a paragraph to a non-empty accumulator would exceed the target, chunk $c_j$ is finalized as $c_j = \text{join}(A_j, \text{"\textbackslash n\textbackslash n"})$. The subsequent chunk $A_{j+1}$ is initialized with an overlap prefix $o_j$ extracted from the terminal suffix of $c_j$:
 $$o_j = \text{suffix}(c_j, L_{\text{overlap}})$$
 where $L_{\text{overlap}} = 180$ characters.
+
+The target is not a hard maximum: if an individual paragraph exceeds $L_{\text{target}}$ while the accumulator is empty, the implementation keeps that paragraph intact, so the resulting chunk can exceed the target.
 
 ### Post-Processing Boundary Constraint (Sub-Minimum Repair)
 If the final chunk $c_J$ satisfies $|c_J| < L_{\text{min}}$ (where $L_{\text{min}} = 120$ characters) and $J > 1$:
@@ -199,7 +201,7 @@ $$\mathcal{E}_{\text{retrieved}} = \langle c_{(1)}, c_{(2)}, \dots, c_{(\min(U, 
 
 ---
 
-## 7. Dynamic / Real-Time Information Detection Predicate
+## 7. Intended Dynamic / Real-Time Information Detection Predicate
 
 Before invoking retrieval, queries requesting current, real-time measurements are intercepted.
 
@@ -207,16 +209,19 @@ Let $\mathcal{T}_{\text{freshness}}$ and $\mathcal{T}_{\text{dynamic}}$ denote d
 $$\mathcal{T}_{\text{freshness}} = \{\text{"current"}, \text{"today"}, \text{"now"}, \text{"latest"}, \text{"real-time"}, \text{"realtime"}, \text{"present status"}\}$$
 $$\mathcal{T}_{\text{dynamic}} = \{\text{"water quality"}, \text{"river discharge"}, \text{"stp status"}, \text{"pollution monitoring"}, \text{"programme status"}, \text{"program status"}, \text{"infrastructure status"}, \text{"legal status"}, \text{"regulatory status"}\}$$
 
-**Dynamic Query Predicate:**
+**Intended Dynamic Query Predicate:**
 $$is\_current(q) \iff \Big(\exists t_1 \in \mathcal{T}_{\text{freshness}}: t_1 \text{ is in } \text{lower}(q)\Big) \;\land\; \Big(\exists t_2 \in \mathcal{T}_{\text{dynamic}}: t_2 \text{ is in } \text{lower}(q)\Big)$$
 
-If $is\_current(q) = \text{True}$, the system bypasses vector retrieval and immediately returns:
+This formulation expresses the intended rule. At baseline commit `56032d7`, the implementation instead stored these terms in one `CURRENT_TERMS` tuple and split it at index 5. Thus only the first five freshness terms were checked as freshness terms, while `realtime` and `present status` were included in the dynamic-topic slice. The formulation above must not be read as a description of the detector implemented at that baseline.
+
+When the intended predicate evaluates to true, the pipeline bypasses vector retrieval and returns:
 $$\text{Response} = \big\langle \text{answer} = M_{\text{current\_info}}, \; \text{citations} = \emptyset, \; \text{mode} = \text{"current-info-fallback"} \big\rangle$$
 
 ### Code Traceability
 - **File:** `brain/retriever.py` (`asks_for_current_information`, lines 89–95).
 - **File:** `brain/rag_pipeline.py` (lines 45–50).
-- **Constants:** `CURRENT_TERMS` (lines 11–16), `CURRENT_INFO_MESSAGE` in `brain/prompts/system.py`.
+- **Baseline implementation:** `CURRENT_TERMS[:5]` and `CURRENT_TERMS[5:]` in `brain/retriever.py` at commit `56032d7`; this split does not match the intended term groups above.
+- **Constants:** `CURRENT_INFO_MESSAGE` in `brain/prompts/system.py`.
 
 ---
 
@@ -231,13 +236,11 @@ Chunks that exceed this limit are truncated or excluded, ensuring the language m
 ### Decoupled Citation Provenance Mapping
 Unlike conventional systems that instruct the LLM to write citations, PRJ_316 constructs citation records deterministically from the metadata of chunks in $\mathcal{E}_{\text{included}}$.
 
-Let $\text{metadata}(c) = \langle \text{title}, \text{file\_name}, p_{\text{start}}, p_{\text{end}}, \text{section}, \text{knowledge\_type} \rangle$.
-The citation set $\Gamma$ is formed by extracting unique 5-tuple keys:
-$$\Gamma = \Big\{ \big(\text{title}(c), \text{file\_name}(c), p_{\text{start}}(c)\text{--}p_{\text{end}}(c), \text{section}(c), \text{knowledge\_type}(c)\big) \;\Big|\; c \in \mathcal{E}_{\text{included}} \Big\}$$
+Let $\text{metadata}(c)$ contain the citation fields for hit $c$. The implementation deduplicates citation objects using the key
+$$K(c) = \big(\text{title}(c), \text{file\_name}(c), p_{\text{start}}(c), p_{\text{end}}(c), \text{section}(c)\big).$$
+The returned citation object also includes $\text{knowledge\_type}(c)$, but that field is not part of the deduplication key.
 
-This decoupling mathematically guarantees:
-$$\text{Hallucinated Citations} = \emptyset$$
-because every element of $\Gamma$ is an immutable projection from the pre-verified ingestion manifest.
+This separates citation-record construction from free-form model output and ties returned metadata to retrieved hit records. It does not by itself prove that each source record is correct or that each answer claim is entailed by its attached citation.
 
 ### Code Traceability
 - **File:** `brain/generator.py` (`citations_from_hits`, lines 37–54; `_evidence_records`, lines 155–182).
