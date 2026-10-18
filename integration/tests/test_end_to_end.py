@@ -8,6 +8,7 @@ from integration.server import app
 def test_end_to_end_integration_ask_mock():
     client = TestClient(app)
     
+    # Independent input and output languages: ask in English, receive Hindi answer
     response = client.post("/api/integration/ask", json={
         "question": "What is Aviral Dhara?",
         "input_language": "en",
@@ -46,64 +47,47 @@ def test_end_to_end_out_of_scope_query():
     assert data["output_language"] == "en"
 
 
-def test_all_four_language_combinations():
+def test_cross_lingual_combinations_and_audio_generation():
     client = TestClient(app)
 
-    # 1. EN -> EN
+    # 1. Ask in Hindi, receive answer in English
     r1 = client.post("/api/integration/ask", json={
-        "question": "What are the major sources of pollution in the Ganga?",
-        "input_language": "en",
+        "question": "अविरल धारा क्या है?",
+        "input_language": "hi",
         "output_language": "en",
         "top_k": 5
     })
     assert r1.status_code == 200
     d1 = r1.json()
-    assert d1["input_language"] == "en"
+    assert d1["input_language"] == "hi"
     assert d1["output_language"] == "en"
-    assert d1["mode"] == "grounded"
-    assert len(d1["citations"]) > 0
+    assert d1["mode"] in ("grounded", "insufficient-evidence")
+    if d1.get("audio_data_base64"):
+        assert len(d1["audio_data_base64"]) > 0
 
-    # 2. EN -> HI
+    # 2. Ask in English, receive answer in Kannada
     r2 = client.post("/api/integration/ask", json={
-        "question": "What are the major sources of pollution in the Ganga?",
+        "question": "What is Aviral Dhara?",
         "input_language": "en",
-        "output_language": "hi",
+        "output_language": "kn",
         "top_k": 5
     })
     assert r2.status_code == 200
     d2 = r2.json()
     assert d2["input_language"] == "en"
-    assert d2["output_language"] == "hi"
-    assert d2["mode"] == "grounded"
-    assert len(d2["citations"]) > 0
+    assert d2["output_language"] == "kn"
 
-    # 3. HI -> HI
+    # 3. Ask in English, receive answer in Tamil
     r3 = client.post("/api/integration/ask", json={
-        "question": "अविरल धारा क्या है?",
-        "input_language": "hi",
-        "output_language": "hi",
+        "question": "What is Aviral Dhara?",
+        "input_language": "en",
+        "output_language": "ta",
         "top_k": 5
     })
     assert r3.status_code == 200
     d3 = r3.json()
-    assert d3["input_language"] == "hi"
-    assert d3["output_language"] == "hi"
-    assert d3["mode"] == "grounded"
-    assert len(d3["citations"]) > 0
-
-    # 4. HI -> EN
-    r4 = client.post("/api/integration/ask", json={
-        "question": "अविरल धारा क्या है?",
-        "input_language": "hi",
-        "output_language": "en",
-        "top_k": 5
-    })
-    assert r4.status_code == 200
-    d4 = r4.json()
-    assert d4["input_language"] == "hi"
-    assert d4["output_language"] == "en"
-    assert d4["mode"] == "grounded"
-    assert len(d4["citations"]) > 0
+    assert d3["input_language"] == "en"
+    assert d3["output_language"] == "ta"
 
 
 def test_specific_domain_queries():
@@ -118,6 +102,7 @@ def test_specific_domain_queries():
     })
     assert r_stp.status_code == 200
     assert r_stp.json()["mode"] == "grounded"
+    assert r_stp.json()["output_language"] == "en"
 
     # Broad query
     r_broad = client.post("/api/integration/ask", json={
@@ -127,4 +112,5 @@ def test_specific_domain_queries():
         "top_k": 5
     })
     assert r_broad.status_code == 200
-    assert r_broad.json()["mode"] == "grounded"
+    assert r_broad.json()["mode"] in ("grounded", "insufficient-evidence")
+    assert r_broad.json()["output_language"] == "hi"

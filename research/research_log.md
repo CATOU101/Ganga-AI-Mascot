@@ -89,13 +89,11 @@ Possible categories include:
 
 ## Research Papers to Review
 
-The following records document papers R1 through R10, each systematically audited, verified against publisher portals and digital repositories, and evaluated for its technical relevance to PRJ_316.
+The following entries are placeholders. Detailed authors, publication information, methods, results, datasets, and citations must be added only after each source has been verified.
 
 ### R1 - AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness
 
-**Status:** Completed  
-**Verification Status:** Verified via Publisher Portal & ResearchGate  
-**Metadata Verification Source:** *Metallurgical and Materials Engineering* Archive (Vol. 31(5), pp. 761–766) & Author Profile Records  
+**Status:** Completed
 
 ### Paper Information
 
@@ -104,8 +102,6 @@ The following records document papers R1 through R10, each systematically audite
 - **Authors:** J. Narmada, A. C. PriyaRanjani, K. Sruthi, P. Harshitha, D. Suchitha, and D. Veera Reddy
 - **Year:** 2025
 - **Publication:** *Metallurgical and Materials Engineering*, Vol. 31(5), pp. 761–766
-- **Link / DOI:** https://doi.org/10.63053/mme.1491 / https://www.metall-mater-eng.com/
-
 
 ### Research Problem
 
@@ -232,19 +228,17 @@ This is the closest baseline project to PRJ_316 because both projects focus on u
 
 ### R2 - Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks
 
-**Status:** Completed  
-**Verification Status:** Verified via NeurIPS Proceedings & arXiv  
-**Metadata Verification Source:** NeurIPS 2020 Conference Proceedings (Vol. 33, pp. 9459–9474)  
+**Status:** Completed
 
 **Paper ID:** R2
 
 **Title:** Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks
 
-**Authors:** Patrick Lewis, Ethan Perez, Aleksander Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, Sebastian Riedel, Douwe Kiela
+**Authors:** Patrick Lewis et al.
 
 **Year:** 2020
 
-**Publication:** *Advances in Neural Information Processing Systems* (NeurIPS 2020), Vol. 33, pp. 9459–9474
+**Publication:** NeurIPS 2020
 
 **Link/DOI:** https://arxiv.org/abs/2005.11401
 
@@ -366,9 +360,7 @@ R2 establishes the core scientific foundation for Retrieval-Augmented Generation
 
 ### R3 - Conversational AI Agents in Education: An Umbrella Review of Current Utilization, Challenges, and Future Directions for Ethical and Responsible Use
 
-**Status:** Completed  
-**Verification Status:** Verified via Springer Nature Portal  
-**Metadata Verification Source:** Springer Nature *AI and Ethics*, Vol. 6, Art. 72 (2026), DOI: 10.1007/s43681-025-00916-0  
+**Status:** Completed
 
 **Paper ID:** R3
 
@@ -578,9 +570,7 @@ R3 provides an umbrella-level synthesis of research on conversational AI agents 
 
 ### R4 - Pedagogical AI Conversational Agents in Higher Education: A Conceptual Framework and Survey of the State of the Art
 
-**Status:** Completed  
-**Verification Status:** Verified via Springer Nature ETR&D Portal  
-**Metadata Verification Source:** Springer *Educational Technology Research and Development*, Vol. 73, pp. 815–874 (2025), DOI: 10.1007/s11423-025-10447-4  
+**Status:** Completed
 
 **Paper ID:** R4
 
@@ -789,9 +779,7 @@ R4 presents a state-of-the-art literature survey of pedagogical AI conversationa
 
 ### R5 - Designing a Flipped AI-Chatbot Learning Module to Support Students' Environmental Literacy Development
 
-**Status:** Completed  
-**Verification Status:** Verified via PLOS ONE Portal  
-**Metadata Verification Source:** *PLOS ONE*, Vol. 21(3), e0345027 (2026), DOI: 10.1371/journal.pone.0345027  
+**Status:** Completed
 
 **Paper ID:** R5
 
@@ -1006,9 +994,7 @@ R5 presents a Flipped AI-Chatbot Learning (FACL) module designed to support Envi
 
 ### R6 - Evaluating the Efficacy of ChatGPT in Environmental Education: Findings from Heuristic and Usability Assessments
 
-**Status:** Completed  
-**Verification Status:** Verified via Emerald Publishing Portal  
-**Metadata Verification Source:** Emerald *On the Horizon*, Vol. 33(2), pp. 165–185 (2025), DOI: 10.1108/OTH-11-2024-0079  
+**Status:** Completed
 
 **Paper ID:** R6
 
@@ -1223,9 +1209,7 @@ R6 evaluates ChatGPT’s use in environmental education through heuristic evalua
 
 ### R7 - Virtual Characters Help K-12 Students Learn and Improve Motivation: A Meta-Analysis
 
-**Status:** Completed  
-**Verification Status:** Verified via AERA / SAGE Journals Portal  
-**Metadata Verification Source:** *Review of Educational Research* (2025), DOI: 10.3102/00346543251389930  
+**Status:** Completed
 
 **Paper ID:** R7
 
@@ -1387,9 +1371,7 @@ R7 is a three-level meta-analysis investigating the effects of virtual character
 
 ### R8 - A Systematic Review of Pedagogical Agent Research: Similarities, Differences and Unexplored Aspects
 
-**Status:** Completed  
-**Verification Status:** Verified via Elsevier Portal  
-**Metadata Verification Source:** Elsevier *Computers & Education*, Vol. 190, Art. 104607 (2022), DOI: 10.1016/j.compedu.2022.104607  
+**Status:** Completed
 
 **Paper ID:** R8
 
@@ -1610,9 +1592,7 @@ R8 systematically reviews pedagogical-agent research published between 2010 and 
 
 ### R9 - Exploring Persona Characteristics in Learning: A Review Study of Pedagogical Agents
 
-**Status:** Completed  
-**Verification Status:** Verified via Elsevier ScienceDirect Portal  
-**Metadata Verification Source:** Elsevier *Procedia Computer Science*, Vol. 201, pp. 87–94 (2022), DOI: 10.1016/j.procs.2022.03.014  
+**Status:** Completed
 
 **Paper ID:** R9
 
@@ -1758,9 +1738,7 @@ R9 reviews how pedagogical-agent persona characteristics affect learning and lea
 
 ### R10 - How Effective are Pedagogical Agents for Learning? A Meta-Analytic Review
 
-**Status:** Completed  
-**Verification Status:** Verified via SAGE Journals Portal  
-**Metadata Verification Source:** *Journal of Educational Computing Research*, Vol. 49(1), pp. 1–39 (2013), DOI: 10.2190/EC.49.1.a  
+**Status:** Completed
 
 **Paper ID:** R10
 

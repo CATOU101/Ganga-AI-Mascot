@@ -170,7 +170,7 @@ python -m brain.api --host 0.0.0.0 --port 8000
 }
 ```
 
-Omitting language fields defaults both input and output to English. Supported codes are `en` and `hi`. `top_k` controls the maximum number of reranked evidence results returned (1–100); candidate retrieval remains controlled by `GANGA_BRAIN_CANDIDATE_TOP_K`.
+Omitting language fields defaults both input and output to English. Supported codes are `en`, `hi`, `kn`, and `ta`. `top_k` controls the maximum number of reranked evidence results returned (1–100); candidate retrieval remains controlled by `GANGA_BRAIN_CANDIDATE_TOP_K`.
 
 - **Grounded Response (`mode: "grounded"`)**:
 

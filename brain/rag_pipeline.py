@@ -36,10 +36,10 @@ def answer_question(
 
     config = load_config()
 
-    # Translate input question to English for retrieval if input is Hindi
+    # Translate input question to English for retrieval if input is not English
     search_question = question
-    if input_lang == "hi":
-        search_question = translate_text(question, "hi", "en")
+    if input_lang != "en":
+        search_question = translate_text(question, input_lang, "en")
 
     # Step 1: Detect current/realtime information request
     if asks_for_current_information(question) or asks_for_current_information(search_question):

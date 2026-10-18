@@ -182,7 +182,7 @@ When a user asks a question, the question is similarly converted into a 384-dime
 The vector store enables fast, deterministic semantic retrieval of relevant knowledge.
 
 > **Vector Database Implementation Rationale**:  
-> In early prototype testing, ChromaDB 1.5.9 was used as the vector database interface. However, ChromaDB's native Rust binding (`chromadb_rust_bindings.abi3.so`) was associated with repeated macOS kernel `SIGSEGV` segmentation fault crashes during retrieval queries. Runtime retrieval was subsequently migrated to a pure Python backend using SQLite (`knowledge_base/vector_db/brain_index.sqlite3`) for metadata/chunk text storage and a portable NumPy array (`knowledge_base/vector_db/brain_semantic_vectors.npy`) for $L2$ vector similarity, validated via SHA-256 manifests (`brain_index_manifest.json`). This migration does not establish a guarantee of runtime stability. Legacy ChromaDB files in that directory are preserved for historical reproducibility.
+> In early prototype testing, ChromaDB 1.5.9 was used as the vector database interface. However, ChromaDB's native Rust binding (`chromadb_rust_bindings.abi3.so`) caused repeated macOS kernel `SIGSEGV` segmentation fault crashes during retrieval queries. To guarantee 100% runtime stability for API serving and demo environments, runtime retrieval was migrated to a pure Python backend using SQLite (`chroma.sqlite3`) for metadata/chunk text storage and a portable NumPy array (`semantic_vectors.npy`) for $L2$ vector similarity.
 
 **Note (from R2):** Retriever, generator, and knowledge store are conceptually independent — a dense-passage-retrieval-style retriever does not require any particular vector database, and a vector database or matrix store does not require any particular retriever or generator. These remain separable decisions.
 
@@ -344,9 +344,6 @@ The interface should not directly depend on internal AI components. This allows 
 
 ## 10. Avatar and Interactive Layer
 The avatar represents the presentation and interaction layer of the system.
-
-> **Production Implementation Note (Verified Baseline)**:  
-> The active production avatar runtime is a browser-native Three.js WebGL application (`avatar/index.html`, `avatar/app.js`, `avatar/mascot.js`) running directly in standard web browsers. It loads `avatar/Chacha_New/Chacha_New.glb` (65-bone Mixamo armature, 28 animations, procedural blinking, 60 FPS LERP lip-sync smoothing, and viewport occupancy calibrated to 80.5%). The high-fidelity 57-bone asset (`avatar/Member2_Chacha/Chacha_Master.glb` with 35 shape keys) is preserved intact for backward compatibility. The early Unity WebGL experiment in `avatar/07_Unity/` is archived and is not part of the active runtime.
 
 Possible interfaces include:
 

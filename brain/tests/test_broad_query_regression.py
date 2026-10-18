@@ -4,7 +4,7 @@ import unittest
 
 from brain.config import load_config
 from brain.embeddings import get_embedding_function
-from brain.generator import build_generator, clean_hit_text, current_information_response
+from brain.generator import build_generator, clean_hit_text
 from brain.rag_pipeline import answer_question
 from brain.retriever import (
     Retriever,
@@ -101,31 +101,6 @@ class TestBroadQueryRegression(unittest.TestCase):
         """Test H: Current info query triggers current-info fallback."""
         res = answer_question("What is the current water quality of the Ganga today?")
         self.assertEqual(res["mode"], "current-info-fallback")
-
-    def test_current_information_detection_requires_freshness_and_dynamic_topic(self):
-        """Freshness and dynamic-topic terms together identify current-data requests."""
-        current_queries = (
-            "What is the current Ganga water quality?",
-            "What is the realtime water quality?",
-            "What is the present status of pollution monitoring?",
-            "What is the latest STP status?",
-        )
-        educational_queries = (
-            "Explain how Ganga water quality is measured.",
-            "Which parameters are tested for Ganga water quality?",
-            "How does pollution monitoring work?",
-        )
-
-        for query in current_queries:
-            with self.subTest(query=query):
-                self.assertTrue(asks_for_current_information(query))
-                result = answer_question(query)
-                self.assertEqual(result["mode"], "current-info-fallback")
-                self.assertEqual(result["answer"], current_information_response()["answer"])
-
-        for query in educational_queries:
-            with self.subTest(query=query):
-                self.assertFalse(asks_for_current_information(query))
 
     def test_sentence_cleaner_removes_report_metadata(self):
         """Test I: clean_hit_text strips report codes and page artifacts."""

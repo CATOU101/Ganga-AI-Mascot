@@ -1,4 +1,4 @@
-﻿"""Domain models and data transfer contracts for Integration layer."""
+"""Domain models and data transfer contracts for Integration layer."""
 
 from __future__ import annotations
 
@@ -55,9 +55,9 @@ class CitationItem(BaseModel):
 class BrainRequest(BaseModel):
     question: str = Field("", description="Question prompt to Ganga Brain RAG")
     query: str | None = Field(None, description="Alias for question")
-    input_language: str | None = Field(None, description="Input language ('en' | 'hi')")
-    output_language: str | None = Field(None, description="Output language ('en' | 'hi')")
-    language: str | None = Field(None, description="Legacy language fallback ('en' | 'hi')")
+    input_language: str | None = Field(None, description="Input language ('en' | 'hi' | 'kn' | 'ta')")
+    output_language: str | None = Field(None, description="Output language (derived from input language)")
+    language: str | None = Field(None, description="Language selection ('en' | 'hi' | 'kn' | 'ta')")
     top_k: int | None = Field(None, description="Retriever candidate override")
 
     def get_question(self) -> str:
@@ -73,9 +73,7 @@ class BrainRequest(BaseModel):
     def get_output_language(self) -> str:
         if self.output_language:
             return self.output_language.lower().strip()
-        if self.language:
-            return self.language.lower().strip()
-        return "hi"
+        return self.get_input_language()
 
 
 class BrainResponse(BaseModel):
@@ -96,8 +94,8 @@ class AvatarPresentation(BaseModel):
     text: str = Field("", description="Standardized alias for answer text")
     mode: str = Field("grounded", description="Brain mode")
     citations: list[CitationItem] = Field(default_factory=list, description="Provenance citations")
-    input_language: str = Field("hi", description="Input language ('hi' | 'en')")
-    output_language: str = Field("hi", description="Output language ('hi' | 'en')")
+    input_language: str = Field("hi", description="Input language ('hi' | 'en' | 'kn' | 'ta')")
+    output_language: str = Field("hi", description="Output language ('hi' | 'en' | 'kn' | 'ta')")
     language: str = Field("hi", description="Legacy language code")
     emotion: EmotionType = Field(EmotionType.NEUTRAL, description="Emotion expression")
     gesture: GestureType = Field(GestureType.IDLE, description="Gesture pose")

@@ -51,9 +51,10 @@ class Member2TTSAdapter(TTSAdapter):
             return None
 
         clean_text = text.strip()
-        lang_key = (language or "hi").lower().strip()
-        if lang_key not in ("en", "hi"):
-            lang_key = "hi"
+        lang_key = (language or "en").lower().strip()
+        if lang_key not in ("en", "hi", "kn", "ta"):
+            logger.warning(f"[Integration TTS] Unsupported language code '{language}'. Refusing silent fallback.")
+            return None
 
         temp_wav = None
         try:

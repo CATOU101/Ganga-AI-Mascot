@@ -8,11 +8,8 @@ from .config import BrainConfig
 from .vector_store import SQLiteVectorStore, get_vector_store
 
 
-FRESHNESS_TERMS = (
+CURRENT_TERMS = (
     "current", "today", "now", "latest", "real-time", "realtime", "present status",
-)
-
-DYNAMIC_TOPIC_TERMS = (
     "water quality", "river discharge", "stp status", "pollution monitoring",
     "programme status", "program status", "infrastructure status", "legal status",
     "regulatory status",
@@ -92,8 +89,8 @@ def is_core_overview_hit(hit: dict) -> bool:
 def asks_for_current_information(question: str) -> bool:
     """Detect queries seeking current or real-time status."""
     lowered = question.lower()
-    dynamic_topic = any(term in lowered for term in DYNAMIC_TOPIC_TERMS)
-    freshness = any(term in lowered for term in FRESHNESS_TERMS)
+    dynamic_topic = any(term in lowered for term in CURRENT_TERMS[5:])
+    freshness = any(term in lowered for term in CURRENT_TERMS[:5])
     return dynamic_topic and freshness
 
 

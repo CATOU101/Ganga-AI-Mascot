@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -28,20 +28,23 @@
       </div>
       
       <div class="header-controls">
-        <a id="quizNavButton" class="quiz-nav-button" href="#quiz" aria-pressed="false">Take Quiz</a>
         <div class="lang-selector-group">
           <span class="control-label">Input Lang</span>
-          <div class="lang-selector">
-            <button id="inputLangHi" class="lang-btn active" data-lang="hi" aria-label="Set input language to Hindi">हिंदी</button>
+          <div class="lang-selector" id="inputLangSelector" role="radiogroup" aria-label="Select input language">
             <button id="inputLangEn" class="lang-btn" data-lang="en" aria-label="Set input language to English">English</button>
+            <button id="inputLangHi" class="lang-btn active" data-lang="hi" aria-label="Set input language to Hindi">हिंदी</button>
+            <button id="inputLangKn" class="lang-btn" data-lang="kn" aria-label="Set input language to Kannada">ಕನ್ನಡ</button>
+            <button id="inputLangTa" class="lang-btn" data-lang="ta" aria-label="Set input language to Tamil">தமிழ்</button>
           </div>
         </div>
 
         <div class="lang-selector-group">
           <span class="control-label">Output Lang</span>
-          <div class="lang-selector">
-            <button id="outputLangHi" class="lang-btn active" data-lang="hi" aria-label="Set output language to Hindi">हिंदी</button>
+          <div class="lang-selector" id="outputLangSelector" role="radiogroup" aria-label="Select output language">
             <button id="outputLangEn" class="lang-btn" data-lang="en" aria-label="Set output language to English">English</button>
+            <button id="outputLangHi" class="lang-btn active" data-lang="hi" aria-label="Set output language to Hindi">हिंदी</button>
+            <button id="outputLangKn" class="lang-btn" data-lang="kn" aria-label="Set output language to Kannada">ಕನ್ನಡ</button>
+            <button id="outputLangTa" class="lang-btn" data-lang="ta" aria-label="Set output language to Tamil">தமிழ்</button>
           </div>
         </div>
 
@@ -90,12 +93,14 @@
 
       <!-- Interactive Q&A and Citations Panel -->
       <section class="interaction-card" aria-label="Conversation and Citations Panel">
-        <div id="chatView" class="chat-view">
         <!-- Answer Display -->
         <div class="answer-display-box">
           <div class="box-header">
             <h3>Response &amp; Source Provenance</h3>
-            <span id="responseLangBadge" class="lang-tag">In: HI | Out: HI</span>
+            <div class="header-actions">
+              <button id="replayAudioBtn" class="replay-btn" title="Replay voice-over" style="display: none;" aria-label="Replay audio answer">🔊 Replay Voice</button>
+              <span id="responseLangBadge" class="lang-tag">In: HI | Out: HI</span>
+            </div>
           </div>
 
           <div id="questionPromptView" class="question-prompt-view" style="display: none;">
@@ -147,19 +152,6 @@
           </form>
           <div id="voiceStatusMsg" class="voice-status-msg" aria-live="polite"></div>
         </div>
-        </div>
-
-        <section id="quiz" class="quiz-view" aria-labelledby="quizTitle" hidden>
-          <header class="quiz-header">
-            <div>
-              <p class="quiz-eyebrow">LEARN ABOUT THE GANGA</p>
-              <h2 id="quizTitle" tabindex="-1">Ganga Knowledge Quiz</h2>
-            </div>
-            <a class="quiz-secondary-button" href="#">Back to Chat</a>
-          </header>
-          <div id="quizContent"></div>
-          <p id="quizAnnouncement" class="sr-only" role="status" aria-live="polite"></p>
-        </section>
       </section>
     </main>
 
@@ -170,8 +162,6 @@
   </div>
 
   <script src="mascot.js?v=chacha-new-v7"></script>
-  <script src="quiz-data.js"></script>
-  <script src="quiz.js"></script>
   <script src="app.js?v=chacha-new-v7"></script>
 </body>
 </html>

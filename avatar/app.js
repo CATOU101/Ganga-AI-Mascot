@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Main Application Orchestrator for Ganga AI Mascot UI
  * Production Integration: Chacha New 3D Avatar + Grounded RAG + Voice
  * 
@@ -11,28 +11,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const mascot = new MascotController();
-  const chatView = document.getElementById('chatView');
-  const quizView = document.getElementById('quiz');
-  const quizNavButton = document.getElementById('quizNavButton');
-
-  window.GangaQuiz.createQuizController({
-    document,
-    questions: window.GangaQuizQuestions,
-    getMascot: () => mascot
-  });
-
-  function updateActiveView(moveFocus = false) {
-    const showQuiz = window.location.hash === '#quiz';
-    if (chatView) chatView.hidden = showQuiz;
-    if (quizView) quizView.hidden = !showQuiz;
-    if (quizNavButton) quizNavButton.setAttribute('aria-pressed', String(showQuiz));
-    if (moveFocus && showQuiz) {
-      document.getElementById('quizTitle')?.focus();
-    }
-  }
-
-  window.addEventListener('hashchange', () => updateActiveView(true));
-  updateActiveView();
 
   // DOM Elements
   const statusBadge = document.getElementById('statusBadge');
@@ -51,10 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const questionInput = document.getElementById('questionInput');
   const micBtn = document.getElementById('micBtn');
   const submitBtn = document.getElementById('submitBtn');
-  const inputLangHiBtn = document.getElementById('inputLangHi');
-  const inputLangEnBtn = document.getElementById('inputLangEn');
-  const outputLangHiBtn = document.getElementById('outputLangHi');
-  const outputLangEnBtn = document.getElementById('outputLangEn');
+  const replayAudioBtn = document.getElementById('replayAudioBtn');
+  const inputLangBtns = document.querySelectorAll('#inputLangSelector .lang-btn');
+  const outputLangBtns = document.querySelectorAll('#outputLangSelector .lang-btn');
   const vizFill = document.getElementById('vizFill');
   const vizLevel = document.getElementById('vizLevel');
   const voiceStatusMsg = document.getElementById('voiceStatusMsg');
@@ -62,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentInputLanguage = 'hi';
   let currentOutputLanguage = 'hi';
   let currentState = 'IDLE';
+  let lastSpeechData = null;
 
   // Audio Playback & Synchronization State
   let activeAudio = null;
@@ -72,39 +50,52 @@ document.addEventListener('DOMContentLoaded', () => {
   let audioChunks = [];
   let isRecording = false;
 
-  // Language selection handlers
-  if (inputLangHiBtn && inputLangEnBtn) {
-    inputLangHiBtn.addEventListener('click', () => setInputLanguage('hi'));
-    inputLangEnBtn.addEventListener('click', () => setInputLanguage('en'));
+  // Language selection handlers: Independent Input & Output language selection
+  if (inputLangBtns && inputLangBtns.length > 0) {
+    inputLangBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const selectedLang = btn.getAttribute('data-lang');
+        if (selectedLang) {
+          setInputLanguage(selectedLang);
+        }
+      });
+    });
   }
-  if (outputLangHiBtn && outputLangEnBtn) {
-    outputLangHiBtn.addEventListener('click', () => setOutputLanguage('hi'));
-    outputLangEnBtn.addEventListener('click', () => setOutputLanguage('en'));
+
+  if (outputLangBtns && outputLangBtns.length > 0) {
+    outputLangBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const selectedLang = btn.getAttribute('data-lang');
+        if (selectedLang) {
+          setOutputLanguage(selectedLang);
+        }
+      });
+    });
   }
+
+  const PLACEHOLDER_BY_LANG = {
+    'hi': 'गंगा नदी या नमामि गंगे से जुड़ा प्रश्न पूछें...',
+    'en': 'Type your question about Ganga, GRBMP, or pollution...',
+    'kn': 'ಗಂಗಾ ನದಿ ಅಥವಾ ನಮಾಮಿ ಗಂಗೆ ಕುರಿತು ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ...',
+    'ta': 'கங்கை நதி அல்லது நமாமி கங்கை குறித்த உங்கள் கேள்வியைத் தட்டச்சு செய்யவும்...'
+  };
 
   function setInputLanguage(lang) {
     currentInputLanguage = lang;
-    if (lang === 'hi') {
-      inputLangHiBtn.classList.add('active');
-      inputLangEnBtn.classList.remove('active');
-      questionInput.placeholder = 'गंगा नदी या नमामि गंगे से जुड़ा प्रश्न पूछें...';
-    } else {
-      inputLangEnBtn.classList.add('active');
-      inputLangHiBtn.classList.remove('active');
-      questionInput.placeholder = 'Type your question about Ganga, GRBMP, or pollution...';
+    inputLangBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+    if (questionInput) {
+      questionInput.placeholder = PLACEHOLDER_BY_LANG[lang] || PLACEHOLDER_BY_LANG['en'];
     }
     updateLangBadge();
   }
 
   function setOutputLanguage(lang) {
     currentOutputLanguage = lang;
-    if (lang === 'hi') {
-      outputLangHiBtn.classList.add('active');
-      outputLangEnBtn.classList.remove('active');
-    } else {
-      outputLangEnBtn.classList.add('active');
-      outputLangHiBtn.classList.remove('active');
-    }
+    outputLangBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
     updateLangBadge();
   }
 
@@ -112,6 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (responseLangBadge) {
       responseLangBadge.textContent = `In: ${currentInputLanguage.toUpperCase()} | Out: ${currentOutputLanguage.toUpperCase()}`;
     }
+  }
+
+  // Audio Replay Button Handler
+  if (replayAudioBtn) {
+    replayAudioBtn.addEventListener('click', () => {
+      if (!lastSpeechData) return;
+      stopCurrentSpeech();
+      playProductionSpeech(lastSpeechData.data, lastSpeechData.fallbackText, 'nod');
+    });
   }
 
   // Update UI State Badges & Synchronize Avatar State Machine
@@ -161,6 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (answerText) {
       answerText.innerHTML = '<span class="progress-step searching">Consulting official GRBMP knowledge base...</span>';
     }
+    // Prevent stale citations from previous questions
+    renderCitations([]);
     setState('THINKING');
 
     const t_start = performance.now();
@@ -180,14 +182,24 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ 
           question: question, 
           input_language: currentInputLanguage, 
-          output_language: currentOutputLanguage 
+          output_language: currentOutputLanguage,
+          language: currentOutputLanguage 
         })
       });
 
       clearTimeout(progressTimer);
 
       if (!response.ok) {
-        throw new Error(`Server returned status ${response.status}`);
+        let errorDetail = `Server returned status ${response.status}`;
+        try {
+          const errData = await response.json();
+          if (errData && errData.detail) {
+            errorDetail = errData.detail;
+          }
+        } catch (_) {}
+        const error = new Error(errorDetail);
+        error.status = response.status;
+        throw error;
       }
 
       const t_response = performance.now();
@@ -198,8 +210,21 @@ document.addEventListener('DOMContentLoaded', () => {
       clearTimeout(progressTimer);
       console.error('[Frontend] Error querying Brain API:', err);
       setState('ERROR');
+      // Ensure no stale citations are displayed on error
+      renderCitations([]);
+      if (modeBadge) {
+        modeBadge.textContent = 'Mode: Insufficient-evidence';
+        modeBadge.className = 'tag mode-tag mode-insufficient';
+      }
       if (answerText) {
-        answerText.textContent = "Sorry, I am having trouble connecting to the Ganga AI Brain server right now. Please verify the backend service is running.";
+        const msg = String(err.message || '').toLowerCase();
+        if (err.name === 'TypeError' || msg.includes('fetch') || msg.includes('network')) {
+          answerText.textContent = "Sorry, I am having trouble connecting to the Ganga AI Brain server right now. Please verify the backend service is running.";
+        } else if (msg.includes('translation') || msg.includes('503')) {
+          answerText.textContent = "Translation service is temporarily unavailable for this language. Please try your question again or choose another language.";
+        } else {
+          answerText.textContent = err.message || "An error occurred while processing your query. Please try again.";
+        }
       }
       setTimeout(() => setState('IDLE'), 2800);
     }
@@ -275,6 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cancel any previous speech playback cleanly
     stopCurrentSpeech();
 
+    // Cache latest response for replay
+    lastSpeechData = { data, fallbackText, initialGesture };
+    if (replayAudioBtn) {
+      replayAudioBtn.style.display = 'inline-flex';
+    }
+
+    const outLang = data.output_language || currentOutputLanguage || 'hi';
+
     let src = null;
     if (data.audio_data_base64) {
       src = `data:audio/wav;base64,${data.audio_data_base64}`;
@@ -296,8 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const cues = (rhubarbData && (rhubarbData.mouth_cues || rhubarbData.visemes)) || [];
 
       setState('SPEAKING');
-
-// One-shot gesture transitions to Talking loop via mascot mixer finished event
 
       activeAudio.onplay = () => {
         if (t_start) {
@@ -322,21 +353,21 @@ document.addEventListener('DOMContentLoaded', () => {
       activeAudio.onerror = (err) => {
         console.warn('[Frontend Audio] Error playing audio WAV, falling back to speech synthesis:', err);
         stopCurrentSpeech();
-        fallbackBrowserTTS(fallbackText);
+        fallbackBrowserTTS(fallbackText, outLang);
       };
 
       activeAudio.play().then(() => {
-        console.log('[Frontend Audio] Neural voice audio playing successfully.');
+        console.log(`[Frontend Audio] Neural voice audio playing successfully in ${outLang.toUpperCase()}.`);
       }).catch((err) => {
         console.warn('[Frontend Audio] Autoplay blocked, falling back to speech synthesis:', err);
         if (!activeAudio || activeAudio.paused) {
-          fallbackBrowserTTS(fallbackText);
+          fallbackBrowserTTS(fallbackText, outLang);
         }
       });
 
     } else {
-      // Audio payload absent: fallback to browser TTS
-      fallbackBrowserTTS(fallbackText);
+      // Audio payload absent: fallback to browser TTS for requested output language
+      fallbackBrowserTTS(fallbackText, outLang);
     }
   }
 
@@ -412,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Emergency Browser SpeechSynthesis Fallback
-  function fallbackBrowserTTS(text) {
+  function fallbackBrowserTTS(text, lang = currentOutputLanguage) {
     if (!window.speechSynthesis) {
       setState('IDLE');
       return;
@@ -422,8 +453,19 @@ document.addEventListener('DOMContentLoaded', () => {
     mascot.playAction('Talking', 0.35);
 
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = currentOutputLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    const speechLangMap = { 'hi': 'hi-IN', 'en': 'en-IN', 'kn': 'kn-IN', 'ta': 'ta-IN' };
+    const targetLocale = speechLangMap[lang] || speechLangMap[currentOutputLanguage] || 'en-IN';
+    utter.lang = targetLocale;
     utter.rate = 1.0;
+
+    // Match browser voice if available
+    try {
+      const voices = window.speechSynthesis.getVoices() || [];
+      const match = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-').startsWith(targetLocale.toLowerCase().slice(0, 2)));
+      if (match) {
+        utter.voice = match;
+      }
+    } catch (e) {}
 
     let simInterval = setInterval(() => {
       if (window.speechSynthesis.speaking) {
@@ -522,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData();
       formData.append('file', blob, 'user_speech.webm');
 
-      const response = await fetch(`/api/integration/stt?input_language=${currentInputLanguage}&output_language=${currentOutputLanguage}`, {
+      const response = await fetch(`/api/integration/stt?input_language=${currentInputLanguage}&output_language=${currentOutputLanguage}&language=${currentOutputLanguage}`, {
         method: 'POST',
         body: formData
       });
@@ -562,7 +604,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const rec = new SpeechRec();
     rec.continuous = false;
     rec.interimResults = false;
-    rec.lang = currentInputLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    const webSpeechLangMap = { 'hi': 'hi-IN', 'en': 'en-IN', 'kn': 'kn-IN', 'ta': 'ta-IN' };
+    rec.lang = webSpeechLangMap[currentInputLanguage] || 'en-IN';
 
     rec.onstart = () => {
       if (micBtn) micBtn.classList.add('mic-listening');

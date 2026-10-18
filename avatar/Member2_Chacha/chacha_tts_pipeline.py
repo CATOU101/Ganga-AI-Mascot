@@ -18,6 +18,7 @@ import json
 import wave
 import subprocess
 import asyncio
+import base64
 import concurrent.futures
 from abc import ABC, abstractmethod
 
@@ -39,7 +40,9 @@ class EdgeTTSProvider(BaseTTSProvider):
     """
     DEFAULT_VOICES = {
         "en": "en-IN-PrabhatNeural",  # Indian English Male
-        "hi": "hi-IN-MadhurNeural"    # Hindi Male (Chacha)
+        "hi": "hi-IN-MadhurNeural",   # Hindi Male (Chacha)
+        "kn": "kn-IN-GaganNeural",    # Kannada Male
+        "ta": "ta-IN-ValluvarNeural", # Tamil Male
     }
 
     def __init__(self, python_exe=None, blender_exe=None):
@@ -52,7 +55,9 @@ class EdgeTTSProvider(BaseTTSProvider):
 
     def synthesize_to_wav(self, text: str, language: str, voice: str = None, output_wav: str = "") -> dict:
         lang = language.lower().strip()
-        voice_name = voice or self.DEFAULT_VOICES.get(lang, "en-IN-PrabhatNeural")
+        voice_name = voice or self.DEFAULT_VOICES.get(lang)
+        if not voice_name:
+            raise ValueError(f"Unsupported language code '{language}' for EdgeTTS; supported languages are {list(self.DEFAULT_VOICES.keys())}.")
 
         temp_mp3 = output_wav.replace(".wav", "_temp.mp3")
         os.makedirs(os.path.dirname(output_wav), exist_ok=True)
@@ -146,22 +151,60 @@ class LocalSapiTTSProvider(BaseTTSProvider):
     """
     DEFAULT_VOICES = {
         "en": "Microsoft David Desktop",
-        "hi": "Microsoft David Desktop"  # Fallback if no Hindi SAPI voice installed
+        "hi": "Microsoft Hemant",   # Regional Hindi SAPI voice if installed
+        "kn": "Microsoft Gagan",    # Regional Kannada SAPI voice if installed
+        "ta": "Microsoft Valluvar", # Regional Tamil SAPI voice if installed
     }
+
+    def _find_installed_voice(self, lang: str) -> str | None:
+        try:
+            import winreg
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Speech\Voices\Tokens")
+            i = 0
+            while True:
+                try:
+                    token = winreg.EnumKey(key, i)
+                    token_lower = token.lower()
+                    if lang == "hi" and any(k in token_lower for k in ("hi", "hindi", "hemant", "kalpana")):
+                        return token
+                    if lang == "kn" and any(k in token_lower for k in ("kn", "kannada", "gagan")):
+                        return token
+                    if lang == "ta" and any(k in token_lower for k in ("ta", "tamil", "valluvar")):
+                        return token
+                    i += 1
+                except OSError:
+                    break
+        except Exception:
+            pass
+        return None
 
     def synthesize_to_wav(self, text: str, language: str, voice: str = None, output_wav: str = "") -> dict:
         lang = language.lower().strip()
-        voice_name = voice or self.DEFAULT_VOICES.get(lang, "Microsoft David Desktop")
+        if lang != "en":
+            voice_name = voice or self._find_installed_voice(lang)
+            if not voice_name:
+                raise RuntimeError(
+                    f"No local SAPI offline voice installed for language '{lang}'. "
+                    f"Unsupported voice does not silently fall back to English."
+                )
+        else:
+            voice_name = voice or self.DEFAULT_VOICES.get("en", "Microsoft David Desktop")
+
         os.makedirs(os.path.dirname(output_wav), exist_ok=True)
 
+        encoded_text = base64.b64encode(text.encode("utf-8")).decode("ascii")
+        escaped_wav = output_wav.replace("'", "''")
+        escaped_voice = voice_name.replace("'", "''")
         ps_script = f"""
 Add-Type -AssemblyName System.Speech
 $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer
 try {{
-    $synth.SelectVoice('{voice_name}')
+    $synth.SelectVoice('{escaped_voice}')
 }} catch {{}}
-$synth.SetOutputToWaveFile('{output_wav}')
-$synth.Speak('{text}')
+$synth.SetOutputToWaveFile('{escaped_wav}')
+$textBytes = [System.Convert]::FromBase64String('{encoded_text}')
+$speakText = [System.Text.Encoding]::UTF8.GetString($textBytes)
+$synth.Speak($speakText)
 $synth.Dispose()
 """
         res = subprocess.run(["powershell", "-NoProfile", "-Command", ps_script], capture_output=True, text=True)

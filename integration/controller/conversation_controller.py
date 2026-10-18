@@ -12,17 +12,9 @@ from integration.config.integration_config import IntegrationConfig, load_integr
 from integration.models.brain_response import (
     AvatarPresentation,
     BrainResponse,
-    CitationItem,
     ConversationState,
     EmotionType,
     GestureType,
-)
-from integration.water_quality import (
-    CPCBWaterQualityError,
-    CPCBWaterQualityService,
-    format_water_quality_answer,
-    is_water_quality_query,
-    parse_water_quality_request,
 )
 
 logger = logging.getLogger("integration.conversation_controller")
@@ -36,11 +28,9 @@ class ConversationController:
         brain_client: BrainClient | None = None,
         config: IntegrationConfig | None = None,
         on_state_change: Callable[[AvatarPresentation], None] | None = None,
-        water_quality_service: CPCBWaterQualityService | None = None,
     ) -> None:
         self.config = config or load_integration_config()
         self.brain_client = brain_client or BrainClient(self.config)
-        self.water_quality_service = water_quality_service
         self.on_state_change = on_state_change
         self._lock = threading.Lock()
         self._current_state = ConversationState.IDLE
@@ -77,7 +67,7 @@ class ConversationController:
     ) -> AvatarPresentation:
         """Process a text question through the state machine synchronously / thread-safely."""
         in_lang = (input_language or language or "hi").lower().strip()
-        out_lang = (output_language or language or "hi").lower().strip()
+        out_lang = (output_language or in_lang).lower().strip()
 
         if self.is_busy:
             logger.warning("[Integration] Conversation controller is busy. Ignoring duplicate request.")
@@ -120,53 +110,6 @@ class ConversationController:
             emotion=EmotionType.THINKING,
             gesture=GestureType.THINKING,
         ))
-
-        # Live CPCB readings are handled before Brain's current-information fallback.
-        if self.water_quality_service and is_water_quality_query(question):
-            water_request = parse_water_quality_request(question)
-            try:
-                readings = self.water_quality_service.readings(water_request)
-                answer = format_water_quality_answer(water_request, readings)
-                mode = "live-water-quality"
-            except CPCBWaterQualityError as error:
-                logger.error("[Integration] CPCB water-quality query failed: %s", error)
-                answer = (
-                    "I couldn't retrieve the requested live water-quality data from CPCB just now. "
-                    "Please try again later; I won't substitute older or unrelated readings."
-                )
-                mode = "live-water-quality-unavailable"
-
-            if out_lang == "hi":
-                from brain.translator import TranslationError, translate_text
-
-                english_answer = answer
-                try:
-                    answer = translate_text(answer, "en", "hi")
-                except TranslationError as error:
-                    logger.error("[Integration] CPCB answer translation failed: %s", error)
-                    answer = (
-                        f"{english_answer}\n\n"
-                        "I could not translate this CPCB response into Hindi. The readings above "
-                        "remain in English; please retry later if you need a Hindi translation."
-                    )
-                    mode = "live-water-quality-translation-unavailable"
-
-            speaking_pres = AvatarPresentation(
-                state=ConversationState.SPEAKING,
-                question=question,
-                answer=answer,
-                mode=mode,
-                citations=[
-                    CitationItem(source="CPCB Real-Time Water Quality Monitoring System")
-                ],
-                input_language=in_lang,
-                output_language=out_lang,
-                language=out_lang,
-                emotion=EmotionType.NEUTRAL,
-                gesture=GestureType.EXPLAINING,
-            )
-            self._set_state(speaking_pres)
-            return speaking_pres
 
         # Step 3: Query Brain API
         try:

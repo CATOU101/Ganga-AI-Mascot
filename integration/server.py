@@ -21,19 +21,13 @@ from integration.models.brain_response import AvatarPresentation, BrainRequest
 from integration.avatar.mascot_presenter import MascotPresenter
 from integration.voice.stt_adapter import get_stt_adapter
 from integration.voice.tts_adapter import get_tts_adapter
-from integration.water_quality import CPCBWaterQualityService
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 AVATAR_DIR = ROOT_DIR / "avatar"
 
 config = load_integration_config()
 brain_client = BrainClient(config)
-water_quality_service = CPCBWaterQualityService()
-controller = ConversationController(
-    brain_client=brain_client,
-    config=config,
-    water_quality_service=water_quality_service,
-)
+controller = ConversationController(brain_client=brain_client, config=config)
 presenter = MascotPresenter()
 stt_adapter = get_stt_adapter(config.stt_provider)
 tts_adapter = get_tts_adapter("synthetic" if config.mock_mode else config.tts_provider)
@@ -59,13 +53,30 @@ def favicon():
     return Response(content=b"", media_type="image/x-icon", status_code=204)
 
 
+@app.get("/health")
 @app.get("/api/integration/health")
 def integration_health():
+    brain_ready = False
+    chunks_count = 0
+    try:
+        from brain.config import load_config
+        from brain.vector_store import get_vector_store
+        store = get_vector_store(load_config())
+        store.check_embedding_ready()
+        brain_ready = True
+        chunks_count = store.count()
+    except Exception as exc:
+        logger.warning(f"Health check Brain status: {exc}")
+
     return {
         "status": "ok",
         "service": "ganga-integration-server",
         "mock_mode": config.mock_mode,
         "brain_url": config.brain_base_url,
+        "brain": {
+            "ready": brain_ready,
+            "chunks": chunks_count,
+        },
     }
 
 
@@ -143,7 +154,7 @@ async def integration_stt(
         raise HTTPException(status_code=400, detail="Audio file must be uploaded as 'file' or 'audio'.")
 
     in_lang = (input_language or language or "hi").lower().strip()
-    out_lang = (output_language or language or "hi").lower().strip()
+    out_lang = (output_language or in_lang).lower().strip()
 
     audio_bytes = await upload_file.read()
     transcription = stt_adapter.transcribe_audio(audio_bytes, language=in_lang)
