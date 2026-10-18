@@ -28,6 +28,7 @@
       </div>
       
       <div class="header-controls">
+        <a id="quizNavButton" class="quiz-nav-button" href="#quiz" aria-pressed="false">Take Quiz</a>
         <div class="lang-selector-group">
           <span class="control-label">Input Lang</span>
           <div class="lang-selector">
@@ -89,6 +90,7 @@
 
       <!-- Interactive Q&A and Citations Panel -->
       <section class="interaction-card" aria-label="Conversation and Citations Panel">
+        <div id="chatView" class="chat-view">
         <!-- Answer Display -->
         <div class="answer-display-box">
           <div class="box-header">
@@ -145,6 +147,19 @@
           </form>
           <div id="voiceStatusMsg" class="voice-status-msg" aria-live="polite"></div>
         </div>
+        </div>
+
+        <section id="quiz" class="quiz-view" aria-labelledby="quizTitle" hidden>
+          <header class="quiz-header">
+            <div>
+              <p class="quiz-eyebrow">LEARN ABOUT THE GANGA</p>
+              <h2 id="quizTitle" tabindex="-1">Ganga Knowledge Quiz</h2>
+            </div>
+            <a class="quiz-secondary-button" href="#">Back to Chat</a>
+          </header>
+          <div id="quizContent"></div>
+          <p id="quizAnnouncement" class="sr-only" role="status" aria-live="polite"></p>
+        </section>
       </section>
     </main>
 
@@ -155,6 +170,8 @@
   </div>
 
   <script src="mascot.js?v=chacha-new-v7"></script>
+  <script src="quiz-data.js"></script>
+  <script src="quiz.js"></script>
   <script src="app.js?v=chacha-new-v7"></script>
 </body>
 </html>

@@ -11,6 +11,28 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const mascot = new MascotController();
+  const chatView = document.getElementById('chatView');
+  const quizView = document.getElementById('quiz');
+  const quizNavButton = document.getElementById('quizNavButton');
+
+  window.GangaQuiz.createQuizController({
+    document,
+    questions: window.GangaQuizQuestions,
+    getMascot: () => mascot
+  });
+
+  function updateActiveView(moveFocus = false) {
+    const showQuiz = window.location.hash === '#quiz';
+    if (chatView) chatView.hidden = showQuiz;
+    if (quizView) quizView.hidden = !showQuiz;
+    if (quizNavButton) quizNavButton.setAttribute('aria-pressed', String(showQuiz));
+    if (moveFocus && showQuiz) {
+      document.getElementById('quizTitle')?.focus();
+    }
+  }
+
+  window.addEventListener('hashchange', () => updateActiveView(true));
+  updateActiveView();
 
   // DOM Elements
   const statusBadge = document.getElementById('statusBadge');
