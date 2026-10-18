@@ -3,7 +3,7 @@
 **Project ID:** PRJ_316  
 **Project title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
 
-Ganga AI Mascot is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based mascot interface. The Brain answers questions using a curated, static collection of official Ganga and Namami Gange documents. A Groq-hosted language model is used for grounded generation after evidence retrieval and filtering; it is not a live web or river-monitoring service.
+Ganga AI Mascot is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based mascot interface. The Brain answers questions using a curated, static collection of official Ganga and Namami Gange documents. Groq and OpenRouter are available for grounded generation after evidence retrieval and filtering; the local extractive generator is the final fallback. The knowledge-answering path is not live web search or river monitoring.
 
 The project brings together source-grounded question answering, a Three.js character interface, and voice-related adapters. Its educational aim is to make information about Ganga stewardship, pollution, and conservation accessible through text and supported voice interaction.
 
@@ -48,23 +48,26 @@ The current knowledge-base inventory contains 86 PDF documents, 4,609 pages, 1,1
 
 Retrieval combines semantic similarity with lexical reranking. A heuristic evidence gate evaluates retrieved evidence before normal answer generation. Unsupported queries may receive an insufficient-evidence response; questions recognized as requiring current information are handled separately because the knowledge base is static. These checks are not calibrated confidence estimates or guarantees that every generated claim is supported.
 
-## Groq generation and citations
+## Hosted generation and citations
 
-The default generation provider is Groq, using the OpenAI-compatible Python SDK endpoint `https://api.groq.com/openai/v1`. The configured default model is `openai/gpt-oss-120b`. The model receives the question and selected evidence with source metadata only after the evidence gate accepts the query. Citation metadata is assembled from retrieved evidence by the Brain rather than generated as source references by the model.
+Grounded generation tries Groq first, then OpenRouter, and finally the local extractive generator. Both hosted providers use the existing OpenAI-compatible Python SDK with independent keys and endpoints. The default models are `openai/gpt-oss-120b` and `nvidia/nemotron-3.5-super-vl:free`. Hosted models receive the same question and selected evidence only after the evidence gate accepts the query. Citation metadata is assembled from retrieved evidence by the Brain rather than generated as source references by a model.
 
-If the Groq key is missing or the request fails, the existing extractive generator is used. Current-information and insufficient-evidence branches bypass normal LLM generation. LLM tests use mocks and do not make real Groq API requests.
+If one hosted provider is missing or fails, generation tries the next configured provider once. If both are unavailable or fail, the existing extractive generator is used. `LLM_PROVIDER=extractive` forces local-only generation. Current-information and insufficient-evidence branches bypass hosted generation. Groq and OpenRouter preserve the same response schema and assemble citations from retrieved metadata; the extractive fallback uses the same citation schema but cites hits that contributed extracted sentences, so its citation list can differ. Provider logs report safe provider/outcome categories without credentials or request data. Automated provider tests use mocks and do not make real API requests.
 
 Prompt constants are exposed through the `brain.prompts` package. The current files are `brain/prompts/__init__.py` and `brain/prompts/system.py`; `brain/prompts.py` is no longer part of the project.
 
 ## Configuration
 
-Configuration is read from process environment variables. The application does not automatically load `.env` files. `.env` should remain local and must not be committed; `.env.example` documents non-secret settings.
+Configuration is read from process environment variables and the project-root `.env` file. Exported process variables take precedence over values in `.env`. The `.env` file should remain local and must not be committed; `.env.example` documents non-secret settings.
 
 | Variable | Purpose |
 | --- | --- |
-| `LLM_PROVIDER` | `groq` (default) or `extractive` |
+| `LLM_PROVIDER` | `groq` (default), `openrouter` (defaults its order to OpenRouter first), or `extractive` (local only) |
+| `LLM_PROVIDER_ORDER` | Comma-separated `groq` / `openrouter` order; defaults to `groq,openrouter`. Example: `openrouter,groq` |
 | `GROQ_MODEL` | Groq model; defaults to `openai/gpt-oss-120b` |
-| `GROQ_API_KEY` | Secret credential for Groq; provide through a private environment setting |
+| `GROQ_API_KEY` | Groq credential; provide privately |
+| `OPENROUTER_MODEL` | OpenRouter model; defaults to `nvidia/nemotron-3.5-super-vl:free` |
+| `OPENROUTER_API_KEY` | OpenRouter credential; provide privately |
 | `GANGA_BRAIN_EMBEDDING_PROVIDER` | Semantic embedding provider (`semantic` by default) or `local-hash` |
 | `GANGA_BRAIN_EMBEDDING_MODEL` | Semantic embedding model (`all-MiniLM-L6-v2` by default) |
 | `GANGA_BRAIN_TOP_K` | Maximum returned evidence count |
@@ -73,13 +76,7 @@ Configuration is read from process environment variables. The application does n
 | `GANGA_BRAIN_MIN_KEYWORD_OVERLAP` | Evidence-gate lexical overlap threshold |
 | `GANGA_BRAIN_ORT_THREADS` | ONNX Runtime thread limit |
 
-To use a local `.env`, add `GROQ_API_KEY` privately, then export the file before starting a server:
-
-```bash
-set -a
-source .env
-set +a
-```
+For local development, set the needed provider keys privately in the project-root `.env` file. Both the standalone Brain and integration server load it automatically, regardless of the shell's current working directory. Explicitly exported variables take precedence. Set `LLM_PROVIDER_ORDER=openrouter,groq` to try OpenRouter first; `LLM_PROVIDER=extractive` avoids hosted providers entirely. OpenRouter's `:free` endpoints may be rate limited and have provider-specific data handling terms; do not send confidential or personal data to this model. Its reasoning is disabled for this request to preserve the existing 700-token output limit and avoid spending that budget on hidden reasoning.
 
 Do not paste or commit a real API key.
 
@@ -136,18 +133,15 @@ These are implemented project components, not a claim that every provider or ope
 
 ## Tests
 
-Run the Brain and integration test suites separately:
+Run the focused configuration/generator tests and regression suites separately from the repository root. These commands force local-only generation for regression tests; provider-chain tests use mocked clients and fake credentials:
 
 ```bash
-python -m pytest -q brain/tests
-python -m pytest -q integration/tests
+./.venv/bin/python -m pytest -q brain/tests/test_config_environment.py brain/tests/test_llm_generator.py
+env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q brain/tests
+env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q integration/tests --ignore=integration/tests/test_end_to_end.py
 ```
 
-The Brain provider tests mock Groq. These test commands do not require a real Groq request.
-
-The Brain suite is verified with 42 passing tests (hardening, broad query regression, and Groq LLM generator suites). The CPCB water-quality module has a dedicated mocked test suite (`integration/tests/test_water_quality_chat.py`) with 20 passing tests covering query detection, station parsing, readings retrieval, stale-data labelling, unsupported-location handling, and upstream failure handling.
-
-The full integration suite contains 53 tests. As of the CPCB integration commit, 51 pass and 2 fail. The 2 failures are in `test_end_to_end.py` and are pre-existing: they require an active Groq API key and network access to reach the Google Translate endpoint, neither of which is available in the sandboxed test environment. These failures are not caused by the CPCB integration. Run the commands above to verify the current checkout; no fixed result is claimed.
+The Brain provider tests mock Groq and OpenRouter; no automated command above makes a hosted LLM request. The integration command omits `test_end_to_end.py` because its language translation flows may require external network access. Passing mocked tests does not establish live Groq/OpenRouter compatibility or availability. OpenRouter free endpoints may be rate-limited and have provider-specific data-handling terms.
 
 ## Project workstreams
 
@@ -165,7 +159,7 @@ brain/
   rag_pipeline.py       Retrieval and generation orchestration
   retriever.py          Hybrid retrieval and ranking
   vector_store.py       SQLite metadata and NumPy vector index
-  generator.py          Groq-backed and extractive answer generators
+  generator.py          Groq/OpenRouter chain and extractive answer generator
   prompts/              Public prompt interface and system prompt
   tests/                Brain regression and provider tests
 knowledge_base/

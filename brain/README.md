@@ -1,6 +1,6 @@
 # Ganga Brain — Demo-Ready RAG Engine
 
-The **Brain** of the Ganga AI Mascot retrieves from the reviewed Ganga River Basin Management Plan (GRBMP) knowledge base and returns grounded answers with source metadata. The default generator uses Groq; set `LLM_PROVIDER=extractive` to use local extractive generation instead.
+The **Brain** of the Ganga AI Mascot retrieves from the reviewed Ganga River Basin Management Plan (GRBMP) knowledge base and returns grounded answers with source metadata. After the evidence gate accepts a question, the default generator tries Groq, then OpenRouter, then local extractive generation. Set `LLM_PROVIDER=extractive` for strict local-only generation.
 
 It uses heuristic checks for unsupported and current-information questions, and reports provenance for retrieved chunks that contribute extracted sentences. These mechanisms are not claim-level evidence verification or a guarantee against unsupported answers.
 
@@ -58,7 +58,7 @@ FastAPI HTTP API (POST /ask)
 
 ## Configuration
 
-Settings are read from environment variables; `.env` files are not loaded automatically:
+Settings are read from environment variables and the project-root `.env` file. Explicitly exported environment variables take precedence:
 
 ```bash
 # Embedding provider: 'semantic' (ONNX MiniLM) or 'local-hash'
@@ -74,22 +74,25 @@ GANGA_BRAIN_MIN_KEYWORD_OVERLAP=0.15
 # ONNX runtime thread limit
 GANGA_BRAIN_ORT_THREADS=2
 
-# Generator provider: 'groq' or 'extractive'
+# Generator: Groq -> OpenRouter -> local extractive fallback by default
 LLM_PROVIDER=groq
+LLM_PROVIDER_ORDER=groq,openrouter
 GROQ_MODEL=openai/gpt-oss-120b
-# GROQ_API_KEY must be set in the process environment.
+# Set provider keys privately in process environment or project-root .env.
+# GROQ_API_KEY=
+# OPENROUTER_API_KEY=
+OPENROUTER_MODEL=nvidia/nemotron-3.5-super-vl:free
+# For OpenRouter first: LLM_PROVIDER_ORDER=openrouter,groq
+# For local-only generation: LLM_PROVIDER=extractive
 ```
 
-The Groq provider uses the OpenAI Python SDK with Groq's OpenAI-compatible API. `.env` values are not loaded automatically. For local development, copy `.env.example` to `.env`, set `GROQ_API_KEY` privately, and export the file in the same shell before starting the API:
+Groq and OpenRouter use separate OpenAI SDK clients, keys, models, and compatible API endpoints. The default order tries Groq once, then OpenRouter once, then the existing extractive generator. Missing/placeholder keys are skipped. For local development, set the desired key(s) privately in the project-root `.env` file. The Brain loads it automatically, including when started from another working directory. Exported environment values take precedence:
 
 ```bash
-set -a
-source .env
-set +a
 python -m brain.api --host 127.0.0.1 --port 8000
 ```
 
-The key is never written to logs. If it is missing or a Groq request fails, generation falls back to the existing extractive generator; the API can start normally. `/health` checks the index and embedding readiness, not Groq connectivity, so `ready: true` does not guarantee that Groq credentials are configured. The embedding model setting applies to the `semantic` provider; the `local-hash` provider always uses its fixed hash-embedding implementation. Index paths, collection name, and chunk-size defaults are defined in `BrainConfig` rather than loaded from environment variables.
+Keys, authorization headers, prompts, retrieved evidence, and exception messages are not written to logs. If a provider is missing or fails, the next configured provider is attempted once; if all hosted providers fail, the existing extractive generator is used. `/health` checks the index and embedding readiness, not provider connectivity. Groq and OpenRouter return the same response fields and assemble citations from retrieved metadata. Extractive fallback keeps the citation schema but may return fewer citations because it includes only hits that contributed extracted sentences. OpenRouter's free endpoint may be rate limited and has provider-specific data-handling terms; do not send confidential or personal data. Reasoning is disabled for the selected Nemotron model so the existing 700-token limit is not consumed by hidden reasoning and no token budget is increased. The embedding model setting applies to the `semantic` provider; the `local-hash` provider always uses its fixed hash-embedding implementation. Index paths, collection name, and chunk-size defaults are defined in `BrainConfig` rather than loaded from environment variables.
 
 ---
 
@@ -102,19 +105,15 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Configure Groq generation
+### 2. Configure hosted generation
 
-Copy `.env.example` to the ignored local `.env` file, add `GROQ_API_KEY` there, then export the settings before launching:
+Set `GROQ_API_KEY` and/or `OPENROUTER_API_KEY` privately in the ignored, project-root `.env` file. The default tries Groq then OpenRouter. Set `LLM_PROVIDER_ORDER=openrouter,groq` to reverse that order, or `LLM_PROVIDER=extractive` for local-only mode. The application loads configuration at startup; explicit process environment values take precedence:
 
-```bash
-cp .env.example .env
-# Set GROQ_API_KEY privately in the local .env file.
-set -a
-source .env
-set +a
-```
+Then launch the application normally, for example with `python -m brain.api --host 127.0.0.1 --port 8000`.
 
-Groq is called only after current-information handling, retrieval, and the evidence quality gate accept the query. The model receives selected evidence and trusted metadata; citations are assembled by the Brain from retrieved metadata. If the key is missing or generation fails, the existing extractive generator is used. Current-information and insufficient-evidence responses bypass the LLM.
+Hosted generation runs only after current-information handling, retrieval, and the evidence quality gate accept the query. Each hosted provider receives equivalent selected evidence and trusted metadata; citations are assembled by the Brain from retrieved metadata. If both providers are missing or fail, the existing extractive generator is used. Current-information and insufficient-evidence responses bypass hosted generation.
+
+Run provider-chain tests with mocked clients and fake credentials using `./.venv/bin/python -m pytest -q brain/tests/test_config_environment.py brain/tests/test_llm_generator.py`. For local-only regressions, set `LLM_PROVIDER=extractive` and blank both hosted key variables before running the Brain test suite. These automated tests do not verify live-provider compatibility.
 
 ### 3. Build the complete index
 

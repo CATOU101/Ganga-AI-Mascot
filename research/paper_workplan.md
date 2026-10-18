@@ -128,7 +128,7 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
   - Lexical keyword search only.
   - Hybrid retrieval without overview boost.
   - Full hybrid retrieval with overview boost and evidence gating.
-- [ ] **Task 6.3:** Generation comparison: Benchmark Groq LLM generation vs. local extractive fallback.
+- [ ] **Task 6.3:** Generation comparison: Evaluate Groq, OpenRouter, and local extractive fallback on the same evidence-gated query set. Measure quality, citation behavior, provider availability, and latency under a documented protocol before drawing comparative conclusions. This is proposed future evaluation; no comparative results are available.
 - [ ] **Task 6.4:** User study: Conduct controlled user evaluation with students / citizens assessing engagement, trust, and learning outcomes.
 - [ ] **Task 6.5:** Record genuine empirical measurements in tables and charts.
 - **Deliverable:** Empirical Results Data Package & Analysis.
@@ -167,3 +167,4 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 | 2026-10-17 | Baseline | Authored comprehensive technical baseline document (`research/technical_baseline.md`). | Research Team |
 | 2026-10-17 | Plan | Formulated staged work plan (`research/paper_workplan.md`) with explicit Results deferral. | Research Team |
 | 2026-10-18 | Feature | Integrated CPCB real-time water quality monitoring (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip) into conversation controller; added Task 5.5 for telemetry evaluation and CPCB data reuse clearance. | Research Team |
+| 2026-10-18 | Implementation | Added configurable Groq → OpenRouter → extractive generation fallback after the existing evidence gate. This is a generation-layer resilience change; no live-provider or comparative performance results are claimed. | Research Team |

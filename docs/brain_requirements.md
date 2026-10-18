@@ -216,6 +216,8 @@ The generation component must be instructed not to fabricate unsupported informa
 
 When real-time information is used, the generated response should make clear that the information comes from a live/current data source and should include the latest available timestamp where appropriate.
 
+**Current implementation note:** Static RAG generation runs only after retrieval and its evidence-quality gate accept the question. The default hosted order is Groq then OpenRouter, with each provider attempted once before local extractive fallback. `LLM_PROVIDER_ORDER` configures the hosted order; `LLM_PROVIDER=extractive` selects local-only generation. Provider credentials/models are independent, and project-root `.env` values are loaded without overriding exported variables. The hosted generators use the same grounded context and response schema; citations come from retrieved metadata. Extractive fallback keeps that schema but can cite a different subset because it cites hits that contributed extracted sentences. Current-information and evidence-rejection branches do not enter hosted generation. Integration-layer CPCB water-quality requests use a separate route.
+
 ## 9. Conversation Context
 
 The Brain should support basic follow-up questions using relevant conversation context.
@@ -378,15 +380,15 @@ The avatar and voice components may initially remain at prototype/integration le
 
 ## 16. Current Implementation Status
 
-**Status: BRAIN RAG ENGINE COMPLETED (Ready for 50% Milestone Integration)**
+**Status: BRAIN RAG ENGINE IMPLEMENTED; provider-chain resilience added**
 
 - **Research and literature review**: COMPLETED
 - **Brain requirements**: DEFINED & IMPLEMENTED
 - **Knowledge-source verification & curation**: COMPLETED (86 GRBMP PDFs, 1,111 sections)
 - **Ingestion & Vector Indexing**: COMPLETED (4,085 chunks in SQLite metadata + NumPy `semantic_vectors.npy`)
 - **Retrieval & Evidence Quality Gate**: COMPLETED (ONNX dense similarity + lexical reranking + out-of-scope fallback + current-info fallback)
-- **Grounded Answer Generator & Provenance**: COMPLETED (Extractive local default / OpenAI option + exact PDF citations)
+- **Grounded Answer Generator & Provenance**: IMPLEMENTED (Groq → OpenRouter → extractive fallback; local-only extractive mode; citation metadata is assembled from retrieved evidence)
 - **FastAPI HTTP Server**: COMPLETED (`POST /ask`, `GET /health`)
 - **Evaluation Suite**: COMPLETED (`python -m brain.tests.run_evaluation`)
-- **Real-Time Live Telemetry APIs**: *Not Connected Yet* (gracefully falls back to `current-info-fallback` for live status questions)
+- **CPCB live telemetry**: Implemented separately in the integration conversation controller for the currently supported stations; broader APIs remain future work.
 - **Avatar / Voice / Frontend**: *Not Connected Yet* (target for upcoming milestone integration phase)

@@ -62,7 +62,11 @@ def answer_question(
         return resp
 
     # Step 4: Generate grounded answer with citations
-    generator = build_generator(config.llm_provider, config.llm_model)
+    provider_order = getattr(config, "llm_provider_order", None)
+    if provider_order is None:
+        generator = build_generator(config.llm_provider, config.llm_model)
+    else:
+        generator = build_generator(config.llm_provider, config.llm_model, provider_order)
     result = generator.generate(
         search_question,
         hits,
