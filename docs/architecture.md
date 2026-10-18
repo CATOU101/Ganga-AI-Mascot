@@ -642,6 +642,7 @@ The architecture defined here represents the active working implementation of th
 - **Quality Gate**: Multi-Factor Evidence Gate (unsupported query rejection + current-info fallback).
 - **Generator**: Local Extractive grounded synthesizer default / OpenAI LLM option.
 - **API Boundary**: FastAPI HTTP Server (`POST /ask`, `GET /health`).
+- **Live Environmental Telemetry**: Real-time CPCB water-quality monitoring (pH, DO, BOD) integrated at the conversation controller layer for 5 verified main-stem Ganga stations (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip) with 60s in-memory caching and freshness labeling.
 
 The architectural objective remains:
 

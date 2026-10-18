@@ -222,6 +222,7 @@ $$\text{Response} = \big\langle \text{answer} = M_{\text{current\_info}}, \; \te
 - **File:** `brain/rag_pipeline.py` (lines 45–50).
 - **Baseline implementation:** `CURRENT_TERMS[:5]` and `CURRENT_TERMS[5:]` in `brain/retriever.py` at commit `56032d7`; this split does not match the intended term groups above.
 - **Constants:** `CURRENT_INFO_MESSAGE` in `brain/prompts/system.py`.
+- **System Boundary Note:** In the integrated conversational mascot service (`integration/controller/conversation_controller.py`), live water-quality queries are intercepted before the Brain service to query the CPCB real-time monitoring service (`integration/water_quality.py`). The static fallback predicate above remains active within the standalone Brain RAG pipeline as an internal safety gate.
 
 ---
 

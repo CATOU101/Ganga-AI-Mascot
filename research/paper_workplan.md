@@ -111,6 +111,12 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
   - End-to-end latency (Query $\to$ RAG $\to$ TTS $\to$ Lip-sync $\to$ Browser render).
   - Avatar usability via standard Chatbot Usability Questionnaire (CUQ) or System Usability Scale (SUS).
   - Educational knowledge gain (pre-test vs. post-test score differential in user study).
+- [ ] **Task 5.5:** Formalize CPCB live water-quality evaluation protocol:
+  - Query classification and routing accuracy (distinguishing live telemetry requests from conceptual/educational water-quality questions).
+  - LLM behavior and response-length optimization when presenting structured station telemetry.
+  - Multimodal voice/TTS interaction testing: evaluate intelligibility and auditory pacing of numeric readings (DO, BOD, pH).
+  - Upstream reliability analysis: benchmark 60-second caching performance, stale-measurement tagging (>90 minutes), and error handling during CPCB portal downtime.
+  - Administrative clearance: clarify formal data reuse permissions and public licensing with CPCB under NDSAP guidelines.
 - **Deliverable:** Evaluation Protocol Specification in `research/implementation_and_evaluation.md`.
 
 ---
@@ -160,3 +166,4 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 | 2026-10-17 | Setup | Created `research/repository-preparation` branch; preserved all local files. | Research Team |
 | 2026-10-17 | Baseline | Authored comprehensive technical baseline document (`research/technical_baseline.md`). | Research Team |
 | 2026-10-17 | Plan | Formulated staged work plan (`research/paper_workplan.md`) with explicit Results deferral. | Research Team |
+| 2026-10-18 | Feature | Integrated CPCB real-time water quality monitoring (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip) into conversation controller; added Task 5.5 for telemetry evaluation and CPCB data reuse clearance. | Research Team |

@@ -35,7 +35,7 @@ The prototype should use RAG so that generated answers are based on retrieved kn
 The Brain should support a separate real-time information path for questions requiring current data.
 
 > **Implementation Status Note (Verified Technical Baseline)**:  
-> Live real-time environmental APIs (CPCB, NMCG, data.gov.in) are not implemented in the current prototype. The active runtime implements real-time query detection (`asks_for_current_information` in `brain/retriever.py`) to intercept freshness/dynamic queries and safely return a static-knowledge disclaimer message (`CURRENT_INFO_MESSAGE`), preventing temporal hallucinations. Live API integration remains planned future work.
+> In the standalone Brain package, real-time query detection (`asks_for_current_information` in `brain/retriever.py`) safely returns a static-knowledge disclaimer message (`CURRENT_INFO_MESSAGE`) to prevent temporal hallucinations. In the integration service layer (`integration/water_quality.py`, `conversation_controller.py`), live CPCB water-quality retrieval is now actively implemented for 5 verified stations on the main River Ganga (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip), reporting DO, BOD, and pH with 60-second caching, timestamp attribution, and stale-data tagging (>90 min). Integration with broader APIs (NMCG, data.gov.in) remains future work.
 
 Potential sources may include:
 
