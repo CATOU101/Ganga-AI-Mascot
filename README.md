@@ -13,9 +13,10 @@ The project brings together source-grounded question answering, a Three.js chara
 Browser text or audio input
         ↓
 Integration FastAPI service
-        ├── Text questions ──→ Brain client ──→ Brain retrieval and answer pipeline
-        └── Audio input ──────→ STT adapter ───→ Brain retrieval and answer pipeline
-                                                   ↓
+        ├── Water-quality questions → CPCB live-data retrieval → Structured response
+        ├── Text questions ──────→ Brain client ──→ Brain retrieval and answer pipeline
+        └── Audio input ──────────→ STT adapter ───→ Brain retrieval and answer pipeline
+                                                     ↓
 Browser UI ← Avatar presentation ← TTS and lip-sync processing ← Answer and citations
 ```
 
@@ -144,7 +145,9 @@ python -m pytest -q integration/tests
 
 The Brain provider tests mock Groq. These test commands do not require a real Groq request.
 
-The Brain suite on the integrated `main` branch is verified with 42 passing tests (including Brain hardening, broad query regression, and Groq LLM generator suites). Run the commands above to check the current checkout; no fixed result is claimed for the integration suite here.
+The Brain suite is verified with 42 passing tests (hardening, broad query regression, and Groq LLM generator suites). The CPCB water-quality module has a dedicated mocked test suite (`integration/tests/test_water_quality_chat.py`) with 20 passing tests covering query detection, station parsing, readings retrieval, stale-data labelling, unsupported-location handling, and upstream failure handling.
+
+The full integration suite contains 53 tests. As of the CPCB integration commit, 51 pass and 2 fail. The 2 failures are in `test_end_to_end.py` and are pre-existing: they require an active Groq API key and network access to reach the Google Translate endpoint, neither of which is available in the sandboxed test environment. These failures are not caused by the CPCB integration. Run the commands above to verify the current checkout; no fixed result is claimed.
 
 ## Project workstreams
 
@@ -171,6 +174,7 @@ knowledge_base/
   vector_db/            Runtime index files and retained legacy artifacts
 integration/
   server.py             Integration FastAPI app and frontend hosting
+  water_quality.py      CPCB live water-quality retrieval, parsing, and response formatting
   api/                  Brain client
   controller/           Conversation state and orchestration
   voice/                STT and TTS adapters
@@ -182,10 +186,39 @@ docs/                   Project documentation and design material
 tools/                  Supporting tools, including lip-sync tooling
 ```
 
+## CPCB live water-quality integration
+
+The conversation controller intercepts questions about current Ganga water quality before the RAG pipeline and returns a structured response drawn directly from the CPCB Real-Time Water Quality Monitoring System.
+
+**Endpoints used (no authentication required):**
+
+```
+GET https://rtwqmsdb1.cpcb.gov.in/data/internet/stations/stations.json
+GET https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json
+```
+
+**Supported stations on the main River Ganga:**
+
+| Station | CPCB code | State |
+|---|---|---|
+| Haridwar (Har Ki Pauri) | UK55 / 11788 | Uttarakhand |
+| Kanpur (Luv Kush Barrage) | UT58 / 11791 | Uttar Pradesh |
+| Ghazipur (Abdul Hameed Setu) | UT66 / 11798 | Uttar Pradesh |
+| Farakka (Farakka Barrage) | WB86 / 11815 | West Bengal |
+| Nabadwip (Nabadwip Bathing Ghat) | WB87 / 11816 | West Bengal |
+
+**Parameters reported:** Dissolved Oxygen (DO), Biochemical Oxygen Demand (BOD), and pH.
+
+The system verifies station identity against the CPCB registry before returning readings. Responses include the measurement timestamp, a freshness label (readings older than 90 minutes are marked stale), and a source attribution to CPCB. Responses state clearly that point readings at a monitoring station do not determine whether water is safe to drink.
+
+Successful CPCB responses are returned through the normal chatbot conversation with mode `live-water-quality`. If the CPCB endpoint is unreachable, the system reports the failure and does not substitute stale or unrelated readings. Retrieved payloads are cached for 60 seconds to reduce repeated requests. CPCB's terms for data reuse have not been independently verified and should be reviewed before wider publication or redistribution.
+
+CPCB water-quality queries are detected by the integration-layer conversation controller (`integration/water_quality.py`, `integration/controller/conversation_controller.py`). This happens before the Brain RAG pipeline; all other questions continue through the existing retrieval and generation path. Hindi translation of CPCB responses is attempted through the existing translation adapter; translation failures are reported inline.
+
+LLM behaviour and voice interaction with CPCB responses have not been systematically evaluated. Do not interpret the availability of live readings as a claim about response quality or accuracy in practice.
+
 ## Status and limitations
 
-The Brain Phase 1 knowledge pipeline and Phase 2 Groq generation are integrated in the current project branch. The system is a prototype: it uses static documents, heuristic retrieval/evidence thresholds, and an external generation provider. It does not have live web search or real-time water-quality data, does not perform formal claim-level entailment verification, and does not guarantee factual correctness. Translation and optional voice services depend on their configured external or platform-specific components.
-
-Potential future directions recorded in earlier project material include adding live hydrological data sources, expanding language coverage, and exploring physical mascot embodiments; these are not described as implemented features.
+The Brain Phase 1 knowledge pipeline, Phase 2 Groq generation, and CPCB live water-quality retrieval are integrated in the current project branch. The system is a prototype: it uses static documents for knowledge queries, heuristic retrieval/evidence thresholds, and an external generation provider. It does not have live web search and does not perform formal claim-level entailment verification. Translation and optional voice services depend on their configured external or platform-specific components. CPCB data is approximately 30–60 minutes behind sensor measurements and may be unavailable or stale for specific stations.
 
 This academic project demonstrates an information-access prototype for river-conservation awareness; it is not an operational environmental monitoring or decision-support system.

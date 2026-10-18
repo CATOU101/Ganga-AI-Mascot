@@ -39,7 +39,10 @@ The codebase is organized into four core architectural components:
 +-----------------------------------------------------------------------------------------------+
 | 3. INTEGRATION & VOICE SUBSYSTEM (`integration/`)                                             |
 |    - `server.py`: Primary FastAPI application (port 8080); serves UI, mounts Brain API.       |
+|    - `water_quality.py`: CPCB live water-quality retrieval, station/parameter parsing,        |
+|       freshness checking, response formatting. Intercepted before Brain query.                 |
 |    - `api/brain_client.py`: In-process and HTTP client routing requests to Brain.             |
+|    - `controller/conversation_controller.py`: Routes CPCB vs. Brain queries; state machine.   |
 |    - `voice/stt_adapter.py`: Offline Vosk speech recognition (English and Hindi).             |
 |    - `voice/tts_adapter.py`: Microsoft EdgeTTS neural speech with Windows SAPI fallback.       |
 |    - `avatar/lipsync.py`: Rhubarb acoustic lip-sync wrapper with procedural cadence fallback. |
@@ -71,9 +74,26 @@ The codebase is organized into four core architectural components:
    └───────────┬───────────┘
                │
                ▼ [Question String + Target Language]
+[Conversation Controller: integration/controller/conversation_controller.py]
+               │
+               ├─► [CPCB Live Water-Quality Detection: is_water_quality_query(q)]
+               │        │ (if True) ──► parse_water_quality_request(q)
+               │                                │
+               │                    CPCBWaterQualityService.readings(request)
+               │                                │
+               │              Fetches station registry + layer-10 snapshot
+               │              (CPCB endpoints; 60s in-memory cache)
+               │                                │
+               │                    format_water_quality_answer(request, records)
+               │                                │
+               │        Returns AvatarPresentation (mode="live-water-quality")
+               │        with CPCB attribution and freshness labels
+               │        ◄── (stops here; Brain pipeline is not called)
+               │
+               ▼ [Non-water-quality questions continue to Brain pipeline]
 [Brain Pipeline: brain/rag_pipeline.py]
                │
-               ├─► [Language Normalization: if hi -> translate to en for search]
+               ├─► [Language Normalization: if hi → translate to en for search]
                │
                ├─► [Dynamic Query Detection: asks_for_current_information(q)]
                │        │ (if True) ──► Return Static Knowledge Disclaimer
@@ -95,7 +115,7 @@ The codebase is organized into four core architectural components:
                │
                ├─► [Decoupled Citation Assembly: metadata bound directly from chunks]
                │
-               └─► [Output Translation: if target_lang == 'hi' -> translate answer]
+               └─► [Output Translation: if target_lang == 'hi' → translate answer]
                │
                ▼ [Brain Response JSON: answer, citations, mode, retrieved chunks]
 [MascotPresenter: integration/avatar/mascot_presenter.py]
@@ -190,7 +210,7 @@ Open `http://127.0.0.1:8080/` in a WebGL-compatible browser to interact with the
 
 ### 5.2 Integration Subsystem Automated Test Suite
 - **Command:** `PYTHONPATH=. ./.venv/bin/pytest integration/tests -k "not test_end_to_end"`
-- **Verified Execution Outcome:** **29 passed, 4 deselected** in 0.72 seconds.
+- **Verified Execution Outcome:** **49 passed, 4 deselected** in ~1.00 second.
 
 | Test Module | Test File | Items | Primary Assertions |
 | :--- | :--- | :--- | :--- |
@@ -200,6 +220,7 @@ Open `http://127.0.0.1:8080/` in a WebGL-compatible browser to interact with the
 | **Conversation Controller**| `integration/tests/test_conversation_controller.py`| 3 | Validates session dialogue history, context turns, and state machine transitions. |
 | **Member2 Asset Guard** | `integration/tests/test_member2_integration.py` | 12 | Validates `Chacha_Master.glb` file size (>100MB), 57 bones, 35 shape keys, and 9 skeletal actions. |
 | **STT / TTS Adapters** | `integration/tests/test_stt_tts.py` | 2 | Tests speech adapter instantiation, audio result data classes, and fallback paths. |
+| **CPCB Water Quality Chat**| `integration/tests/test_water_quality_chat.py` | 20 | Tests query classification, multi-station parsing, parameter extraction (DO, BOD, pH), stale measurement labelling (>90m), registry validation, 60s caching, unsupported station rejection, and API failure handling. |
 
 ### 5.3 Golden Evaluation Suite (Existing Artifact)
 - **Script:** `brain/tests/run_evaluation.py`
