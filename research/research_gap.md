@@ -2,8 +2,9 @@
 
 **Project ID:** PRJ_316  
 **Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
-**Status:** Complete Comparative Gap Analysis (Grounded on R1–R10)  
-**Authoritative Baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`  
+**Status:** Comparative gap framing; not an empirical finding or claim of novelty across all literature.
+**Historical implementation baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
+**Current implementation snapshot audited:** `main` at `80833751f2a365eb00be5ddeee3392e4a601d38e` (2026-10-19; before documentation-only changes). R1's publication record remains unverified in the literature review; R1-based statements are provisional.
 
 ---
 
@@ -15,7 +16,7 @@ Establishing a credible academic contribution for an applied AI system requires 
 3. Inherent engineering and operational limitations of the current prototype.
 4. Defensible candidate contributions that can be experimentally validated.
 
-This document synthesizes these four dimensions, specifically comparing PRJ_316 against its primary application baseline (R1: Narmada et al., 2025), foundational RAG architecture (R2: Lewis et al., 2020), educational conversational AI reviews (R3: Ganguly et al., 2026; R4: Yusuf et al., 2025), environmental education studies (R5: Wang & Li, 2026; R6: Wang et al., 2025), and pedagogical agent meta-analyses (R7: Schroeder et al., 2025; R8: Dai et al., 2022; R9: Tao et al., 2022; R10: Schroeder et al., 2013).
+This document synthesizes these dimensions against sources discussed in the literature review. R1's publication record remains unresolved, so statements attributed to R1 are provisional. This comparison is a candidate framing based on reviewed sources, not proof that the stated gaps are absent from the full literature.
 
 ---
 
@@ -57,16 +58,17 @@ Beyond individual paper findings, cross-synthesis of R1–R10 reveals three over
 To maintain scientific integrity, the current implementation limitations must be acknowledged explicitly rather than concealed:
 
 1. **Static Historical Horizon:** The active knowledge base consists exclusively of GRBMP reports published between 2010 and 2015. It lacks contemporary post-2020 NMCG sewerage infrastructure telemetry.
-2. **Absence of Real-Time IoT Telemetry:** Despite earlier conceptual planning documents mentioning CPCB sensor feeds, no live environmental sensor APIs are implemented. Dynamic queries are intercepted via pattern heuristics and routed to static fallbacks.
-3. **Heuristic Evidence Quality Gating:** The evidence gate relies on candidate pool keyword coverage ($\ge 60\%$) and top-candidate lexical overlap ($\ge 15\%$). While empirically effective at blocking out-of-domain queries, these are deterministic string heuristics rather than formal cross-encoder entailment probabilities.
-4. **Network Dependencies for Multilingual Voice:** English-to-Hindi translation relies on an external Google Translate HTTP endpoint; neural voice synthesis relies on Microsoft EdgeTTS. Truly offline operation is restricted to English extractive fallback and local Vosk STT.
-5. **Cross-Platform Tooling Variances:** Windows SAPI and Rhubarb binary execution do not operate natively on macOS or Linux, relying on procedural cadence fallbacks.
+2. **Limited Live Station Data:** The integration controller has a separate CPCB route for a supported set of main-stem stations and DO/BOD/pH readings. It is not a broad river-monitoring network, does not replace the static GRBMP corpus, and depends on an external service. Data-reuse terms and sustained endpoint availability remain unverified.
+3. **Heuristic Evidence Quality Gating:** The evidence gate uses candidate-pool keyword coverage (default $\ge 60\%$) and top-hit lexical overlap (default $\ge 15\%$), along with embedding distance filtering. These deterministic engineering rules are not calibrated probabilities, cross-encoder entailment scores, or proof of claim support; effectiveness remains to be measured.
+4. **External Translation and Multilingual Limits:** Text language controls support English, Hindi, Kannada, and Tamil. Script detection is heuristic. General translation uses Google's public GTX endpoint by default on API routes and may send the question and/or generated answer externally; endpoint-specific terms and retention are not verified. A small exact-phrase map works locally, but general translation is not local or offline and no translation cache is retained.
+5. **Voice Support Is Uneven:** Vosk model mappings cover English and Hindi only. Browser speech locale controls and Edge TTS voice IDs are configured for four languages, but actual support depends on browser/provider availability and has not been validated consistently. Windows SAPI fallback is configured for English/Hindi. Rhubarb's bundled binary is platform-specific and cadence fallback may be used elsewhere.
+6. **Cross-Platform Tooling Variances:** Windows SAPI and the bundled Rhubarb binary do not operate natively on every platform; availability and fallback behavior depend on the host environment.
 
 ---
 
 ## 5. Defensible Candidate Contributions for PRJ_316
 
-Based on the verified literature baseline and actual source-code implementation, PRJ_316 can articulate five defensible contributions for peer-reviewed publication:
+Based on the reviewed literature (with source-specific verification status) and actual source-code implementation, PRJ_316 can frame the following candidate contributions for later peer-reviewed evaluation:
 
 ```
                     CORE CONTRIBUTIONS OF PRJ_316
@@ -94,16 +96,16 @@ Based on the verified literature baseline and actual source-code implementation,
                                   |
                                   v
    +-------------------------------------------------------------+
-   | 4. Hallucination-Resistant Decoupled Citation Assembly      |
-   |    - Citations bound from chunk metadata, not LLM output    |
-   |    - Verifiable provenance: file, page range, section, type |
+   | 4. Decoupled Citation Metadata Assembly                    |
+   |    - Citation objects assembled from retrieved-hit metadata |
+   |    - Traceable fields; claim-level entailment is not proved  |
    +------------------------------+------------------------------+
                                   |
                                   v
    +-------------------------------------------------------------+
    | 5. Culturally Grounded Three.js WebGL Mascot Integration    |
-   |    - 65-bone rigged Chacha Chaudhary 3D avatar              |
-   |    - 28 Mixamo gestures + acoustic/cadence viseme lip-sync  |
+   |    - Three.js Chacha avatar and quiz are implemented        |
+   |    - Voice/provider and learning outcomes remain unevaluated|
    |    - Modular decoupling of Brain reasoning and 3D UI       |
    +-------------------------------------------------------------+
 ```

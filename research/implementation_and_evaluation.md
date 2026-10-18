@@ -2,15 +2,15 @@
 
 **Project ID:** PRJ_316  
 **Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
-**Status:** Reproducible Implementation Guide & Evaluation Benchmark Protocol  
-**Authoritative Baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`  
+**Status:** Implementation guide and proposed evaluation protocol
+**Historical baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
+**Implementation snapshot audited:** `main` at `80833751f2a365eb00be5ddeee3392e4a601d38e` (2026-10-19; before documentation-only changes)
 **Execution Environment:** macOS / Linux / Windows, Python 3.11–3.13  
 
 ---
 
 > [!IMPORTANT]
-> **Reproducibility Guarantee & Empirical Deferral:**  
-> All commands, paths, and configurations in this document have been verified directly within the repository. In accordance with academic research standards, empirical benchmark performance measurements (Precision@k, Recall@k, MRR, Answer Faithfulness) are **deferred** to Stage 6 of the research work plan. The 8 golden evaluation test results documented below are recorded purely as existing regression assertions, not as a general benchmark claim.
+> **Execution and empirical status:** Commands below describe how to run the software; they were not all executed during this documentation audit. Empirical benchmark measurements (Precision@k, Recall@k, MRR, answer faithfulness) remain deferred. The eight-case golden evaluation artifact is a small regression fixture, not a general benchmark or performance claim.
 
 ---
 
@@ -29,7 +29,7 @@ The codebase is organized into four core architectural components:
 |    - `vector_store.py`: Thread-safe SQLite metadata and memory-mapped NumPy vector index.     |
 |    - `embeddings.py`: Local CPU ONNX execution of all-MiniLM-L6-v2 (384d).                    |
 |    - `generator.py`: Evidence-gated Groq → OpenRouter → extractive generation chain.          |
-|    - `translator.py`: Bilingual translation between English and Hindi.                        |
+|    - `translator.py`: English/Hindi/Kannada/Tamil selection, detection, and translation handling.|
 |    - `chunking.py`: Paragraph-preserving character chunking with overlap and metadata.        |
 +-----------------------------------------------------------------------------------------------+
 | 2. KNOWLEDGE BASE SUBSYSTEM (`knowledge_base/`)                                               |
@@ -201,21 +201,24 @@ Open `http://127.0.0.1:8080/` in a WebGL-compatible browser to interact with the
 
 ---
 
-## 5. Test Catalog & Verified Outcomes
+## 5. Test Catalog and Previously Reported Evidence
+
+No application test suite was run for this documentation audit. The results below are historical reports supplied from earlier runs, not fresh verification of the current checkout.
 
 ### 5.1 Brain Subsystem Automated Test Suite
-- **Command:** `env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q brain/tests`
-- **Verified Execution Outcome:** **58 passed, 19 subtests passed, 6 warnings** in 1.61s (current checkout; explicit extractive mode and blank hosted keys).
+- **Previously reported command:** `env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q brain/tests`
+- **Previously reported outcome:** **76 passed, 19 subtests**. This was run with explicit extractive mode and blank hosted-provider variables; it is not a new result from this audit.
 
 | Test Module | Test File | Items | Primary Assertions |
 | :--- | :--- | :--- | :--- |
 | **Brain Hardening** | `brain/tests/test_brain_hardening.py` | 12 | Tests `/health`, `/ask` validation, out-of-domain rejection, empty string safety, language parameter handling, and distance boundary edge cases. |
 | **Broad Query Routing**| `brain/tests/test_broad_query_regression.py` | 11 | Tests broad Ganga query detection, overview document matching, overview boost calculations, and regression protection for general inquiries. |
-| **LLM Generator & Mocks**| `brain/tests/test_llm_generator.py` | Current checkout | Mocks Groq and OpenRouter clients and checks provider ordering, fallback, request compatibility, citations, and safe logging. |
+| **LLM Generator & Mocks**| `brain/tests/test_llm_generator.py` | Suite dependent | Mocks Groq and OpenRouter clients and checks provider ordering, fallback, request compatibility, citations, and safe logging. |
+| **Multilingual handling** | `brain/tests/test_multilingual_support.py` | Included in prior full-suite report | Exercises language selection/detection and mocked translation/error paths; external translation is not live-validated by mocked tests. |
 
 ### 5.2 Integration Subsystem Automated Test Suite
-- **Command:** `env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q integration/tests --ignore=integration/tests/test_end_to_end.py`
-- **Verified Execution Outcome:** **50 passed, 8 warnings** in 0.80s (current checkout; explicit extractive mode and blank hosted keys). The network-dependent end-to-end module is excluded.
+- **Previously reported command:** `env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q integration/tests --ignore=integration/tests/test_end_to_end.py`
+- **Previously reported outcome:** **54 passed**. This used explicit extractive mode and blank hosted-provider variables; network-dependent `integration/tests/test_end_to_end.py` was excluded. It is not a new result from this audit.
 
 | Test Module | Test File | Items | Primary Assertions |
 | :--- | :--- | :--- | :--- |
@@ -226,29 +229,30 @@ Open `http://127.0.0.1:8080/` in a WebGL-compatible browser to interact with the
 | **Member2 Asset Guard** | `integration/tests/test_member2_integration.py` | 12 | Validates `Chacha_Master.glb` file size (>100MB), 57 bones, 35 shape keys, and 9 skeletal actions. |
 | **STT / TTS Adapters** | `integration/tests/test_stt_tts.py` | 2 | Tests speech adapter instantiation, audio result data classes, and fallback paths. |
 | **CPCB Water Quality Chat**| `integration/tests/test_water_quality_chat.py` | 20 | Tests query classification, multi-station parsing, parameter extraction (DO, BOD, pH), stale measurement labelling (>90m), registry validation, 60s caching, unsupported station rejection, and API failure handling. |
+| **Multilingual route** | `integration/tests/test_multilingual_route.py` | Included in prior full-suite report | Checks route language handling, UI controls, and configured-provider limits using mocks. |
 
 ### 5.3 Golden Evaluation Suite (Existing Artifact)
 - **Script:** `brain/tests/run_evaluation.py`
 - **Output Artifact:** `brain/tests/evaluation_results.json`
 - **Command:** `PYTHONPATH=. ./.venv/bin/python brain/tests/run_evaluation.py`
-- **Verified Execution Outcome:** **8 / 8 PASS** (Executed with local extractive fallback).
+- **Prior artifact report:** **8 / 8 PASS** with local extractive fallback; this documentation task did not rerun the script or independently revalidate its output artifact.
 
-| Case ID | Question | Expected Mode | Actual Mode | Citations | Verified Behavior |
+| Case ID | Question | Expected Mode | Prior artifact mode | Citations | Prior artifact note (not correctness validation) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **A_factual** | "What is Aviral Dhara?" | `grounded` | `grounded` | 3 | Accurately retrieves and quotes GRBMP e-flows definition. |
+| **A_factual** | "What is Aviral Dhara?" | `grounded` | `grounded` | 3 | Returned a grounded-mode answer and citation metadata. |
 | **B_urban_pollution** | "What does the GRBMP say about pollution load from urban areas?" | `grounded` | `grounded` | 4 | Retrieves BOD/COD urban discharge tables. |
 | **C_historical** | "According to the GRBMP material, what historical concerns are associated with sewage pollution?" | `grounded` | `grounded` | 3 | Prepends historical notice and cites historical sections. |
 | **D_unsupported_mars** | "What is the population of Mars according to the GRBMP?" | `insufficient-evidence` | `insufficient-evidence` | 0 | Gate 1 blocks query; returns safe disclaimer. |
 | **E_current_info** | "What is the current water quality of the Ganga today?" | `current-info-fallback` | `current-info-fallback` | 0 | `asks_for_current_information` blocks retrieval; returns disclaimer. |
 | **F_provenance** | "What does the knowledge base say about environmental flows, and which source page supports it?" | `grounded` | `grounded` | 3 | Binds valid report title and page range metadata. |
-| **G_citations** | "What are the key functions of National Ganga River Basin Authority?" | `grounded` | `grounded` | 3 | Binds NGRBA institutional mandate with 0 hallucinated sources. |
+| **G_citations** | "What are the key functions of National Ganga River Basin Authority?" | `grounded` | `grounded` | 3 | Returned citation objects associated with retrieved metadata; no claim-level source audit is implied. |
 | **H_empty_query** | "" | `insufficient-evidence` | `insufficient-evidence` | 0 | Immediate safety rejection. |
 
 ### 5.4 Provider-Chain Validation
 - **Command:** `./.venv/bin/python -m pytest -q brain/tests/test_config_environment.py brain/tests/test_llm_generator.py`
-- **Verified Execution Outcome:** **34 passed, 12 subtests passed** in 0.56s, no warnings.
+- **Previously reported outcome:** **34 passed, 12 subtests**. Provider SDK calls were mocked and fake credentials used; no real hosted API call. The earlier report recorded no warnings.
 
-The Brain and integration commands above use explicit extractive mode and blank hosted keys so suite behavior cannot depend on local credentials. Provider SDK calls in automated tests are mocked; these suites do not perform a live-provider smoke test. Results are from this checkout on 2026-10-18 and do not establish that a live endpoint is available or compatible.
+Earlier focused multilingual tests were reported as **22 passed**, and quiz tests as **5 passed**. These are prior reports; the exact invocation is not preserved here. Translation/LLM/CPCB/STT/TTS dependencies were mocked where covered. The quiz count is an automated software test, not a user study. `git diff --check` was also previously reported as passing. None of these reports establishes current live-provider compatibility or availability.
 
 ---
 

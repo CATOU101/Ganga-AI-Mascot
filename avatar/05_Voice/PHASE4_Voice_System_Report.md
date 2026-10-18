@@ -2,6 +2,8 @@
 
 Date: 2026-09-12
 
+> **Historical phase report:** The offline/formant voice design recorded here is an earlier Unity/asset-stage artifact, not the current application TTS implementation. Current runtime providers and platform limits are described in [`avatar/README.md`](../README.md).
+
 ## Acoustic Character Profile
 
 - **Persona**: Chacha (warm, respectable, encouraging elderly Indian uncle)

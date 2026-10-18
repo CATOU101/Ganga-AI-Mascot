@@ -2,8 +2,8 @@
 
 **Project ID:** PRJ_316  
 **Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
-**Status:** Comprehensive Review (Verified Primary Literature R1–R10)  
-**Authoritative Baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`  
+**Status:** Thematic review of ten sources with per-source verification labels; R1 remains unverified.
+**Historical implementation baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
 
 ---
 
@@ -13,7 +13,7 @@ The deployment of conversational Artificial Intelligence (AI) and interactive pe
 
 In the context of the **Namami Gange Programme**, communicating technical hydrologic data, pollution abatement strategies, wastewater treatment methodologies, and cultural heritage to diverse demographics requires balancing technical accuracy with accessibility. While commercial Large Language Models (LLMs) offer fluent dialogue, they present critical limitations: vulnerability to hallucinations, lack of verifiable source attribution, static cutoff horizons, and an inability to reliably state when evidence is insufficient.
 
-This literature review investigates ten foundational and contemporary studies (R1–R10) spanning eight interconnected research domains:
+This literature review discusses ten foundational and contemporary studies (R1–R10) spanning eight interconnected research domains. Verification labels are inherited from earlier review work and were not independently rechecked for this documentation audit; R1 remains unresolved:
 1. Ganga and River Conservation Awareness.
 2. Environmental Education and Digital Mascots.
 3. Conversational AI Architectures.
@@ -81,7 +81,7 @@ Verification status is recorded per source. The supplied DOI for R1 (`10.63053/m
 
 ## 4. Synthesis and Research Matrix
 
-The following matrix compares how each verified literature source addresses the core technical and educational requirements of PRJ_316:
+The following matrix compares how the reviewed sources address the core technical and educational requirements of PRJ_316. It is a qualitative synthesis, not a systematic evidence map.
 
 | Paper ID | Domain / Application Focus | Knowledge Grounding / RAG | Curated Government Corpus | Hybrid Retrieval & Gating | Decoupled Provenance Citations | 3D Embodiment / Lip-Sync | Quantitative / Dual Evaluation |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -101,19 +101,19 @@ The following matrix compares how each verified literature source addresses the 
 
 ## 5. Identified Literature Gaps & Methodological Opportunity
 
-Across the verified literature, three distinct research disconnects emerge:
+Across the reviewed literature, three research disconnects are proposed for further examination; this synthesis does not establish that they are exhaustive:
 
 1. **The Application vs. Architecture Gap (R1 vs. R2):**  
    The primary application baseline (R1) conceptualizes a culturally recognizable mascot for Ganga conservation but completely lacks a verifiable knowledge retrieval architecture, relying on generic conversational NLP without source grounding. Conversely, foundational RAG research (R2) operates on broad, uncurated encyclopedic corpora (Wikipedia) without domain-specific evidence gating or regulatory citation assembly.
 2. **The Embodiment vs. Factuality Gap (R7/R8/R10 vs. R2/R6):**  
    Pedagogical agent literature demonstrates that 3D character embodiment fosters learner engagement and motivation, yet virtually all evaluated pedagogical agents rely on scripted dialog trees or ungrounded generative models vulnerable to environmental inaccuracies (as highlighted in R6). There is an absence of systems combining high-fidelity 3D character embodiment with strict, source-grounded RAG.
 3. **The Grounding vs. Citation Provability Gap:**  
-   Standard RAG systems (R2) allow generative models to synthesize source references directly in the text output, which frequently introduces phantom citations or distorted page numbers. A dedicated mechanism that programmatically extracts and binds immutable document metadata (file, page range, section, knowledge type) outside LLM generation is rarely demonstrated in educational conversational systems.
+   Some RAG designs ask models to produce source references in text, which can result in inaccurate or fabricated references. PRJ_316 instead assembles citation objects from retrieved metadata outside model text generation. The metadata is not immutable, and this design alone does not verify each claim against its cited passage. The prevalence of these approaches across educational systems has not been established by this project.
 
 ---
 
 ## 6. Literature Review Conclusion
 
-The verified academic literature demonstrates both the educational necessity and technical feasibility of the **Ganga AI Mascot** system. 
+The reviewed academic literature provides context for the **Ganga AI Mascot** design. The current implementation is a software prototype; neither this literature review nor implementation alone demonstrates educational effectiveness. R1's publication record remains unverified, and its details should be treated as provisional.
 
-By grounding an iconic cultural mascot (Chacha Chaudhary, R1, R9) on a curated, government-approved scientific corpus (86 GRBMP reports) through a hybrid retrieval-augmented architecture (R2) featuring dual evidence gating and immutable citation assembly, PRJ_316 addresses the critical ethical and pedagogical challenges identified across the conversational AI and environmental education literature (R3, R4, R5, R6). Furthermore, the decoupling of the factual Brain from the Three.js avatar layer directly respects the methodological recommendations established in pedagogical agent meta-analyses (R7, R8, R10).
+The current prototype combines a curated project corpus (86 GRBMP reports), hybrid retrieval, heuristic evidence checks, metadata-based citation assembly, and a Three.js avatar. This implementation is informed by the reviewed literature but does not establish that the system resolves the cited ethical or pedagogical challenges. R1-based framing is provisional; citation assembly is traceable to retrieved metadata but does not prove claim-level support.

@@ -4,6 +4,8 @@
 
 This research log records research papers, related projects, and technical resources reviewed for PRJ_316. It supports systematic comparison of existing work relevant to an AI-powered, source-grounded conversational agent and interactive digital mascot for Ganga and river conservation awareness.
 
+Verification labels below reflect prior review work and were not all independently rechecked during the 2026-10-19 documentation audit. R1's supplied DOI did not resolve in the earlier recorded checks; its publication metadata and claims remain unverified until independently confirmed. Repetition of a citation in another project document is not verification.
+
 ## Paper Analysis Template
 
 ### Paper ID
@@ -89,13 +91,13 @@ Possible categories include:
 
 ## Research Papers to Review
 
-The following records document papers R1 through R10, each systematically audited, verified against publisher portals and digital repositories, and evaluated for its technical relevance to PRJ_316.
+The following records document papers R1 through R10 and evaluate their relevance to PRJ_316. Verification status is source-specific; R1 remains unverified, and other labels are inherited from prior checks rather than freshly verified in this documentation audit.
 
 ### R1 - AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness
 
-**Status:** Completed  
-**Verification Status:** Verified via Publisher Portal & ResearchGate  
-**Metadata Verification Source:** *Metallurgical and Materials Engineering* Archive (Vol. 31(5), pp. 761–766) & Author Profile Records  
+**Status:** Notes drafted; bibliographic verification unresolved
+**Verification Status:** Unverified; the supplied DOI failed prior DOI-resolution/Crossref checks. This does not establish that the article is invalid.
+**Metadata Verification Source:** Prior notes cite the journal archive and author profiles; those records have not resolved the identity/DOI issue. Independent confirmation is required.
 
 ### Paper Information
 
@@ -1957,17 +1959,17 @@ The strongest technical opportunity identified for the Brain is source-grounded 
 
 | ID | Paper | Status | Primary Relevance |
 |---|---|---|---|
-| R1 | AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness | COMPLETED | Domain/application baseline |
-| R2 | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | COMPLETED | RAG foundation |
-| R3 | Conversational AI Agents in Education | COMPLETED | Educational conversational AI / responsible AI |
-| R4 | Pedagogical AI Conversational Agents in Higher Education | COMPLETED | Pedagogical-agent framework |
-| R5 | Designing a Flipped AI-Chatbot Learning Module for Environmental Literacy | COMPLETED | Environmental education |
-| R6 | Evaluating the Efficacy of ChatGPT in Environmental Education | COMPLETED | Evaluation / usability |
-| R7 | Virtual Characters Help K–12 Students Learn and Improve Motivation | COMPLETED | Virtual characters / learning / motivation |
-| R8 | A Systematic Review of Pedagogical Agent Research | COMPLETED | Agent design / evaluation |
-| R9 | Exploring Persona Characteristics in Learning | COMPLETED | Avatar / persona design |
-| R10 | How Effective are Pedagogical Agents for Learning? | COMPLETED | Evidence of learning effectiveness |
+| R1 | AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness | Notes drafted; **verification open** | Provisional domain/application baseline |
+| R2 | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Review notes complete; prior verification label not rechecked here | RAG foundation |
+| R3 | Conversational AI Agents in Education | Review notes complete; prior verification label not rechecked here | Educational conversational AI / responsible AI |
+| R4 | Pedagogical AI Conversational Agents in Higher Education | Review notes complete; prior verification label not rechecked here | Pedagogical-agent framework |
+| R5 | Designing a Flipped AI-Chatbot Learning Module for Environmental Literacy | Review notes complete; prior verification label not rechecked here | Environmental education |
+| R6 | Evaluating the Efficacy of ChatGPT in Environmental Education | Review notes complete; prior verification label not rechecked here | Evaluation / usability |
+| R7 | Virtual Characters Help K–12 Students Learn and Improve Motivation | Review notes complete; prior verification label not rechecked here | Virtual characters / learning / motivation |
+| R8 | A Systematic Review of Pedagogical Agent Research | Review notes complete; prior verification label not rechecked here | Agent design / evaluation |
+| R9 | Exploring Persona Characteristics in Learning | Review notes complete; prior verification label not rechecked here | Avatar / persona design |
+| R10 | How Effective are Pedagogical Agents for Learning? | Review notes complete; prior verification label not rechecked here | Evidence of learning effectiveness |
 
-**Overall Literature-Review Status:** COMPLETED
+**Overall literature-note status:** R1–R10 notes are present; primary-source verification remains open for R1 and prior labels for R2–R10 were not rechecked in this documentation audit.
 
-R1–R10 literature review completed. The reviewed literature covers the application domain, RAG/knowledge grounding, educational conversational AI, environmental education, AI evaluation, virtual characters, pedagogical-agent design, persona characteristics, and learning effectiveness.
+The notes cover the application domain, RAG/knowledge grounding, educational conversational AI, environmental education, AI evaluation, virtual characters, pedagogical-agent design, persona characteristics, and learning effectiveness. This status does not mean every citation or factual claim has been independently verified.

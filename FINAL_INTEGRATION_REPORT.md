@@ -5,6 +5,8 @@
 **Repository**: `https://github.com/CATOU101/Ganga-AI-Mascot`  
 **Safety Checkpoint Branch**: `member2-final-integration-backup`  
 
+> **Historical report (2026-09-23):** This describes the Member 2 integration snapshot and checks recorded at that time. It is not a current runtime or test report. The current browser runtime uses the Three.js client and active `Chacha_New` model described in [`avatar/README.md`](avatar/README.md); current voice support and limitations are documented in the root README.
+
 ---
 
 ## 1. Executive Summary

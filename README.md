@@ -3,9 +3,9 @@
 **Project ID:** PRJ_316  
 **Project title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
 
-Ganga AI Mascot is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based mascot interface. The Brain answers questions using a curated, static collection of official Ganga and Namami Gange documents. Groq and OpenRouter are available for grounded generation after evidence retrieval and filtering; the local extractive generator is the final fallback. The knowledge-answering path is not live web search or river monitoring.
+Ganga AI Mascot (PRJ_316) is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based Chacha Chaudhary mascot. The Brain answers questions from a curated, static collection of Ganga River Basin Management Plan (GRBMP) documents. It retrieves passages, applies heuristic evidence checks, then attempts Groq and OpenRouter generation in order; local extractive generation is the final fallback. This knowledge-answering path is neither live web search nor river monitoring. A separate integration route retrieves a limited set of live CPCB station readings.
 
-The project brings together source-grounded question answering, a Three.js character interface, and voice-related adapters. Its educational aim is to make information about Ganga stewardship, pollution, and conservation accessible through text and supported voice interaction.
+The project brings together source-grounded question answering, a Three.js character interface, four-language text handling (English, Hindi, Kannada, and Tamil), and voice-related adapters. These are implemented prototype capabilities; the external translation service and speech providers have operational and privacy limits described below.
 
 ## Overall system architecture
 
@@ -44,7 +44,7 @@ Groq grounded generation (or extractive fallback)
 Trusted citations/provenance and FastAPI response
 ```
 
-The current knowledge-base inventory contains 86 PDF documents, 4,609 pages, 1,111 approved/reviewed sections, and 4,085 indexed chunks. The semantic embedding model is `all-MiniLM-L6-v2` with 384 dimensions. Runtime storage uses the application-owned SQLite and NumPy index files under `knowledge_base/vector_db/`, with a manifest used for index integrity checks. Chroma-format files in that directory are legacy artifacts, not the active runtime store.
+The checked-in knowledge-base inventory describes 86 PDF documents, 4,609 pages, 1,111 approved/reviewed sections, and 4,085 indexed chunks. The semantic embedding model is `all-MiniLM-L6-v2` with 384 dimensions. Runtime storage uses the application-owned SQLite and NumPy index files under `knowledge_base/vector_db/`, with a manifest used for index integrity checks. Chroma-format files in that directory are legacy artifacts, not the active runtime store. These corpus counts describe the repository snapshot and may change when its reviewed source data is updated.
 
 Retrieval combines semantic similarity with lexical reranking. A heuristic evidence gate evaluates retrieved evidence before normal answer generation. Unsupported queries may receive an insufficient-evidence response; questions recognized as requiring current information are handled separately because the knowledge base is static. These checks are not calibrated confidence estimates or guarantees that every generated claim is supported.
 
@@ -68,14 +68,6 @@ Configuration is read from process environment variables and the project-root `.
 | `GROQ_API_KEY` | Groq credential; provide privately |
 | `OPENROUTER_MODEL` | OpenRouter model; defaults to `nvidia/nemotron-3.5-super-vl:free` |
 | `OPENROUTER_API_KEY` | OpenRouter credential; provide privately |
-
-### Language and translation privacy
-
-Text input/output language codes are `en`, `hi`, `kn`, and `ta`. When no input language is supplied, the Brain detects a supported script; an explicit input language takes precedence. When language conversion is needed, the application sends the question and/or generated answer to Google's public Translate endpoint by default. The chat UI has no per-request consent checkbox; API clients can explicitly set `translation_consent: false` to disable external translation for a request. A static set of known system phrases can be translated locally without external requests. No translation cache is retained. The endpoint is not Google's documented Cloud Translation API, and this project has not verified its endpoint-specific terms, retention, reliability, or availability; do not send personal or confidential text. See [Google Translate](https://translate.google.com/) and [Google's privacy policy](https://policies.google.com/privacy).
-
-Local options were reviewed for the four requested languages: the current Argos model index shows English↔Hindi packages but no English↔Kannada/Tamil packages. NLLB-200 distilled 600M advertises broad multilingual coverage, but its model card marks it CC-BY-NC, research-only, not for production, and not intended for domain-specific text. No local runtime/latency benchmark was performed on target hardware, so it is not enabled. See the [Argos package index](https://github.com/argosopentech/argospm-index/blob/main/index.json) and [NLLB model card](https://huggingface.co/facebook/nllb-200-distilled-600M).
-
-The Vosk adapter currently has configured models for English and Hindi only; Kannada and Tamil speech recognition are not configured. The browser Web Speech API may offer those locales, depending on browser and host support. Edge TTS voice IDs are configured for all four text languages, but actual synthesis availability depends on the external service; Windows SAPI fallback is configured only for English/Hindi. These are configuration statements, not provider compatibility or quality claims.
 | `GANGA_BRAIN_EMBEDDING_PROVIDER` | Semantic embedding provider (`semantic` by default) or `local-hash` |
 | `GANGA_BRAIN_EMBEDDING_MODEL` | Semantic embedding model (`all-MiniLM-L6-v2` by default) |
 | `GANGA_BRAIN_TOP_K` | Maximum returned evidence count |
@@ -83,6 +75,14 @@ The Vosk adapter currently has configured models for English and Hindi only; Kan
 | `GANGA_BRAIN_EVIDENCE_MAX_DISTANCE` | Evidence-gate distance threshold |
 | `GANGA_BRAIN_MIN_KEYWORD_OVERLAP` | Evidence-gate lexical overlap threshold |
 | `GANGA_BRAIN_ORT_THREADS` | ONNX Runtime thread limit |
+
+### Language and translation privacy
+
+Text input/output language codes are `en`, `hi`, `kn`, and `ta`. When no input language is supplied, the Brain detects a supported script; an explicit input language takes precedence. When language conversion is needed, the application sends the question and/or generated answer to Google's public Translate endpoint by default. The chat UI has no per-request consent checkbox; API clients can explicitly set `translation_consent: false` to disable external translation for a request. A static set of known system phrases can be translated locally without external requests. No translation cache is retained. The endpoint is not Google's documented Cloud Translation API, and this project has not verified its endpoint-specific terms, retention, reliability, or availability; do not send personal or confidential text. See [Google Translate](https://translate.google.com/) and [Google's privacy policy](https://policies.google.com/privacy).
+
+An earlier local-translation feasibility review reported English↔Hindi packages in the Argos index but no English↔Kannada/Tamil packages, and noted the NLLB-200 distilled 600M model card's CC-BY-NC/research-only and domain-coverage limitations. Those external resources can change and were not rechecked during this documentation audit. No local runtime/latency benchmark was performed on target hardware, so a local model is not enabled. Recheck the [Argos package index](https://github.com/argosopentech/argospm-index/blob/main/index.json) and [NLLB model card](https://huggingface.co/facebook/nllb-200-distilled-600M) before making a deployment decision.
+
+The Vosk adapter has configured speech-recognition models for English and Hindi only. Browser Web Speech locale controls include all four languages, but actual recognition depends on browser and speech-service support. Edge TTS voice identifiers are configured for all four languages; live synthesis availability depends on the external service and is not validated for every environment. Windows SAPI fallback is configured only for English and Hindi. Configuration does not guarantee provider availability or quality.
 
 For local development, set the needed provider keys privately in the project-root `.env` file. Both the standalone Brain and integration server load it automatically, regardless of the shell's current working directory. Explicitly exported variables take precedence. Set `LLM_PROVIDER_ORDER=openrouter,groq` to try OpenRouter first; `LLM_PROVIDER=extractive` avoids hosted providers entirely. OpenRouter's `:free` endpoints may be rate limited and have provider-specific data handling terms; do not send confidential or personal data to this model. Its reasoning is disabled for this request to preserve the existing 700-token output limit and avoid spending that budget on hidden reasoning.
 
@@ -126,7 +126,7 @@ The integration application can be started separately:
 python -m integration.server --host 127.0.0.1 --port 8080
 ```
 
-It defines `/api/integration/health`, `/api/integration/ask`, and `/api/integration/stt`, mounts the Brain API under `/brain`, and serves the avatar frontend when its entry point is available. If the frontend is served, open `http://127.0.0.1:8080/`. The interface supports typed questions and browser-recorded audio input, with input and output language controls for English and Hindi.
+It defines `/api/integration/health`, `/api/integration/ask`, and `/api/integration/stt`, mounts the Brain API under `/brain`, and serves the avatar frontend when its entry point is available. If the frontend is served, open `http://127.0.0.1:8080/`. The interface supports typed questions, browser-recorded audio input, and English, Hindi, Kannada, and Tamil input/output language controls. Vosk-backed uploaded-audio recognition remains limited to English and Hindi.
 
 ## Avatar, voice, and integration components
 
@@ -217,10 +217,12 @@ Successful CPCB responses are returned through the normal chatbot conversation w
 
 CPCB water-quality queries are detected by the integration-layer conversation controller (`integration/water_quality.py`, `integration/controller/conversation_controller.py`). This happens before the Brain RAG pipeline; all other questions continue through the existing retrieval and generation path. CPCB responses are translated through the same external translation path by default when a non-English output language is selected. If external translation is disabled or fails, the live readings remain in English with an explanatory note.
 
+This is a limited station-data feature, not a comprehensive river-monitoring network. It covers the supported stations and parameters described above; the curated static GRBMP corpus remains the source for educational and historical knowledge questions. Live endpoint availability was not tested as part of this documentation update.
+
 LLM behaviour and voice interaction with CPCB responses have not been systematically evaluated. Do not interpret the availability of live readings as a claim about response quality or accuracy in practice.
 
 ## Status and limitations
 
-The Brain Phase 1 knowledge pipeline, Phase 2 Groq generation, and CPCB live water-quality retrieval are integrated in the current project branch. The system is a prototype: it uses static documents for knowledge queries, heuristic retrieval/evidence thresholds, and an external generation provider. It does not have live web search and does not perform formal claim-level entailment verification. Translation and optional voice services depend on their configured external or platform-specific components. CPCB data is approximately 30–60 minutes behind sensor measurements and may be unavailable or stale for specific stations.
+The knowledge pipeline, Groq/OpenRouter generation chain, multilingual text flow, Three.js avatar, quiz, voice adapters, and CPCB station-data route are integrated in the current main snapshot. The system is a prototype: knowledge questions use static documents, retrieval and evidence thresholds are heuristic, hosted generation requires a configured provider, and the system does not perform formal claim-level entailment verification. Translation and optional voice services depend on external or platform-specific components. CPCB data can be delayed, stale, or unavailable at specific stations.
 
 This academic project demonstrates an information-access prototype for river-conservation awareness; it is not an operational environmental monitoring or decision-support system.

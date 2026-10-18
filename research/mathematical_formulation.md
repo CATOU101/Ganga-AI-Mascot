@@ -2,14 +2,15 @@
 
 **Project ID:** PRJ_316  
 **Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
-**Status:** Implemented Mathematical Specification  
-**Authoritative Baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`  
+**Status:** Engineering formulation audited against current implementation; thresholds are prototype heuristics, not empirically calibrated.
+**Historical baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
+**Current implementation snapshot audited:** `main` at `80833751f2a365eb00be5ddeee3392e4a601d38e` (2026-10-19; before documentation-only changes)
 
 ---
 
 > [!NOTE]
 > **Source-Grounded Mathematical Integrity:**  
-> Every equation in this document corresponds directly to the active implementation in `brain/chunking.py`, `brain/embeddings.py`, `brain/vector_store.py`, `brain/retriever.py`, and `brain/generator.py`. The hybrid retrieval score is a deterministic engineering heuristic combining continuous metric-space distance with discrete term coverage and boolean query masks; it is **not** presented as a Bayesian posterior probability, calibrated confidence interval, or likelihood ratio.
+> Equations below describe implementation details in `brain/chunking.py`, `brain/embeddings.py`, `brain/vector_store.py`, `brain/retriever.py`, and `brain/generator.py`. The hybrid retrieval score is a deterministic engineering heuristic, not a calibrated probability, confidence interval, or likelihood ratio. Thresholds are configuration defaults, not empirically tuned results.
 
 ---
 
@@ -21,7 +22,7 @@ The text chunking algorithm processes reviewed sections to produce target-sized 
 Let a reviewed document section $S$ be represented as a raw character string of length $|S|$.
 Text normalization produces a sanitized string $T$:
 $$T = \text{norm}(S)$$
-where $\text{norm}(\cdot)$ collapses consecutive spaces and carriage returns into single line breaks (`\n\n`).
+where `normalize_text` converts CRLF/CR to LF, collapses runs of horizontal spaces/tabs to one space, reduces runs of three or more newlines to two, and strips surrounding whitespace.
 
 The normalized text $T$ is partitioned into an ordered sequence of $M$ paragraphs:
 $$P = \langle p_1, p_2, \dots, p_M \rangle, \quad p_m \in \text{split}(T, \text{"\textbackslash n\textbackslash s*\textbackslash n"})$$
@@ -37,16 +38,15 @@ When appending a paragraph to a non-empty accumulator would exceed the target, c
 $$o_j = \text{suffix}(c_j, L_{\text{overlap}})$$
 where $L_{\text{overlap}} = 180$ characters.
 
-The target is not a hard maximum: if an individual paragraph exceeds $L_{\text{target}}$ while the accumulator is empty, the implementation keeps that paragraph intact, so the resulting chunk can exceed the target.
+The target is not a hard maximum: an individual paragraph is kept intact when it exceeds $L_{\text{target}}$. A carried overlap prefix can also make the following chunk exceed the target. Thus 1,400 characters is a packing target, not a strict maximum.
 
 ### Post-Processing Boundary Constraint (Sub-Minimum Repair)
-If the final chunk $c_J$ satisfies $|c_J| < L_{\text{min}}$ (where $L_{\text{min}} = 120$ characters) and $J > 1$:
-$$c_{J-1} \leftarrow \text{norm}(c_{J-1} \mathbin{\Vert} \text{"\textbackslash n\textbackslash n"} \mathbin{\Vert} c_J), \quad \text{and } c_J \text{ is discarded}$$
+During a left-to-right post-processing pass, any chunk shorter than $L_{\text{min}}=120$ characters is appended to the preceding repaired chunk when one exists; the first chunk is retained even if shorter than the minimum. The implementation does not apply this rule only to the final chunk.
 
 ### Code Traceability
 - **File:** `brain/chunking.py`
-- **Functions:** `normalize_text` (lines 17–22), `split_section_text` (lines 24–56), `chunks_from_sections` (lines 58–81).
-- **Parameters:** `target_chars=1400`, `overlap_chars=180`, `min_chunk_chars=120` (defined in `brain/config.py`, lines 30–32).
+- **Functions:** `normalize_text`, `split_section_text`, `chunks_from_sections` in `brain/chunking.py`.
+- **Parameters:** `target_chars=1400`, `overlap_chars=180`, `min_chunk_chars=120` in `BrainConfig` (`brain/config.py`).
 - **Assumptions & Limitations:** Chunking operates on raw character counts rather than BPE/WordPiece token counts. This ensures token-free, deterministic segmentation across Python environments without requiring external tokenizer libraries during indexing.
 
 ---
@@ -58,31 +58,31 @@ Let $\mathcal{V}$ denote the vocabulary space of natural language text strings. 
 $$\mathbf{z} = f_{\text{MiniLM}}(t) \in \mathbb{R}^{384}$$
 where $f_{\text{MiniLM}}$ is the ONNX Runtime execution of `all-MiniLM-L6-v2`.
 
-The resulting vector is $L_2$-normalized to project onto the unit hypersphere $\mathbb{S}^{383}$:
+The default Chroma `DefaultEmbeddingFunction` normalizes its returned ONNX vectors; `LocalHashEmbedding.embed_query` also normalizes nonzero hash vectors explicitly:
 $$\mathbf{e}(t) = \frac{\mathbf{z}}{\|\mathbf{z}\|_2} = \frac{\mathbf{z}}{\sqrt{\sum_{k=1}^{384} z_k^2}}$$
 such that $\|\mathbf{e}(t)\|_2 = 1.0$.
 
 ### Baseline Hash Embedding (Reproducibility Fallback)
 When running without neural weights, `LocalHashEmbedding` computes a 384-dimensional bag-of-words vector using SHA-256 digests:
 For each token $w \in \text{tokens}(t)$:
-$$h = \text{SHA-256}(w), \quad \text{idx} = h[0:4] \pmod d, \quad s = \begin{cases} +1 & \text{if } h[4] \equiv 0 \pmod 2 \\ -1 & \text{otherwise} \end{cases}$$
-$$\mathbf{v}_{\text{idx}} \leftarrow \mathbf{v}_{\text{idx}} + s, \qquad \mathbf{e}_{\text{hash}}(t) = \frac{\mathbf{v}}{\|\mathbf{v}\|_2}$$
+$$h = \text{SHA-256}(w), \quad \text{idx} = \text{uint32}_{\text{big-endian}}(h[0:4]) \bmod d, \quad s = \begin{cases} +1 & \text{if } h[4] \equiv 0 \pmod 2 \\ -1 & \text{otherwise} \end{cases}$$
+$$\mathbf{v}_{\text{idx}} \leftarrow \mathbf{v}_{\text{idx}} + s, \qquad \mathbf{e}_{\text{hash}}(t) = \begin{cases}\frac{\mathbf{v}}{\|\mathbf{v}\|_2} & \|\mathbf{v}\|_2 > 0 \\ \mathbf{0} & \text{otherwise}\end{cases}$$
 
 ### Code Traceability
 - **File:** `brain/embeddings.py`
-- **Classes:** `ONNXSemanticEmbedding` (lines 57–90), `LocalHashEmbedding` (lines 28–55).
+- **Classes:** `ONNXSemanticEmbedding`, `LocalHashEmbedding`; the default function delegates normalization to the installed Chroma embedding-function implementation.
 - **Assumptions & Limitations:** The model truncates input text beyond 256 WordPiece tokens. Because chunk target sizes are 1,400 characters ($\approx 250\text{--}300$ words), semantic representations primarily capture the leading paragraphs of each chunk.
 
 ---
 
 ## 3. Candidate Vector Retrieval
 
-Given an input user question $q$, the query vector is computed as:
+For the normalized default semantic embedding and normalized hash baseline, an input user question $q$ has query vector:
 $$\mathbf{q} = \mathbf{e}(q) \in \mathbb{R}^{384}, \quad \|\mathbf{q}\|_2 = 1.0$$
 
-The active vector store maintains an immutable matrix of pre-computed chunk vectors:
+In the audited index snapshot, the active vector store contains a matrix of pre-computed chunk vectors:
 $$\mathbf{D} \in \mathbb{R}^{N \times 384}, \quad N = 4,085$$
-where each row $\mathbf{d}_i \in \mathbb{R}^{384}$ corresponds to chunk $i$, with $\|\mathbf{d}_i\|_2 = 1.0$.
+where each row $\mathbf{d}_i \in \mathbb{R}^{384}$ corresponds to chunk $i$; for the configured normalized embedding functions, $\|\mathbf{d}_i\|_2=1$ for nonzero vectors.
 
 ### Distance Metric
 The distance between the query vector $\mathbf{q}$ and document chunk $\mathbf{d}_i$ is computed as the Euclidean ($L_2$) distance:
@@ -98,9 +98,8 @@ The system retrieves the top $K_{\text{cand}} = 15$ nearest chunks using an effi
 $$\mathcal{C}_{\text{cand}} = \text{argpartition}_{i \in \{1, \dots, N\}} \big( dist(\mathbf{q}, \mathbf{d}_i), K_{\text{cand}} \big)$$
 
 ### Code Traceability
-- **File:** `brain/vector_store.py` (`SQLiteVectorStore.query`, lines 329–356).
-- **File:** `brain/retriever.py` (`Retriever.retrieve_candidates`, lines 108–113).
-- **Parameters:** `candidate_top_k = 15` (defined in `brain/config.py`, line 34).
+- **Files/functions:** `SQLiteVectorStore.query` in `brain/vector_store.py`; `Retriever.retrieve_candidates` in `brain/retriever.py`.
+- **Parameter:** `candidate_top_k=15` by default in `BrainConfig`; actual $K$ is capped by the number of indexed vectors.
 
 ---
 
@@ -110,9 +109,9 @@ $$\mathcal{C}_{\text{cand}} = \text{argpartition}_{i \in \{1, \dots, N\}} \big( 
 Let the query string $q$ be tokenized into discrete alphanumeric words:
 $$\mathcal{W}(q) = \text{regex\_match}\big(\text{"[A-Za-z0-9][A-Za-z0-9\_-]*"}, \text{lower}(q)\big)$$
 
-The non-stopword query keyword set $\mathcal{K}(q)$ is defined as:
-$$\mathcal{K}(q) = \big\{ w \in \mathcal{W}(q) \;\big|\; |w| \ge 3 \;\land\; w \notin \mathcal{S}_{\text{stopwords}} \big\}$$
-where $\mathcal{S}_{\text{stopwords}}$ is an immutable set of 49 stop words and domain noise terms (`what`, `is`, `the`, `tell`, `knowledge`, `grbmp`, etc.).
+The implementation produces an ordered keyword list $\mathcal{K}(q)$ by filtering the token sequence; repeated keyword occurrences are retained:
+$$\mathcal{K}(q) = \langle w_i \in \mathcal{W}(q) \mid |w_i| \ge 3 \land w_i \notin \mathcal{S}_{\text{stopwords}} \rangle$$
+where $\mathcal{S}_{\text{stopwords}}$ is the English stop-word and domain-noise set in `brain/retriever.py` (`what`, `is`, `the`, `tell`, `knowledge`, `grbmp`, etc.).
 
 ### Candidate Pool Keyword Coverage (Pre-Rerank Gate 1)
 To protect against out-of-domain or unsupported queries that accidentally match vector clusters, the system checks whether the query's keywords appear anywhere within the candidate pool $\mathcal{C}_{\text{cand}}$.
@@ -121,7 +120,7 @@ Let $\text{text\_corpus}(c)$ denote the concatenated lowercase text, title, and 
 $$\text{text\_corpus}(c) = \text{lower}\big(\text{text}(c) \mathbin{\Vert} \text{" "} \mathbin{\Vert} \text{title}(c) \mathbin{\Vert} \text{" "} \mathbin{\Vert} \text{section}(c)\big)$$
 
 The pool coverage ratio is:
-$$pool\_coverage(q, \mathcal{C}_{\text{cand}}) = \frac{\big| \big\{ w \in \mathcal{K}(q) \;\big|\; \exists c \in \mathcal{C}_{\text{cand}}: w \text{ is a substring of } \text{text\_corpus}(c) \big\} \big|}{|\mathcal{K}(q)|}$$
+$$pool\_coverage(q, \mathcal{C}_{\text{cand}}) = \frac{\sum_{i=1}^{|\mathcal{K}(q)|} \mathbb{I}[w_i \text{ occurs as a substring in some } \text{text\_corpus}(c)]}{|\mathcal{K}(q)|}$$
 *(Defined as $1.0$ if $\mathcal{K}(q) = \emptyset$)*.
 
 **Gate Condition 1:**
@@ -129,8 +128,8 @@ $$\text{If } |\mathcal{K}(q)| > 0 \;\land\; pool\_coverage(q, \mathcal{C}_{\text
 
 ### Code Traceability
 - **File:** `brain/retriever.py`
-- **Functions:** `extract_keywords` (lines 97–101), `rerank_and_filter` pool check (lines 127–135).
-- **Parameters:** Stopwords set `STOPWORDS` (lines 18–26), threshold $0.60$ (line 133).
+- **Functions:** `extract_keywords`, `Retriever.rerank_and_filter` in `brain/retriever.py`.
+- **Parameter:** Candidate-pool coverage threshold `0.60` in `Retriever.rerank_and_filter`.
 
 ---
 
@@ -141,12 +140,12 @@ For all candidates $c \in \mathcal{C}_{\text{cand}}$ that pass Gate 1, individua
 ### 1. Distance Threshold Cutoff
 $$\text{If } dist(\mathbf{q}, \mathbf{d}_c) > \theta_{\text{dist}} \implies \text{Discard candidate } c$$
 where:
-$$\theta_{\text{dist}} = \begin{cases} 1.15 & \text{if using semantic embedding (MiniLM)} \\ 1.35 & \text{if using baseline hash embedding} \end{cases}$$
-*(Note: $dist \le 1.15$ corresponds to $\cos(\mathbf{q}, \mathbf{d}_c) \ge 1 - \frac{1.15^2}{2} = 1 - 0.661 = 0.339$)*.
+$$\theta_{\text{dist}} = \begin{cases} \texttt{evidence\_max\_distance} & \text{semantic embedding; default }1.15 \\ 1.35 & \text{local-hash embedding} \end{cases}$$
+For the default semantic threshold of $1.15$, unit-normalized vectors yield the equivalent cosine bound $\cos(\mathbf{q},\mathbf{d}_c) \ge 1 - 1.15^2/2 \approx 0.339$. This conversion depends on unit normalization; the implemented ranking and gate use Euclidean distance directly.
 
 ### 2. Individual Lexical Overlap Ratio
-For candidate $c$, the matched keyword count is:
-$$n_{\text{match}}(q, c) = \sum_{w \in \mathcal{K}(q)} \mathbb{I}\big(w \text{ is a substring of } \text{text\_corpus}(c)\big)$$
+For candidate $c$, the matched keyword-occurrence count is:
+$$n_{\text{match}}(q, c) = \sum_{i=1}^{|\mathcal{K}(q)|} \mathbb{I}\big(w_i \text{ is a substring of } \text{text\_corpus}(c)\big)$$
 The overlap ratio is:
 $$overlap(q, c) = \begin{cases} \frac{n_{\text{match}}(q, c)}{|\mathcal{K}(q)|} & \text{if } |\mathcal{K}(q)| > 0 \\ 1.0 & \text{if } |\mathcal{K}(q)| = 0 \end{cases}$$
 
@@ -155,11 +154,11 @@ To prevent broad, general questions from matching narrow, obscure technical subs
 
 **Broad Query Predicate:**
 $$is\_broad(q) \iff \big(\text{"ganga"} \in \text{lower}(q) \;\lor\; \text{"river"} \in \text{lower}(q)\big) \;\land\; \big(\mathcal{W}(q) \cap \mathcal{T}_{\text{specific}} = \emptyset\big)$$
-where $\mathcal{T}_{\text{specific}}$ is a curated set of 38 technical topic terms (`dolphin`, `stp`, `tannery`, `bod`, `cod`, `pesticide`, etc.).
+where $\mathcal{T}_{\text{specific}}$ is the curated technical-topic set in `brain/retriever.py` (`dolphin`, `stp`, `tannery`, `bod`, `cod`, `pesticide`, etc.).
 
 **Core Overview Document Predicate:**
-$$is\_overview(c) \iff \text{file}(c) \in \mathcal{F}_{\text{core}} \;\lor\; \text{title}(c) \in \mathcal{T}_{\text{core}} \;\lor\; \big(\text{section}(c) \in \mathcal{S}_{\text{overview}} \;\land\; \text{has\_summary\_title}(c)\big)$$
-where $\mathcal{F}_{\text{core}}$ includes `13_GRBMP - MPD.pdf`, `27_GRBMP - Extended Summary.pdf`, `Vision Ganga Eng_Compressed.pdf`, etc.
+$$is\_overview(c) \iff \text{core-file-substring}(c) \;\lor\; \text{core-title-substring}(c) \;\lor\; \big(\text{overview-section-substring}(c) \;\land\; \text{summary-title-substring}(c)\big)$$
+The implementation uses substring matching against configured core filenames, titles, and section names; a section match also requires one of its configured summary-title substrings in the title. The configured tuples are maintained in `brain/retriever.py`.
 
 **Overview Boost Indicator:**
 $$\mathbb{I}_{\text{overview}}(q, c) = \begin{cases} 1 & \text{if } is\_broad(q) \land is\_overview(c) \\ 0 & \text{otherwise} \end{cases}$$
@@ -169,15 +168,14 @@ The total hybrid score $S_{\text{hybrid}}(q, c)$ is computed as:
 $$S_{\text{hybrid}}(q, c) = \underbrace{\frac{1.0}{1.0 + dist(\mathbf{q}, \mathbf{d}_c)}}_{\text{Continuous Semantic Proximity}} + \underbrace{0.5 \cdot overlap(q, c)}_{\text{Discrete Lexical Overlap}} + \underbrace{0.25 \cdot \mathbb{I}_{\text{overview}}(q, c)}_{\text{Query-Conditioned Overview Boost}}$$
 
 ### Score Bounds
-- The semantic component $\frac{1}{1 + dist} \in [\frac{1}{1 + 1.15}, \frac{1}{1 + 0}] \approx [0.465, 1.000]$.
+- For the default semantic cutoff, the semantic component $\frac{1}{1 + dist} \in [\frac{1}{1 + 1.15}, 1] \approx [0.465, 1.000]$; the configurable threshold changes the lower bound.
 - The lexical component $0.5 \cdot overlap \in [0.000, 0.500]$.
 - The overview component $0.25 \cdot \mathbb{I} \in \{0.000, 0.250\}$.
-- Total possible score range: $S_{\text{hybrid}}(q, c) \in [0.465, 1.750]$.
+- For the default semantic cutoff, the possible score range is $S_{\text{hybrid}}(q,c)\in[0.465,1.750]$. The local-hash cutoff of 1.35 changes the lower bound to $1/(1+1.35)\approx0.426$; a configured semantic cutoff also changes its bound.
 
 ### Code Traceability
-- **File:** `brain/retriever.py`
-- **Functions:** `is_broad_ganga_query` (lines 64–73), `is_core_overview_hit` (lines 76–86), scoring loop (lines 138–165).
-- **Parameters:** Distance threshold $1.15$ (`evidence_max_distance`, `brain/config.py`, line 35), lexical weight $0.5$, overview weight $0.25$.
+- **Functions:** `is_broad_ganga_query`, `is_core_overview_hit`, and `Retriever.rerank_and_filter` in `brain/retriever.py`.
+- **Parameters:** Semantic distance default `evidence_max_distance=1.15`, local-hash distance cutoff `1.35`, lexical weight `0.5`, overview weight `0.25`.
 
 ---
 
@@ -192,16 +190,16 @@ Let $c^* = c_{(1)}$ denote the highest-scoring candidate.
 $$\text{If } |\mathcal{K}(q)| > 1 \;\land\; overlap(q, c^*) < \theta_{\text{overlap}} \implies \text{Reject: return } (\text{False}, \emptyset)$$
 where $\theta_{\text{overlap}} = 0.15$ (`min_keyword_overlap`).
 
-If Gate 2 passes, the retrieval pipeline accepts the query and returns the top $K = 5$ hits:
+If Gate 2 passes, the retrieval pipeline accepts the query and returns up to the top $K=5$ hits (or the requested/configured count):
 $$\mathcal{E}_{\text{retrieved}} = \langle c_{(1)}, c_{(2)}, \dots, c_{(\min(U, K))} \rangle$$
 
 ### Code Traceability
-- **File:** `brain/retriever.py` (lines 173–179).
-- **Parameters:** `min_keyword_overlap = 0.15`, `top_k = 5` (defined in `brain/config.py`, lines 33, 36).
+- **Function:** `Retriever.rerank_and_filter` in `brain/retriever.py`.
+- **Parameters:** `min_keyword_overlap=0.15`, `top_k=5` defaults in `BrainConfig` (`brain/config.py`); API `top_k` may override the returned count.
 
 ---
 
-## 7. Intended Dynamic / Real-Time Information Detection Predicate
+## 7. Current-Information Detection Predicate
 
 Before invoking retrieval, queries requesting current, real-time measurements are intercepted.
 
@@ -209,18 +207,17 @@ Let $\mathcal{T}_{\text{freshness}}$ and $\mathcal{T}_{\text{dynamic}}$ denote d
 $$\mathcal{T}_{\text{freshness}} = \{\text{"current"}, \text{"today"}, \text{"now"}, \text{"latest"}, \text{"real-time"}, \text{"realtime"}, \text{"present status"}\}$$
 $$\mathcal{T}_{\text{dynamic}} = \{\text{"water quality"}, \text{"river discharge"}, \text{"stp status"}, \text{"pollution monitoring"}, \text{"programme status"}, \text{"program status"}, \text{"infrastructure status"}, \text{"legal status"}, \text{"regulatory status"}\}$$
 
-**Intended Dynamic Query Predicate:**
+**Implemented dynamic/current-information predicate:**
 $$is\_current(q) \iff \Big(\exists t_1 \in \mathcal{T}_{\text{freshness}}: t_1 \text{ is in } \text{lower}(q)\Big) \;\land\; \Big(\exists t_2 \in \mathcal{T}_{\text{dynamic}}: t_2 \text{ is in } \text{lower}(q)\Big)$$
 
-This formulation expresses the intended rule. At baseline commit `56032d7`, the implementation instead stored these terms in one `CURRENT_TERMS` tuple and split it at index 5. Thus only the first five freshness terms were checked as freshness terms, while `realtime` and `present status` were included in the dynamic-topic slice. The formulation above must not be read as a description of the detector implemented at that baseline.
+The current code stores freshness and topic terms separately and returns true when at least one substring from each group is present in the lowercased question. The earlier baseline commit `56032d7` used a different combined tuple/split; that historical behavior is not the current implementation.
 
-When the intended predicate evaluates to true, the pipeline bypasses vector retrieval and returns:
+When this predicate evaluates to true for the original question or its translated search text, the Brain pipeline bypasses vector retrieval and returns:
 $$\text{Response} = \big\langle \text{answer} = M_{\text{current\_info}}, \; \text{citations} = \emptyset, \; \text{mode} = \text{"current-info-fallback"} \big\rangle$$
 
 ### Code Traceability
-- **File:** `brain/retriever.py` (`asks_for_current_information`, lines 89–95).
-- **File:** `brain/rag_pipeline.py` (lines 45–50).
-- **Baseline implementation:** `CURRENT_TERMS[:5]` and `CURRENT_TERMS[5:]` in `brain/retriever.py` at commit `56032d7`; this split does not match the intended term groups above.
+- **Functions:** `asks_for_current_information` in `brain/retriever.py`; `answer_question` in `brain/rag_pipeline.py`.
+- **Historical note:** The combined `CURRENT_TERMS` split existed at baseline `56032d7`; the current implementation uses separate term groups.
 - **Constants:** `CURRENT_INFO_MESSAGE` in `brain/prompts/system.py`.
 - **System Boundary Note:** In the integrated conversational mascot service (`integration/controller/conversation_controller.py`), live water-quality queries are intercepted before the Brain service to query the CPCB real-time monitoring service (`integration/water_quality.py`). The static fallback predicate above remains active within the standalone Brain RAG pipeline as an internal safety gate.
 
@@ -232,7 +229,7 @@ $$\text{Response} = \big\langle \text{answer} = M_{\text{current\_info}}, \; \te
 Retrieved hits in $\mathcal{E}_{\text{retrieved}}$ are packed into an evidence context block for the generator subject to a total character budget:
 $$\sum_{c \in \mathcal{E}_{\text{included}}} |\text{text}(c)| \le C_{\text{max}} = 6,000 \text{ characters}$$
 
-Chunks that exceed this limit are truncated or excluded, ensuring the language model context window is not saturated.
+The generator's `_evidence_records` caps the combined evidence text at 6,000 characters, truncating the hit that crosses the remaining text budget and omitting later text. Metadata, JSON framing, system instructions, and question are outside this character limit, so it is not a guarantee about total model-token usage.
 
 ### Decoupled Citation Provenance Mapping
 Unlike conventional systems that instruct the LLM to write citations, PRJ_316 constructs citation records deterministically from the metadata of chunks in $\mathcal{E}_{\text{included}}$.
@@ -244,21 +241,21 @@ The returned citation object also includes $\text{knowledge\_type}(c)$, but that
 This separates citation-record construction from free-form model output and ties returned metadata to retrieved hit records. It does not by itself prove that each source record is correct or that each answer claim is entailed by its attached citation.
 
 ### Code Traceability
-- **File:** `brain/generator.py` (`citations_from_hits`, lines 37–54; `_evidence_records`, lines 155–182).
+- **Functions:** `citations_from_hits` and `OpenAICompatibleGenerator._evidence_records` in `brain/generator.py`.
 - **Parameters:** `MAX_LLM_EVIDENCE_CHARS = 6000`, `MAX_LLM_OUTPUT_TOKENS = 700`.
 
 ---
 
 ## 9. Mathematical Summary Table
 
-| Operation | Mathematical Representation | Code Implementation | Line Reference |
-| :--- | :--- | :--- | :--- |
-| **Paragraph Packing** | $\sum |p| + 2(|A| - 1) \le 1400$ | `split_section_text` | `brain/chunking.py:38` |
-| **Vector Normalization** | $\mathbf{e}(t) = \mathbf{z} / \|\mathbf{z}\|_2$ | `DefaultEmbeddingFunction` | `brain/embeddings.py:85` |
-| **Metric Distance** | $dist(\mathbf{q}, \mathbf{d}) = \|\mathbf{q} - \mathbf{d}\|_2$ | `np.linalg.norm(vectors - query, axis=1)` | `brain/vector_store.py:344` |
-| **Pool Coverage Gate** | $pool\_coverage(q, \mathcal{C}) \ge 0.60$ | `pool_coverage < 0.60` | `brain/retriever.py:133` |
-| **Distance Cutoff** | $dist(\mathbf{q}, \mathbf{d}) \le 1.15$ | `distance > max_dist` | `brain/retriever.py:157` |
-| **Keyword Overlap** | $overlap(q, c) = n_{\text{match}} / |\mathcal{K}(q)|$ | `matched_count / len(keywords)` | `brain/retriever.py:144` |
-| **Hybrid Ranking Score** | $S = \frac{1}{1+dist} + 0.5 \cdot overlap + 0.25 \cdot \mathbb{I}$ | `(1.0 / (1.0 + dist)) + (0.5 * ov) + boost` | `brain/retriever.py:161-163` |
-| **Top Overlap Gate** | $overlap(q, c^*) \ge 0.15$ | `top_overlap < min_keyword_overlap` | `brain/retriever.py:175` |
-| **Dynamic Interception** | $(\exists t_1 \in \mathcal{T}_{\text{fresh}}) \land (\exists t_2 \in \mathcal{T}_{\text{dyn}})$ | `dynamic_topic and freshness` | `brain/retriever.py:94` |
+| Operation | Mathematical Representation | Code Implementation |
+| :--- | :--- | :--- |
+| **Paragraph Packing** | Greedy paragraph packing toward 1,400 chars; 180-char suffix overlap; short-chunk repair at 120 chars | `split_section_text` in `brain/chunking.py` |
+| **Vector Normalization** | $\mathbf{e}(t)=\mathbf{z}/\|\mathbf{z}\|_2$ for normalized embeddings | Chroma default function and `LocalHashEmbedding` in `brain/embeddings.py` |
+| **Metric Distance** | $dist(\mathbf{q},\mathbf{d})=\|\mathbf{q}-\mathbf{d}\|_2$ | `SQLiteVectorStore.query` in `brain/vector_store.py` |
+| **Pool Coverage Gate** | $pool\_coverage(q,\mathcal{C})\ge0.60$ | `Retriever.rerank_and_filter` in `brain/retriever.py` |
+| **Distance Cutoff** | Semantic: config default 1.15; local-hash: 1.35 | `Retriever.rerank_and_filter` and `BrainConfig` |
+| **Keyword Overlap** | $overlap(q,c)=n_{\text{match}}/\lvert\mathcal{K}(q)\rvert$ | `Retriever.rerank_and_filter` |
+| **Hybrid Ranking Score** | $S=\frac{1}{1+dist}+0.5\cdot overlap+0.25\cdot\mathbb{I}$ | `Retriever.rerank_and_filter` |
+| **Top Overlap Gate** | $overlap(q,c^*)\ge0.15$ for more than one keyword | `Retriever.rerank_and_filter` |
+| **Dynamic Interception** | One freshness term AND one dynamic-topic term occur as substrings | `asks_for_current_information` in `brain/retriever.py` |

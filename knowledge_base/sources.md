@@ -263,7 +263,7 @@ The Knowledge Base is primarily responsible for stable conceptual knowledge and 
 
 ## Current Implementation Status
 
-The GRBMP source collection processing is **completed** on the `Knowledge-base-creation` branch:
+The GRBMP source collection processing was recorded as completed on the historical `Knowledge-base-creation` branch. The current repository snapshot retains this corpus and its derived index; the historical branch name does not identify the active branch. Runtime storage currently uses the application-owned SQLite/NumPy index (`brain_index.sqlite3`, `brain_semantic_vectors.npy`, and `brain_index_manifest.json`); older Chroma-format artifacts are retained but are not the active runtime store.
 
 1. **Source registration**: 86 GRBMP PDF files registered (4,609 pages).
 2. **Section-level filtering**: Completed; 1,111 approved sections selected.
@@ -271,6 +271,6 @@ The GRBMP source collection processing is **completed** on the `Knowledge-base-c
 4. **Chunking**: 4,085 text chunks created.
 5. **Metadata assignment**: Complete metadata schema attached to each chunk (`source_id`, `file_name`, `page`, `section`, `knowledge_type`, `relevance`).
 6. **Embedding**: 384-dimensional dense ONNX vector embeddings generated (`all-MiniLM-L6-v2`).
-7. **Vector Database Ingestion**: SQLite metadata database (`chroma.sqlite3`) and NumPy vector matrix (`semantic_vectors.npy`) populated.
+7. **Vector Store Ingestion**: SQLite metadata database (`brain_index.sqlite3`) and NumPy vector matrix (`brain_semantic_vectors.npy`) populated and validated with `brain_index_manifest.json`.
 8. **Retrieval and grounding evaluation**: Verified via CLI, test suite (`python -m brain.tests.run_evaluation`), and FastAPI server (`POST /ask`).
 

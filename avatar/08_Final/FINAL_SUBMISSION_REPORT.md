@@ -4,6 +4,8 @@
 **Target Workspace**: `/Users/madhavan/Documents/Ganga-AI-Mascot/Ganga-AI-Mascot/avatar`  
 **Overall Status**: **PASSED (100%)** (69/69 checks passing)
 
+> **Historical Unity-stage report (2026-09-22):** These checks describe the files and Unity workflow at that date. They are not a current application verification report; see [`avatar/README.md`](../README.md) for the active Three.js runtime.
+
 ---
 
 ## 1. Verification Breakdown by Category

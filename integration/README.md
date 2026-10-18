@@ -13,10 +13,22 @@ Responses are ordinary chatbot messages, attributed to the CPCB Real-Time Water 
 
 Text language controls support `en`, `hi`, `kn`, and `ta`. Input detection is Unicode-script heuristic; explicit language values take precedence. When a language conversion is needed, external translation to Google's public Translate endpoint is enabled by default and may send the question and/or generated answer. The endpoint's specific terms and retention have not been verified; do not send personal or confidential text. API callers can set `translation_consent=false` to disable external translation for a request. Exact built-in system phrases can be translated locally; no raw-text translation cache is retained. CPCB readings still use the dedicated CPCB path; if external translation is disabled or fails, readings remain in English with an explanatory note.
 
-Vosk currently has configured English and Hindi speech models only. Kannada/Tamil browser speech locale selection is configuration only; actual recognition depends on browser support. Edge TTS voice identifiers are configured for all four languages, but live synthesis availability has not been smoke-tested; Windows SAPI fallback is only configured for English/Hindi.
+Vosk currently has configured English and Hindi speech models only. Kannada/Tamil browser speech locale selection is configuration only; actual recognition depends on browser support. Edge TTS voice identifiers are configured for all four languages, but availability has not been systematically checked across language/host combinations; Windows SAPI fallback is configured only for English/Hindi.
 
 Run the deterministic mocked tests with:
 
 ```bash
 python -m pytest -q integration/tests/test_water_quality_chat.py
 ```
+
+## Run the integration service
+
+From the repository root, start the combined integration and avatar service with:
+
+```bash
+python -m integration.server --host 127.0.0.1 --port 8080
+```
+
+The server provides `/api/integration/health`, `/api/integration/ask`, and `/api/integration/stt`, mounts the Brain API under `/brain`, and serves `avatar/` at `/` when available. The in-process integration path calls the Brain pipeline directly; a separately launched Brain process loads its own project-root environment configuration. Run the mocked integration regression suite with `./.venv/bin/python -m pytest -q integration/tests --ignore=integration/tests/test_end_to_end.py` when dependencies are installed. The end-to-end module may make network-dependent translation calls.
+
+The CPCB path covers a limited station/parameter set, not a river-wide sensor network. Its current upstream availability and the service's reuse terms were not independently confirmed during this documentation audit.

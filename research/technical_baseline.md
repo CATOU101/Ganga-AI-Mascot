@@ -3,11 +3,11 @@
 **Project ID:** PRJ_316  
 **Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
 **Repository:** https://github.com/CATOU101/Ganga-AI-Mascot  
-**Authoritative Baseline Commit SHA:** `56032d744b80695be7593c6f85e50d53c7c5a083` (`origin/main`, merging PR #25 from `MA_MEM`)  
-**Active Working Branch:** `research/repository-preparation`  
-**Document Status:** Complete & Verified Technical Baseline  
+**Historical Baseline Commit SHA:** `56032d744b80695be7593c6f85e50d53c7c5a083` (`origin/main`, merging PR #25 from `MA_MEM`)
+**Current implementation branch:** `main`
+**Document Status:** Historical baseline with dated implementation addenda
 
-This document preserves the technical snapshot anchored to the baseline SHA above. Subsequent implementation changes on `research/repository-preparation` are recorded in the dated post-baseline addendum at the end of this document; historical baseline test counts below are not current-checkout validation results.
+This document preserves the technical snapshot anchored to the baseline SHA above. Sections 1–11 describe that historical snapshot unless an addendum says otherwise. The current implementation snapshot and later integration are recorded separately below. Test counts in the historical sections and addenda are prior reports, not validation performed during the documentation audit.
 
 ---
 
@@ -253,15 +253,43 @@ The pipeline implements explicit branching before and during retrieval:
 1. **Static Corpus Horizon:** The knowledge base reflects GRBMP documents published between 2010 and 2015. It lacks contemporary post-2020 NMCG project data.
 2. **Absence of Direct IoT Sensor Feeds:** The application does not directly connect to river sensors. CPCB station readings are handled by a separate integration-layer route, as described in the post-baseline update.
 3. **External Network Reliance:** Hosted Groq/OpenRouter generation, Google translation, and EdgeTTS require live internet access when selected.
-4. **Heuristic Gating:** Lexical overlap and distance thresholds filter irrelevant queries effectively but do not constitute formal semantic entailment proofs.
+4. **Heuristic Gating:** Lexical overlap and distance thresholds are used to reject some low-match queries; their effectiveness has not been measured, and they do not constitute formal semantic entailment proofs.
 5. **Cross-Platform Audio/Tooling Gaps:** SAPI speech synthesis and Rhubarb binary analysis are Windows-dependent, requiring fallback paths on macOS/Linux.
 
 ---
 
-## 12. Post-Baseline Generation-Layer Resilience Update (2026-10-18)
+## 12. Post-Baseline Generation-Layer Resilience Update (2026-10-18; later merged to main)
 
-The working branch adds a configurable hosted-provider chain after the existing Brain retrieval and evidence-quality gate: Groq is the default first provider, OpenRouter is attempted next, and the existing extractive generator is the final fallback. Each configured provider is attempted at most once per request. Missing credentials and provider errors advance to the next provider. `LLM_PROVIDER_ORDER=openrouter,groq` makes OpenRouter primary, while `LLM_PROVIDER=extractive` keeps generation local-only. Groq and OpenRouter keys and model settings remain independent, and project-root `.env` loading does not override exported variables.
+The implementation added a configurable hosted-provider chain after the existing Brain retrieval and evidence-quality gate: Groq is the default first provider, OpenRouter is attempted next, and the existing extractive generator is the final fallback. Each configured provider is attempted at most once per request. Missing credentials and provider errors advance to the next provider. `LLM_PROVIDER_ORDER=openrouter,groq` makes OpenRouter primary, while `LLM_PROVIDER=extractive` keeps generation local-only. Groq and OpenRouter keys and model settings are independent, and project-root `.env` loading does not override exported variables. This section records the feature history; the source of truth is now `main`.
 
-The change is confined to generation/configuration orchestration; it does not change retrieval scoring, evidence acceptance, or the citation assembly algorithm. Hosted citation metadata continues to be built from retrieved evidence, while extractive fallback cites only hits contributing selected sentences and may therefore return a different citation list. Current-information and evidence-rejection branches still bypass hosted generation, and CPCB water-quality routing remains in the integration controller.
+Retrieval scoring, evidence acceptance, and citation assembly were preserved. Hosted citations are built from metadata for retrieved evidence included in the provider request; extractive fallback cites only hits contributing selected sentences and may therefore return a different citation list. Current-information and evidence-rejection branches still bypass hosted generation, and CPCB water-quality routing remains separate in the integration controller.
 
-Provider tests use mocked SDK clients and fake credentials. No real-provider smoke test or comparative quality, latency, or availability experiment is claimed. OpenRouter free endpoints may be rate limited and have provider-specific data-handling terms. See `research/implementation_and_evaluation.md` for current-checkout validation commands and results.
+Provider tests are mocked. No live-provider smoke test or comparative quality, latency, or availability experiment is established by the feature change. OpenRouter free endpoints may be rate limited and have provider-specific data-handling terms.
+
+## 13. Current-State Addendum (2026-10-19)
+
+### Snapshot and architecture
+
+The current main implementation was audited at commit `80833751f2a365eb00be5ddeee3392e4a601d38e`, after the multilingual integration was merged. That hash is the implementation snapshot before this documentation-only update. Current branch `main` is the active source of truth; `research/repository-preparation` and `Knowledge-base-creation` are historical development branches.
+
+- **Static knowledge path:** The Brain uses the reviewed GRBMP corpus, 384-dimensional local MiniLM embeddings, an application-owned SQLite metadata store and NumPy vector matrix, hybrid Euclidean/lexical ranking, heuristic evidence checks, and citation metadata assembled from retrieved hits. It does not provide live web search.
+- **Generation:** Default Groq → OpenRouter → extractive fallback; provider order can be configured. Hosted generation only runs after current-information handling, retrieval, and evidence acceptance. Each configured hosted provider is attempted at most once. Citation object shape is shared, though extractive output can cite a different subset of evidence.
+- **CPCB:** The integration controller routes selected current water-quality requests to a dedicated CPCB lookup for supported Ganga stations and DO/BOD/pH. It uses a 60-second source-payload cache and labels readings older than 90 minutes stale. It is a limited station feed, not a comprehensive monitoring network. Live availability and reuse terms were not checked in this documentation audit.
+- **Text languages and privacy:** Request/response language handling supports `en`, `hi`, `kn`, and `ta`, with Unicode-script detection when input language is omitted and explicit selection taking precedence. General translations use Google's public GTX endpoint by default on API routes; questions and/or generated answers can be sent externally. A small exact-phrase map is local; no translation cache is retained. Endpoint-specific terms, retention, and reliability remain unverified. API clients can set `translation_consent=false`; there is no consent checkbox in the chat UI.
+- **Voice and avatar:** Vosk mappings cover English and Hindi only. Browser speech locale controls and Edge TTS voice IDs are configured for four languages, but support depends on browser/provider and is not established universally. Windows SAPI fallback is configured for English and Hindi. The active browser UI uses Three.js; older Unity and alternate avatar documents are retained historical assets. Quiz and avatar presence do not establish learning impact.
+- **Research status:** No completed 100-question benchmark, provider comparison, user study, educational outcome measurement, or live-service reliability study is asserted. Results and Discussion remain deferred until valid empirical work is conducted.
+
+### Previously reported test evidence (not rerun during this documentation audit)
+
+The following counts were reported in earlier work and are reproduced only as historical evidence. They are not fresh results for this checkout:
+
+| Suite | Previously reported result | Conditions / limitation |
+| --- | --- | --- |
+| Focused config/provider tests | 34 passed, 12 subtests | Mocked provider clients and fake credentials; no real hosted request. |
+| Focused multilingual tests | 22 passed | External translation/provider paths were mocked for unit tests. |
+| Brain suite | 76 passed, 19 subtests | Local-only environment (`LLM_PROVIDER=extractive`, hosted key variables blank). |
+| Integration suite | 54 passed | Excluded the network-dependent `integration/tests/test_end_to_end.py`; local-only configuration was used for regression. |
+| Quiz tests | 5 passed | Automated UI logic tests; not a user study. |
+| `git diff --check` | Passed | Earlier report only; the current documentation diff is checked separately. |
+
+These suites do not establish live Groq/OpenRouter availability, live Google translation success, universal STT/TTS locale coverage, or research effectiveness. See `research/implementation_and_evaluation.md` for test commands and scope.
