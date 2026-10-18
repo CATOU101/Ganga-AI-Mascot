@@ -21,13 +21,19 @@ from integration.models.brain_response import AvatarPresentation, BrainRequest
 from integration.avatar.mascot_presenter import MascotPresenter
 from integration.voice.stt_adapter import get_stt_adapter
 from integration.voice.tts_adapter import get_tts_adapter
+from integration.water_quality import CPCBWaterQualityService
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 AVATAR_DIR = ROOT_DIR / "avatar"
 
 config = load_integration_config()
 brain_client = BrainClient(config)
-controller = ConversationController(brain_client=brain_client, config=config)
+water_quality_service = CPCBWaterQualityService()
+controller = ConversationController(
+    brain_client=brain_client,
+    config=config,
+    water_quality_service=water_quality_service,
+)
 presenter = MascotPresenter()
 stt_adapter = get_stt_adapter(config.stt_provider)
 tts_adapter = get_tts_adapter("synthetic" if config.mock_mode else config.tts_provider)
