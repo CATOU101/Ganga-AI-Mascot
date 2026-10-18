@@ -8,6 +8,7 @@ import urllib.request
 import urllib.error
 from typing import Any
 
+from brain.translator import TranslationConsentRequired, TranslationError
 from integration.config.integration_config import IntegrationConfig, load_integration_config
 from integration.models.brain_response import BrainRequest, BrainResponse, CitationItem, EmotionType, GestureType
 
@@ -40,6 +41,7 @@ class BrainClient:
         output_language: str = "hi",
         top_k: int | None = None,
         language: str | None = None,
+        translation_consent: bool = True,
     ) -> BrainResponse:
         """Send question to Brain API POST /ask safely with separate input and output languages."""
         in_lang = (input_language or language or "hi").lower().strip()
@@ -63,7 +65,10 @@ class BrainClient:
         if is_local:
             try:
                 from brain.rag_pipeline import answer_question
-                rag_res = answer_question(question.strip(), top_k=top_k, input_language=in_lang, output_language=out_lang)
+                rag_res = answer_question(
+                    question.strip(), top_k=top_k, input_language=in_lang,
+                    output_language=out_lang, allow_external_translation=translation_consent,
+                )
                 mode = rag_res.get("mode", "insufficient-evidence")
                 gesture = "explaining" if mode == "grounded" else ("thinking" if mode == "insufficient-evidence" else "idle")
                 return self._parse_response(
@@ -80,8 +85,16 @@ class BrainClient:
                     in_lang,
                     out_lang
                 )
+            except TranslationConsentRequired:
+                raise
+            except TranslationError:
+                logger.warning("[Integration] Direct translation failed: provider_error")
+                return self._fallback_response(
+                    answer="Translation is temporarily unavailable. Please try again later.",
+                    mode="insufficient-evidence", input_language=in_lang, output_language=out_lang,
+                )
             except Exception as direct_err:
-                logger.warning(f"[Integration] Direct in-process RAG call failed: {direct_err}; falling back to HTTP.")
+                logger.warning("[Integration] Direct in-process RAG call failed (%s); falling back to HTTP.", type(direct_err).__name__)
 
         url = f"{self.config.brain_base_url}/ask"
         payload = {
@@ -89,6 +102,7 @@ class BrainClient:
             "input_language": in_lang,
             "output_language": out_lang,
             "language": out_lang,
+            "translation_consent": translation_consent,
         }
         if top_k is not None:
             payload["top_k"] = top_k
@@ -109,11 +123,28 @@ class BrainClient:
                 resp_bytes = response.read()
                 return self._parse_response(resp_bytes, in_lang, out_lang)
 
-        except (urllib.error.URLError, TimeoutError, OSError) as e:
-            logger.info(f"[Integration] Standalone Brain HTTP server unreachable ({e}). Calling RAG pipeline in-process.")
+        except urllib.error.HTTPError as http_err:
+            if http_err.code == 428:
+                raise TranslationConsentRequired("External translation is disabled for this request") from None
+            if http_err.code == 503:
+                logger.warning("[Integration] Brain translation failed: provider_error")
+                return self._fallback_response(
+                    answer="Translation is temporarily unavailable. Please try again later.",
+                    mode="insufficient-evidence", input_language=in_lang, output_language=out_lang,
+                )
+            logger.warning("[Integration] Brain API returned HTTP %s.", http_err.code)
+            return self._fallback_response(
+                answer="The Ganga AI Brain encountered an internal processing issue. Please try again.",
+                mode="insufficient-evidence", input_language=in_lang, output_language=out_lang,
+            )
+        except (urllib.error.URLError, TimeoutError, OSError):
+            logger.info("[Integration] Standalone Brain HTTP server unavailable; calling RAG pipeline in-process.")
             try:
                 from brain.rag_pipeline import answer_question
-                rag_res = answer_question(question.strip(), top_k=top_k, input_language=in_lang, output_language=out_lang)
+                rag_res = answer_question(
+                    question.strip(), top_k=top_k, input_language=in_lang,
+                    output_language=out_lang, allow_external_translation=translation_consent,
+                )
                 mode = rag_res.get("mode", "insufficient-evidence")
                 gesture = "explaining" if mode == "grounded" else ("thinking" if mode == "insufficient-evidence" else "idle")
                 return self._parse_response(
@@ -130,8 +161,16 @@ class BrainClient:
                     in_lang,
                     out_lang
                 )
+            except TranslationConsentRequired:
+                raise
+            except TranslationError:
+                logger.warning("[Integration] In-process translation failed: provider_error")
+                return self._fallback_response(
+                    answer="Translation is temporarily unavailable. Please try again later.",
+                    mode="insufficient-evidence", input_language=in_lang, output_language=out_lang,
+                )
             except Exception as in_proc_err:
-                logger.error(f"[Integration] In-process RAG execution error: {in_proc_err}")
+                logger.error("[Integration] In-process RAG execution failed (%s).", type(in_proc_err).__name__)
                 return self._fallback_response(
                     answer="Sorry, I am having trouble connecting to the Ganga AI Brain right now. Please check if the Brain server is running.",
                     mode="insufficient-evidence",
@@ -140,7 +179,7 @@ class BrainClient:
                 )
 
         except Exception as e:
-            logger.error(f"[Integration] Unexpected error in BrainClient: {e}")
+            logger.error("[Integration] Unexpected BrainClient error (%s).", type(e).__name__)
             return self._fallback_response(
                 answer="An unexpected error occurred while processing your query.",
                 mode="insufficient-evidence",
@@ -162,7 +201,7 @@ class BrainClient:
         try:
             data = json.loads(raw_bytes.decode("utf-8"))
         except Exception as err:
-            logger.error(f"[Integration] Malformed JSON received from Brain API: {err}")
+            logger.error("[Integration] Malformed JSON received from Brain API (%s).", type(err).__name__)
             return self._fallback_response(
                 answer="Received an invalid response format from the AI Brain server.",
                 mode="insufficient-evidence",

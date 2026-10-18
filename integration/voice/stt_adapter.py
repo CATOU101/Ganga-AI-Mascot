@@ -21,7 +21,7 @@ try:
 except Exception as e:
     vosk = None
     VOSK_AVAILABLE = False
-    logger.warning(f"[Integration STT] Vosk not importable: {e}")
+    logger.warning("[Integration STT] Vosk not importable (%s).", type(e).__name__)
 
 
 def normalize_stt_text(raw_text: str) -> str:
@@ -50,6 +50,7 @@ class VoskSTTAdapter(STTAdapter):
         "en": "en-us",
         "hi": "hi",
     }
+    SUPPORTED_LANGUAGES = frozenset(MODEL_LANG_MAP)
 
     def __init__(self, models_dir: Optional[str] = None):
         self.models_dir = models_dir
@@ -76,7 +77,7 @@ class VoskSTTAdapter(STTAdapter):
             self._models[lang_key] = model
             return model
         except Exception as e:
-            logger.error(f"[Integration STT] Error loading Vosk model for {lang_key}: {e}")
+            logger.error("[Integration STT] Error loading Vosk model for %s (%s).", lang_key, type(e).__name__)
             raise
 
     def transcribe_audio(self, audio_bytes: bytes | None, language: str = "hi") -> str:
@@ -85,13 +86,14 @@ class VoskSTTAdapter(STTAdapter):
             return ""
 
         lang_key = (language or "hi").lower().strip()
-        if lang_key not in ("en", "hi"):
-            lang_key = "hi"
+        if lang_key not in self.SUPPORTED_LANGUAGES:
+            logger.warning("[Integration STT] Vosk has no configured model for language %s.", lang_key)
+            return ""
 
         try:
             model = self._get_model(lang_key)
         except Exception as err:
-            logger.error(f"[Integration STT] Could not initialize Vosk model: {err}. Falling back to mock.")
+            logger.error("[Integration STT] Could not initialize Vosk model (%s). Falling back to mock.", type(err).__name__)
             return MockSTTAdapter().transcribe_audio(audio_bytes, language=lang_key)
 
         # Write incoming audio to a temporary file
@@ -117,7 +119,7 @@ sound.write({repr(temp_wav)}, 16000, 1, aud.FORMAT_S16, aud.CONTAINER_WAV, 65536
                 res = subprocess.run([self.blender_exe, "--background", "--python-expr", conv_script],
                                      capture_output=True, text=True)
                 if res.returncode != 0 or not os.path.exists(temp_wav):
-                    logger.error(f"[Integration STT] Audio conversion failed: {res.stderr}")
+                    logger.error("[Integration STT] Audio conversion failed (return_code=%s).", res.returncode)
                     return ""
 
             # Perform Kaldi recognizer pass
@@ -136,11 +138,11 @@ sound.write({repr(temp_wav)}, 16000, 1, aud.FORMAT_S16, aud.CONTAINER_WAV, 65536
                 raw_text = final_res.get("text", "")
 
             norm_text = normalize_stt_text(raw_text)
-            logger.info(f"[Integration STT] Vosk transcribed ({lang_key}): '{norm_text}'")
+            logger.info("[Integration STT] Vosk transcription completed for %s.", lang_key)
             return norm_text
 
         except Exception as e:
-            logger.error(f"[Integration STT] Vosk transcription error: {e}")
+            logger.error("[Integration STT] Vosk transcription failed (%s).", type(e).__name__)
             return ""
         finally:
             if temp_input and os.path.exists(temp_input) and temp_input != temp_wav:

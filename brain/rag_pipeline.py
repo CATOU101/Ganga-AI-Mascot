@@ -8,7 +8,7 @@ import json
 from .config import load_config
 from .generator import build_generator, current_information_response, insufficient_evidence_response
 from .retriever import Retriever, asks_for_current_information
-from .translator import normalize_language, translate_text
+from .translator import TranslationConsentRequired, normalize_language, translate_text
 from .vector_store import build_index as build_vector_index
 
 
@@ -22,6 +22,7 @@ def answer_question(
     top_k: int | None = None,
     input_language: str | None = None,
     output_language: str | None = None,
+    allow_external_translation: bool = False,
 ) -> dict:
     """Answer a question; unspecified language defaults to English."""
     input_lang = normalize_language(input_language, default="en")
@@ -29,22 +30,22 @@ def answer_question(
 
     if not question or not question.strip():
         resp = insufficient_evidence_response()
-        resp["answer"] = translate_text(resp["answer"], "en", output_lang)
+        resp["answer"] = translate_text(resp["answer"], "en", output_lang, allow_external=allow_external_translation)
         resp["input_language"] = input_lang
         resp["output_language"] = output_lang
         return resp
 
     config = load_config()
 
-    # Translate input question to English for retrieval if input is Hindi
+    # Translate non-English questions to English for retrieval when consent is present.
     search_question = question
-    if input_lang == "hi":
-        search_question = translate_text(question, "hi", "en")
+    if input_lang != "en":
+        search_question = translate_text(question, input_lang, "en", allow_external=allow_external_translation)
 
     # Step 1: Detect current/realtime information request
     if asks_for_current_information(question) or asks_for_current_information(search_question):
         resp = current_information_response()
-        resp["answer"] = translate_text(resp["answer"], "en", output_lang)
+        resp["answer"] = translate_text(resp["answer"], "en", output_lang, allow_external=allow_external_translation)
         resp["input_language"] = input_lang
         resp["output_language"] = output_lang
         return resp
@@ -56,10 +57,17 @@ def answer_question(
     # Step 3: Check Evidence Quality Gate result
     if not is_sufficient or not hits:
         resp = insufficient_evidence_response()
-        resp["answer"] = translate_text(resp["answer"], "en", output_lang)
+        resp["answer"] = translate_text(resp["answer"], "en", output_lang, allow_external=allow_external_translation)
         resp["input_language"] = input_lang
         resp["output_language"] = output_lang
         return resp
+
+    # Do not send evidence to a hosted generator if the requested output will
+    # require external translation and the caller has not opted in.
+    if output_lang != "en" and not allow_external_translation:
+        raise TranslationConsentRequired(
+            "External translation requires explicit per-request consent"
+        )
 
     # Step 4: Generate grounded answer with citations
     provider_order = getattr(config, "llm_provider_order", None)
@@ -77,7 +85,7 @@ def answer_question(
 
     # Step 5: Translate answer to output_language if requested
     if output_lang != "en":
-        result["answer"] = translate_text(result["answer"], "en", output_lang)
+        result["answer"] = translate_text(result["answer"], "en", output_lang, allow_external=allow_external_translation)
 
     result["input_language"] = input_lang
     result["output_language"] = output_lang

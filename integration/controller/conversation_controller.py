@@ -65,7 +65,7 @@ class ConversationController:
             try:
                 self.on_state_change(presentation)
             except Exception as e:
-                logger.error(f"[Integration] Error in state change listener: {e}")
+                logger.error("[Integration] State change listener failed (%s).", type(e).__name__)
 
     def process_text_question(
         self,
@@ -74,6 +74,7 @@ class ConversationController:
         output_language: str = "hi",
         top_k: int | None = None,
         language: str | None = None,
+        translation_consent: bool = True,
     ) -> AvatarPresentation:
         """Process a text question through the state machine synchronously / thread-safely."""
         in_lang = (input_language or language or "hi").lower().strip()
@@ -129,25 +130,24 @@ class ConversationController:
                 answer = format_water_quality_answer(water_request, readings)
                 mode = "live-water-quality"
             except CPCBWaterQualityError as error:
-                logger.error("[Integration] CPCB water-quality query failed: %s", error)
+                logger.error("[Integration] CPCB water-quality query failed (%s).", type(error).__name__)
                 answer = (
                     "I couldn't retrieve the requested live water-quality data from CPCB just now. "
                     "Please try again later; I won't substitute older or unrelated readings."
                 )
                 mode = "live-water-quality-unavailable"
 
-            if out_lang == "hi":
+            if out_lang != "en":
                 from brain.translator import TranslationError, translate_text
 
                 english_answer = answer
                 try:
-                    answer = translate_text(answer, "en", "hi")
-                except TranslationError as error:
-                    logger.error("[Integration] CPCB answer translation failed: %s", error)
+                    answer = translate_text(answer, "en", out_lang, allow_external=translation_consent)
+                except TranslationError:
+                    logger.warning("[Integration] CPCB answer translation unavailable or disabled.")
                     answer = (
                         f"{english_answer}\n\n"
-                        "I could not translate this CPCB response into Hindi. The readings above "
-                        "remain in English; please retry later if you need a Hindi translation."
+                        f"The readings remain in English because translation to {out_lang} was disabled or unavailable."
                     )
                     mode = "live-water-quality-translation-unavailable"
 
@@ -170,9 +170,22 @@ class ConversationController:
 
         # Step 3: Query Brain API
         try:
-            brain_resp = self.brain_client.ask(question, input_language=in_lang, output_language=out_lang, top_k=top_k)
+            brain_resp = self.brain_client.ask(
+                question, input_language=in_lang, output_language=out_lang,
+                top_k=top_k, translation_consent=translation_consent,
+            )
         except Exception as e:
-            logger.error(f"[Integration] Brain query failed: {e}")
+            from brain.translator import TranslationConsentRequired
+
+            if isinstance(e, TranslationConsentRequired):
+                self._set_state(AvatarPresentation(
+                    state=ConversationState.IDLE,
+                    input_language=in_lang,
+                    output_language=out_lang,
+                    language=out_lang,
+                ))
+                raise
+            logger.error("[Integration] Brain query failed (%s).", type(e).__name__)
             error_pres = AvatarPresentation(
                 state=ConversationState.ERROR,
                 question=question,
@@ -183,7 +196,7 @@ class ConversationController:
                 language=out_lang,
                 emotion=EmotionType.NEUTRAL,
                 gesture=GestureType.IDLE,
-                error_message=str(e),
+                error_message="The Brain could not process this request.",
             )
             self._set_state(error_pres)
             time.sleep(0.5)

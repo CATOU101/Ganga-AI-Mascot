@@ -68,6 +68,14 @@ Configuration is read from process environment variables and the project-root `.
 | `GROQ_API_KEY` | Groq credential; provide privately |
 | `OPENROUTER_MODEL` | OpenRouter model; defaults to `nvidia/nemotron-3.5-super-vl:free` |
 | `OPENROUTER_API_KEY` | OpenRouter credential; provide privately |
+
+### Language and translation privacy
+
+Text input/output language codes are `en`, `hi`, `kn`, and `ta`. When no input language is supplied, the Brain detects a supported script; an explicit input language takes precedence. When language conversion is needed, the application sends the question and/or generated answer to Google's public Translate endpoint by default. The chat UI has no per-request consent checkbox; API clients can explicitly set `translation_consent: false` to disable external translation for a request. A static set of known system phrases can be translated locally without external requests. No translation cache is retained. The endpoint is not Google's documented Cloud Translation API, and this project has not verified its endpoint-specific terms, retention, reliability, or availability; do not send personal or confidential text. See [Google Translate](https://translate.google.com/) and [Google's privacy policy](https://policies.google.com/privacy).
+
+Local options were reviewed for the four requested languages: the current Argos model index shows English↔Hindi packages but no English↔Kannada/Tamil packages. NLLB-200 distilled 600M advertises broad multilingual coverage, but its model card marks it CC-BY-NC, research-only, not for production, and not intended for domain-specific text. No local runtime/latency benchmark was performed on target hardware, so it is not enabled. See the [Argos package index](https://github.com/argosopentech/argospm-index/blob/main/index.json) and [NLLB model card](https://huggingface.co/facebook/nllb-200-distilled-600M).
+
+The Vosk adapter currently has configured models for English and Hindi only; Kannada and Tamil speech recognition are not configured. The browser Web Speech API may offer those locales, depending on browser and host support. Edge TTS voice IDs are configured for all four text languages, but actual synthesis availability depends on the external service; Windows SAPI fallback is configured only for English/Hindi. These are configuration statements, not provider compatibility or quality claims.
 | `GANGA_BRAIN_EMBEDDING_PROVIDER` | Semantic embedding provider (`semantic` by default) or `local-hash` |
 | `GANGA_BRAIN_EMBEDDING_MODEL` | Semantic embedding model (`all-MiniLM-L6-v2` by default) |
 | `GANGA_BRAIN_TOP_K` | Maximum returned evidence count |
@@ -110,7 +118,7 @@ curl -X POST http://127.0.0.1:8000/ask \
   -d '{"question":"What is the Ganga River?","input_language":"en","output_language":"en"}'
 ```
 
-The ask request accepts `question`, optional `input_language` and `output_language` (`en` or `hi`), the legacy `language` field, and optional `top_k` (1–100). Responses include an answer, a response `mode`, citations, and language fields.
+The ask request accepts `question`, optional `input_language` and `output_language` (`en`, `hi`, `kn`, or `ta`), the legacy `language` field, optional `translation_consent` (defaults to `true`; set `false` to disable external translation), and optional `top_k` (1–100). Responses include an answer, a response `mode`, citations, and language fields. If a language conversion is needed while external translation is disabled, the API returns HTTP 428; provider failures return a sanitized translation-unavailable response.
 
 The integration application can be started separately:
 
@@ -207,7 +215,7 @@ The system verifies station identity against the CPCB registry before returning 
 
 Successful CPCB responses are returned through the normal chatbot conversation with mode `live-water-quality`. If the CPCB endpoint is unreachable, the system reports the failure and does not substitute stale or unrelated readings. Retrieved payloads are cached for 60 seconds to reduce repeated requests. CPCB's terms for data reuse have not been independently verified and should be reviewed before wider publication or redistribution.
 
-CPCB water-quality queries are detected by the integration-layer conversation controller (`integration/water_quality.py`, `integration/controller/conversation_controller.py`). This happens before the Brain RAG pipeline; all other questions continue through the existing retrieval and generation path. Hindi translation of CPCB responses is attempted through the existing translation adapter; translation failures are reported inline.
+CPCB water-quality queries are detected by the integration-layer conversation controller (`integration/water_quality.py`, `integration/controller/conversation_controller.py`). This happens before the Brain RAG pipeline; all other questions continue through the existing retrieval and generation path. CPCB responses are translated through the same external translation path by default when a non-English output language is selected. If external translation is disabled or fails, the live readings remain in English with an explanatory note.
 
 LLM behaviour and voice interaction with CPCB responses have not been systematically evaluated. Do not interpret the availability of live readings as a claim about response quality or accuracy in practice.
 

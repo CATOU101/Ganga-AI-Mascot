@@ -160,6 +160,7 @@ body {
 
 .lang-selector {
   display: flex;
+  flex-wrap: wrap;
   background: rgba(0, 0, 0, 0.35);
   padding: 3px;
   border-radius: var(--radius-md);
