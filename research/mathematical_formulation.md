@@ -229,7 +229,7 @@ $$\text{Response} = \big\langle \text{answer} = M_{\text{current\_info}}, \; \te
 Retrieved hits in $\mathcal{E}_{\text{retrieved}}$ are packed into an evidence context block for the generator subject to a total character budget:
 $$\sum_{c \in \mathcal{E}_{\text{included}}} |\text{text}(c)| \le C_{\text{max}} = 6,000 \text{ characters}$$
 
-The generator's `_evidence_records` caps the combined evidence text at 6,000 characters, truncating the hit that crosses the remaining text budget and omitting later text. Metadata, JSON framing, system instructions, and question are outside this character limit, so it is not a guarantee about total model-token usage.
+The generator's `_evidence_records` caps the combined evidence text at 6,000 characters, truncating the hit that crosses the remaining text budget and omitting later text. This limit applies to evidence text only; metadata, JSON framing, system instructions, and question are outside the character limit, so it is not a limit on the full prompt or total model-token usage.
 
 ### Decoupled Citation Provenance Mapping
 Unlike conventional systems that instruct the LLM to write citations, PRJ_316 constructs citation records deterministically from the metadata of chunks in $\mathcal{E}_{\text{included}}$.

@@ -84,7 +84,7 @@ def rank_candidates(
             
         if mode == "A":  # Dense-Only
             score = 1.0 / (1.0 + dist)
-        elif mode == "B":  # Lexical-Only
+        elif mode == "B":  # Lexical-overlap reranking within dense candidates
             score = overlap
         elif mode == "C":  # Unweighted Hybrid
             score = (1.0 / (1.0 + dist)) + (0.5 * overlap)
@@ -99,7 +99,7 @@ def rank_candidates(
     if not scored:
         return False, [], "no_candidates_survived_cutoff"
         
-    # Sort descending by score; tie-break deterministically by distance ascending
+    # Sort by score descending, then distance ascending; complete ties retain input order.
     scored.sort(key=lambda item: (item[0], -item[2]), reverse=True)
     
     # Post-Rerank Gate 2: Top-hit overlap check
@@ -153,8 +153,8 @@ def run_benchmark() -> int:
     print(f"[OK] Initialized SQLiteVectorStore (4,085 chunks) in {init_time:.2f}s.")
     
     configurations = {
-        "A": "Dense-Only (Euclidean Proximity)",
-        "B": "Lexical-Only (Keyword Overlap)",
+        "A": "Dense-Score Reranking (Euclidean Proximity)",
+        "B": "Lexical-Overlap Reranking (within dense top-15 pool)",
         "C": "Unweighted Hybrid (Dense + 0.5*Lexical)",
         "D": "Proposed Hybrid (Dense + 0.5*Lexical + 0.25*OverviewBoost)",
     }
@@ -168,7 +168,7 @@ def run_benchmark() -> int:
             "date": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "python_version": platform.python_version(),
             "platform": platform.platform(),
-            "dataset_path": str(DATASET_PATH),
+            "dataset_path": str(DATASET_PATH.relative_to(ROOT_DIR)),
             "dataset_sha256": current_hash,
             "total_queries": len(queries),
             "configurations": configurations,
@@ -303,14 +303,16 @@ def _generate_markdown_report(results: dict[str, Any], path: Path) -> None:
         "",
         "## 1. Overview and Research Question",
         "",
-        "> **Research Question (RQ1):** Does query-conditioned hybrid retrieval with broad-query overview boosting ($S_{\\text{hybrid}}$) improve retrieval accuracy and ranking compared with dense-only, lexical-only, and unweighted hybrid retrieval over the curated GRBMP regulatory corpus?",
+        "> **Research Question (RQ1):** Within a shared dense-retrieved top-15 candidate pool, how do dense, lexical-overlap, hybrid, and overview-boosted reranking configurations compare on this curated GRBMP query set?",
+        "",
+        "**Evaluation scope:** Each configuration ranks the same dense-retrieved candidate pool. Config B is lexical-overlap reranking, not full-corpus lexical search. Production-gated runs also apply candidate-coverage and distance filters.",
         "",
         "---",
         "",
         "## 2. Overall Benchmark Results (All 30 Queries)",
         "",
         "### A. Production Gated Pipeline (Primary)",
-        "Applies pre-rerank candidate pool coverage check ($\ge 0.60$), Euclidean distance cutoff ($d \le 1.15$), and post-rerank top-hit overlap gate ($\ge 0.15$).",
+        "Applies pre-rerank candidate pool coverage check ($\\ge 0.60$), Euclidean distance cutoff ($d \\le 1.15$), and post-rerank top-hit overlap gate ($\\ge 0.15$).",
         "",
         "| Configuration | Description | Precision@5 | Recall@5 | MRR@5 | Total Latency (s) |",
         "| :--- | :--- | :---: | :---: | :---: | :---: |",
@@ -328,8 +330,8 @@ def _generate_markdown_report(results: dict[str, Any], path: Path) -> None:
         
     lines.extend([
         "",
-        "### B. Ungated Ranking Pipeline (Pure Scoring Ablation)",
-        "Ranks candidates purely by score without early-exit gate rejections.",
+        "### B. Ungated Reranking (No Evidence-Gate Rejections)",
+        "Ranks the same dense candidate pool by each score without early-exit gate rejections; this is not a full-corpus retrieval comparison.",
         "",
         "| Configuration | Description | Precision@5 | Recall@5 | MRR@5 | Total Latency (s) |",
         "| :--- | :--- | :---: | :---: | :---: | :---: |",
@@ -371,18 +373,16 @@ def _generate_markdown_report(results: dict[str, Any], path: Path) -> None:
         "",
         "## 4. Key Empirical Findings",
         "",
-        "1. **MRR@5 Improvement:** The Proposed Hybrid with Overview Boost (Config D) achieves **MRR@5 = 0.1444**, outperforming Dense-Only (Config A: 0.1083, a **+33.3% relative gain**) and Unweighted Hybrid (Config C: 0.1261, a **+14.5% relative gain**).",
-        "2. **Broad/Thematic Impact:** On Category A (Broad/Thematic), Config D achieves **MRR@5 = 0.1500** compared to Config A (0.0500) and Config C (0.1000), proving that overview boosting directly elevates executive plan summaries to Rank 1 for broad river queries.",
-        "3. **Governance & Technical Stability:** On Technical/Scientific (Category B) and Governance/Policy (Category C), overview boosting introduces zero distortion, preserving identical ranking performance to unweighted hybrid retrieval.",
-        "4. **Purity vs. Completeness Trade-off:** While Recall@5 across all 30 queries is slightly higher in dense-only un-gated mode (0.1444 vs 0.1278), MRR@5 is decisively higher in Config D (0.1444 vs 0.1194), indicating that when gold chunks are retrieved, Config D places them significantly higher in the top ranks.",
+        "The tables report descriptive metrics on this 30-query set. They do not include uncertainty estimates or repeated-run variability, and do not establish general performance or a causal effect of overview boosting.",
         "",
         "---",
         "",
-        "## 5. Reproducibility Guarantee",
-        "To reproduce these exact results from scratch:",
+        "## 5. Reproduction command and provenance limits",
+        "This command runs the benchmark with the current checkout and index; matching the saved artifact also requires matching code, index, configuration, and environment:",
         "```bash",
         "PYTHONPATH=. ./.venv/bin/python research/benchmark/run_retrieval_benchmark.py",
         "```",
+        "The saved JSON records dataset hash, runtime/platform, query count, and configuration labels, but not the benchmark code commit or vector-index digest.",
     ])
     
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")

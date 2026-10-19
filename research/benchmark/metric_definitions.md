@@ -9,7 +9,7 @@
 
 ## 1. Overview and Operational Scope
 
-This document defines the mathematical models, tie-breaking procedures, and aggregation rules for evaluating candidate retrieval over the curated Ganga River Basin Management Plan (GRBMP) knowledge corpus ($N = 4,085$ indexed chunks).
+This document defines the mathematical models and aggregation rules for evaluating reranking over a shared dense-retrieved candidate pool from the curated Ganga River Basin Management Plan (GRBMP) index ($N = 4,085$ indexed chunks). The retrieval ablation runner obtains up to 15 dense candidates per query before applying each ranking configuration; Config B is therefore lexical reranking within that pool, not full-corpus lexical retrieval. Production-gated runs also apply candidate-coverage and distance filters.
 
 All metrics are evaluated at cutoff rank $K = 5$, reflecting the production RAG pipeline parameter (`GANGA_BRAIN_TOP_K = 5`) defined in `brain/config.py`.
 
@@ -79,10 +79,8 @@ $$\text{RR@5}(q) = \begin{cases}
    * If a configuration rejects a query (e.g. via evidence gate) or returns fewer than 5 chunks, positions with no candidate are assigned non-matching dummy values ($\mathbb{I} = 0$).
    * If zero relevant chunks appear in the top 5:
      $$\text{P@5}(q) = 0.0, \quad \text{R@5}(q) = 0.0, \quad \text{RR@5}(q) = 0.0$$
-4. **Tie-Breaking Rule:**
-   * When two candidate chunks have identical ranking scores:
-     * *Lexical Retrieval:* Tied keyword overlap scores are broken by Euclidean vector distance ascending (closer vector wins).
-     * *Dense & Hybrid Retrieval:* Tied continuous scores are broken deterministically by chunk integer ordinal ascending (`chunk_id`).
+4. **Tie behavior in the saved benchmark implementation:**
+   * `run_retrieval_benchmark.py` sorts scored candidates by score descending and Euclidean distance ascending (`(score, -distance)` with reverse sorting). It does not apply a chunk ordinal as a secondary key. Candidates tied on both score and distance retain their incoming order, which is inherited from the vector-store candidate query and is not documented as stable. The vector-store implementation likewise does not promise a deterministic tie order. Therefore, the previous deterministic ordinal tie-breaking rule was inaccurate; exact ordering for complete ties is not guaranteed by the current implementation.
 
 ---
 
@@ -101,11 +99,11 @@ $$\text{Mean Metric} = \frac{1}{|\mathcal{S}|} \sum_{q \in \mathcal{S}} \text{Me
 
 ## 5. Retrieval Configurations Evaluated in Ablation
 
-The benchmark evaluates four configurations over the identical 4,085-chunk corpus:
+The benchmark evaluates four ranking configurations over the same dense top-15 candidates per query from the 4,085-chunk index:
 
 | Configuration ID | Name | Scoring Function ($S$) | Description |
 | :--- | :--- | :--- | :--- |
-| **Config A** | Dense-Only | $S_{\text{dense}}(q, c) = \frac{1.0}{1.0 + \|\mathbf{q} - \mathbf{d}_c\|_2}$ | Pure 384-d Euclidean vector similarity over unit-normalized MiniLM embeddings. |
-| **Config B** | Lexical-Only | $S_{\text{lexical}}(q, c) = overlap(q, c) = \frac{\sum \mathbb{I}[w \in c]}{|\mathcal{K}(q)|}$ | Exact keyword overlap ratio over extracted query terms ($|w| \ge 3$, non-stopwords). |
-| **Config C** | Unweighted Hybrid | $S_{\text{unweighted}}(q, c) = \frac{1.0}{1.0 + \|\mathbf{q} - \mathbf{d}_c\|_2} + 0.5 \cdot overlap(q, c)$ | Linear combination of vector proximity and lexical overlap, without overview boost. |
-| **Config D** | Proposed Overview-Boosted Hybrid | $S_{\text{hybrid}}(q, c) = \frac{1.0}{1.0 + \|\mathbf{q} - \mathbf{d}_c\|_2} + 0.5 \cdot overlap(q, c) + 0.25 \cdot \mathbb{I}_{\text{overview}}(q, c)$ | Full production algorithm with broad-query detection and executive document boosting. |
+| **Config A** | Dense-Score Reranking | $S_{\text{dense}}(q, c) = \frac{1.0}{1.0 + \|\mathbf{q} - \mathbf{d}_c\|_2}$ | Euclidean score over the shared dense-retrieved candidate pool. |
+| **Config B** | Lexical-Overlap Reranking | $S_{\text{lexical}}(q, c) = overlap(q, c) = \frac{\sum \mathbb{I}[w \in c]}{|\mathcal{K}(q)|}$ | Keyword-overlap score over extracted query terms ($|w| \ge 3$, non-stopwords), applied only to the shared dense top-15 candidate pool. |
+| **Config C** | Unweighted Hybrid Reranking | $S_{\text{unweighted}}(q, c) = \frac{1.0}{1.0 + \|\mathbf{q} - \mathbf{d}_c\|_2} + 0.5 \cdot overlap(q, c)$ | Linear combination of vector proximity and lexical overlap within the shared candidate pool. |
+| **Config D** | Overview-Boosted Hybrid Reranking | $S_{\text{hybrid}}(q, c) = \frac{1.0}{1.0 + \|\mathbf{q} - \mathbf{d}_c\|_2} + 0.5 \cdot overlap(q, c) + 0.25 \cdot \mathbb{I}_{\text{overview}}(q, c)$ | Broad-query detection and overview boost applied to the shared candidate pool. |

@@ -136,8 +136,8 @@ def validate() -> bool:
             print(f"  - {err}")
         return False
 
-    print("\n[SUCCESS] ALL VALIDATION CHECKS PASSED PERFECTLY!")
-    print(f"Dataset is 100% verified, reproducible, and ready for benchmark execution.")
+    print("\n[SUCCESS] Dataset structure and gold-chunk existence checks passed.")
+    print("Dataset structure and referenced chunk existence checks passed; annotation support and run reproducibility are not established by this validator.")
     return True
 
 

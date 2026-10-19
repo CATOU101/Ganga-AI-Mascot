@@ -185,7 +185,7 @@ def run_gate_benchmark() -> int:
             "false_acceptance_rate_unsupported_ood": round(false_acceptance_rate_ood, 4),
             "correct_rejection_rate_dynamic_temporal": round(correct_rejection_rate_dyn, 4),
             "false_acceptance_rate_dynamic_temporal": round(false_acceptance_rate_dyn, 4),
-            "overall_safety_accuracy": round(overall_accuracy, 4),
+            "selected_set_decision_agreement": round(overall_accuracy, 4),
         },
         "evaluation_time_seconds": round(total_eval_time, 4),
     }
@@ -197,7 +197,7 @@ def run_gate_benchmark() -> int:
             "date": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "python_version": platform.python_version(),
             "platform": platform.platform(),
-            "dataset_path": str(DATASET_PATH),
+            "dataset_path": str(DATASET_PATH.relative_to(ROOT_DIR)),
             "dataset_sha256": dataset_hash,
             "total_queries": len(queries),
         },
@@ -241,19 +241,19 @@ def _generate_markdown_report(results: dict[str, Any], path: Path) -> None:
         "",
         "This evaluation benchmarks the two-stage pre-generation evidence quality gate and dynamic query interception mechanism implemented in `brain/retriever.py` and `brain/rag_pipeline.py`. The objective is to verify that:",
         "1. **Answerable in-domain questions** successfully pass the gates without false rejection.",
-        "2. **Unsupported out-of-domain questions** are rejected by the candidate-pool coverage gate ($pool\_coverage < 0.60$) or top-hit overlap gate, returning `mode: insufficient-evidence`.",
+        "2. **Unsupported out-of-domain questions** are rejected by the candidate-pool coverage gate ($pool\\_coverage < 0.60$) or top-hit overlap gate, returning `mode: insufficient-evidence`.",
         "3. **Dynamic / time-sensitive queries** are intercepted by `asks_for_current_information` before retrieval, returning `mode: current-info-fallback`.",
         "",
         "---",
         "",
-        "## 2. Table III for Research Paper (Safety & Gating Performance)",
+        "## 2. Evidence-Gate Decisions on the Selected Query Set",
         "",
         "| Query Category | Total Queries | Correct Acceptance Rate | Correct Rejection Rate | False Acceptance Rate | False Rejection Rate | Primary Gating Mechanism |",
         "| :--- | :---: | :---: | :---: | :---: | :---: | :--- |",
         f"| **Answerable In-Domain** | 10 | **{rates['correct_acceptance_rate_answerable']*100:.1f}%** (10/10) | N/A | N/A | **{rates['false_rejection_rate_answerable']*100:.1f}%** (0/10) | None (Passed all gates) |",
         f"| **Unsupported Out-of-Domain** | 5 | N/A | **{rates['correct_rejection_rate_unsupported_ood']*100:.1f}%** (5/5) | **{rates['false_acceptance_rate_unsupported_ood']*100:.1f}%** (0/5) | N/A | Candidate-pool coverage gate ($<60\\%$) |",
         f"| **Dynamic / Time-Sensitive** | 5 | N/A | **{rates['correct_rejection_rate_dynamic_temporal']*100:.1f}%** (5/5) | **{rates['false_acceptance_rate_dynamic_temporal']*100:.1f}%** (0/5) | N/A | Dynamic query interception (`asks_for_current_information`) |",
-        f"| **Overall / Combined** | **20** | **100.0%** (10/10) | **100.0%** (10/10) | **0.0%** (0/10) | **0.0%** (0/10) | **Overall Safety Accuracy: 100.0%** |",
+        f"| **Overall / Combined** | **20** | **100.0%** (10/10) | **100.0%** (10/10) | **0.0%** (0/10) | **0.0%** (0/10) | **Decision agreement on this selected set: 100.0%** |",
         "",
         "---",
         "",
@@ -275,17 +275,18 @@ def _generate_markdown_report(results: dict[str, Any], path: Path) -> None:
         "",
         "## 4. Analysis and Gate-Specific Behavior",
         "",
-        "1. **Zero Hallucination Leaks:** Zero unsupported or dynamic queries bypassed the safety mechanisms. All 10 unanswerable queries were safely intercepted before reaching the generator context.",
-        "2. **Candidate-Pool Coverage Gate ($pool\\_coverage < 0.60$):** All 5 unsupported out-of-domain queries exhibited low candidate-pool keyword coverage ($0.00$ to $0.57$), correctly triggering safe rejection.",
-        "3. **Dynamic Query Interception:** All 5 temporal inquiries triggered `asks_for_current_information` due to the presence of dynamic topic keywords coupled with freshness qualifiers, transparently issuing the static knowledge disclaimer.",
-        "4. **No False Rejections on In-Domain Inquiries:** All 10 answerable domain queries passed both gates, achieving high pool coverage ($0.67$ to $1.00$) and valid top-hit keyword overlap.",
+        "1. **Decision agreement in this set:** The saved result reports decisions on 10 answerable, 5 out-of-domain, and 5 dynamic queries. This selected set does not establish general safety or hallucination prevention.",
+        "2. **Candidate-pool coverage:** Coverage is a lexical heuristic, not a calibrated safety score.",
+        "3. **Dynamic-query interception:** The five tested temporal inquiries matched `asks_for_current_information`; this does not establish comprehensive detection.",
+        "4. **Scope:** The observed agreement applies only to these 20 queries.",
         "",
         "---",
         "",
         "## 5. Limitations",
         "",
         "* **Sample Size:** Evaluated on a targeted 20-query benchmark ($N=20$).",
-        "* **Engineering Heuristic Scope:** The gates represent deterministic lexical-semantic filters and rule-based predicates. They do not constitute a formal mathematical proof of Natural Language Inference (NLI) entailment.",
+        "* **Engineering Heuristic Scope:** The gates use keyword coverage, lexical overlap, distance thresholds, and rule-based predicates. They are not a calibrated safety classifier or a proof of Natural Language Inference (NLI) entailment.",
+        "* **Provenance:** The result records dataset hash and runtime/platform, but not the code commit, index digest, or generation provider/mode.",
     ]
 
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -303,7 +304,7 @@ def _print_table_iii(results: dict[str, Any]) -> None:
     print(f"{'Dynamic / Temporal (N=5)':<28} | {'N/A':<14} | {rates['correct_rejection_rate_dynamic_temporal']*100:<13.1f}% | {rates['false_acceptance_rate_dynamic_temporal']*100:<11.1f}%")
     print("-" * 70)
     print(f"{'Overall (N=20)':<28} | {'100.0%':<14} | {'100.0%':<14} | {'0.0%':<12}")
-    print(f"Overall Safety Accuracy: {rates['overall_safety_accuracy']*100:.1f}%")
+    print(f"Decision agreement on selected set (N=20): {rates['selected_set_decision_agreement']*100:.1f}%")
     print("=" * 70)
 
 

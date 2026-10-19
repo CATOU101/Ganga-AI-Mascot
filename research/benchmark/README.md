@@ -12,10 +12,10 @@
 
 ## 1. Overview and Primary Research Question
 
-This benchmark dataset establishes a reproducible, source-grounded experimental standard for evaluating the retrieval performance of the Ganga AI Mascot conversational Brain.
+This curated dataset supports a small, source-referenced retrieval reranking evaluation. Its validation script checks dataset structure and gold chunk ID existence in the local index; it does not independently validate annotation support or establish a general benchmark standard.
 
 ### Primary Research Question
-> **Does query-conditioned hybrid retrieval with broad-query overview boosting ($S_{\text{hybrid}}$) improve evidence retrieval from the curated GRBMP regulatory corpus compared with pure dense, pure lexical, and unweighted hybrid retrieval?**
+> **Within a shared dense-retrieved top-15 candidate pool, how do dense, lexical-overlap, hybrid, and overview-boosted reranking configurations compare on this 30-query set?**
 
 ---
 
@@ -106,13 +106,17 @@ The benchmark is provided as a line-delimited JSON (`JSONL`) file where each ent
 ## 4. Annotation Methodology and Quality Control
 
 1. **Direct Materiality Standard:** A chunk is included as gold evidence *only* if its text explicitly provides factual support for answering the question. Chunks containing incidental keyword matches without answering the query were excluded.
-2. **Double Verification:** Every gold chunk ID was looked up against `brain_index.sqlite3` and verified for non-empty text, valid page numbers, and title provenance.
+2. **Dataset validation:** `validate_benchmark.py` checks gold chunk ID existence, non-empty text, and presence of title and file-name metadata in the local SQLite index. It does not verify page numbers, compare the annotated preview against source PDFs, or establish independent/double annotation review.
 3. **Multi-Chunk Evidence Handling:** Where an answer requires complementary information (e.g. definitions in both an executive summary and a detailed plan section), both chunks are indexed.
-4. **Zero Fabrication Guarantee:** All 42 unique gold chunk IDs originate directly from the pre-computed SQLite index at `knowledge_base/vector_db/brain_index.sqlite3`.
+4. **Gold-ID scope:** The current dataset contains 42 unique gold chunk IDs, and the validation script checks their existence in the configured SQLite index. This mechanical check is not a guarantee that labels are complete or that the chunks semantically support each answer.
+
+## 5. Evaluation and provenance limits
+
+The retrieval runner obtains up to 15 dense candidates for each query, then applies each scoring configuration to that shared pool. Config B is keyword-overlap reranking, not a full-corpus lexical search. The production-gated condition applies coverage and distance gates. The saved result records dataset hash, runtime/platform, and configuration labels, but not the benchmark code commit or vector-index digest. A fresh run uses the current checkout and index and is not guaranteed to reproduce the saved result unless those inputs match. The corpus inventory lists 86 source PDFs while the groundedness result records 83 unique indexed document names; the current artifacts do not explain the difference.
 
 ---
 
-## 5. Execution and Validation
+## 6. Execution and Validation
 
 ### Running the Validation Harness
 To verify dataset integrity, category balance, and SQLite chunk existence:

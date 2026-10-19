@@ -4,7 +4,7 @@
 
 This research log records research papers, related projects, and technical resources reviewed for PRJ_316. It supports systematic comparison of existing work relevant to an AI-powered, source-grounded conversational agent and interactive digital mascot for Ganga and river conservation awareness.
 
-Verification labels below reflect prior review work and were not all independently rechecked during the 2026-10-19 documentation audit. R1's supplied DOI did not resolve in the earlier recorded checks; its publication metadata and claims remain unverified until independently confirmed. Repetition of a citation in another project document is not verification.
+Verification labels below reflect prior review work and were not all independently rechecked during the 2026-10-19 documentation audit. The publisher identifies R1 as DOI `10.63278/mme.vi.1631`, but the landing page lists Dr. Preethi Jeevani while the PDF title block lists Dr. A. C. Priya Ranjani and separately contains “Dr. Preethi Jeevan”; resolve this against the final version of record without guessing an author sequence. R5 is an expert-consensus module-design study, not evidence of classroom learning gains. Repetition of a citation in another project document is not verification.
 
 ## Paper Analysis Template
 
@@ -91,22 +91,22 @@ Possible categories include:
 
 ## Research Papers to Review
 
-The following records document papers R1 through R10 and evaluate their relevance to PRJ_316. Verification status is source-specific; R1 remains unverified, and other labels are inherited from prior checks rather than freshly verified in this documentation audit.
+The following records document papers R1 through R10 and evaluate their relevance to PRJ_316. Verification status is source-specific; R1's DOI/article record is identified but author metadata needs reconciliation. Other labels are inherited from prior checks rather than freshly verified in this documentation audit.
 
 ### R1 - AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness
 
-**Status:** Notes drafted; bibliographic verification unresolved
-**Verification Status:** Unverified; the supplied DOI failed prior DOI-resolution/Crossref checks. This does not establish that the article is invalid.
-**Metadata Verification Source:** Prior notes cite the journal archive and author profiles; those records have not resolved the identity/DOI issue. Independent confirmation is required.
+**Status:** Article record identified; author metadata needs verification
+**Verification Status:** The publisher article page lists DOI `10.63278/mme.vi.1631`, vol. 31, no. 5, pp. 761–766 (2025). Its author listing and associated PDF differ: the page lists Dr. Preethi Jeevani, while the PDF title block names Dr. A. C. Priya Ranjani and separately contains “Dr. Preethi Jeevan.” Treat author identity/order as unresolved pending editorial confirmation.
+**Metadata Verification Source:** [Publisher article page](https://metall-mater-eng.com/index.php/home/article/view/1631). Do not use the prior DOI `10.63053/mme.1491`.
 
 ### Paper Information
 
 - **Paper ID:** R1
 - **Title:** AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness
-- **Authors:** J. Narmada, A. C. PriyaRanjani, K. Sruthi, P. Harshitha, D. Suchitha, and D. Veera Reddy
+- **Authors:** Pending reconciliation between publisher landing-page and PDF metadata; do not finalize author order yet.
 - **Year:** 2025
 - **Publication:** *Metallurgical and Materials Engineering*, Vol. 31(5), pp. 761–766
-- **Link / DOI:** https://doi.org/10.63053/mme.1491 / https://www.metall-mater-eng.com/
+- **Link / DOI:** https://doi.org/10.63278/mme.vi.1631
 
 
 ### Research Problem
@@ -1959,7 +1959,7 @@ The strongest technical opportunity identified for the Brain is source-grounded 
 
 | ID | Paper | Status | Primary Relevance |
 |---|---|---|---|
-| R1 | AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness | Notes drafted; **verification open** | Provisional domain/application baseline |
+| R1 | AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness | Publisher article/DOI identified; author metadata reconciliation **open** | Domain/application context |
 | R2 | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Review notes complete; prior verification label not rechecked here | RAG foundation |
 | R3 | Conversational AI Agents in Education | Review notes complete; prior verification label not rechecked here | Educational conversational AI / responsible AI |
 | R4 | Pedagogical AI Conversational Agents in Higher Education | Review notes complete; prior verification label not rechecked here | Pedagogical-agent framework |
@@ -1970,6 +1970,6 @@ The strongest technical opportunity identified for the Brain is source-grounded 
 | R9 | Exploring Persona Characteristics in Learning | Review notes complete; prior verification label not rechecked here | Avatar / persona design |
 | R10 | How Effective are Pedagogical Agents for Learning? | Review notes complete; prior verification label not rechecked here | Evidence of learning effectiveness |
 
-**Overall literature-note status:** R1–R10 notes are present; primary-source verification remains open for R1 and prior labels for R2–R10 were not rechecked in this documentation audit.
+**Overall literature-note status:** R1–R10 notes are present; R1 author metadata reconciliation remains open, and prior labels for R2–R10 were not rechecked in this documentation audit.
 
 The notes cover the application domain, RAG/knowledge grounding, educational conversational AI, environmental education, AI evaluation, virtual characters, pedagogical-agent design, persona characteristics, and learning effectiveness. This status does not mean every citation or factual claim has been independently verified.

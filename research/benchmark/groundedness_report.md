@@ -1,23 +1,25 @@
-# Answer Groundedness and Citation Correctness Benchmark Report
+# Heuristic Groundedness and Citation-Metadata Benchmark Report
 
 **Project:** PRJ_316 (Ganga AI Mascot)  
 **Date:** 2026-10-19T12:44:41Z  
 **Dataset SHA-256:** `8755cefa4455c31e8c24c858b8ac7113e80657a3a29808488f346d9007b51fcb`  
 **Corpus Size:** 4085 chunks across 83 documents  
 
+The saved JSON retains legacy field names `extrinsic_hallucination_rate` and `citation_hallucination_rate`. These are derived from lexical and metadata checks and must not be interpreted as empirical hallucination rates. The current benchmark runner names the sentence-level complement `lexically_unmatched_sentence_fraction` and does not emit a citation-hallucination metric. The saved artifact has not been rewritten.
+
 ---
 
 ## 1. Executive Summary
 
-This evaluation benchmarks the factual groundedness of generated answers and the correctness of programmatic citation metadata binding across 20 representative corpus questions spanning Broad Thematic, Technical/Scientific, and Governance/Policy domains.
+This evaluation applies lexical operational checks to answers and citation metadata for 20 corpus questions spanning Broad Thematic, Technical/Scientific, and Governance/Policy domains. It does not measure semantic entailment or establish claim-level citation correctness. The saved result metadata does not identify the generation provider or mode, so the output cannot be attributed to extractive or hosted generation from this artifact alone.
 
 | Metric | Result | Benchmark Interpretation |
 | :--- | :---: | :--- |
-| **Sentence Groundedness** | **100.0%** (70/70) | Fraction of answer sentences directly grounded in retrieved chunks. |
-| **Extrinsic Hallucination Rate** | **0.0%** | Unsupported or fabricated statements in output answers. |
-| **Citation Provenance Validity** | **100.0%** (56/56) | Citations pointing to verifiable, existing corpus PDF records. |
-| **Citation-Evidence Alignment** | **100.0%** (56/56) | Programmatic binding alignment between retrieved hits and citation metadata. |
-| **Citation Hallucination Rate** | **0.0%** | Citations pointing to phantom files or nonexistent page numbers. |
+| **Sentences passing lexical heuristic** | **100.0%** (70/70) | Script's phrase/token-overlap rule classified these sentences as matching retrieved text; not semantic entailment. |
+| **Lexically unmatched sentence fraction** | **0.0%** | Complement of the lexical classifier result; not a measured hallucination rate. |
+| **Citation metadata checks passed** | **100.0%** (56/56) | File-name membership plus non-empty source and page fields under the script's rule. |
+| **Citation/retrieval alignment checks passed** | **100.0%** (56/56) | Script found a retrieved hit sharing source OR page; this does not verify exact source-page-section alignment. |
+| **Citation hallucination rate** | **Not established** | The implemented provenance checks do not establish whether a cited passage supports an answer claim. |
 | **Gold Document Match Rate** | **50.0%** | Queries where cited documents overlap annotated ground-truth files. |
 
 ---
@@ -32,9 +34,9 @@ This evaluation benchmarks the factual groundedness of generated answers and the
 
 ---
 
-## 3. Boundary Condition & Fallback Safety Audit
+## 3. Boundary-Query Behavior Checks
 
-Verifies that unsupported out-of-domain and dynamic telemetry queries trigger graceful fallbacks without emitting hallucinated claims or spurious citations.
+Checks the observed pipeline mode and citation count for two out-of-domain and two dynamic-query examples. These four cases do not establish general fallback safety.
 
 | Query ID | Boundary Type | Observed Pipeline Mode | Citations Emitted | Fallback Verified |
 | :--- | :--- | :--- | :---: | :---: |
@@ -47,7 +49,11 @@ Verifies that unsupported out-of-domain and dynamic telemetry queries trigger gr
 
 ## 4. Key Scientific Findings for Research Paper
 
-1. **Zero Extrinsic Hallucination in Extractive Mode:** Across 71 evaluated sentences in 20 domain answers, 100% of sentences originate verbatim or near-verbatim from retrieved knowledge chunks. The extractive fallback mode eliminates hallucinated claims.
-2. **100% Citation Provenance Integrity:** All 56 emitted citation records match verified files, page ranges, and section headings in the SQLite document metadata store. Decoupling citation construction from LLM text generation guarantees zero fabricated citations.
-3. **Zero False Citations on Non-Answerable Queries:** Out-of-domain and dynamic queries emit exactly 0 citations, ensuring that the system never attaches spurious authority to conversational refusals.
-4. **Gold Document Match (45.0%):** In 9 of 20 queries, the top retrieved citations overlap directly with primary annotated benchmark source documents. The remaining 11 queries retrieve valid alternate reports within the 86-document GRBMP corpus covering identical regulatory mandates.
+1. **Lexical sentence check:** The JSON records 70/70 sentences passing the benchmark's lexical heuristic. This is not evidence of zero hallucinations or semantic support; the script also classifies clauses of three or fewer words as grounded automatically.
+2. **Citation metadata checks:** The JSON records 56/56 citations passing the script's provenance condition and 56/56 passing its alignment condition. Provenance checks file-name membership and non-empty fields; alignment accepts a matching source OR page. Neither validates page content or claim-level entailment.
+3. **Boundary examples:** The report records zero citations for two out-of-domain and two dynamic cases. This describes those four examples only.
+4. **Gold document match:** The JSON records **50.0% (10/20)**. The artifact does not establish that the other ten queries retrieved semantically equivalent alternate reports, so no such characterization is made here.
+
+## 5. Reproducibility and provenance limits
+
+The saved artifact records dataset SHA-256, 4,085 chunks, and 83 indexed document names. It does not record the code commit, vector-index digest, provider/model, or generation mode. The separate inventory documents 86 source PDFs; the available artifacts do not explain why 83 document names appear in this benchmark run. Do not attribute this result to a particular generator mode without independent run provenance.

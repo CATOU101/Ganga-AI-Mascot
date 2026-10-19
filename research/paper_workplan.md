@@ -1,17 +1,17 @@
 # Research Paper Work Plan: Ganga AI Mascot (PRJ_316)
 
-**Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
-**Target Venue:** IEEE Transactions / IEEE Conference on Artificial Intelligence / Educational Technology & Springer AI & Ethics  
+**Project Title:** Evidence-Gated Environmental RAG with Query-Conditioned Hybrid Retrieval and Traceable Citations for Ganga Conservation Awareness
+**Target Venue:** Undecided; current master manuscript is venue-neutral
 **Historical technical baseline SHA:** `56032d744b80695be7593c6f85e50d53c7c5a083`
 **Current implementation branch:** `main`
-**Current implementation snapshot audited:** `80833751f2a365eb00be5ddeee3392e4a601d38e` (2026-10-19; before documentation-only changes)
-**Execution Status:** Repository integration is implemented; documentation reconciliation and evaluation-protocol design are in progress. Empirical evaluation and Results remain deferred.
+**Current implementation snapshot audited:** `73602067672fdce4ed4a2f07a4308a7735db55c3` (2026-10-19; before this documentation-only review)
+**Execution Status:** Repository integration is implemented. Saved small benchmark artifacts exist, but require documentation/provenance correction and do not support broad performance, safety, or educational-effect claims. Human evaluation and broader empirical evaluation remain deferred.
 
 ---
 
 > [!IMPORTANT]
 > **Academic Integrity Notice:**  
-> In accordance with research integrity standards, the **Results and Discussion** sections of the research paper are **explicitly deferred** until formal empirical experiments (retrieval precision/recall, answer groundedness, human usability assessments) are conducted with proper methodology. No experimental metrics or benchmarks are fabricated in this plan.
+> A descriptive Results and Discussion draft now summarizes the saved retrieval, evidence-gate, and heuristic groundedness artifacts. These small artifacts do not replace broader experiments, independent annotation, claim-level citation review, or human usability and learning evaluation. No new results are claimed here.
 
 ---
 
@@ -21,7 +21,7 @@
 Stage 1: Repository Audit & Reproducibility Baseline (COMPLETED)
      │
      ▼
-Stage 2: Primary Literature Verification (COMPLETED)
+Stage 2: Primary Literature Review and Selected Source Checks (IN PROGRESS)
      │
      ▼
 Stage 3: Research Gap & Contribution Framing (COMPLETED)
@@ -30,13 +30,13 @@ Stage 3: Research Gap & Contribution Framing (COMPLETED)
 Stage 4: Mathematical Algorithm Formulation (COMPLETED)
      │
      ▼
-Stage 5: Evaluation & Benchmark Protocol Design (IN PROGRESS; dataset not finalized)
+Stage 5: Evaluation & Benchmark Protocol Design (PARTIAL; saved small artifacts, protocol not finalized)
      │
      ▼
 Stage 6: Empirical Experimental Execution (DEFERRED - PENDING EXPERIMENTS)
      │
      ▼
-Stage 7: Research Paper Manuscript Drafting (PENDING STAGE 6)
+Stage 7: Research Paper Manuscript Drafting (DRAFT PREPARED; REVIEW OPEN)
      │
      ▼
 Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
@@ -45,7 +45,7 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 ---
 
 ### Stage 1: Repository Audit & Reproducibility Baseline
-- [x] **Task 1.1:** Verify the historical `56032d7` baseline, then verify the multilingual integration merge on current `main` (`8083375`).
+- [x] **Task 1.1:** Verify the historical `56032d7` baseline and the multilingual integration on `main`; the current documentation-review baseline is `7360206`.
 - [x] **Task 1.2:** Review the feature branch and integrate the multilingual work into `main`; the feature branch is not the current working branch.
 - [x] **Task 1.3:** Verify knowledge base inventory (86 PDFs, 4,609 pages, 1,111 approved sections, 4,085 chunks).
 - [x] **Task 1.4:** Execute Brain test suite (42 tests) and integration suite (29 tests) using isolated local environment.
@@ -57,16 +57,16 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 
 ### Stage 2: Primary Literature Verification
 - [x] **Task 2.1:** Inspect existing research notes in `research/research_log.md` covering papers R1 through R10.
-- [x] **Task 2.2:** Record primary-source checks and explicit verification status for the reviewed sources; R1 remains unresolved and must not be described as verified.
-- [x] **Task 2.3:** Record the supplied R1 metadata and the failed DOI-resolution/Crossref checks; independent confirmation is still required.
+- [x] **Task 2.2:** Record source verification status and note which labels were not rechecked.
+- [ ] **Task 2.3:** R1 DOI corrected to `10.63278/mme.vi.1631`; author metadata still requires verification against the version of record because publisher page and PDF differ.
 - [x] **Task 2.4:** Expand `research/literature_review.md` from placeholder stub into a structured 8-domain review.
 - [x] **Task 2.5:** Update `research/research_log.md` with explicit verification statuses and primary source links.
-- **Deliverable:** Verified Literature Review (`research/literature_review.md`) & Traceable Research Log (`research/research_log.md`).
+- **Deliverable:** Literature Review (`research/literature_review.md`) & Research Log (`research/research_log.md`); R1 author metadata and remaining source checks are still open.
 
 ---
 
 ### Stage 3: Research Gap & Contribution Framing
-- [x] **Task 3.1:** Compare PRJ_316 against baseline mascot paper R1 (lack of RAG, lack of curated KB, lack of verifiable citations).
+- [x] **Task 3.1:** Compare PRJ_316 with R1's described mascot concept; the reviewed article does not document the source-grounded retrieval and citation pipeline used in this prototype. This source-level comparison is not a claim about all mascot systems.
 - [x] **Task 3.2:** Contrast domain-specific environmental RAG against open-domain RAG (R2).
 - [x] **Task 3.3:** Integrate pedagogical agent findings (R7, R8, R9, R10) separating avatar persona engagement from factual Brain reliability.
 - [x] **Task 3.4:** Articulate 5 defensible candidate contributions:
@@ -94,7 +94,7 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 ---
 
 ### Stage 5: Evaluation & Benchmark Protocol Design
-- [ ] **Task 5.1:** Design a curated 100-question benchmark dataset spanning 5 categories:
+- [ ] **Task 5.1:** Finalize a broader benchmark protocol. Existing artifacts include a 30-query retrieval set, a 20-query evidence-gate set, and a 20-query groundedness/citation set; these small sets do not substitute for the proposed 100-question evaluation across 5 categories:
   - Factual / Scientific (e.g., Aviral Dhara, water quality parameters, biodiversity).
   - Policy & Institutional (e.g., NGRBA, NMCG mandate, National Ganga Act provisions).
   - Historical / Methodological (e.g., past wastewater reuse case studies, river health indices).
@@ -107,7 +107,7 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 - [ ] **Task 5.3:** Formalize generation quality metrics:
   - **Factual Groundedness / Faithfulness:** Proportion of generated statements directly supported by cited evidence passages.
   - **Citation Precision & Recall:** Proportion of cited sources that actually contain the supporting claims.
-  - **Safe Rejection Rate:** Accuracy in intercepting out-of-domain and dynamic queries without hallucination.
+  - **Evidence-gate decision agreement:** Report only on the defined test set and describe the lexical/rule-based criteria; do not interpret as general safety or hallucination prevention.
 - [ ] **Task 5.4:** Formalize multimodal interaction metrics:
   - End-to-end latency (Query $\to$ RAG $\to$ TTS $\to$ Lip-sync $\to$ Browser render).
   - Avatar usability via standard Chatbot Usability Questionnaire (CUQ) or System Usability Scale (SUS).
@@ -136,17 +136,18 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 
 ---
 
-### Stage 7: Research Paper Manuscript Drafting *(PENDING STAGE 6)*
-- [ ] **Task 7.1:** Title, Abstract, and Keywords.
-- [ ] **Task 7.2:** Section I: Introduction & Motivation (Namami Gange context, Chacha Chaudhary cultural mascot, limitations of existing chatbots).
-- [ ] **Task 7.3:** Section II: Related Work (RAG, pedagogical agents, environmental AI).
-- [ ] **Task 7.4:** Section III: System Architecture & Knowledge Pipeline (GRBMP corpus, SQLite/NumPy vector store).
-- [ ] **Task 7.5:** Section IV: Mathematical Formulation (Hybrid retrieval, evidence gating, citation provenance).
-- [ ] **Task 7.6:** Section V: Multimodal Avatar & Voice Interaction (Three.js WebGL, Rhubarb viseme alignment).
-- [ ] **Task 7.7:** Section VI: Experimental Setup & Results (Incorporating genuine data from Stage 6).
-- [ ] **Task 7.8:** Section VII: Discussion, Ethical Considerations, & Limitations.
-- [ ] **Task 7.9:** Section VIII: Conclusion & Future Work.
-- **Deliverable:** Complete Research Paper Manuscript (LaTeX / Word IEEE/Springer format).
+### Stage 7: Research Paper Manuscript Drafting *(DRAFT PREPARED; REVIEW OPEN)*
+- [x] **Task 7.1:** Venue-neutral title, abstract, and keywords.
+- [x] **Task 7.2:** Introduction and motivation.
+- [x] **Task 7.3:** Related work, with source-specific verification limits.
+- [x] **Task 7.4:** System architecture and knowledge pipeline.
+- [x] **Task 7.5:** Implementation-aligned mathematical formulation.
+- [x] **Task 7.6:** Multilingual, voice, avatar, and CPCB scope described with capability limits.
+- [x] **Task 7.7:** Descriptive results from existing saved artifacts, without claiming new experiments.
+- [x] **Task 7.8:** Discussion, ethics, and limitations.
+- [x] **Task 7.9:** Conclusion and future work.
+- [ ] Final bibliography reconciliation for R1 authors, stronger provenance, larger empirical evaluation, and venue-specific formatting remain open.
+- **Deliverable:** Venue-neutral draft at `research/papers/venue_neutral_master_manuscript.md`; submission preparation remains incomplete.
 
 ---
 

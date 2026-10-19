@@ -10,7 +10,7 @@
 ---
 
 > [!IMPORTANT]
-> **Execution and empirical status:** Commands below describe how to run the software; they were not all executed during this documentation audit. Empirical benchmark measurements (Precision@k, Recall@k, MRR, answer faithfulness) remain deferred. The eight-case golden evaluation artifact is a small regression fixture, not a general benchmark or performance claim.
+> **Execution and empirical status:** Commands below describe how to run the software; they were not all executed during this documentation update. Saved retrieval, evidence-gate, and groundedness benchmark artifacts exist; their corrected reports describe the limited operational checks represented by those artifacts. They do not establish broad performance, semantic faithfulness, safety, or educational impact. The eight-case golden evaluation artifact is a small regression fixture, not a general benchmark or performance claim.
 
 ---
 
@@ -169,7 +169,7 @@ All commands have been verified on Python 3.13 within this repository.
 
 ### Step 1: Environment Setup
 ```bash
-# From repository root: /Users/madhavan/Documents/Ganga-AI-Mascot/Ganga-AI-Mascot
+# From the repository root
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt

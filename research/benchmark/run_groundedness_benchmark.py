@@ -1,8 +1,8 @@
-"""Reproducible evaluation runner for Answer Groundedness and Citation Correctness.
+"""Heuristic evaluation runner for answer-text overlap and citation metadata checks.
 
 Project: AI-Powered Interactive Digital Mascot for Namami Gange (PRJ_316)
-Evaluates 20 representative corpus questions spanning Broad, Technical, and Governance
-domains, plus boundary edge-cases for hallucination and spurious citation prevention.
+Evaluates 20 corpus questions spanning Broad, Technical, and Governance domains, plus
+four boundary examples that check fallback modes and citation emission.
 """
 
 from __future__ import annotations
@@ -68,7 +68,7 @@ def evaluate_groundedness_and_citations() -> int:
     results: dict[str, Any] = {
         "benchmark_metadata": {
             "project_id": "PRJ_316",
-            "benchmark_name": "Answer Groundedness & Citation Correctness Evaluation",
+            "benchmark_name": "Heuristic Answer-Text and Citation-Metadata Evaluation",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "dataset_sha256": actual_hash,
             "total_queries": len(queries),
@@ -224,7 +224,7 @@ def evaluate_groundedness_and_citations() -> int:
             "sentence_count": len(sentences),
             "grounded_sentence_count": q_grounded_sents,
             "groundedness_score": round(q_groundedness, 4),
-            "extrinsic_hallucination_rate": round(1.0 - q_groundedness, 4),
+            "lexically_unmatched_sentence_fraction": round(1.0 - q_groundedness, 4),
             "citation_count": len(citations),
             "valid_citation_count": q_valid_cits,
             "citation_provenance_validity": round(q_valid_cits / len(citations) if citations else 1.0, 4),
@@ -287,12 +287,11 @@ def evaluate_groundedness_and_citations() -> int:
         "total_sentences_evaluated": total_sentences,
         "grounded_sentences": grounded_sentences,
         "overall_groundedness_rate": round(overall_groundedness, 4),
-        "extrinsic_hallucination_rate": round(1.0 - overall_groundedness, 4),
+        "lexically_unmatched_sentence_fraction": round(1.0 - overall_groundedness, 4),
         "total_citations_evaluated": total_citations,
         "valid_provenance_citations": valid_provenance_citations,
         "citation_provenance_validity_rate": round(overall_provenance_validity, 4),
         "citation_binding_alignment_rate": round(overall_alignment, 4),
-        "citation_hallucination_rate": round(1.0 - overall_provenance_validity, 4),
         "gold_document_match_rate": round(overall_gold_match, 4),
         "boundary_tests_passed": all(b["boundary_handling_passed"] for b in results["boundary_evaluations"]),
         "total_evaluation_time_seconds": round(elapsed_time, 2),
@@ -309,12 +308,12 @@ def evaluate_groundedness_and_citations() -> int:
 
     print("=" * 75)
     print(f"BENCHMARK COMPLETE:")
-    print(f"  Sentence Groundedness:      {overall_groundedness*100:.2f}% ({grounded_sentences}/{total_sentences})")
-    print(f"  Extrinsic Hallucination:    {(1.0-overall_groundedness)*100:.2f}%")
-    print(f"  Citation Provenance Valid:  {overall_provenance_validity*100:.2f}% ({valid_provenance_citations}/{total_citations})")
-    print(f"  Citation Alignment:         {overall_alignment*100:.2f}% ({aligned_citations}/{total_citations})")
-    print(f"  Citation Hallucination:     {(1.0-overall_provenance_validity)*100:.2f}%")
-    print(f"  Gold Source Match:          {overall_gold_match*100:.2f}% ({gold_document_matches}/{len(queries)})")
+    print(f"  Sentences passing lexical heuristic: {overall_groundedness*100:.2f}% ({grounded_sentences}/{total_sentences})")
+    print("  Hallucination rate:          Not established by lexical check")
+    print(f"  Citation metadata checks:   {overall_provenance_validity*100:.2f}% ({valid_provenance_citations}/{total_citations})")
+    print(f"  Citation/retrieval heuristic: {overall_alignment*100:.2f}% ({aligned_citations}/{total_citations})")
+    print("  Citation correctness:        Not established by metadata checks")
+    print(f"  Gold document match:         {overall_gold_match*100:.2f}% ({gold_document_matches}/{len(queries)})")
     print("=" * 75)
 
     return 0
@@ -324,9 +323,18 @@ def _write_markdown_report(results: dict[str, Any], path: Path) -> None:
     meta = results["benchmark_metadata"]
     summary = results["overall_summary"]
     cats = results["category_summary"]
+    aligned_citations = sum(
+        1
+        for query in results["query_evaluations"]
+        for citation in query["citations"]
+        if citation["aligned_to_retrieved"]
+    )
+    gold_document_matches = sum(
+        1 for query in results["query_evaluations"] if query["matches_gold_document"]
+    )
 
     lines = [
-        "# Answer Groundedness and Citation Correctness Benchmark Report",
+        "# Heuristic Groundedness and Citation-Metadata Benchmark Report",
         "",
         f"**Project:** {meta['project_id']} (Ganga AI Mascot)  ",
         f"**Date:** {meta['timestamp']}  ",
@@ -337,22 +345,22 @@ def _write_markdown_report(results: dict[str, Any], path: Path) -> None:
         "",
         "## 1. Executive Summary",
         "",
-        "This evaluation benchmarks the factual groundedness of generated answers and the correctness of programmatic citation metadata binding across 20 representative corpus questions spanning Broad Thematic, Technical/Scientific, and Governance/Policy domains.",
+        "This evaluation applies lexical operational checks to answers and citation metadata for 20 corpus questions. It does not measure semantic entailment or claim-level citation correctness. The result metadata does not identify the generation provider or mode, so outputs cannot be attributed to extractive or hosted generation from this artifact alone.",
         "",
         "| Metric | Result | Benchmark Interpretation |",
         "| :--- | :---: | :--- |",
-        f"| **Sentence Groundedness** | **{summary['overall_groundedness_rate']*100:.1f}%** ({summary['grounded_sentences']}/{summary['total_sentences_evaluated']}) | Fraction of answer sentences directly grounded in retrieved chunks. |",
-        f"| **Extrinsic Hallucination Rate** | **{summary['extrinsic_hallucination_rate']*100:.1f}%** | Unsupported or fabricated statements in output answers. |",
-        f"| **Citation Provenance Validity** | **{summary['citation_provenance_validity_rate']*100:.1f}%** ({summary['valid_provenance_citations']}/{summary['total_citations_evaluated']}) | Citations pointing to verifiable, existing corpus PDF records. |",
-        f"| **Citation-Evidence Alignment** | **{summary['citation_binding_alignment_rate']*100:.1f}%** ({summary['valid_provenance_citations']}/{summary['total_citations_evaluated']}) | Programmatic binding alignment between retrieved hits and citation metadata. |",
-        f"| **Citation Hallucination Rate** | **{summary['citation_hallucination_rate']*100:.1f}%** | Citations pointing to phantom files or nonexistent page numbers. |",
+        f"| **Sentences passing lexical heuristic** | **{summary['overall_groundedness_rate']*100:.1f}%** ({summary['grounded_sentences']}/{summary['total_sentences_evaluated']}) | Phrase/token-overlap classifier result; not semantic entailment. |",
+        f"| **Lexically unmatched sentence fraction** | **{summary['lexically_unmatched_sentence_fraction']*100:.1f}%** | Complement of lexical classifier result; not a measured hallucination rate. |",
+        f"| **Citation metadata checks passed** | **{summary['citation_provenance_validity_rate']*100:.1f}%** ({summary['valid_provenance_citations']}/{summary['total_citations_evaluated']}) | File-name membership plus non-empty source/page fields. |",
+        f"| **Citation/retrieval alignment checks passed** | **{summary['citation_binding_alignment_rate']*100:.1f}%** ({aligned_citations}/{summary['total_citations_evaluated']}) | Retrieved hit shared source OR page; exact citation correctness is not established. |",
+        "| **Citation hallucination rate** | **Not established** | Metadata checks do not establish whether cited text supports answer claims. |",
         f"| **Gold Document Match Rate** | **{summary['gold_document_match_rate']*100:.1f}%** | Queries where cited documents overlap annotated ground-truth files. |",
         "",
         "---",
         "",
         "## 2. Category-Level Performance Breakdown",
         "",
-        "| Category | Queries | Sentences | Grounded (%) | Citations | Valid Citations (%) | Gold Match (%) |",
+        "| Category | Queries | Sentences | Passing lexical check (%) | Citations | Passing metadata check (%) | Gold Match (%) |",
         "| :--- | :---: | :---: | :---: | :---: | :---: | :---: |",
     ]
 
@@ -365,9 +373,9 @@ def _write_markdown_report(results: dict[str, Any], path: Path) -> None:
         "",
         "---",
         "",
-        "## 3. Boundary Condition & Fallback Safety Audit",
+        "## 3. Boundary-Query Behavior Checks",
         "",
-        "Verifies that unsupported out-of-domain and dynamic telemetry queries trigger graceful fallbacks without emitting hallucinated claims or spurious citations.",
+        "Checks observed pipeline mode and citation count for two out-of-domain and two dynamic-query examples. These four cases do not establish general fallback safety.",
         "",
         "| Query ID | Boundary Type | Observed Pipeline Mode | Citations Emitted | Fallback Verified |",
         "| :--- | :--- | :--- | :---: | :---: |",
@@ -382,12 +390,15 @@ def _write_markdown_report(results: dict[str, Any], path: Path) -> None:
         "",
         "---",
         "",
-        "## 4. Key Scientific Findings for Research Paper",
+        "## 4. Results and interpretation limits",
         "",
-        "1. **Zero Extrinsic Hallucination in Extractive Mode:** Across 71 evaluated sentences in 20 domain answers, 100% of sentences originate verbatim or near-verbatim from retrieved knowledge chunks. The extractive fallback mode eliminates hallucinated claims.",
-        "2. **100% Citation Provenance Integrity:** All 56 emitted citation records match verified files, page ranges, and section headings in the SQLite document metadata store. Decoupling citation construction from LLM text generation guarantees zero fabricated citations.",
-        "3. **Zero False Citations on Non-Answerable Queries:** Out-of-domain and dynamic queries emit exactly 0 citations, ensuring that the system never attaches spurious authority to conversational refusals.",
-        "4. **Gold Document Match (45.0%):** In 9 of 20 queries, the top retrieved citations overlap directly with primary annotated benchmark source documents. The remaining 11 queries retrieve valid alternate reports within the 86-document GRBMP corpus covering identical regulatory mandates.",
+        f"1. The JSON records {summary['grounded_sentences']}/{summary['total_sentences_evaluated']} sentences passing the lexical heuristic. Short clauses are classified as grounded automatically; this is not evidence of zero hallucinations or semantic support.",
+        f"2. The JSON records {summary['valid_provenance_citations']}/{summary['total_citations_evaluated']} citations passing its metadata condition and {aligned_citations}/{summary['total_citations_evaluated']} passing its alignment condition. Provenance checks file-name membership and non-empty fields; alignment accepts a matching source OR page. Neither verifies page content or claim-level entailment.",
+        "3. The boundary table covers two out-of-domain and two dynamic examples only.",
+        f"4. Gold-document overlap is {summary['gold_document_match_rate']*100:.1f}% ({gold_document_matches}/{summary['total_corpus_queries']}); the artifact does not establish that other retrieved documents are semantically equivalent alternatives.",
+        "",
+        "## 5. Reproducibility and provenance limits",
+        "The saved result records dataset SHA-256, chunk count, and indexed-document-name count, but not the code commit, index digest, provider/model, or generation mode. The corpus inventory lists 86 source PDFs while this result records the number of unique indexed document names; the available artifacts do not reconcile the difference.",
         "",
     ])
 

@@ -23,7 +23,7 @@ The system couples a source-grounded conversational AI "Brain" with an interacti
 
 The runtime architecture is decoupled into three primary layers:
 1. **Interactive Client Layer (Avatar & Web UI):** A client-side WebGL application built on Three.js (`avatar/index.html`, `avatar/app.js`, `avatar/mascot.js`) rendering the 3D Chacha Chaudhary mascot, managing skeletal animations, procedural blinking, speech cadence, and audio playback.
-2. **Integration Service Layer (`integration/server.py`):** A FastAPI service operating on port 8080 that coordinates user requests, manages conversational state, exposes speech-to-text (STT) and text-to-speech (TTS) pipelines, generates acoustic/viseme lip-sync timelines, and mounts the Brain API. It also intercepts real-time water-quality queries via `integration/water_quality.py` to retrieve verified live telemetry from CPCB monitoring stations (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip) with 60-second in-memory caching and freshness labelling.
+2. **Integration Service Layer (`integration/server.py`):** A FastAPI service operating on port 8080 that coordinates user requests, manages conversational state, exposes speech-to-text (STT) and text-to-speech (TTS) pipelines, generates acoustic/viseme lip-sync timelines, and mounts the Brain API. It also routes supported water-quality queries via `integration/water_quality.py` to a CPCB endpoint for selected stations and readings, with 60-second in-memory caching and freshness labelling. Endpoint availability, measurement validation, and data-reuse terms are not established by this architecture description.
 3. **Knowledge & Reasoning Brain Layer (`brain/api.py`, `brain/rag_pipeline.py`):** A standalone FastAPI service (typically port 8000) hosting a Retrieval-Augmented Generation (RAG) pipeline over curated government documents, featuring hybrid semantic/lexical retrieval, heuristic evidence gating, hosted generation, extractive fallback, and deterministic citation assembly. The post-baseline provider-chain update is described in the addendum.
 
 ```
@@ -76,7 +76,7 @@ The runtime architecture is decoupled into three primary layers:
 |                      +-------------------+-------------------+                        |
 |                                          |                                            |
 |                                          v                                            |
-|                       [Deterministic Citation Provenance Assembly]                    |
+|                       [Retrieved-Metadata Citation Assembly]                          |
 |                                          |                                            |
 |                                          v                                            |
 |                        [HTTP Response: Answer + Citations]                            |

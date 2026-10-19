@@ -4,7 +4,7 @@
 **Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
 **Status:** Comparative gap framing; not an empirical finding or claim of novelty across all literature.
 **Historical implementation baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
-**Current implementation snapshot audited:** `main` at `80833751f2a365eb00be5ddeee3392e4a601d38e` (2026-10-19; before documentation-only changes). R1's publication record remains unverified in the literature review; R1-based statements are provisional.
+**Current implementation snapshot audited:** `main` at `73602067672fdce4ed4a2f07a4308a7735db55c3` (2026-10-19; before these documentation corrections). R1's DOI/article record is identified; its author metadata needs reconciliation between the publisher page and PDF.
 
 ---
 
@@ -16,7 +16,7 @@ Establishing a credible academic contribution for an applied AI system requires 
 3. Inherent engineering and operational limitations of the current prototype.
 4. Defensible candidate contributions that can be experimentally validated.
 
-This document synthesizes these dimensions against sources discussed in the literature review. R1's publication record remains unresolved, so statements attributed to R1 are provisional. This comparison is a candidate framing based on reviewed sources, not proof that the stated gaps are absent from the full literature.
+This document synthesizes these dimensions against sources discussed in the literature review. It is a candidate framing based on a thematic, non-exhaustive review, not proof that the stated gaps are absent from the full literature.
 
 ---
 
@@ -24,13 +24,13 @@ This document synthesizes these dimensions against sources discussed in the lite
 
 | Literature Source | Explicitly Identified Research Gap | Direct Relevance to PRJ_316 |
 | :--- | :--- | :--- |
-| **R1** (Narmada et al., 2025) | Identifies that traditional civic river awareness campaigns suffer from low engagement among youth, proposing an AI mascot. **However**, the paper explicitly notes the absence of structured technical knowledge bases, domain-specific retrieval, or provenance tracking. | Establishes the application rationale for an AI-powered Chacha Chaudhary mascot, while leaving the knowledge engine completely unformulated. |
+| **R1** (2025; author metadata to verify) | Describes an AI-powered Chacha Chaudhary mascot concept for Ganga conservation. Its article description does not document the source-grounded retrieval and citation pipeline implemented here; this comparison is limited to the reviewed article. | Provides application context, not evidence that the proposed mascot improves awareness or behavior. |
 | **R2** (Lewis et al., 2020) | Notes that parametric neural language models hallucinate facts, cannot easily update their knowledge without retraining, and fail to provide verifiable provenance for generated statements. | Provides the core technical solution (external non-parametric vector index combined with parametric generator). |
 | **R3** (Ganguly et al., 2026) | Identifies hallucination, factual unreliability, lack of explainability, privacy risks, and absence of pedagogical oversight as the primary barriers preventing conversational AI adoption in formal education. | Demands that educational agents incorporate strict evidence quality gating and verifiable citations rather than unconstrained generation. |
 | **R4** (Yusuf et al., 2025) | Identifies an over-concentration of educational chatbots on technological novelty rather than instructional purpose; notes that conversational agents rarely separate cognitive reasoning from visual embodiment. | Motivates PRJ_316's modular decoupling: the standalone Brain handles factual reasoning, while the Three.js avatar handles presentation. |
-| **R5** (Wang & Li, 2026) | Demonstrates that environmental chatbots frequently deliver disjointed factual trivia rather than structured environmental literacy (awareness $\to$ understanding $\to$ action). | Motivates structuring Brain retrieval to support pedagogical explanations (Aviral Dhara, Nirmal Dhara) and historical context. |
-| **R6** (Wang et al., 2025) | Heuristic evaluation of general LLMs (ChatGPT) reveals high error rates in regional environmental contexts, over-generalized guidance, and a tendency to fabricate citations when answering localized environmental questions. | Confirms that general-purpose commercial LLMs cannot replace curated local regulatory corpora (e.g., GRBMP). |
-| **R7 & R10** (Schroeder et al., 2013, 2025) | Meta-analyses reveal that pedagogical agent embodiment produces small to moderate learning gains ($g \approx 0.19\text{--}0.25$), but these gains collapse if agent speech is discordant with visual cues or if the underlying instruction is flawed. | Confirms that visual embodiment (Three.js avatar) is an engagement amplifier, not a substitute for knowledge accuracy in the Brain. |
+| **R5** (Wang & Li, 2026) | Proposes an expert-consensus design for a flipped AI-chatbot environmental-literacy module. It does not measure classroom learning or behavioral outcomes. | Offers design concepts to consider; it does not validate PRJ_316's educational effect. |
+| **R6** (Wang et al., 2025) | The cited heuristic/usability evaluation reports answer-quality concerns in its environmental-education setting, including localization and citation issues. | Motivates evaluating a curated local corpus; one study does not establish that general-purpose LLMs cannot serve such tasks. |
+| **R7 & R10** (Schroeder et al., 2013, 2025) | The cited meta-analyses report effects in their studied settings: R7 reports learning $g=0.42$ and motivation $g=0.48$ for its respective analyses; R10 reports an overall learning effect of $g=0.19$. These findings do not directly predict PRJ_316 outcomes. | Motivates evaluating the avatar and Brain separately; does not establish an effect for this system. |
 
 ---
 
@@ -39,17 +39,17 @@ This document synthesizes these dimensions against sources discussed in the lite
 Beyond individual paper findings, cross-synthesis of R1–R10 reveals three overarching structural gaps in conversational AI for environmental stewardship:
 
 ### Gap A: The Domain-Grounding Disconnect in Mascot Systems
-- Existing mascot and educational chatbot literature (R1, R7, R8, R9) focuses heavily on character design, speech synthesis, and engagement metrics. When conversational intelligence is integrated, it is implemented either as fixed rule-based decision trees or as unconstrained zero-shot commercial LLM prompts.
-- There is a noticeable absence of systems coupling culturally resonant public mascots with curated government-document RAG pipelines.
+- The reviewed sources cover a Ganga mascot concept, pedagogical-agent design, and retrieval-augmented generation, but they do not all examine the same system properties or populations.
+- Within this thematic, non-exhaustive set, we did not identify a directly comparable system combining a public-facing environmental mascot with curated government-document RAG. This is a scoped observation, not proof that no comparable system exists.
 
-### Gap B: The Citation-Generation Fallacy in Standard RAG
-- Mainstream RAG implementations (exemplified by R2 and commercial frameworks) prompt the language model to generate citations within its output text (e.g., "[1]", "(Source: Report X, p. 12)").
-- Empirical research (R3, R6) shows that generative models routinely confabulate citation details—attributing real claims to wrong page numbers or fabricating plausible report titles.
-- Systems that programmatically decouple citation binding (assembling trusted metadata directly from retrieved vector chunks and passing it outside the LLM prompt) remain underexplored in educational conversational agents.
+### Gap B: Citation-Generation Risks in RAG
+- Some RAG systems ask the language model to produce references in answer text (for example, numbered or named sources); this review does not estimate how prevalent that design is.
+- The reviewed sources discuss citation and attribution risks, but do not establish a universal error rate for generated citations.
+- Within the reviewed set, we did not identify a directly comparable educational environmental agent using citation fields assembled separately from generated prose. The thematic review does not establish prevalence across the full literature.
 
 ### Gap C: Unhandled Negative Constraint & Dynamic Query Interception
-- Most conversational agents attempt to generate an answer for every user input. In environmental monitoring, users frequently inquire about dynamic or real-time parameters (e.g., "What is the water quality at Varanasi right now?").
-- Standard RAG pipelines either hallucinate plausible current metrics or present historical baseline data as contemporary facts. A formal query-classification layer that explicitly intercepts temporal/dynamic queries and safely disclaims static knowledge limits is rarely formalized in literature.
+- Current-information handling is an implementation requirement when a system combines static documents with changing environmental measurements. The Brain in this project uses a temporal-intent rule to return a static-knowledge disclaimer for recognized query patterns; a separate integration route handles selected CPCB station queries.
+- The reviewed sources do not establish how prevalent such temporal filters are across RAG systems. The project’s 20-query gate artifact is too small and selected to establish comprehensive dynamic-query detection or safety.
 
 ---
 
@@ -113,22 +113,22 @@ Based on the reviewed literature (with source-specific verification status) and 
 ### Detailed Contribution Statements
 
 #### Contribution 1: A Curated, Multi-Tier Environmental Knowledge Corpus for River Conservation
-Unlike open-domain RAG systems built on Wikipedia (R2) or ungrounded mascot chatbots (R1), this work designs, implements, and releases a structured curation pipeline processing 86 official Ganga River Basin Management Plan (GRBMP) scientific reports (4,609 pages). The pipeline introduces a multi-tier section review taxonomy (`KEEP`, `KEEP_HISTORICAL`, `KEEP_METHODOLOGICAL`, `EXCLUDE`) yielding 1,111 approved sections and 4,085 indexed chunks with granular page, chapter, and temporal metadata.
+The prototype implements a structured curation pipeline for 86 source PDFs associated with the Ganga River Basin Management Plan (GRBMP), covering 4,609 pages. The pipeline uses a multi-tier section review taxonomy (`KEEP`, `KEEP_HISTORICAL`, `KEEP_METHODOLOGICAL`, `EXCLUDE`) with 1,111 approved sections and 4,085 indexed chunks. The groundedness artifact reports 83 unique indexed document names; the available artifacts do not reconcile this with the 86 source PDFs.
 
-#### Contribution 2: Query-Conditioned Hybrid Retrieval with Broad-Inquiry Overview Boosting
-Standard dense retrieval often fails on broad conceptual queries (e.g., "What is the Ganga River?") by matching narrow technical subsections rather than executive summaries. We formulate a hybrid retrieval algorithm combining Euclidean vector distance over unit-normalized embeddings with lexical keyword coverage, augmented by an automated query-type detection rule that applies an overview boost ($\beta = 0.25$) when broad thematic queries match core executive plan documents.
+#### Contribution 2: Query-Conditioned Hybrid Reranking with Broad-Inquiry Overview Boosting
+The prototype ranks a shared dense-retrieved top-15 candidate pool using Euclidean distance, lexical keyword coverage, and an overview boost ($\beta = 0.25$) for detected broad queries matching core overview documents. The saved 30-query evaluation compares reranking configurations within this pool; it does not compare full-corpus dense and lexical retrieval.
 
-#### Contribution 3: Dual-Stage Pre-Generation Evidence Quality Gating & Safe Failure Modes
+#### Contribution 3: Dual-Stage Pre-Generation Evidence Checks and Fallback Paths
 Addressing the hallucination and unreliability challenges highlighted by Ganguly et al. (R3) and Wang et al. (R6), the pipeline introduces a two-stage pre-generation gate:
-- A candidate pool keyword coverage gate ($pool\_coverage \ge 0.60$) that rejects out-of-domain queries before reranking.
-- An individual evidence threshold ($overlap(q, c^*) \ge 0.15$) that validates top candidate relevance.
-- A temporal-predicate filter that intercepts real-time/current inquiries and transparently returns static knowledge disclaimers, preventing misleading answers.
+- A candidate pool keyword-coverage threshold ($pool\_coverage \ge 0.60$) that can reject queries before reranking.
+- An individual evidence threshold ($overlap(q, c^*) \ge 0.15$) used to screen the top candidate.
+- A temporal-predicate filter that detects some real-time/current inquiries and returns a static-knowledge disclaimer; detection coverage and risk reduction have not been established.
 
-#### Contribution 4: Hallucination-Resistant Decoupled Citation Provenance
+#### Contribution 4: Decoupled Citation-Metadata Assembly
 The implementation instructs the generative model not to generate source references in its response string. Citation objects are instead assembled deterministically from metadata associated with chunks passed through the evidence gate. This makes returned citation metadata traceable to retrieved hits; it does not by itself validate claim-level entailment or prove that every source record is correct.
 
-#### Contribution 5: Culturally Grounded Multimodal Avatar Architecture for Public Environmental Literacy
-Extending the pedagogical agent findings of Schroeder et al. (R7, R10) and persona design principles of Tao et al. (R9), the system integrates the AI Brain with an interactive, browser-native Three.js WebGL mascot (Chacha Chaudhary) featuring 65 bones, 28 body gestures, and acoustic/cadence viseme mapping. Crucially, the architecture strictly decouples factual reasoning from character presentation, ensuring that visual engagement never compromises scientific veracity.
+#### Contribution 5: Culturally Grounded Multimodal Avatar Prototype
+Informed by pedagogical-agent and persona-design literature, the prototype integrates the AI Brain with a browser-native Three.js WebGL mascot (Chacha Chaudhary) featuring 65 bones, 28 body gestures, and acoustic/cadence viseme mapping. The architecture separates Brain processing from character presentation; this does not establish that the avatar improves engagement or that system outputs are scientifically correct.
 
 ---
 
@@ -136,8 +136,8 @@ Extending the pedagogical agent findings of Schroeder et al. (R7, R10) and perso
 
 | Evaluation Dimension | Existing Literature Baseline | PRJ_316 Approach | Validation Method (Stage 6 Work Plan) |
 | :--- | :--- | :--- | :--- |
-| **Domain Corpus** | None (R1), Wikipedia (R2), General Web (R6) | Curated 86 GRBMP reports (4,085 chunks) | Inventory manifest verification & schema validation |
-| **Retrieval Strategy** | Keyword only (R1), DPR Dense (R2) | Euclidean Dense + Lexical Overlap + Overview Boost | Precision@k, Recall@k, MRR ablation benchmark |
-| **Hallucination Control**| Prompting only (R6) | Dual Evidence Gating + Decoupled Provenance | Groundedness score, safe rejection rate on 100 queries |
-| **Citation Verifiability**| Unverified / confabulated (R2, R6) | Immutable metadata binding from chunk index | Citation precision & page-level source alignment |
+| **Domain Corpus** | Different sources in the reviewed examples | Curated 86 source PDFs; 4,085 chunks (83 indexed document names in groundedness artifact; discrepancy unresolved) | Inventory and schema checks |
+| **Retrieval Strategy** | Different retrieval approaches in the reviewed examples | Dense candidate retrieval followed by lexical/hybrid reranking and overview boost | 30-query reranking metrics within a shared dense top-15 pool |
+| **Evidence handling**| Prompting and approaches described in reviewed sources | Heuristic evidence gate and decoupled citation-metadata assembly | Small saved heuristic checks; semantic support and general safety not established |
+| **Citation metadata**| Practices vary across reviewed sources | Citation fields assembled from retrieved-hit metadata | Benchmark provenance checks do not verify page content or claim-level entailment |
 | **Interface / Mascot** | Conceptual robot (R1), 2D chatbot (R5, R6) | Three.js 3D WebGL Avatar (65 bones, 28 clips) | Latency benchmarking, CUQ/SUS user study |
