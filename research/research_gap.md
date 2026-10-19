@@ -1,7 +1,7 @@
 # Research Gap & Contribution Framing: Ganga AI Mascot (PRJ_316)
 
 **Project ID:** PRJ_316  
-**Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
+**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Status:** Comparative gap framing; not an empirical finding or claim of novelty across all literature.
 **Historical implementation baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
 **Current implementation snapshot audited:** `main` at `73602067672fdce4ed4a2f07a4308a7735db55c3` (2026-10-19; before these documentation corrections). R1's DOI/article record is identified; its author metadata needs reconciliation between the publisher page and PDF.

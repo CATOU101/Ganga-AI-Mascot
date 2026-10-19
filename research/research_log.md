@@ -2,6 +2,10 @@
 
 ## PRJ_316 - Ganga AI Mascot
 
+**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
+
+**Current Research Paper Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
+
 This research log records research papers, related projects, and technical resources reviewed for PRJ_316. It supports systematic comparison of existing work relevant to an AI-powered, source-grounded conversational agent and interactive digital mascot for Ganga and river conservation awareness.
 
 Verification labels below reflect prior review work and were not all independently rechecked during the 2026-10-19 documentation audit. The publisher identifies R1 as DOI `10.63278/mme.vi.1631`, but the landing page lists Dr. Preethi Jeevani while the PDF title block lists Dr. A. C. Priya Ranjani and separately contains “Dr. Preethi Jeevan”; resolve this against the final version of record without guessing an author sequence. R5 is an expert-consensus module-design study, not evidence of classroom learning gains. Repetition of a citation in another project document is not verification.

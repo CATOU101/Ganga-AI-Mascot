@@ -1,6 +1,6 @@
 # Ganga AI Mascot: 30-Query Retrieval Benchmark Dataset (PRJ_316)
 
-**Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
+**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Repository:** `https://github.com/CATOU101/Ganga-AI-Mascot`  
 **Dataset File:** `domain_queries_30.jsonl`  
 **Metric Specifications:** `metric_definitions.md`  

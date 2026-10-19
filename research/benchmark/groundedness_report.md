@@ -1,5 +1,7 @@
 # Heuristic Groundedness and Citation-Metadata Benchmark Report
 
+**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
+
 **Project:** PRJ_316 (Ganga AI Mascot)  
 **Date:** 2026-10-19T12:44:41Z  
 **Dataset SHA-256:** `8755cefa4455c31e8c24c858b8ac7113e80657a3a29808488f346d9007b51fcb`  

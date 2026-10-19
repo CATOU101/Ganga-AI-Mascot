@@ -1,6 +1,8 @@
 # Research Paper Work Plan: Ganga AI Mascot (PRJ_316)
 
-**Project Title:** Evidence-Gated Environmental RAG with Query-Conditioned Hybrid Retrieval and Traceable Citations for Ganga Conservation Awareness
+**Research Paper Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
+
+**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Target Venue:** Undecided; current master manuscript is venue-neutral
 **Historical technical baseline SHA:** `56032d744b80695be7593c6f85e50d53c7c5a083`
 **Current implementation branch:** `main`

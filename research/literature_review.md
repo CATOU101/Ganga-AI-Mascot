@@ -1,7 +1,7 @@
 # Literature Review: AI-Powered Grounded Conversational Agents and Digital Mascots for Environmental Awareness
 
 **Project ID:** PRJ_316  
-**Project Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity  
+**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Status:** Thematic review of ten sources. R1's publisher record and DOI are identified; its author metadata conflicts between the publisher landing page and PDF and needs verification against the version of record. Other verification labels were not all independently rechecked for this update.
 **Historical implementation baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
 
