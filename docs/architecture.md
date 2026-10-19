@@ -2,6 +2,8 @@
 
 This document defines the system architecture for **Ganga AI Mascot** (PRJ_316), an AI-powered educational and conversational assistant for the Namami Gange initiative.
 
+**Official project title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
+
 The system is designed around a knowledge-grounded conversational AI agent that can answer questions about the Ganga River, its ecosystem, pollution, biodiversity, conservation, and Namami Gange programmes. The AI agent forms the core "brain" of the mascot, while the avatar, robot, or other interfaces act as presentation and interaction layers.
 
 The architecture is modular so that the AI brain can be developed and evaluated independently from the avatar and hardware components.

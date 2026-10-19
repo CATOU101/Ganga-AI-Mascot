@@ -1,7 +1,8 @@
-# Ganga AI Mascot
+# Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 
-**Project ID:** PRJ_316  
-**Project title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
+- **Project ID:** PRJ_316
+- **Official project title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
+- **Short name:** Ganga AI Mascot
 
 Ganga AI Mascot (PRJ_316) is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based Chacha Chaudhary mascot. The Brain answers questions from a curated, static collection of Ganga River Basin Management Plan (GRBMP) documents. It retrieves passages, applies heuristic evidence checks, then attempts Groq and OpenRouter generation in order; local extractive generation is the final fallback. This knowledge-answering path is neither live web search nor river monitoring. A separate integration route retrieves a limited set of live CPCB station readings.
 

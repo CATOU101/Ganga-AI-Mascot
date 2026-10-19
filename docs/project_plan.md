@@ -1,6 +1,7 @@
 # Project Plan
 
-**Project:** PRJ_316 — AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
+- **Project ID:** PRJ_316
+- **Official project title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Status snapshot:** 2026-10-19, `main` at `80833751f2a365eb00be5ddeee3392e4a601d38e` (before this documentation-only update)
 
 This plan distinguishes implemented software from provider validation and research evaluation. Code presence and automated regression tests do not establish external-service availability, response quality, usability, or learning impact.
