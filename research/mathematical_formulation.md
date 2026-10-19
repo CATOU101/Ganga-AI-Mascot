@@ -1,7 +1,6 @@
 # Mathematical Formulation: Ganga AI Mascot (PRJ_316)
 
 **Project ID:** PRJ_316  
-**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Status:** Engineering formulation audited against current implementation; thresholds are prototype heuristics, not empirically calibrated.
 **Historical baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
 **Current implementation snapshot audited:** `main` at `80833751f2a365eb00be5ddeee3392e4a601d38e` (2026-10-19; before documentation-only changes)

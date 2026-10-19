@@ -2,13 +2,12 @@
 
 ## PRJ_316 - Ganga AI Mascot
 
-**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 
 **Current Research Paper Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
 
 This research log records research papers, related projects, and technical resources reviewed for PRJ_316. It supports systematic comparison of existing work relevant to an AI-powered, source-grounded conversational agent and interactive digital mascot for Ganga and river conservation awareness.
 
-Verification labels below reflect prior review work and were not all independently rechecked during the 2026-10-19 documentation audit. The publisher identifies R1 as DOI `10.63278/mme.vi.1631`, but the landing page lists Dr. Preethi Jeevani while the PDF title block lists Dr. A. C. Priya Ranjani and separately contains “Dr. Preethi Jeevan”; resolve this against the final version of record without guessing an author sequence. R5 is an expert-consensus module-design study, not evidence of classroom learning gains. Repetition of a citation in another project document is not verification.
+Bibliographic metadata for R1–R10 was rechecked against the sources listed in the 2026-10-19 audit below. R1's author names and order are transcribed from the PDF title-block byline: J. Narmada, Dr. A. C. Priya Ranjani, K. Sruthi, P. Harshitha, D. Suchitha, and D. Veera Reddy. The publisher landing page's “How to Cite” field instead lists Dr. Preethi Jeevani; “Dr. Preethi Jeevan” also appears separately on page 1 of the PDF, outside the title-block author line. This discrepancy is preserved here; research-document citations follow the PDF byline and do not infer that the separate name is an author. R5 is an expert-consensus module-design study, not evidence of classroom learning gains. Repetition of a citation in another project document is not verification.
 
 ## Paper Analysis Template
 
@@ -95,19 +94,19 @@ Possible categories include:
 
 ## Research Papers to Review
 
-The following records document papers R1 through R10 and evaluate their relevance to PRJ_316. Verification status is source-specific; R1's DOI/article record is identified but author metadata needs reconciliation. Other labels are inherited from prior checks rather than freshly verified in this documentation audit.
+The following records document papers R1 through R10 and evaluate their relevance to PRJ_316. Verification status is source-specific; the 2026-10-19 source audit below records the checked fields and links. R1's author list follows the PDF title-block byline, with the publisher citation-metadata discrepancy recorded above.
 
 ### R1 - AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness
 
-**Status:** Article record identified; author metadata needs verification
-**Verification Status:** The publisher article page lists DOI `10.63278/mme.vi.1631`, vol. 31, no. 5, pp. 761–766 (2025). Its author listing and associated PDF differ: the page lists Dr. Preethi Jeevani, while the PDF title block names Dr. A. C. Priya Ranjani and separately contains “Dr. Preethi Jeevan.” Treat author identity/order as unresolved pending editorial confirmation.
+**Status:** Article record identified; author listing follows the published PDF title-block byline
+**Verification Status:** The publisher article page lists DOI `10.63278/mme.vi.1631`, vol. 31, no. 5, pp. 761–766 (2025). This log uses the PDF title-block byline in its printed order: J. Narmada, Dr. A. C. Priya Ranjani, K. Sruthi, P. Harshitha, D. Suchitha, and D. Veera Reddy. The publisher landing page's “How to Cite” field instead lists Dr. Preethi Jeevani. The PDF separately contains “Dr. Preethi Jeevan” on page 1, outside the title-block author line. This source discrepancy is documented; do not substitute the landing-page citation field for the PDF byline or infer additional authorship details.
 **Metadata Verification Source:** [Publisher article page](https://metall-mater-eng.com/index.php/home/article/view/1631). Do not use the prior DOI `10.63053/mme.1491`.
 
 ### Paper Information
 
 - **Paper ID:** R1
 - **Title:** AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness
-- **Authors:** Pending reconciliation between publisher landing-page and PDF metadata; do not finalize author order yet.
+- **Authors:** J. Narmada; Dr. A. C. Priya Ranjani; K. Sruthi; P. Harshitha; D. Suchitha; D. Veera Reddy (PDF title-block byline, in printed order; publisher citation metadata discrepancy noted above).
 - **Year:** 2025
 - **Publication:** *Metallurgical and Materials Engineering*, Vol. 31(5), pp. 761–766
 - **Link / DOI:** https://doi.org/10.63278/mme.vi.1631
@@ -246,7 +245,7 @@ This is the closest baseline project to PRJ_316 because both projects focus on u
 
 **Title:** Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks
 
-**Authors:** Patrick Lewis, Ethan Perez, Aleksander Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, Sebastian Riedel, Douwe Kiela
+**Authors:** Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, Sebastian Riedel, Douwe Kiela
 
 **Year:** 2020
 
@@ -1963,17 +1962,62 @@ The strongest technical opportunity identified for the Brain is source-grounded 
 
 | ID | Paper | Status | Primary Relevance |
 |---|---|---|---|
-| R1 | AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness | Publisher article/DOI identified; author metadata reconciliation **open** | Domain/application context |
-| R2 | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Review notes complete; prior verification label not rechecked here | RAG foundation |
-| R3 | Conversational AI Agents in Education | Review notes complete; prior verification label not rechecked here | Educational conversational AI / responsible AI |
-| R4 | Pedagogical AI Conversational Agents in Higher Education | Review notes complete; prior verification label not rechecked here | Pedagogical-agent framework |
-| R5 | Designing a Flipped AI-Chatbot Learning Module for Environmental Literacy | Review notes complete; prior verification label not rechecked here | Environmental education |
-| R6 | Evaluating the Efficacy of ChatGPT in Environmental Education | Review notes complete; prior verification label not rechecked here | Evaluation / usability |
-| R7 | Virtual Characters Help K–12 Students Learn and Improve Motivation | Review notes complete; prior verification label not rechecked here | Virtual characters / learning / motivation |
-| R8 | A Systematic Review of Pedagogical Agent Research | Review notes complete; prior verification label not rechecked here | Agent design / evaluation |
-| R9 | Exploring Persona Characteristics in Learning | Review notes complete; prior verification label not rechecked here | Avatar / persona design |
-| R10 | How Effective are Pedagogical Agents for Learning? | Review notes complete; prior verification label not rechecked here | Evidence of learning effectiveness |
+| R1 | AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness | **UNRESOLVED:** bibliographic record verified; PDF title-block author order preserved; publisher citation-field conflict remains | Domain/application context |
+| R2 | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | **VERIFIED:** official NeurIPS proceedings record and arXiv record | RAG foundation |
+| R3 | Conversational AI Agents in Education | **VERIFIED:** Springer Nature record | Educational conversational AI / responsible AI |
+| R4 | Pedagogical AI Conversational Agents in Higher Education | **VERIFIED:** Springer Nature record | Pedagogical-agent framework |
+| R5 | Designing a Flipped AI-Chatbot Learning Module for Environmental Literacy | **VERIFIED:** PLOS ONE record | Environmental education |
+| R6 | Evaluating the Efficacy of ChatGPT in Environmental Education | **VERIFIED:** Emerald record | Evaluation / usability |
+| R7 | Virtual Characters Help K–12 Students Learn and Improve Motivation | **UNRESOLVED:** SAGE OnlineFirst record verified; no final volume/issue assignment shown as of 2026-10-19 | Virtual characters / learning / motivation |
+| R8 | A Systematic Review of Pedagogical Agent Research | **VERIFIED:** Elsevier ScienceDirect record | Agent design / evaluation |
+| R9 | Exploring Persona Characteristics in Learning | **VERIFIED:** Elsevier ScienceDirect record and DOI-linked proceedings record | Avatar / persona design |
+| R10 | How Effective are Pedagogical Agents for Learning? | **VERIFIED:** SAGE record | Evidence of learning effectiveness |
 
-**Overall literature-note status:** R1–R10 notes are present; R1 author metadata reconciliation remains open, and prior labels for R2–R10 were not rechecked in this documentation audit.
+**Overall literature-note status:** R1–R10 metadata have been checked against the sources recorded in the bibliographic audit below. R1 is cited using the PDF title-block byline; R7 remains cited OnlineFirst pending final issue assignment.
 
 The notes cover the application domain, RAG/knowledge grounding, educational conversational AI, environmental education, AI evaluation, virtual characters, pedagogical-agent design, persona characteristics, and learning effectiveness. This status does not mean every citation or factual claim has been independently verified.
+
+## Bibliographic and Artifact Provenance Audit — 2026-10-19
+
+The manuscript references [1]–[10] were checked field-by-field against the publisher's article record/PDF, official conference proceedings, or DOI-linked publisher record on 2026-10-19. **VERIFIED** means the cited metadata is supported by the listed record; **UNRESOLVED** identifies the specific metadata element still unavailable or conflicting. No metadata was inferred to fill a gap. No repository experiments or test suites were run for this audit.
+
+| Ref. | Status | Fields checked and result | Verification source |
+|---|---|---|---|
+| R1 | **UNRESOLVED** | Title, year, venue, vol. 31, no. 5, pp. 761–766, and DOI `10.63278/mme.vi.1631` match the publisher record. The manuscript preserves the PDF title-block author order exactly: J. Narmada, Dr. A. C. Priya Ranjani, K. Sruthi, P. Harshitha, D. Suchitha, D. Veera Reddy. The publisher “How to Cite” field names Dr. Preethi Jeevani instead. The conflict is not resolved; neither version is substituted for the other. | [Publisher article record](https://metall-mater-eng.com/index.php/home/article/view/1631); [published PDF](https://metall-mater-eng.com/index.php/home/article/download/1631/951/5510) |
+| R2 | **VERIFIED** | Title, full author order, NeurIPS 2020 proceedings, vol. 33, pp. 9459–9474, and 2020 publication year verified. No DOI is cited; arXiv:2005.11401 is retained as the stable identifier. | [Official NeurIPS proceedings record](https://proceedings.nips.cc/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html); [arXiv record](https://arxiv.org/abs/2005.11401) |
+| R3 | **VERIFIED** | Author order, title, *AI and Ethics*, vol. 6, article 72, year 2026, and DOI verified. The publisher gives the online publication date as 2025-12-19 and the volume/article citation year as 2026; the manuscript correctly uses 2026. | [Springer Nature article record](https://link.springer.com/article/10.1007/s43681-025-00916-0) |
+| R4 | **VERIFIED** | Author order, title, journal, vol. 73, pp. 815–874, year 2025, and DOI verified. | [Springer Nature article record](https://link.springer.com/article/10.1007/s11423-025-10447-4) |
+| R5 | **VERIFIED** | Author order, title, *PLOS ONE*, vol. 21, no. 3, article e0345027, year 2026, and DOI verified. The article's publication date is 2026-03-18. | [PLOS ONE article record](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0345027) |
+| R6 | **VERIFIED** | Author order, title, *On the Horizon*, vol. 33, no. 2, pp. 165–185, year 2025, and DOI verified. | [Emerald publisher record](https://doi.org/10.1108/OTH-11-2024-0079) |
+| R7 | **UNRESOLVED** | Author order, title, journal, OnlineFirst status, DOI, and 2025 first-online date verified. The publisher record still shows OnlineFirst and does not assign a final volume or issue as of 2026-10-19. Pages 1–47 refer to the article PDF pagination, not a final issue assignment. The manuscript retains an online-first citation. | [SAGE/AERA article record](https://journals.sagepub.com/doi/10.3102/00346543251389930); [publisher PDF](https://journals.sagepub.com/doi/pdf/10.3102/00346543251389930) |
+| R8 | **VERIFIED** | Author order, title, *Computers & Education*, vol. 190, article 104607, year 2022, and DOI verified. | [Elsevier ScienceDirect article record](https://www.sciencedirect.com/science/article/pii/S0360131522001786) |
+| R9 | **VERIFIED** | Author order (Y. Tao, G. Zhang, D. Zhang, F. Wang, Y. Zhou, T. Xu), title, *Procedia Computer Science*, vol. 201, pp. 87–94, year 2022, and DOI verified. | [Elsevier ScienceDirect article record](https://www.sciencedirect.com/science/article/pii/S1877050922004264); [DOI record](https://doi.org/10.1016/j.procs.2022.03.014) |
+| R10 | **VERIFIED** | Author order, title, *Journal of Educational Computing Research*, vol. 49, no. 1, pp. 1–39, year 2013, and DOI verified. | [SAGE article record](https://journals.sagepub.com/doi/10.2190/EC.49.1.a) |
+
+### Corpus/index counts and benchmark provenance
+
+The source directory contains 86 GRBMP PDFs. A read-only query of the checked-in SQLite index's metadata found 83 distinct indexed `file_name` values and 4,085 chunks; the manifest records the same chunk count and the current index snapshot's hashes (`chunks_sha256` `02757645cb613a703ef128dcc3ecb45c0a0d2dd85ba1ddc072eac96924c6673a`; `vectors_sha256` `ed0ec6e081d9e806e46c40bad57a2ea6c237a88327620598f320e62f7c16c455`). Three source PDFs are not represented in the index:
+
+- `23_72_M Tech Thesis, 2014 Assessment of Approaches for Eliminating Use of Fresh Water in Tanneries at.pdf`
+- `46_57_Surface and GW Modelling of the GRB (2).pdf`
+- `57_71_M Tech Thesis Assessment of Provisioning an Appropriate Solid Waste Management Approach in.pdf`
+
+The groundedness JSON reports the same 4,085 chunks and 83 indexed names, so the current source/index count difference has a concrete explanation. However, because the benchmark JSON contains no index digest, its exact use of this checked-in index snapshot is not independently established.
+
+The saved retrieval and evidence-gate results record query-dataset hashes and runtime/platform metadata but not the benchmark code commit or index/corpus digest. The groundedness result records its dataset hash and corpus counts but not the code revision, index digest, provider, model, or generation mode. The repository manifest identifies the current index snapshot, but it cannot establish that the saved runs used it. No missing provenance was inferred or added to result artifacts.
+
+### Manuscript reference reconciliation — 2026-10-19
+
+The current manuscript bibliography was reconciled to its in-text citations and renumbered in first-citation order. All ten works that were in the current manuscript remain included: the RAG paper, the Ganga mascot paper, two conversational-education reviews, two environmental-education studies, the 2025 virtual-character meta-analysis, two pedagogical-agent reviews, and the 2013 pedagogical-agent meta-analysis. The former manuscript's [1] (Ganga mascot) is current [3]; former [2] (RAG) remains current [2]. Other former numbers shift by one after [2] as a result of the base mascot citation moving behind the first-use GRBMP and RAG citations.
+
+The source draft named `Ganga_Avatar_Paper_Draft_IEEE.docx.pdf` was not present in the repository tree inspected on this date. Consequently, its original references [1]–[10], their in-text purposes, and whether any should be retained cannot be established from repository evidence. They have not been inferred from the current manuscript bibliography. The task-provided bibliographic descriptions for original [11]–[13] were evaluated as follows:
+
+| Original draft ref. | Current manuscript ref. | Decision and use | Evidence consulted |
+|---|---:|---|---|
+| [11] GRBMP Main Plan Document | [1] | Retained. Cited as a source in the project corpus; the local PDF title page names the Main Plan Document, January 2015, and identifies the seven-IIT consortium as preparer. The official NMCG reports page lists the Main Plan Document. | Local `knowledge_base/raw_documents/GRBMP/13_GRBMP - MPD.pdf`, title page and preface; [NMCG GRBMP volume 1 record](https://nmcg.nic.in/Grbmpreports_vol_1.aspx). |
+| [12] Sentence-BERT | [12] | Retained for background on sentence-embedding methodology, not as the implementation library or proof of the exact deployed artifact. The current code calls ChromaDB's built-in ONNX embedding function. | [ACL Anthology proceedings record](https://aclanthology.org/D19-1410/); `brain/embeddings.py`, `ONNXSemanticEmbedding`; [Hugging Face all-MiniLM-L6-v2 model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2). |
+| [13] MiniLM | [13] | Retained as architectural background for the MiniLM family. The paper does not by itself establish the identity or provenance of the deployed `all-MiniLM-L6-v2` ONNX archive. | [Official NeurIPS 2020 proceedings record](https://proceedings.nips.cc/paper/2020/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html); `brain/embeddings.py`, `MINILM_MODEL_NAME` and `embedding_provenance`; [Hugging Face model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2). |
+
+The exact runtime model is named `all-MiniLM-L6-v2` in `brain/embeddings.py`; its configured code path uses ChromaDB's `DefaultEmbeddingFunction`, and the index manifest records a model archive SHA-256. Sentence-BERT and MiniLM are therefore background/model-family references; neither should be described as the software package directly called by the application. The model-card citation identifies the named checkpoint but does not independently prove that the checked-in ONNX archive bytes are identical to a current remote model-card revision. The available manifest digest is the local artifact identity.
+
+The current master bibliography contains 14 entries, all cited in the text: [1] GRBMP source; [2] RAG; [3] Ganga mascot precedent; [4]–[5] conversational AI education reviews; [6]–[7] environmental education studies; [8]–[11] pedagogical-agent literature; [12] sentence-embedding background; [13] MiniLM architecture; [14] the exact model-card record. The reference renumbering changes only citation labels and reference ordering; it does not change the R1 author byline, DOI, R7 OnlineFirst status, result values, or implementation claims. The unresolved absence of the original draft prevents a complete [1]–[13] cross-draft reconciliation and must be addressed before asserting that all original draft citations were reviewed.

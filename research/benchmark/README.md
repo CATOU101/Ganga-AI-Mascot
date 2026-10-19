@@ -1,6 +1,5 @@
 # Ganga AI Mascot: 30-Query Retrieval Benchmark Dataset (PRJ_316)
 
-**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Repository:** `https://github.com/CATOU101/Ganga-AI-Mascot`  
 **Dataset File:** `domain_queries_30.jsonl`  
 **Metric Specifications:** `metric_definitions.md`  
@@ -112,7 +111,7 @@ The benchmark is provided as a line-delimited JSON (`JSONL`) file where each ent
 
 ## 5. Evaluation and provenance limits
 
-The retrieval runner obtains up to 15 dense candidates for each query, then applies each scoring configuration to that shared pool. Config B is keyword-overlap reranking, not a full-corpus lexical search. The production-gated condition applies coverage and distance gates. The saved result records dataset hash, runtime/platform, and configuration labels, but not the benchmark code commit or vector-index digest. A fresh run uses the current checkout and index and is not guaranteed to reproduce the saved result unless those inputs match. The corpus inventory lists 86 source PDFs while the groundedness result records 83 unique indexed document names; the current artifacts do not explain the difference.
+The retrieval runner obtains up to 15 dense candidates for each query, then applies each scoring configuration to that shared pool. Config B is keyword-overlap reranking, not a full-corpus lexical search. The production-gated condition applies coverage and distance gates. The saved result records dataset hash, runtime/platform, and configuration labels, but not the benchmark code commit or vector-index digest. A fresh run uses the current checkout and index and is not guaranteed to reproduce the saved result unless those inputs match. Read-only inspection of the checked-in index confirms 4,085 chunks across 83 distinct source filenames; three of the 86 source PDFs are absent from that index. The groundedness result reports matching chunk/document counts, but no digest binds it to this exact index snapshot.
 
 ---
 

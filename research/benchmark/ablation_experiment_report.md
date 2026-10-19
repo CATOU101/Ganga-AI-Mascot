@@ -1,6 +1,5 @@
 # Retrieval Ablation Experiment Report: Ganga AI Mascot (PRJ_316)
 
-**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 
 **Date:** 2026-10-19T12:26:43Z  
 **Python Runtime:** 3.13.3 (macOS-26.7.1-arm64-arm-64bit-Mach-O)  

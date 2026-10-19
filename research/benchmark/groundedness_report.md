@@ -1,6 +1,5 @@
 # Heuristic Groundedness and Citation-Metadata Benchmark Report
 
-**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 
 **Project:** PRJ_316 (Ganga AI Mascot)  
 **Date:** 2026-10-19T12:44:41Z  
@@ -58,4 +57,4 @@ Checks the observed pipeline mode and citation count for two out-of-domain and t
 
 ## 5. Reproducibility and provenance limits
 
-The saved artifact records dataset SHA-256, 4,085 chunks, and 83 indexed document names. It does not record the code commit, vector-index digest, provider/model, or generation mode. The separate inventory documents 86 source PDFs; the available artifacts do not explain why 83 document names appear in this benchmark run. Do not attribute this result to a particular generator mode without independent run provenance.
+The saved artifact records dataset SHA-256, 4,085 chunks, and 83 indexed document names. It does not record the code commit, vector-index digest, provider/model, or generation mode. The checked-in index manifest and read-only SQLite metadata contain 4,085 chunks and 83 distinct source filenames; three PDFs in the source inventory are not represented in that index. The matching counts explain the current 86-source-PDF versus 83-indexed-name difference, but the benchmark artifact has no index digest to establish that it used this exact index snapshot. Do not attribute this result to a particular generator mode without independent run provenance.

@@ -18,7 +18,6 @@ from brain.vector_store import get_vector_store
 
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
-OFFICIAL_PROJECT_TITLE = "Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange"
 BENCHMARK_DIR = ROOT_DIR / "research" / "benchmark"
 DATASET_PATH = BENCHMARK_DIR / "evidence_gate_queries_20.jsonl"
 OUTPUT_JSON_PATH = BENCHMARK_DIR / "evidence_gate_results.json"
@@ -230,7 +229,6 @@ def _generate_markdown_report(results: dict[str, Any], path: Path) -> None:
     lines = [
         "# Evidence-Gate Evaluation Report: Ganga AI Mascot (PRJ_316)",
         "",
-        f"**Official Project Title:** {OFFICIAL_PROJECT_TITLE}",
         "",
         f"**Date:** {meta['date']}  ",
         f"**Runtime:** Python {meta['python_version']} on {meta['platform']}  ",

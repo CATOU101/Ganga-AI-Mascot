@@ -1,10 +1,9 @@
 # Research Gap & Contribution Framing: Ganga AI Mascot (PRJ_316)
 
 **Project ID:** PRJ_316  
-**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Status:** Comparative gap framing; not an empirical finding or claim of novelty across all literature.
 **Historical implementation baseline:** `56032d744b80695be7593c6f85e50d53c7c5a083`
-**Current implementation snapshot audited:** `main` at `73602067672fdce4ed4a2f07a4308a7735db55c3` (2026-10-19; before these documentation corrections). R1's DOI/article record is identified; its author metadata needs reconciliation between the publisher page and PDF.
+**Current implementation snapshot audited:** `main` at `73602067672fdce4ed4a2f07a4308a7735db55c3` (2026-10-19; before these documentation corrections). R1's DOI/article record is identified; this review follows the PDF title-block byline and records the publisher citation-metadata discrepancy in the research log.
 
 ---
 
@@ -24,7 +23,7 @@ This document synthesizes these dimensions against sources discussed in the lite
 
 | Literature Source | Explicitly Identified Research Gap | Direct Relevance to PRJ_316 |
 | :--- | :--- | :--- |
-| **R1** (2025; author metadata to verify) | Describes an AI-powered Chacha Chaudhary mascot concept for Ganga conservation. Its article description does not document the source-grounded retrieval and citation pipeline implemented here; this comparison is limited to the reviewed article. | Provides application context, not evidence that the proposed mascot improves awareness or behavior. |
+| **R1** (2025; PDF byline used) | Describes an AI-powered Chacha Chaudhary mascot concept for Ganga conservation. Its article description does not document the source-grounded retrieval and citation pipeline implemented here; this comparison is limited to the reviewed article. | Provides application context, not evidence that the proposed mascot improves awareness or behavior. |
 | **R2** (Lewis et al., 2020) | Notes that parametric neural language models hallucinate facts, cannot easily update their knowledge without retraining, and fail to provide verifiable provenance for generated statements. | Provides the core technical solution (external non-parametric vector index combined with parametric generator). |
 | **R3** (Ganguly et al., 2026) | Identifies hallucination, factual unreliability, lack of explainability, privacy risks, and absence of pedagogical oversight as the primary barriers preventing conversational AI adoption in formal education. | Demands that educational agents incorporate strict evidence quality gating and verifiable citations rather than unconstrained generation. |
 | **R4** (Yusuf et al., 2025) | Identifies an over-concentration of educational chatbots on technological novelty rather than instructional purpose; notes that conversational agents rarely separate cognitive reasoning from visual embodiment. | Motivates PRJ_316's modular decoupling: the standalone Brain handles factual reasoning, while the Three.js avatar handles presentation. |

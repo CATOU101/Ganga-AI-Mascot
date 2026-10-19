@@ -2,7 +2,6 @@
 
 **Research Paper Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
 
-**Official Project Title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 **Target Venue:** Undecided; current master manuscript is venue-neutral
 **Historical technical baseline SHA:** `56032d744b80695be7593c6f85e50d53c7c5a083`
 **Current implementation branch:** `main`
@@ -59,11 +58,11 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 
 ### Stage 2: Primary Literature Verification
 - [x] **Task 2.1:** Inspect existing research notes in `research/research_log.md` covering papers R1 through R10.
-- [x] **Task 2.2:** Record source verification status and note which labels were not rechecked.
-- [ ] **Task 2.3:** R1 DOI corrected to `10.63278/mme.vi.1631`; author metadata still requires verification against the version of record because publisher page and PDF differ.
+- [x] **Task 2.2:** Recheck R1–R10 bibliographic metadata against publisher, official proceedings, and DOI-linked records; record source URLs and unresolved fields in the 2026-10-19 research-log audit.
+- [x] **Task 2.3:** R1 DOI is `10.63278/mme.vi.1631`; use the author names/order printed in the PDF title-block byline and document the conflicting publisher “How to Cite” metadata in `research/research_log.md`.
 - [x] **Task 2.4:** Expand `research/literature_review.md` from placeholder stub into a structured 8-domain review.
 - [x] **Task 2.5:** Update `research/research_log.md` with explicit verification statuses and primary source links.
-- **Deliverable:** Literature Review (`research/literature_review.md`) & Research Log (`research/research_log.md`); R1 author metadata and remaining source checks are still open.
+- **Deliverable:** Literature Review (`research/literature_review.md`) & Research Log (`research/research_log.md`); R2–R6 and R8–R10 verified, R1's PDF byline retained with the publisher-metadata conflict unresolved, and R7's OnlineFirst record verified with final volume/issue metadata unavailable as of 2026-10-19.
 
 ---
 
@@ -148,16 +147,17 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 - [x] **Task 7.7:** Descriptive results from existing saved artifacts, without claiming new experiments.
 - [x] **Task 7.8:** Discussion, ethics, and limitations.
 - [x] **Task 7.9:** Conclusion and future work.
-- [ ] Final bibliography reconciliation for R1 authors, stronger provenance, larger empirical evaluation, and venue-specific formatting remain open.
+- [ ] Stronger provenance, larger empirical evaluation, and venue-specific formatting remain open. R1's reference follows the PDF title-block byline; its conflicting publisher “How to Cite” metadata is documented in `research/research_log.md`.
 - **Deliverable:** Venue-neutral draft at `research/papers/venue_neutral_master_manuscript.md`; submission preparation remains incomplete.
 
 ---
 
 ### Stage 8: Final Technical and Academic Review
 - [ ] **Task 8.1:** Check mathematical notation consistency across all sections.
-- [ ] **Task 8.2:** Cross-verify all citations, author names, DOIs, and bibliography entries.
+- [x] **Task 8.2:** Cross-verify the current manuscript references [1]–[14] against publisher, proceedings, government, or model-card records as applicable. The original manuscript references were renumbered by first appearance; R1's conflicting author metadata and R7's missing final issue assignment remain explicitly unresolved.
 - [ ] **Task 8.3:** Ensure zero unsubstantiated claims or marketing language.
 - [ ] **Task 8.4:** Verify code repository reproducibility instructions against a clean environment.
+- [ ] **Task 8.5:** Reconcile the original IEEE draft's references [1]–[10] against the master manuscript when `Ganga_Avatar_Paper_Draft_IEEE.docx.pdf` is available. The file was not present in the repository tree during the 2026-10-19 review, so these ten entries' purposes and dispositions remain unaudited; the supplied entries for GRBMP, Sentence-BERT, and MiniLM were assessed and added where relevant.
 - **Deliverable:** Camera-Ready Research Paper and Reproducible Code Archive.
 
 ---
@@ -173,4 +173,5 @@ Stage 8: Academic & Technical Review / Camera-Ready (FINAL STAGE)
 | 2026-10-18 | Feature | Integrated CPCB real-time water quality monitoring (Haridwar, Kanpur, Ghazipur, Farakka, Nabadwip) into conversation controller; added Task 5.5 for telemetry evaluation and CPCB data reuse clearance. | Research Team |
 | 2026-10-18 | Implementation | Added configurable Groq → OpenRouter → extractive generation fallback after the existing evidence gate. This is a generation-layer resilience change; no live-provider or comparative performance results are claimed. | Research Team |
 | 2026-10-19 | Integration | Verified the multilingual integration on `main` at `8083375`; documentation reconciliation follows as a separate milestone. | Research Team |
+| 2026-10-19 | Editorial audit | Checked reference metadata for R1–R10 against publisher/proceedings records; recorded the R1 and R7 unresolved fields. Compared source PDF names with the checked-in index and updated benchmark provenance notes without rerunning experiments. | Research Team |
 | 2026-10-19 | Documentation | Reconciled current project, architecture, implementation, and research status against source; benchmark design and empirical work remain open. | Research Team |

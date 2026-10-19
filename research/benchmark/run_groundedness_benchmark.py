@@ -16,7 +16,6 @@ from pathlib import Path
 from typing import Any
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-OFFICIAL_PROJECT_TITLE = "Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange"
 sys.path.insert(0, str(ROOT_DIR))
 
 from brain.config import load_config
@@ -337,7 +336,6 @@ def _write_markdown_report(results: dict[str, Any], path: Path) -> None:
     lines = [
         "# Heuristic Groundedness and Citation-Metadata Benchmark Report",
         "",
-        f"**Official Project Title:** {OFFICIAL_PROJECT_TITLE}  ",
         f"**Project:** {meta['project_id']} (Ganga AI Mascot)  ",
         f"**Date:** {meta['timestamp']}  ",
         f"**Dataset SHA-256:** `{meta['dataset_sha256']}`  ",
