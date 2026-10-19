@@ -1,0 +1,1356 @@
+{
+  "benchmark_metadata": {
+    "project_id": "PRJ_316",
+    "benchmark_name": "Answer Groundedness & Citation Correctness Evaluation",
+    "timestamp": "2026-10-19T12:44:41Z",
+    "dataset_sha256": "8755cefa4455c31e8c24c858b8ac7113e80657a3a29808488f346d9007b51fcb",
+    "total_queries": 20,
+    "corpus_chunks": 4085,
+    "corpus_unique_documents": 83
+  },
+  "query_evaluations": [
+    {
+      "query_id": "Q_BROAD_01",
+      "category": "Broad/Thematic",
+      "query": "What is Aviral Dhara in the context of the Ganga River Basin Management Plan?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 1297,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 4,
+      "valid_citation_count": 4,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "110-110",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "8_Mission 1_Aviral Dhara",
+          "file_name": "8_Mission 1_Aviral Dhara.pdf",
+          "page": "19-19",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "27-31",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "9-14",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "Definitions In this Act, unless the context otherwise requires – 1) “Active Flood Plain” is the area on the two sides of a river that gets inundated by a flood having a mean recurrence interval of 2.33 years; 2) Afforestation means plantation of trees to restore or reestablish the forest cover; 3) Authority means any authority, board, corporation, council, department, institute, university or any other body corporate, established by or under any Central, State or Provincial Act in force in the territory of India and includes, a.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "In sum, GRBMP focuses on the basin’s overall resource environment and the major factors affecting it (espec ially diverse anthropogenic activities), and seeks ways and means to protect the basin and its resources against identifiable adverse impacts.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "Mission 1 – Aviral Dhara 4.1.1 Importance of Aviral Dhara: Aviral Dhara – or the continuous flow of water, sediments and other natural constituents – in National River Ganga was achieved through long -term balance between various dynamic parameters such as water, sediment and influent/ effluent seepage flow rates and terrain gradient.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "3.4 Conceptual Framework 11 3.5 Work Structure 12 4 Mission Summaries 13 4.1 Aviral Dhara 13 4.1.1 Importance of Aviral Dhara 13",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_BROAD_02",
+      "category": "Broad/Thematic",
+      "query": "What is Nirmal Dhara and what is its primary objective in the GRBMP?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 610,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "47_Mission 2_Nirmal Dhara",
+          "file_name": "47_Mission 2_Nirmal Dhara.pdf",
+          "page": "21-21",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "47_Mission 2_Nirmal Dhara",
+          "file_name": "47_Mission 2_Nirmal Dhara.pdf",
+          "page": "34-34",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "47_Mission 2_Nirmal Dhara",
+          "file_name": "47_Mission 2_Nirmal Dhara.pdf",
+          "page": "22-24",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "In sum, GRBMP focuses on the basin’s overall resource environment and the major factors affecting it (especially diverse anthropogenic activities), and seeks ways and means to protect the basin and its resources against identifiable adverse impacts.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "For, only thus can we secure the environme ntal foundation of NRGB for the good of one and all.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "overall relevance to the objectives of MND will be termed “MND Projects” and will receive due consideration for funding under Ganga rejuvenati on programmes (e.g.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "superior,(10) praising other shrines , (11) discarding garments; (12) bathing, and (13) making noise.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_BROAD_03",
+      "category": "Broad/Thematic",
+      "query": "What are the core vision and objectives of the Ganga River Basin Management Plan?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 417,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Vision Ganga",
+          "file_name": "Vision Ganga Eng_Compressed.pdf",
+          "page": "15-15",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "9-14",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "61-64",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "Objectives of Ganga River Management BASED ON the vision and societal needs, the main objectives of Ganga river management have been identified as the following: a.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "environmental flows shall be maintained in all rivers and tributaries of Ganga river system to fulfil their geological, ecological, socio-economic and cultural functions.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "URMP : Urban River Management Plan.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": " Create broad public acceptance of the Plan.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_BROAD_04",
+      "category": "Broad/Thematic",
+      "query": "What are the eight fundamental missions formulated under the Ganga River Basin Management Plan?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 1143,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan Extended Summary",
+          "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+          "page": "26-26",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "25-25",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Vision Ganga",
+          "file_name": "Vision Ganga Eng_Compressed.pdf",
+          "page": "16-17",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "Recommended Actions: The main actions recommended are: i) Establishment of a comprehensive Data Bank by continuous collection, processing and storage of information on natural resources, anthropogenic activities, and environmental monitoring data of the basin.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "iii) Preparation of documents and materials based on the above data for easy understanding by non-specialized people.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Formulation of Missions Given the escalating impacts of human activities on NRGB, the above objectives guided the formulation of eight important areas where restorative actions need to be carried out in Mission mode, viz.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "Formulation of Missions GIVEN THE escalating impacts of human activities on the Ganga river basin, the Vision and objectives have guided the formulation of eight important areas where the focussed corrective actions need to be carried out in mission mode, viz.: “aviral dhara”, “nirmal dhara”, “ecological restoration”, “sustainable agriculture”, “Geological safeguarding”, “basin protection against disasters”, “river hazards management” and “environmental knowledge-building and sensitisation”.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_BROAD_05",
+      "category": "Broad/Thematic",
+      "query": "How does the GRBMP define the Ganga River as an ecological and geological entity?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 692,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan Extended Summary",
+          "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+          "page": "9-10",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "22-22",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "30-30",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "“Continuous Flow ”): The flow of water, sediments and other natural constituents of River Ganga are continuous and adequate over the entire length of the river throughout the year.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "“Nirmal Dhara” (i.e.“ Unpolluted Flow ”): The flow in the Ganga River Network is bereft of manmade pollution; hence the river water quality should not be affected by human activities.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Geologic Entity: The Ganga River System is the earth’s creations of ancient times, which may not be reparable if damaged.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "“Aviral Dhara ” (meaning “Continuous Flow ”): The flow of water, sediments and other natural constituents of River Ganga are continuous and adequate over the entire length of the river throughout the year.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_BROAD_06",
+      "category": "Broad/Thematic",
+      "query": "What is the concept of Environmental Flows (E-flows) and how is it assessed in the Ganga basin?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 556,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "132-180",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "89-108",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "27-31",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "f large sediment -carrying tributaries (Gandak, Kosi, Mahananda) continues to feed Ganga and the river is characterised by numerous in-channel and abundant braid bars till Farakka.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Environmental Flows: State-of-the-Art with special reference to Rivers in the Ganga River Basin bal level and also i ts relevance for Indian conditions, with special reference to Ganga river system.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Towards this end, a method for ensuring longitudinal river connectivity with E -Flows passage through dams/barrages is suggested .",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_BROAD_07",
+      "category": "Broad/Thematic",
+      "query": "What are the major physiographic stretches into which the Ganga river is categorized in the plan?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 769,
+      "sentence_count": 2,
+      "grounded_sentence_count": 2,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 2,
+      "valid_citation_count": 2,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "104-104",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "21-21",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "IITC [2010b]: “Active Floodplain Mapping: Defining the River Space; IITC [2011a]: “ Mapping of Legislations Applicable to the Ganga River Basin; 13.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "IITC [2011b]: “ Agriculture in the Ganga River Basin: An Overview; Defining River Ganga River Ganga is defined herein as compri sing of six main headstreams originating in the Himalayas, namely the Alaknanda, Dhauli Ganga, Nandakini, Pinder, Mandakini and Bhagirathi rivers starting from their feeding glaciers up to their respective confluences (together comprising the Upper Ganga segment), the subsequent main stem of the river downstream from Rishikesh to Varanasi (the Middle Ganga segment), and the final stretch from Varanasi to Ganga Sagar (the Lower Ganga segment).",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_TECH_01",
+      "category": "Technical/Scientific",
+      "query": "What sewage treatment standards and management approaches are recommended for urban wastewater in the Ganga basin?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 396,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 2,
+      "valid_citation_count": 2,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Sewage Treatment in Class I Towns: Recommendations and Guidelines",
+          "file_name": "16_31_003_EQP_S&R_02.pdf",
+          "page": "5-5",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Assessment of Some Aspects of Provisioning Sewerage Systems in Urban Agglomeration of Ganga Basin",
+          "file_name": "33_036EQP.pdf",
+          "page": "7-7",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "into safe and usable organic manure.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "The concept of decentralized treatment systems and water/wastewater management will be covered in detail in subsequent reports.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "Selection of Appropriate Sewage Treatment Technology Item 4.5.2 in Guidelines for the Preparation of Urban River Management Plan (URMP) for all Class I Towns in Ganga River Basin (Report No.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "Background and Review of Literature 2.1.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_TECH_02",
+      "category": "Technical/Scientific",
+      "query": "Which primary water quality parameters are monitored to assess the river health of the Ganga, and what are their benchmark levels?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 742,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Hydrological Flow Health Assessment of the River Ganga",
+          "file_name": "15_Hydrological Flow Health Assessment of the River Ganga.pdf",
+          "page": "60-60",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "71-73",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "8_Mission 1_Aviral Dhara",
+          "file_name": "8_Mission 1_Aviral Dhara.pdf",
+          "page": "46-51",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "Based on the hydrologic flow health analysis, the h ealth of the river in terms of low flows at the main stem of the river is mostly moderate to good.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Hence, the problems in terms of water quality during the low flows are not due to hydrologic conditions, but are due to overloading of pollutants beyond the ass imilation capacity of the river.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "Mission 2 – Nirmal Dhara 4.2.1 Introduction: The Ganga River Network was adopted as the primary indicator of health of the National River Ganga Basin (NRGB) in GRBMP, and human-technology-environment aspects were factored in to assess the basin’s resource dynamics.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "o been carried out to obtain annual “flow health scores” of the rivers [IITC, 2014b].",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_TECH_03",
+      "category": "Technical/Scientific",
+      "query": "What are the ecological habitat requirements and conservation threats for the Gangetic dolphin (Platanista gangetica)?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 572,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 2,
+      "valid_citation_count": 2,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Measures for Ecological Revival of River Ganga",
+          "file_name": "31_Measures for Ecological Revival of River Ganga.pdf",
+          "page": "18-19",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Status of Aquatic Vertebrates in the Ganga River",
+          "file_name": "17_028ENB.pdf",
+          "page": "11-26",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "ugh empowering and involving local riverside communities.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Use of chemical fertilizers and pesticides in agricultural in flood plains and riparian zone be regulated and restricted.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "The Gangetic dolphin Platanista gangetica gangetica was declared a National aquatic animal by Ministry of Environment and Forest on May 10, 2010 and a Conservation Action Plan was published for 2010-2020 (Sinha et al., 2010).",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "mising provisio n of goods and services that result from functioning ecosystems and the biodiversity that sustains them.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_TECH_04",
+      "category": "Technical/Scientific",
+      "query": "How does agricultural runoff and chemical fertilizer or pesticide use affect water quality and ecology in the basin?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 655,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Reform Imperatives for Agricultural Sustainability in Ganga Basin",
+          "file_name": "29_Reform Imperative for Agricultural Sustainability in Ganga Basin.pdf",
+          "page": "5-5",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "41-44",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Status of Aquatic Vertebrates in the Ganga River",
+          "file_name": "17_028ENB.pdf",
+          "page": "11-26",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "ith other missions, intends to reduce the water resource consumption and pollution and improve rural livelihood by way of promoting sustainable agricultural practices in the basin.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": " Enhance water-use efficiency and reduce non-point sources of water pollution.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "4) Agricultural and Other Rural Activities: (i) Over-useof resources (including fresh water from surface and ground water sources and other soil resources); and (ii) discharge of agricultural and rural wastes(including chemical fertilizers and pesticides) in the basin.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "pulation pressure and has changed the water and land use patterns drastically.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_TECH_05",
+      "category": "Technical/Scientific",
+      "query": "What are the impacts of unscientific riverbed sand mining on sediment transport and river morphology?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 692,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "37-38",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "57_Mission 3_Ecological  Restoration",
+          "file_name": "57_Mission 3_Ecological  Restoration.pdf",
+          "page": "23-34",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Vision Ganga",
+          "file_name": "Vision Ganga Eng_Compressed.pdf",
+          "page": "91-91",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "4.3.2 Threats to River Biodiversity: Eight main factors affecting the habitat of aquatic species of Nat ional River Ganga and causing loss of her biodiversity were identified, viz.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Recommended Actions: Given the above threat factors , the measures recommended are : (1) Restoration of longitudinal connectivity along with E - flows at dams, barrages and other obstructions.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Notably, unrestrained gravel and sand mining from river beds combined with the dumping of construction wastes in rivers have altered river forms PRobING THoUGHTS Anthropogenic activities in river basins result in substantial changes in land use, land cover, and waterways.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_TECH_06",
+      "category": "Technical/Scientific",
+      "query": "How do dams and run-of-the-river hydroelectric projects in the Upper Ganga affect downstream hydrology and sediment flow?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 408,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Extended Summary",
+          "file_name": "27_GRBMP - Extended Summary.pdf",
+          "page": "27-31",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan Extended Summary",
+          "file_name": "29_2014-06-13_GRBMP_Extended Summary.pdf",
+          "page": "11-11",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "9-14",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "Towards this end, a method for ensuring longitudinal river connectivity with E -Flows passage through dams/barrages is suggested .",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "has also been proposed to define environmental clearance requirements for dams/ barrages based on 4 categories of their environmental impacts.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Figure 6: Flow Diagram of GRBMP Work Structure FAO : Food and Agricultural Organization.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_TECH_07",
+      "category": "Technical/Scientific",
+      "query": "What solid waste management and disposal restrictions are recommended for riparian towns and pilgrimage sites?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 746,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "47_Mission 2_Nirmal Dhara",
+          "file_name": "47_Mission 2_Nirmal Dhara.pdf",
+          "page": "31-31",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Guidelines for the Preparation of Urban River Management Plan for all Class I Towns in Ganga River Basin",
+          "file_name": "30_2_002_EQP_S&R_01.pdf",
+          "page": "8-8",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "47_Mission 2_Nirmal Dhara",
+          "file_name": "47_Mission 2_Nirmal Dhara.pdf",
+          "page": "43-46",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "generated within the complex must be trea ted and recycled/reused within the complex itself.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "2) Domestic sewage generated from all other sources should be collected and transported in closed conduits for treatment followed by reuse/recycle.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "b) washing of clothes and routine bathing, c) wallowing of cattle, d) throwing of floral offerings, e) disposal of corpses, and f) other undesirable activities that are prevalent.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": " sewage collection in Class III towns/rural areas Projects may be formulated for providing small -bore sewer systems in areas were sewage generation is not sufficient to support a conventional sewage network or in congested areas where laying conventional sewers is impossible .",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_GOV_01",
+      "category": "Governance/Policy",
+      "query": "What were the primary mandate, composition, and institutional powers of the National Ganga River Basin Authority (NGRBA)?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 505,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way Forward",
+          "file_name": "35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+          "page": "4-4",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way Forward",
+          "file_name": "35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+          "page": "3-3",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "47_Mission 2_Nirmal Dhara",
+          "file_name": "47_Mission 2_Nirmal Dhara.pdf",
+          "page": "11-18",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "The National Ganga River Basin Authority (NGRBA) The formation: 20th February, 2009, The Role: A Financing, Monitoring and Co-ordinating Authority.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "STEERING COMMITTEE (Fund Allocation and Programme Formulation) and its implementation rests with the institutions of governance.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "Effective co -ordination of these activities is envisaged through a high -level constitutional body tentatively named the ‘National River Ganga Basin Management Commission’ (NRGBMC).",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_GOV_02",
+      "category": "Governance/Policy",
+      "query": "What is the rationale and structure of the proposed National River Ganga Act recommended by the IIT Consortium?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 599,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "89-108",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Implementation of Ganga River Basin Management Plan Recommendations on Legal and Institutional Aspects",
+          "file_name": "10_037_ Implementation Mechanism.pdf",
+          "page": "13-14",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "110-110",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "This, in effect, would help us improve the governance of urban sanitation (or sewage) sector in different states along the banks of river Ganga and her tributaries.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Interim GRBMP: IIT Consortium: Spetember 2013 • 75 • Accordingly, the proposed Ganga River Basin Management Act should aim to prohi bit and regulate activities that affect wholesomeness of the river, and creates i nstitutions to regulate the activities thereon.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Interim GRBMP: IIT Consortium: Spetember 2013 • 94 • Articles 39(b), 48 A, 49 and the Fundamental Duties enshrine under Article 51A (f) and(g) of the Constitution of India.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_GOV_03",
+      "category": "Governance/Policy",
+      "query": "What roles and enforcement responsibilities do the Central Pollution Control Board and State Pollution Control Boards hold in river basin governance?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 778,
+      "sentence_count": 4,
+      "grounded_sentence_count": 4,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Mapping of Legislations Applicable to the Ganga River Basin",
+          "file_name": "54_011PLG.pdf",
+          "page": "47-47",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Mapping of Legislations Applicable to the Ganga River Basin",
+          "file_name": "54_011PLG.pdf",
+          "page": "13-13",
+          "knowledge_type": "STATIC",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Ganga River Basin Management Plan Interim Report",
+          "file_name": "25_GRBMPInterim_Rep.pdf",
+          "page": "89-108",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "in particular, advising them in relation to the coordination of their activities with a view to resolve conflicts among them and to achieve maximum results in respect of the measures undertaken by them in the inter-State river or river valley for the purpose of - (vii) Prevention of pollution of the waters of inter-State river; Section 13 is the main section under River Boards Act, 1956 dealing with the issue of sanitation.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "As the Act is a central legislation it is applied to all the states.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "prevention and control of water pollution constituted under the Water.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "This, in effect, would help us improve the governance of urban sanitation (or sewage) sector in different states along the banks of river Ganga and her tributaries.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_GOV_04",
+      "category": "Governance/Policy",
+      "query": "How does the GRBMP propose restructuring river basin institutions into a multi-tier governance model?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 560,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 2,
+      "valid_citation_count": 2,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way Forward",
+          "file_name": "35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+          "page": "14-15",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way Forward",
+          "file_name": "35_70_Assessment of Potential Institutional Models for Sewage Treatment in Ganga Basin and the Way.pdf",
+          "page": "10-12",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "first and foremost task of which is formulating the integrated river basin management (Hooper, B, 2005).",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "Governance Mechanisms in the Proposed NGRBMP • Use of a system approach, in which attention is directed towards both natural and the human because both are affected directly or indirectly by the policy.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "An enabling environment for effective river basin governance is: Restructuring to meet new legislative requirements New legislative requirements may enable or even require restructuring of utility services.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_GOV_05",
+      "category": "Governance/Policy",
+      "query": "What economic instruments, effluent charges, and water tariff mechanisms are proposed to incentivize water conservation?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 429,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 2,
+      "valid_citation_count": 2,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": false,
+      "citations": [
+        {
+          "source": "Ganga River Basin Management Plan - 2015 Main Plan Document",
+          "file_name": "13_GRBMP - MPD.pdf",
+          "page": "132-180",
+          "knowledge_type": "HISTORICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Vision Ganga",
+          "file_name": "Vision Ganga Eng_Compressed.pdf",
+          "page": "124-124",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "ffluent for agriculture or disposal in inland water bodies has very serious effects on the users of such resources.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        },
+        {
+          "sentence": "Encouraging more recycling/reuse of effluent with application of advanced treatment technologies will limit the unsustainabl e exploitation of fresh water resources.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "IWIS • 2017 135134 IWIS • 2017 Water Trading, Valuation, Pricing and an Effective Tariff Regime D4.1.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        }
+      ]
+    },
+    {
+      "query_id": "Q_GOV_06",
+      "category": "Governance/Policy",
+      "query": "What are the key policy recommendations for managing domestic sewage and industrial pollution under the GRBMP governance framework?",
+      "pipeline_mode": "grounded",
+      "answer_length_chars": 523,
+      "sentence_count": 3,
+      "grounded_sentence_count": 3,
+      "groundedness_score": 1.0,
+      "extrinsic_hallucination_rate": 0.0,
+      "citation_count": 3,
+      "valid_citation_count": 3,
+      "citation_provenance_validity": 1.0,
+      "citation_binding_alignment": 1.0,
+      "matches_gold_document": true,
+      "citations": [
+        {
+          "source": "Policy and Governance Perspective and Analytical Framework for Management of Urban Sewage",
+          "file_name": "10_009PLG.pdf",
+          "page": "8-14",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": true
+        },
+        {
+          "source": "Policy and Governance Issues in Urban Water and Sanitation Sector: A Review and Lessons for Ganga Basin",
+          "file_name": "57_69_Policy and Governance Trends in Urban Water and Sanitation Sector in India.pdf",
+          "page": "7-12",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        },
+        {
+          "source": "Prevention of River Pollution by Urban Sewage: Recommendations from Policy and Governance Perspective based on a Model Case Study",
+          "file_name": "28_010PLG.pdf",
+          "page": "16-16",
+          "knowledge_type": "METHODOLOGICAL",
+          "valid_provenance": true,
+          "aligned_to_retrieved": true,
+          "matches_gold_document": false
+        }
+      ],
+      "sentence_evaluations": [
+        {
+          "sentence": "This document makes an attempt to present another perspective called as the Policy and Governance (P & G) perspective.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "It also elaborates on the Policy and Governance Framework, based on the Policy and Governance Perspective.",
+          "is_grounded": true,
+          "match_type": "verbatim_n_gram_match"
+        },
+        {
+          "sentence": "under the XIth plan by generating awareness and identifies fragmented institutional roles and responsibilities at the nationa l, state, and city level as one of the key issue to be carried out in an effective and efficient manner by the agencies concerned with governance of the sanitation sector.",
+          "is_grounded": true,
+          "match_type": "high_lexical_subsumption"
+        }
+      ]
+    }
+  ],
+  "category_summary": {
+    "Broad/Thematic": {
+      "query_count": 7,
+      "sentence_count": 25,
+      "grounded_sentence_count": 25,
+      "groundedness_rate": 1.0,
+      "citation_count": 21,
+      "valid_citation_count": 21,
+      "citation_provenance_rate": 1.0,
+      "gold_document_match_rate": 0.7143
+    },
+    "Technical/Scientific": {
+      "query_count": 7,
+      "sentence_count": 26,
+      "grounded_sentence_count": 26,
+      "groundedness_rate": 1.0,
+      "citation_count": 19,
+      "valid_citation_count": 19,
+      "citation_provenance_rate": 1.0,
+      "gold_document_match_rate": 0.4286
+    },
+    "Governance/Policy": {
+      "query_count": 6,
+      "sentence_count": 19,
+      "grounded_sentence_count": 19,
+      "groundedness_rate": 1.0,
+      "citation_count": 16,
+      "valid_citation_count": 16,
+      "citation_provenance_rate": 1.0,
+      "gold_document_match_rate": 0.3333
+    }
+  },
+  "boundary_evaluations": [
+    {
+      "boundary_id": "BND_OOD_01",
+      "query": "What are the main principles of quantum computing and qubit superposition?",
+      "boundary_type": "out_of_domain",
+      "expected_mode": "insufficient-evidence",
+      "observed_mode": "insufficient-evidence",
+      "citation_count": 0,
+      "spurious_citations_emitted": 0,
+      "boundary_handling_passed": true
+    },
+    {
+      "boundary_id": "BND_OOD_02",
+      "query": "What were the causes and consequences of the French Revolution in 1789?",
+      "boundary_type": "out_of_domain",
+      "expected_mode": "insufficient-evidence",
+      "observed_mode": "insufficient-evidence",
+      "citation_count": 0,
+      "spurious_citations_emitted": 0,
+      "boundary_handling_passed": true
+    },
+    {
+      "boundary_id": "BND_DYN_01",
+      "query": "What is the current water quality of the Ganga at Varanasi today?",
+      "boundary_type": "dynamic_telemetry",
+      "expected_mode": "current-info-fallback",
+      "observed_mode": "current-info-fallback",
+      "citation_count": 0,
+      "spurious_citations_emitted": 0,
+      "boundary_handling_passed": true
+    },
+    {
+      "boundary_id": "BND_DYN_02",
+      "query": "Show me the latest real-time pollution monitoring at Kanpur today.",
+      "boundary_type": "dynamic_telemetry",
+      "expected_mode": "current-info-fallback",
+      "observed_mode": "current-info-fallback",
+      "citation_count": 0,
+      "spurious_citations_emitted": 0,
+      "boundary_handling_passed": true
+    }
+  ],
+  "overall_summary": {
+    "total_corpus_queries": 20,
+    "total_sentences_evaluated": 70,
+    "grounded_sentences": 70,
+    "overall_groundedness_rate": 1.0,
+    "extrinsic_hallucination_rate": 0.0,
+    "total_citations_evaluated": 56,
+    "valid_provenance_citations": 56,
+    "citation_provenance_validity_rate": 1.0,
+    "citation_binding_alignment_rate": 1.0,
+    "citation_hallucination_rate": 0.0,
+    "gold_document_match_rate": 0.5,
+    "boundary_tests_passed": true,
+    "total_evaluation_time_seconds": 2.1
+  }
+}
