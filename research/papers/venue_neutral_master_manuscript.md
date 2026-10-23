@@ -1,272 +1,196 @@
 # AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
 
-
-**Project ID:** PRJ_316
+**Authors and affiliations:** To be supplied from verified institutional records. No author names, affiliations, or contact details are inferred in this draft.
 
 ## Abstract
 
-This paper describes Ganga AI Mascot (PRJ_316) as a research prototype combining a browser-based Three.js mascot and chat interface with a retrieval-augmented conversational Brain. The wider software prototype also includes optional voice adapters, English, Hindi, Kannada, and Tamil text handling, an in-browser knowledge quiz, and a separate CPCB route for selected live water-quality queries. The Brain indexes reviewed Ganga River Basin Management Plan (GRBMP) sections, retrieves dense candidates, reranks them using lexical overlap and a query-conditioned overview boost, and applies heuristic evidence gates before hosted generation. A configurable Groq-to-OpenRouter chain is followed by a local extractive generator; citations are assembled from retrieved metadata rather than generated citation strings. We report only results present in saved benchmark artifacts: a 30-query reranking comparison, a 20-query evidence-gate check, and a 20-query lexical groundedness and citation-metadata check. All reranking configurations shared a dense top-15 candidate pool; the lexical configuration therefore did not search the full corpus. The saved groundedness checks are operational heuristics, not semantic entailment judgments, and do not establish hallucination or citation correctness rates. No educational-outcome study, independent benchmark reproduction, or real-provider comparison is reported. The prototype and its small artifacts support a description of the integrated software and preliminary engineering evaluation, while broader claims about effectiveness, safety, and generalization remain open.
+This paper describes a browser-based digital mascot integrated with a retrieval-augmented question-answering system for Ganga River Basin Management Plan (GRBMP) material. The Brain retrieves up to 15 dense candidates, applies lexical-overlap and overview-aware reranking, checks evidence with heuristic gates, and then uses a configurable Groq-to-OpenRouter generation chain with extractive fallback. Citation records are assembled from retrieved metadata. The wider application also includes a Three.js avatar, a quiz, multilingual text paths, voice adapters, and a separate CPCB route for selected water-quality requests. Three saved evaluations are reported without rerunning the underlying experiments: a 30-query retrieval ablation, a selected 20-query evidence-gate check, and a 20-query lexical groundedness and citation-metadata check. Retrieval configurations rerank a shared dense top-15 candidate pool. The overview-boosted configuration had MRR@5 0.1444 versus 0.1261 for lexical and unweighted hybrid configurations, with lower recall (0.1278 versus 0.1333); all configurations had P@5 0.0533. On the selected gate set, 10/10 labeled answerable examples were accepted, and 5/5 examples in each of the out-of-domain and dynamic groups were rejected or intercepted. The groundedness script classified 70/70 answer sentences as passing a lexical heuristic and recorded 56/56 citation metadata checks and 56/56 limited source-or-page alignment checks. These operational results do not establish answer relevance, correctness, semantic entailment, general safety, educational impact, or performance on unseen queries. Missing benchmark code and index digests limit exact reproduction.
 
-## Keywords
+## Index Terms
 
-Retrieval-augmented generation; environmental information; digital mascot; evidence gating; citation metadata; multilingual interface; Ganga River; conversational systems.
+Retrieval-augmented generation, hybrid information retrieval, evidence gating, citation provenance, environmental information, digital mascot, Ganga River.
 
-## 1. Introduction
+## I. INTRODUCTION
 
-River-basin planning documents contain technical, historical, ecological, and governance material that is difficult to navigate through conversational interfaces. A conversational system for public awareness must make this material accessible while distinguishing document-supported answers from questions that require current measurements or fall outside the available corpus. A visual character can provide an interface for interaction, but its presence alone does not establish learning, trust, or behavior change.
+River-basin management plans combine scientific, ecological, historical, and governance information. A conversational interface may make such material easier to explore, but it must distinguish static document evidence from requests for current measurements and from questions the corpus does not support. A character interface can organize interaction; it does not by itself demonstrate learning or behavior change.
 
-Ganga AI Mascot (PRJ_316) is the software prototype studied here. Its active client combines a Three.js browser avatar, chat interface, and a knowledge quiz with a Brain service that retrieves evidence from reviewed GRBMP documents and generates answers only after a heuristic evidence gate accepts a query. The broader application includes configurable hosted language-model providers, an extractive fallback, metadata-based citation assembly, multilingual text handling, voice adapters, and a separate CPCB water-quality route. The work reported here concerns the implemented digital application; it does not report a physical robot implementation or evaluation. The reviewed GRBMP Main Plan Document is among the sources for the curated river-basin corpus [1]. Retrieval-augmented generation provides a general framework for combining parametric generation with non-parametric evidence [2]; this project implements a domain-specific retrieval and response pipeline.
+This work studies a software prototype that combines a browser-based Three.js mascot and chat client with a Brain service over reviewed GRBMP sections [1]. The prototype integrates dense candidate retrieval, lexical reranking, heuristic evidence checks, hosted generation with extractive fallback, and citations assembled separately from generated prose. A distinct integration route handles selected CPCB water-quality requests. The reported work is an implementation description and analysis of saved engineering artifacts, not a user study or a comparison of live model providers. The architecture follows the general RAG pattern of combining parametric generation with retrieved non-parametric evidence [2].
 
-The contribution of this paper is primarily architectural and descriptive. It documents the prototype, states the retrieval and gating rules in implementation-aligned terms, and summarizes saved technical evaluation artifacts with their limitations. It does not claim that the prototype prevents hallucinations, guarantees citation correctness, is generally safe, improves learning, or generalizes beyond the tested queries. The benchmark results are descriptive and do not include uncertainty estimates or repeated-run comparisons.
+The contribution is a traceable account of the implemented pipeline and a narrow descriptive evaluation. We specify its chunking, ranking, and evidence rules; distinguish the shared candidate pool from full-corpus search; and report the saved retrieval, gate, and lexical citation checks with explicit limitations. The paper makes no claim of perfect factuality, guaranteed citation support, general safety, educational effectiveness, or broad retrieval generalization.
 
-## 2. Related Work
+## II. EXISTING WORKS
 
-The literature relevant to PRJ_316 spans domain-specific environmental awareness, retrieval-augmented generation, conversational educational systems, and pedagogical agents. The reviewed Chacha Chaudhary mascot article provides thematic precedent for a Ganga-awareness character [3]. The author list in this manuscript follows the published PDF's title-block byline. The publisher landing page's “How to Cite” field instead names Dr. Preethi Jeevani; this discrepancy is documented in the research log.
+Retrieval-augmented generation (RAG) combines parametric generation with non-parametric document retrieval for knowledge-intensive tasks [2]. This prototype follows that broad architecture using a curated river-basin corpus and a local dense index. It adds lexical-overlap reranking and deterministic citation-record assembly from retrieved metadata; the evaluation below does not establish semantic claim support.
 
-Retrieval-augmented generation couples a language model with an external document index to support knowledge-intensive tasks [2]. PRJ_316 follows this general pattern but uses a reviewed document corpus, dense candidate retrieval, lexical reranking, explicit heuristic gates, and citation metadata assembled outside the model output. These mechanisms are engineering choices; the saved results do not establish that they ensure semantic support.
+The GRBMP Main Plan Document is a corpus source [1]. A related Ganga-awareness mascot paper provides domain context [3]; its author list here follows the published PDF title-block byline. The publisher’s “How to Cite” field conflicts on one author name, as documented in the research log. The paper describes a proposed system and its awareness aims, not measured outcomes. Reviews of conversational AI in education discuss opportunities and ethical or pedagogical concerns [4], [5]. Environmental-education studies in the reviewed set include an expert-consensus module design [6] and a heuristic/usability assessment of ChatGPT in its own study context [7]; neither evaluates this prototype. Reviews and meta-analyses of pedagogical agents and virtual characters report findings from other settings [8]–[11], which cannot be transferred to the system studied here.
 
-Reviews of conversational AI in education identify opportunities as well as concerns involving accuracy, privacy, pedagogical alignment, and responsible use [4, 5]. Environmental-education work includes an expert-consensus design developed with 12 experts [6] and heuristic/usability evaluation involving experts and students [7]. The first is design consensus, not a measured classroom learning outcome; the second evaluates ChatGPT in its study context and does not validate PRJ_316. Research on pedagogical agents includes meta-analyses and reviews, but pooled findings from other systems and settings cannot be transferred to PRJ_316 [8–11]. One virtual-character meta-analysis reports learning $g=0.42$ ($k=70$) and motivation $g=0.48$ ($k=47$) in its K–12 evidence base; these findings do not establish an effect for this prototype [8]. An earlier meta-analysis reported an overall learning effect of $g=0.19$ across 43 studies and 3,088 participants, also in a different evidence base [11].
+Sentence-level embedding methods provide background for semantic representation [12], while MiniLM describes a transformer compression approach [13]. In the application, `brain/embeddings.py` calls ChromaDB’s built-in ONNX `DefaultEmbeddingFunction` and identifies the model as `all-MiniLM-L6-v2`; Sentence-Transformers is not directly called by the application. The model card [14] describes the named checkpoint, but does not prove that the checked-in ONNX archive matches a particular remote revision.
 
-The project’s literature review is thematic and non-exhaustive. Within the sources reviewed, a directly comparable combination of a three-dimensional environmental mascot, domain-grounded retrieval, and metadata-based citations was not identified. This is a bounded observation about the reviewed literature, not proof that no comparable system exists.
+The literature review is thematic rather than systematic. Within the reviewed sources, a directly comparable combination of an environmental mascot, domain-grounded retrieval, and metadata-based citations was not identified. This bounded observation is not evidence that no comparable system exists.
 
-## 3. Research Gap and Contributions
+## III. SYSTEM ARCHITECTURE AND METHODOLOGY
 
-The reviewed work motivates investigation of how a recognizable character interface can be combined with a domain-specific evidence pipeline. The present prototype explores that engineering combination for Ganga and Namami Gange material. It contributes:
+### A. Corpus Processing and Index
 
-1. A document-processing and review pipeline that produces a local index from approved GRBMP sections.
-2. A hybrid reranking and heuristic evidence-gating pipeline, with query-conditioned overview boosting.
-3. A generation layer that supports a configurable hosted-provider chain followed by extractive fallback, while assembling citations from retrieved metadata.
-4. Integration of the Brain with a Three.js mascot, multilingual text handling, voice adapters, an in-browser knowledge quiz, and a distinct live water-quality route.
-5. Saved small-scale retrieval, gate, and heuristic groundedness artifacts that expose implementation behavior but do not constitute broad validation.
+The source inventory records 86 GRBMP PDFs and 4,609 pages. Review records identify 1,111 approved or retained sections. The checked-in SQLite index contains 4,085 chunks and 83 distinct source filenames; three inventoried PDFs are absent from that index. The matching chunk and distinct-filename counts in the groundedness artifact do not prove that its run used this exact index because the artifact contains no index digest.
 
-These are system and evaluation-artifact contributions. Learning outcomes, user experience, claim-level factuality, and comparative provider performance remain unevaluated in the evidence reported here.
+`brain/chunking.py` normalizes whitespace and greedily packs paragraphs toward a 1,400-character target with a 180-character suffix overlap. A subsequent repair merges short chunks below 120 characters into the preceding chunk; a first chunk can remain below this minimum, and oversized paragraphs are not split, so 1,400 is not a hard maximum. The semantic embedding path is configured as 384-dimensional and uses ChromaDB’s default ONNX embedding function for the named `all-MiniLM-L6-v2` checkpoint. A separate normalized 384-dimensional local-hash implementation is available as an alternative, not as the reported semantic index configuration.
 
-## 4. System Architecture
+### B. Candidate Retrieval, Reranking, and Evidence Gate
 
-The system separates browser presentation, integration services, and the Brain retrieval-and-generation subsystem. The browser renders the character and chat interface and includes an in-browser quiz. The integration service handles conversation state, optional speech input/output, avatar presentation, and CPCB routing. Its configured water-quality service maps selected queries to five stations (Haridwar, Kanpur, Ghazipur, Farakka, and Nabadwip); this is not basin-wide monitoring. Non-CPCB questions are passed to the Brain, which normalizes language, handles current-information requests, retrieves and filters evidence, generates a response, and returns citation metadata.
+For each benchmark query, the runner requests up to 15 dense candidates using Euclidean distance, then applies each scoring configuration to that same pool. The production retriever returns up to five accepted hits by default. Configurations A–D are defined in Section IV. In particular, configuration B is a lexical score used to rerank dense candidates, not a full-corpus lexical search.
 
-```mermaid
-flowchart TD
-    U[User text or speech] --> WEB[Browser chat, quiz, voice UI and Three.js mascot]
-    WEB --> INT[Integration service and conversation controller]
-    INT -->|Selected water-quality query| CPCB[CPCB service route]
-    CPCB --> PRES[Presentation with source and freshness metadata]
-    INT -->|Other question| LANG[Language normalization and translation]
-    LANG --> CUR{Current-information query?}
-    CUR -->|Yes| INFO[Current-information fallback]
-    CUR -->|No| RET[Dense retrieval: up to 15 candidates]
-    RET --> GATE[Coverage, distance, overlap filtering and reranking]
-    GATE -->|Rejected| INSUFF[Insufficient-evidence response]
-    GATE -->|Accepted| CHAIN[Groq then OpenRouter by default]
-    CHAIN -->|Providers unavailable or fail| EXT[Extractive generator]
-    CHAIN -->|Generated answer| CITE[Citations assembled from retrieved metadata]
-    EXT --> CITE
-    INFO --> OUT[Response and presentation]
-    INSUFF --> OUT
-    CITE --> OUT
-    PRES --> OUT
-    OUT --> WEB
-```
+The gate first computes the fraction of extracted query keywords found in at least one candidate’s text, title, or section. A nonempty keyword set with coverage below 0.60 is rejected. Candidates beyond the configured distance cutoff (default 1.15 for the semantic path; 1.35 for local-hash) are removed. After reranking, a query with more than one keyword is rejected when the top hit’s overlap is below 0.15. These are lexical and distance heuristics, not semantic relevance judgments or calibrated confidence.
 
-The source inventory records 86 source PDFs (4,609 pages), 1,111 approved/reviewed sections, and 4,085 indexed chunks. Read-only inspection of the checked-in index manifest and SQLite metadata found 4,085 chunks across 83 distinct source filenames; three PDFs in the source directory are not represented in that index. The saved groundedness artifact reports the same 4,085/83 counts, but it does not record an index digest, so its use of this exact index snapshot cannot be established. Dataset hashes establish byte-level identity of the evaluation query files; they do not validate the correctness or completeness of their gold labels.
+The Brain separately intercepts recognized freshness terms paired with configured dynamic topics and returns a current-information fallback without retrieval or generation. In the integrated controller, selected live water-quality requests are routed to the CPCB service before this Brain fallback. CPCB support is limited to five configured stations—Haridwar, Kanpur, Ghazipur, Farakka, and Nabadwip—and uses external endpoints. Routing does not guarantee availability, freshness, completeness, representativeness, or correctness of the readings.
 
-Current-information handling in the Brain returns a static-knowledge disclaimer for recognized dynamic requests. The integration controller can intercept selected water-quality queries and route them to a CPCB service before the Brain. This path is distinct from the hosted LLM chain and does not imply verification of external endpoint availability or data-reuse terms.
+### C. Generation and Citation Assembly
 
-## 5. Methodology
+Generation is reached only after retrieval and the existing evidence gate accept a question. Hosted providers are attempted in configurable order, Groq then OpenRouter by default, once each per request; the configured defaults are `openai/gpt-oss-120b` for Groq and `nvidia/nemotron-3.5-super-vl:free` for OpenRouter. Missing credentials and request failures advance to the next provider, followed by extractive generation. These settings describe code configuration, not a live-provider smoke test. `LLM_PROVIDER=extractive` is the local-only generator mode.
 
-### 5.1 Knowledge preparation
+The generator bounds the concatenated evidence text to 6,000 characters; this does not cap the entire prompt. Its output-token parameter is capped at 700. Provider instructions request an answer from supplied evidence and prohibit model-created citation strings. Citation objects are deduplicated from metadata on included retrieved hits. This makes citation-record construction independent of generated text, but does not prove source metadata correctness or claim-level entailment. The extractive fallback may cite only the hits that contributed selected sentences and can return a different citation list.
 
-The active index is described as containing 4,085 chunks derived from 1,111 approved/reviewed sections. The separate source inventory lists 86 PDFs and 4,609 pages; document counts are not silently equated with the groundedness artifact’s 83 unique file names. Chunk construction normalizes whitespace and packs paragraphs toward a 1,400-character target, with a 180-character overlap and a 120-character minimum repair rule. The target is not a hard maximum: an oversized paragraph may remain intact, overlap can make a following chunk exceed the target, and the first chunk can remain shorter than the minimum. Embeddings are 384-dimensional and unit-normalized in the configured semantic and hash implementations. In the semantic implementation, `brain/embeddings.py` names `all-MiniLM-L6-v2` and `ONNXSemanticEmbedding` instantiates ChromaDB’s `DefaultEmbeddingFunction`, delegating embedding calls to that function; the application does not call the Sentence-Transformers library directly. The index manifest records the model archive digest and runtime metadata, but does not identify a corresponding remote model-card revision. Sentence-BERT [12] provides sentence-embedding methodological background, and MiniLM [13] provides architectural background. The `all-MiniLM-L6-v2` model card [14] identifies the checkpoint and describes its 384-dimensional sentence embeddings and intended semantic-search use; it does not establish that the checked-in ONNX archive matches a particular remote revision. The optional local-hash baseline maps token hashes into a normalized 384-dimensional vector.
+### D. Mascot and Supporting Interfaces
 
-### 5.2 Retrieval and reranking
+The integration includes a Three.js browser avatar, quiz interface, optional STT/TTS adapters, and language handling for English, Hindi, Kannada, and Tamil. Voice configuration is not equivalent to experimentally verified recognition or synthesis quality. Edge TTS has configured voices for all four languages; Windows SAPI fallback is limited to English and Hindi. Translation may call an external Google Translate GTX endpoint when enabled; the evaluation does not measure translation quality or establish privacy properties. These capabilities support the application but are not evaluated outcomes in this paper.
 
-For each query, the vector store returns up to 15 dense candidates by Euclidean distance. The ablation benchmark compares four ranking scores over this same dense candidate pool: dense proximity (A), lexical overlap (B), dense plus weighted overlap (C), and dense plus weighted overlap plus an overview boost (D). Thus, B is lexical reranking of dense candidates, not an independent full-corpus lexical retrieval method. The production-gated condition additionally applies the candidate-pool coverage and distance filters before ranking and a top-hit overlap check afterward.
+## IV. MATHEMATICAL FORMULATION
 
-The reported retrieval set contains 30 curated queries divided into broad/thematic, technical/scientific, and governance/policy groups, with 42 unique annotated gold chunk IDs. The saved query dataset SHA-256 is `66f6df3f8758b3e50ff8f6f5373bd354f98a82eb8e6bbf31dd8c84f38923a999`. The validator checks the structure and existence of gold IDs in the configured index; it does not independently establish annotation support. Each metric is aggregated over the saved set; no confidence intervals or repeated-run variability are available.
+For the reported semantic-index configuration, let $q$ be a query, $e(q)\in\mathbb{R}^{384}$ its unit-normalized embedding, and $d_i$ a unit-normalized indexed vector. Candidate retrieval orders chunks by Euclidean distance:
 
-### 5.3 Evidence-gate evaluation
+\begin{equation}
+\delta(q,d_i)=\|e(q)-d_i\|_2,\qquad
+\mathcal{C}_{15}(q)=\operatorname{Top15}_{d_i}[-\delta(q,d_i)].
+\label{eq:dense}
+\end{equation}
 
-The gate artifact contains 20 selected queries: 10 labeled answerable in-domain, five unsupported out-of-domain, and five dynamic/time-sensitive. The artifact records whether the pipeline accepted or rejected each case. This is an operational check on those selected queries, not a calibrated safety evaluation or an estimate of behavior on a broader query population. Dataset SHA-256: `f5d0d77a75a8ce9ec29a0798486eeca3a89649b838aad4324d1a5e09ce288ca2`.
+For unit vectors, this distance lies in $[0,2]$. Let $K(q)$ be the keyword list produced by lowercasing and tokenization, after removing tokens shorter than three characters and configured English stop words. Repeated occurrences are retained. Let $T(c)$ concatenate lowercased chunk text, title, and section metadata. The implementation’s pool coverage and candidate overlap are substring-presence ratios:
 
-### 5.4 Groundedness and citation-metadata evaluation
+\begin{equation}
+\mathrm{cov}(q,\mathcal{C})=\begin{cases}
+\frac{\sum_{w\in K(q)}\mathbf{1}[\exists c\in\mathcal{C}:w\subset T(c)]}{|K(q)|},&|K(q)|>0,\\
+1,&|K(q)|=0,
+\end{cases}
+\label{eq:coverage}
+\end{equation}
 
-The groundedness artifact contains 20 corpus questions, categorized as seven broad/thematic, seven technical/scientific, and six governance/policy cases. Its script applies lexical sentence-to-evidence checks and citation metadata rules. The rules do not adjudicate semantic entailment. Clauses of three or fewer words can be classified as grounded automatically; citation alignment accepts a matching source or page field; and gold-document matching compares cited file names with annotations. The artifact does not identify the generation provider or mode. Dataset SHA-256: `8755cefa4455c31e8c24c858b8ac7113e80657a3a29808488f346d9007b51fcb`.
+\begin{equation}
+\mathrm{ov}(q,c)=\begin{cases}
+\frac{\sum_{w\in K(q)}\mathbf{1}[w\subset T(c)]}{|K(q)|},&|K(q)|>0,\\
+1,&|K(q)|=0.
+\end{cases}
+\label{eq:overlap}
+\end{equation}
 
-## 6. Mathematical Formulation
+The first gate requires $\mathrm{cov}\geq0.60$. After distance filtering, the second requires $\mathrm{ov}(q,c^*)\geq0.15$ for the top-ranked candidate $c^*$ when $|K(q)|>1$. The score used by the production retriever is
 
-Let $q$ be a query, $e(q)\in\mathbb{R}^{384}$ its embedding, and $d_i\in\mathbb{R}^{384}$ an indexed chunk vector. For the configured normalized embedding functions, nonzero vectors are unit-normalized. The vector store computes Euclidean distance (unitless, in $[0,2]$ for unit vectors) and obtains up to 15 nearest chunks:
+\begin{equation}
+S_D(q,c)=\frac{1}{1+\delta(q,c)}+0.5\,\mathrm{ov}(q,c)+0.25\,\mathbf{1}[B(q)\land O(c)],
+\label{eq:hybrid}
+\end{equation}
 
-\[
-\delta(q,d_i)=\|e(q)-d_i\|_2, \qquad C_{15}(q)=\operatorname{Top15}_{d_i}\big(-\delta(q,d_i)\big).
-\]
+where $B(q)$ indicates that the query contains “Ganga” or “river” and no configured specific-topic token, and $O(c)$ identifies a hit using configured overview filenames/titles or qualifying overview-section metadata. The coefficients and cutoffs are fixed heuristics, not learned weights or probabilistic confidence values.
 
-Let $K(q)$ be the list of query keywords remaining after tokenization and stop-word filtering. Tokens shorter than three characters and configured English stop words are removed; repeated keyword occurrences are retained. For a candidate $c$, let $T(c)$ be the lowercased concatenation of its text, title, and section metadata. Pool coverage and individual overlap are operational substring ratios:
+For evaluation, configuration A scores $1/(1+\delta)$; B scores $\mathrm{ov}$; C scores $1/(1+\delta)+0.5\mathrm{ov}$; and D adds the overview term in (3). The benchmark sorts score descending and distance ascending, retaining input order on complete ties. The production retriever sorts only by score descending and inherits input order on ties. Precision@5, recall@5, and reciprocal rank at 5 are computed against annotated gold chunk IDs and averaged over queries as defined in the benchmark documentation.
 
-\[
-\operatorname{coverage}(q,C)=\begin{cases}\frac{\sum_{w\in K(q)}\mathbf{1}[w\text{ occurs in some }T(c),c\in C]}{|K(q)|},&|K(q)|>0\\1,&|K(q)|=0,\end{cases}
-\quad
-\operatorname{overlap}(q,c)=\begin{cases}\frac{\sum_{w\in K(q)}\mathbf{1}[w\text{ occurs in }T(c)]}{|K(q)|},&|K(q)|>0\\1,&|K(q)|=0.\end{cases}
-\]
+## V. EXPERIMENTAL SETUP AND EVALUATION
 
-When the keyword list is empty, the implementation defines the corresponding ratio as 1. A non-empty keyword list is rejected at the first gate when pool coverage is below 0.60. Candidates beyond the configured semantic distance threshold (default 1.15) are removed; the local-hash path uses a 1.35 cutoff. The second gate rejects a multi-keyword query if the highest-ranked candidate has overlap below 0.15. For remaining candidates, the production hybrid score is:
+Three saved artifacts are examined; their underlying benchmark runs are not repeated here. The retrieval ablation contains 30 curated queries (10 each broad/thematic, technical/scientific, and governance/policy) with 42 unique annotated gold chunk IDs. Its dataset SHA-256 is `66f6df3f8758b3e50ff8f6f5373bd354f98a82eb8e6bbf31dd8c84f38923a999`. All four ranking configurations share the same dense top-15 candidate pool. Reported metrics are per-query P@5, R@5, and MRR@5 means. There are no uncertainty estimates or repeated runs.
 
-\[
-S(q,c)=\frac{1}{1+\delta(q,c)}+0.5\,\operatorname{overlap}(q,c)+0.25\,\mathbf{1}[B(q)\land O(c)],
-\]
+The evidence-gate artifact contains 20 selected examples: 10 labeled answerable, five unsupported out-of-domain, and five dynamic/time-sensitive. Its dataset SHA-256 is `f5d0d77a75a8ce9ec29a0798486eeca3a89649b838aad4324d1a5e09ce288ca2`. The artifact checks outcomes on this set only; it is not an estimate over a population of user queries.
 
-where $B(q)$ is true when the query contains “Ganga” or “river” and has no token in the configured set of specific topic terms; $O(c)$ marks a hit from configured overview filenames/titles or qualifying overview sections and titles. The overview term therefore depends on both a query-type rule and hit metadata. These constants and thresholds are prototype heuristics, not calibrated probabilities or learned parameters. Up to five accepted hits are returned by default. The production retriever sorts by score descending; the benchmark runner sorts by score descending and Euclidean distance ascending. Neither defines a chunk-ordinal tiebreaker for complete ties, so ordering can inherit candidate order.
+The groundedness artifact covers 20 corpus questions and has dataset SHA-256 `8755cefa4455c31e8c24c858b8ac7113e80657a3a29808488f346d9007b51fcb`. It records sentence-level lexical checks, metadata checks, a permissive source-or-page alignment check, and overlap between cited filenames and annotated gold-document sets. These are separate operational criteria with different denominators; none is semantic entailment or human annotation.
 
-The generator bounds the concatenated evidence text to 6,000 characters; this bound applies to evidence text, not the full prompt. Its output budget is capped at 700 tokens. Citation objects are assembled from metadata on retrieved hits; this describes provenance-field construction, not a proof that each answer claim is entailed by the cited page. The extractive fallback selects sentences from retrieved text and can consequently return a different citation subset from hosted generation.
+The available result JSONs do not record the benchmark code revision and index digest. The groundedness JSON also omits provider, model, and generation mode. Dataset hashes verify query-file bytes, not annotation validity or index identity. Thus, the figures reproduce saved aggregates, not independent re-executions of retrieval or answer generation.
 
-## 7. Implementation Details
+## VI. RESULTS AND DISCUSSION
 
-The Brain is organized around configuration, retrieval, generation, and response orchestration. `brain/config.py` reads project-root environment configuration and defines embedding, retrieval, and provider settings. `brain/vector_store.py` manages the SQLite metadata and NumPy vector index; `brain/retriever.py` performs candidate retrieval, reranking, and evidence filtering; `brain/rag_pipeline.py` sequences language handling, dynamic-query checks, retrieval, generation, and response construction.
+### A. Retrieval Ablation
 
-Hosted generation uses independent OpenAI-SDK-compatible clients for Groq and OpenRouter. The default hosted order is Groq followed by OpenRouter, configurable by environment. Each configured provider is attempted at most once for a generation request; missing credentials or provider failures advance the chain, and extraction is the final response fallback. `LLM_PROVIDER=extractive` selects local extractive generation. No live-provider availability or comparative quality result is inferred from this configuration or the saved artifacts.
+Table I reports the production-gated aggregates saved for the 30-query retrieval set. All configurations have P@5 of 0.0533. D has the highest MRR@5 (0.1444) but its R@5 (0.1278) is lower than B and C (0.1333); this is a ranking trade-off, not a uniform improvement. B and C have equal saved aggregate values. Figure 1 visualizes these aggregate values. The benchmark's lexical configuration reranks dense candidates, so the comparison does not establish the behavior of corpus-wide lexical search.
 
-Generation receives the accepted retrieved evidence and a grounding-oriented instruction. It is asked not to create citation references. Citation fields are generated separately from hit metadata. For multilingual text, the implementation supports English, Hindi, Kannada, and Tamil language codes and uses Unicode-script counts for a basic language detector. General translations use an external Google Translate GTX endpoint when enabled; selected fixed phrases are handled by a local phrase map. The saved benchmark artifacts do not evaluate translation quality, provider privacy, or multilingual answer correctness. External translation therefore represents a data-handling consideration, not a verified local or private service.
+| Configuration | P@5 | R@5 | MRR@5 |
+|---|---:|---:|---:|
+| A: dense proximity | 0.0533 | 0.1278 | 0.1083 |
+| B: lexical overlap | 0.0533 | 0.1333 | 0.1261 |
+| C: dense + weighted overlap | 0.0533 | 0.1333 | 0.1261 |
+| D: C + overview boost | 0.0533 | 0.1278 | 0.1444 |
 
-The integration layer supports voice adapters and a Three.js avatar, and the browser client includes a quiz interface. The implementation configures Edge TTS voice identifiers for English, Hindi, Kannada, and Tamil; its Windows SAPI fallback is configured only for English and Hindi. These configured identifiers do not establish reliable live synthesis across languages or environments. The technical baseline also identifies Vosk models for English and Hindi. This paper does not report an end-to-end speech-recognition or speech-synthesis quality study, so configured language support is not presented as experimentally validated behavior. The CPCB route is separate from Brain generation. The quiz and avatar are implementation features, not evaluated learning interventions; neither usability nor learning impact is measured here. Although PRJ_316's broader scope includes an interactive robot mascot, the implementation evaluated in this paper is the software and browser-based digital-avatar prototype; physical robotics is outside the reported evaluation.
+![Figure 1. Production-gated retrieval metrics by configuration.](figures/fig1_retrieval_ablation.pdf)
 
-## 8. Experimental Setup
+**Fig. 1.** Saved P@5, R@5, and MRR@5 aggregates for four ranking configurations over the same dense top-15 candidate pool (30 queries). No uncertainty interval is available.
 
-This manuscript summarizes saved artifacts; no new benchmark or experiment was run for its preparation. Artifact metadata identifies Python 3.13.3 and a macOS 26.7.1 ARM64 environment for the reported retrieval and gate runs. The retrieval artifact records the query-set hash and configuration labels but not the code commit or a corpus/vector-index digest. The groundedness artifact records its dataset hash, chunk count, and document-name count, but not the code commit, index digest, provider, or generation mode. Independent reproduction of these artifacts was not performed.
+### B. Category-Level Ranking
 
-| Evaluation artifact | Cases | Operational measurement | Provenance and scope |
-|---|---:|---|---|
-| Retrieval reranking | 30 queries | P@5, R@5, MRR@5 for four ranking configurations | Shared dense top-15 pool; dataset hash recorded; code commit and index digest absent |
-| Evidence gate | 20 queries | Accept/reject outcomes for answerable, OOD, and dynamic examples | Selected cases only; dataset hash recorded |
-| Groundedness/citation metadata | 20 queries | Lexical sentence classification, citation-field checks, source/page alignment, gold-file match | Heuristic checks; generator/provider and index digest not recorded |
-
-## 9. Results
-
-### 9.1 Retrieval reranking
-
-Table 1 reproduces the aggregate metrics from `retrieval_ablation_results.json`. The production-gated results apply the candidate-pool coverage, distance, and post-reranking overlap conditions. Ungated results rank the same dense candidate pool without early gate rejection. Values are descriptive for the 30 saved queries.
-
-**Table 1. Retrieval ranking metrics at $k=5$.**
-
-| Condition | Configuration | P@5 | R@5 | MRR@5 |
-|---|---|---:|---:|---:|
-| Production-gated | A: dense score | 0.0533 | 0.1278 | 0.1083 |
-| Production-gated | B: lexical overlap within dense pool | 0.0533 | 0.1333 | 0.1261 |
-| Production-gated | C: dense + 0.5 lexical | 0.0533 | 0.1333 | 0.1261 |
-| Production-gated | D: C + 0.25 overview boost | 0.0533 | 0.1278 | 0.1444 |
-| Ungated | A: dense score | 0.0600 | 0.1444 | 0.1194 |
-| Ungated | B: lexical overlap within dense pool | 0.0533 | 0.1333 | 0.1261 |
-| Ungated | C: dense + 0.5 lexical | 0.0533 | 0.1333 | 0.1261 |
-| Ungated | D: C + 0.25 overview boost | 0.0533 | 0.1278 | 0.1444 |
-
-In the production-gated condition, D has the largest aggregate MRR@5 among these configurations (0.1444): approximately 33.3% higher than A (0.1083) and 14.5% higher than C (0.1261). The relative increase describes this set only. P@5 is unchanged at 0.0533 across all four settings, while D’s R@5 (0.1278) is lower than B and C (0.1333). Thus, the MRR difference is not an across-the-board gain in retrieved relevant items. In the ungated condition, A has the highest reported P@5 and R@5, while D has the highest reported MRR@5. These differences are descriptive, without significance tests or repeated-run uncertainty. They do not establish a general advantage of one configuration.
-
-Category MRR@5 is 0.2750, 0.3033, 0.3033, and 0.3333 for A–D on broad/thematic queries; 0.0500 for all four settings on technical/scientific queries; and 0.0000, 0.0250, 0.0250, and 0.0500 for A–D on governance/policy queries. Governance performance remains low in absolute terms. No causal explanation for subgroup differences is established by these aggregates, and the 10 queries per category are too few to support broad claims.
-
-**Table 2. Production-gated category MRR@5 (10 queries per category).**
+Figure 2 shows that technical MRR@5 remains 0.0500 in all configurations. Broad-query MRR is higher under D (0.3333), while governance remains low (0.0000–0.0500). Each category contains ten queries; small differences should be interpreted descriptively.
 
 | Configuration | Broad/thematic | Technical/scientific | Governance/policy |
 |---|---:|---:|---:|
-| A: dense score | 0.2750 | 0.0500 | 0.0000 |
-| B: lexical overlap within dense pool | 0.3033 | 0.0500 | 0.0250 |
-| C: dense + lexical | 0.3033 | 0.0500 | 0.0250 |
-| D: C + overview boost | 0.3333 | 0.0500 | 0.0500 |
+| A | 0.2750 | 0.0500 | 0.0000 |
+| B | 0.3033 | 0.0500 | 0.0250 |
+| C | 0.3033 | 0.0500 | 0.0250 |
+| D | 0.3333 | 0.0500 | 0.0500 |
 
-### 9.2 Evidence-gate cases
+![Figure 2. Category MRR@5 by configuration.](figures/fig2_category_mrr.pdf)
 
-**Table 3. Evidence-gate outcomes in the 20-query saved set.**
+**Fig. 2.** Broad/thematic, technical/scientific, and governance/policy MRR@5 from the saved production-gated artifact. Zeros are shown; each category contains ten queries.
 
-| Query group | Accepted/rejected outcome | Count |
-|---|---|---:|
-| Labeled answerable in-domain | Accepted | 10/10 |
-| Unsupported out-of-domain | Rejected | 5/5 |
-| Dynamic/time-sensitive | Intercepted by Brain temporal filter (current-info fallback) | 5/5 |
+### C. Evidence-Gate Outcomes
 
-The Brain-only benchmark records the expected outcome for each of these 20 selected cases: 10/10 answerable examples were accepted, 5/5 OOD examples were rejected at the lexical coverage threshold, and 5/5 current/dynamic examples were intercepted by the temporal-intent filter. The benchmark does not call the integration controller and therefore does not evaluate CPCB routing. This result is limited to the curated set and should not be described as evidence of general safety, calibrated confidence, or a zero false-acceptance rate outside these examples. Four separate boundary examples in the groundedness report also show two OOD rejections and two dynamic-query fallbacks; they are not independent broad validation.
+The artifact records expected decisions for all 20 selected cases: 10/10 labeled answerable queries were accepted, 5/5 out-of-domain queries rejected, and 5/5 dynamic queries intercepted. Figure 3 displays the observed decisions with their group denominators. Dynamic handling was the Brain’s temporal-query fallback; this benchmark did not test the separate integration CPCB route.
 
-### 9.3 Groundedness and citation metadata
+![Figure 3. Evidence-gate outcomes.](figures/fig3_evidence_gate.pdf)
 
-**Table 4. Operational checks in the saved groundedness artifact.**
+**Fig. 3.** Matching observed decisions in each selected query group, with sample sizes shown. These counts do not establish unseen-query behavior or general safety.
 
-| Check | Saved result | Interpretation |
-|---|---:|---|
-| Sentences passing lexical heuristic | 70/70 (100%) | Lexical overlap/subsumption classifier result; not semantic entailment |
-| Citation metadata/provenance checks | 56/56 (100%) | Filename membership in loaded corpus and nonempty source/page fields |
-| Citation/retrieval alignment checks | 56/56 (100%) | A retrieved hit shared source OR page; this permissive check is not exact binding validation |
-| Queries matching an annotated gold document | 10/20 (50%) | At least one cited filename matched the query’s annotated gold-file set |
+### D. Groundedness and Citation Checks
 
-The saved JSON contains 70 classified sentences across 20 cases; all 70 passed the implemented lexical rule. Its legacy `extrinsic_hallucination_rate` field is the complement of that heuristic result (0 for this run), not an empirically measured hallucination rate. The script automatically accepts clauses of three words or fewer as grounded. The benchmark does not measure whether an answer addresses its question, independently establish answer correctness, or determine semantic entailment. Because it checks lexical overlap against concatenated retrieved text, irrelevant or partially unrelated text can be classified as grounded. For example, in the existing saved artifact (Q_BROAD_01), a response to an Aviral Dhara question begins with an Active Flood Plain definition and the heuristic classifies that sentence as grounded by high lexical subsumption; this is an example from the existing benchmark, not a new experiment. Thus, 70/70 is only the heuristic's classification result and must not be interpreted as 100% answer quality, relevance, or factual correctness. These automated outputs are not human-verified semantic groundedness or evidence of zero hallucinations in use. All 56 citations passed the script’s metadata checks and its permissive source-OR-page alignment test. Neither check verifies page contents or whether a cited passage entails a claim. Ten of 20 queries had at least one cited filename matching the annotated gold-file set. Other citations may identify another corpus document, but no claim-level adjudication establishes that they are parallel regulatory support or that they support the answer. The artifact does not identify the generation provider, model, or mode, so extractive generation cannot be assumed.
+The saved groundedness JSON contains 70 evaluated sentences and classifies all 70 as passing its lexical heuristic. It does not measure whether answers address their questions, establish factual correctness, or adjudicate entailment. Clauses of three words or fewer are accepted automatically, and lexical overlap may classify irrelevant or partially unrelated text as grounded. In existing case Q_BROAD_01, for example, the response to an Aviral Dhara question begins with an Active Flood Plain definition, which the heuristic classified as grounded by high lexical subsumption; this is an artifact example, not a new experiment.
 
-## 10. Discussion
+The JSON records 56/56 citation metadata checks, 56/56 source-or-page alignment checks, and at least one exact annotated gold-document filename in 10/20 queries. Metadata checks require corpus filename membership and nonempty source/page fields; alignment accepts a retrieved hit sharing either source or page. Neither checks page text or claim support. The 50% gold-document overlap is not proof that other citations are wrong or that they are valid substitutes. The artifact does not identify which generator or provider produced the saved answers. We therefore do not interpret the legacy JSON complement field as an empirical hallucination rate.
 
-Together, the artifacts support three narrow observations about this saved prototype configuration: alternative scores changed ranking order within the same dense top-15 pool; the implemented gate produced expected labels on the 20 selected examples; and the lexical scripts classified the saved answer sentences and citation records according to their stated rules. The 70/70 groundedness classification does not measure whether answers address their questions, answer correctness, or semantic entailment, and lexical overlap can accept irrelevant or partially unrelated text. The retrieval results suggest that D moved some relevant chunks earlier in this 30-query set, as reflected by MRR, but the equal P@5 and lower recall than B/C show a ranking trade-off rather than uniform improvement. Technical-query MRR did not change, and governance MRR remained small. These findings motivate a larger stratified held-out query set, including separately measured candidate recall and a full-corpus lexical baseline; the current artifacts do not test generalization.
+## VII. LIMITATIONS AND THREATS TO VALIDITY
 
-The evidence-gate artifact shows expected outcomes for its 20 selected examples, but its lexical coverage and temporal phrase rules do not establish semantic understanding or complete OOD detection. A separate CPCB path supports selected questions at five configured stations; neither routing nor a successful response guarantees that data are available, current, representative of the basin, or correct. Better gate evaluation would require diverse, independently labeled in-domain, ambiguous, OOD, and temporal queries, with held-out cases and error analysis. Citation evaluation would require claim-level evidence annotation and independent adjudication; the present 50% exact gold-file overlap cannot be interpreted as either citation failure or valid alternate support without that review.
+The retrieval set has 30 curated queries, while gate and groundedness sets each have 20. Gold labels and selected gate labels were not independently adjudicated in this paper. Results are from saved artifacts without repeated runs, confidence intervals, or full code/index provenance. Reranking is conditional on a shared dense top-15 pool; candidate-generation recall is not isolated from ranking effects.
 
-All three experiments share small, fixed test sets; limited label validation; one saved run; and incomplete code/index provenance. Missing provider and generation-mode metadata further weakens interpretation of the answer-level artifact. Dataset hashes verify the bytes of query files, not whether the gold labels or judgments are valid. Stronger conclusions require larger independently annotated test sets, repeat runs with a versioned code/index/configuration snapshot, complete provider/model/mode logging that excludes secrets, and human claim-evidence review. The architecture separates educational content retrieval, answer generation, voice/avatar presentation, and selected live telemetry. However, no user study or controlled educational assessment has measured usability, knowledge gain, engagement, trust, or behavior change. Prior educational findings provide context but cannot substitute for project-specific evidence [6–11].
+The gates use substring overlap, distance thresholds, and lexical temporal phrases. These rules can reject supported questions or accept weakly related candidates. The groundedness script tests lexical overlap, not question relevance, answer correctness, or semantic entailment. Citation metadata and limited alignment tests do not establish that a page supports an answer claim. No zero-hallucination or citation-guarantee conclusion follows.
 
-## 11. Limitations and Threats to Validity
+The index represents 83 source filenames, whereas the inventory lists 86 PDFs; three named source PDFs are absent from the checked-in index. Although the saved groundedness artifact has the same chunk and filename counts, it has no digest tying it to the current index. Retrieval and gate JSONs lack benchmark commit/index digest; the groundedness JSON also lacks provider/model/generation mode. Exact computational reproduction is consequently limited.
 
-**Table 5. Principal limitations and threats.**
+External hosted LLM, translation, and CPCB services may be unavailable or change. CPCB coverage is limited to five configured stations, and routed readings are not necessarily fresh or complete. External translation can transmit text when enabled. Configured language and voice identifiers are not a language-quality evaluation. No human participants, learning outcomes, usability, awareness, trust, or behavior change were measured. No physical robot implementation or evaluation is reported. The literature review is non-exhaustive, R1 has conflicting author metadata between its PDF title block and publisher citation field, and R7 remains OnlineFirst without final issue assignment in the checked publisher record.
 
-| Area | Limitation | Consequence for interpretation |
-|---|---|---|
-| Query sampling | Retrieval uses 30 curated queries; gate and groundedness use 20 each | Results may not represent naturally occurring questions or other domains |
-| Candidate pool | All retrieval configurations rerank the same dense top-15 candidates | No conclusion about full-corpus lexical retrieval or independent search architectures |
-| Metrics | Small sets, one saved run per configuration, no confidence intervals | Differences are descriptive; statistical reliability is unknown |
-| Groundedness | Lexical heuristic, including automatic pass for clauses of three words or fewer | Does not measure question relevance or answer correctness; may classify irrelevant text as grounded and does not establish semantic entailment or a hallucination rate |
-| Citations | Metadata and source-or-page checks | Does not establish exact page correctness or claim-level citation support |
-| Evidence gate | Twenty selected examples | Cannot establish general safety or behavior on unseen queries |
-| Corpus inventory | 86 source PDFs; checked-in index contains 83 distinct source filenames, with three PDFs absent | The current source-to-index difference is explained; the groundedness artifact has matching counts but lacks an index digest tying it to this snapshot |
-| Provenance | Retrieval artifacts lack code commit and index digest; groundedness lacks provider/mode | Exact computational reproduction and generator attribution are unavailable |
-| External services | Hosted generation, translation, and CPCB availability depend on external services; CPCB configuration covers five named stations | Availability, data handling, live compatibility, basin-wide coverage, and measurement validity are not established by saved results |
-| Multilingual and voice quality | Text-language support exists, but comprehensive translation/STT/TTS quality evaluation is absent | Configuration or code-path presence must not be confused with verified language quality |
-| Project scope | The broader PRJ_316 scope includes an interactive robot mascot; the reported implementation is the browser-based software and digital-avatar prototype | No physical robot deployment or robotics evaluation is claimed |
-| Educational impact | No participant study or learning measure | No claim of improved learning, awareness, engagement, or behavior is supported |
-| Literature scope | The literature review is thematic and non-exhaustive; some metadata needs verification | Novelty and bibliographic claims require further review |
+## VIII. CONCLUSION AND FUTURE WORK
 
-Additional risks include model and provider updates, translation errors, OCR artifacts in source documents, heuristic sensitivity to tokenization and thresholds, and the possibility that a retrieved passage is topically related but insufficient for a generated claim. The results do not establish general safety or generalization beyond the tested datasets.
+This paper documents a source-grounded conversational prototype integrated with a digital mascot and reports three small saved engineering evaluations. In the 30-query set, overview-aware reranking increased MRR@5 relative to B/C while slightly reducing recall; all configurations had the same P@5. The selected evidence-gate set showed expected decisions in 20 cases. The 70/70 sentence result is a lexical heuristic classification, while citation checks cover metadata and limited alignment only. These findings describe implementation behavior and do not establish semantic faithfulness, general safety, or educational impact.
 
-## 12. Reproducibility and Ethical Considerations
+Future work should version benchmark code and index snapshots, evaluate candidate recall separately, use larger independently annotated held-out sets, and perform claim-level citation adjudication. Separate tests are needed for CPCB availability and data semantics, translation quality and data handling, voice operation, usability, and learning outcomes. These are proposed evaluations, not results of the present study.
 
-The repository contains benchmark scripts, datasets, saved JSON outputs, and reports. The datasets have recorded SHA-256 hashes, which are reproduced above. The artifacts do not record all inputs required for exact reconstruction: notably, the benchmark code commit and index/corpus digest are absent, and the groundedness artifact omits provider and generation mode. The current manuscript preparation did not rerun those experiments or independently reproduce the saved values. The current source-to-index count difference is explained by three source PDFs absent from the checked-in index, but the saved benchmark is not bound to that index by a digest.
+## REFERENCES
 
-The project uses a static/historical document base for Brain answers and a separate CPCB route for selected live water-quality queries. Dynamic-query fallback and CPCB routing should not be conflated. CPCB endpoint availability and data-reuse terms need separate verification. Hosted LLM providers can receive the question and bounded retrieved evidence after the evidence gate accepts a query. General translation may send user text or generated answer text to an external translation endpoint when enabled. The project’s implementation and provider terms should be reviewed before deployment with sensitive or personally identifying content; this paper makes no claim that external translation is local or private.
+[1] Consortium of Seven Indian Institutes of Technology, *Ganga River Basin Management Plan: Main Plan Document*, prepared for the Ministry of Environment and Forests, Government of India, Jan. 2015. National Mission for Clean Ganga report record: https://nmcg.nic.in/Grbmpreports_vol_1.aspx.
 
-Citation metadata is derived from retrieved document records, but users should not interpret citation presence as independent validation of every statement. The source corpus is described as GRBMP material; a publication-ready data statement should document acquisition, versioning, rights, and any redistribution constraints. No human-subject evaluation is reported. Any future user study should include appropriate consent, privacy safeguards, accessible study materials, and a predefined analysis plan.
+[2] P. Lewis *et al*., “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,” in *Advances in Neural Information Processing Systems*, vol. 33, pp. 9459–9474, 2020. [Online]. Available: https://arxiv.org/abs/2005.11401.
 
-## 13. Conclusion and Future Work
+[3] J. Narmada, Dr. A. C. Priya Ranjani, K. Sruthi, P. Harshitha, D. Suchitha, and D. Veera Reddy, “AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness,” *Metallurgical and Materials Engineering*, vol. 31, no. 5, pp. 761–766, 2025, doi: 10.63278/mme.vi.1631. Author order follows the published PDF title-block byline; the publisher’s “How to Cite” field differs. Publisher record: https://metall-mater-eng.com/index.php/home/article/view/1631.
 
-This paper presented the implementation and limited evaluation of Ganga AI Mascot as a browser-based multilingual digital-mascot prototype for source-grounded interaction over Ganga river-basin documents. The integrated software includes the chat and quiz interface, Three.js avatar, voice adapters, CPCB station-data route, and a Brain combining dense candidate retrieval, lexical reranking, heuristic evidence gates, hosted-provider fallback, extractive generation, and metadata-based citations. Saved artifacts provide preliminary descriptive measurements on small curated sets. They do not demonstrate semantic faithfulness, guaranteed citation correctness, general safety, educational effectiveness, or broad retrieval performance; no physical robot deployment is evaluated.
+[4] A. Ganguly, N. Mehjabin, A. Malik, and A. Johri, “Conversational AI agents in education: An umbrella review of current utilization, challenges, and future directions for ethical and responsible use,” *AI and Ethics*, vol. 6, art. 72, 2026, doi: 10.1007/s43681-025-00916-0.
 
-Future work should expand and independently annotate query sets, record benchmark code and index provenance, evaluate claim-level evidence support with human adjudication, measure translation quality and data flows, verify external-service behavior, and conduct usability and learning studies before making educational claims. Although the current 86-to-83 source/index difference is explained by three source PDFs absent from the checked-in index, the saved groundedness artifact is not cryptographically tied to that index snapshot. R1 is cited using the PDF title-block byline; the conflicting publisher citation metadata is documented in the research log.
+[5] H. Yusuf, A. Money, and D. Daylamani-Zad, “Pedagogical AI Conversational Agents in Higher Education: A Conceptual Framework and Survey of the State of the Art,” *Educational Technology Research and Development*, vol. 73, pp. 815–874, 2025, doi: 10.1007/s11423-025-10447-4.
 
-## 14. References
+[6] X. Wang and X. Li, “Designing a flipped AI-chatbot learning module to support students’ environmental literacy development: A Fuzzy Delphi Method,” *PLOS ONE*, vol. 21, no. 3, Art. no. e0345027, 2026, doi: 10.1371/journal.pone.0345027.
 
-[1] Consortium of Seven Indian Institutes of Technology, *Ganga River Basin Management Plan: Main Plan Document*, prepared for the Ministry of Environment and Forests, Government of India, January 2015. [National Mission for Clean Ganga report record](https://nmcg.nic.in/Grbmpreports_vol_1.aspx). The report title page identifies the IIT consortium as preparer; the NMCG page lists the Main Plan Document.
+[7] X. Wang, Z. Zainuddin, C. H. Leng, W. Dong, and X. Li, “Evaluating the efficacy of ChatGPT in environmental education: Findings from heuristic and usability assessments,” *On the Horizon: The International Journal of Learning Futures*, vol. 33, no. 2, pp. 165–185, 2025, doi: 10.1108/OTH-11-2024-0079.
 
-[2] P. Lewis *et al*., “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,” in *Advances in Neural Information Processing Systems*, vol. 33, pp. 9459–9474, 2020. [arXiv:2005.11401](https://arxiv.org/abs/2005.11401).
+[8] N. L. Schroeder, S. Zhang, C. D. Jaldi, J. R. Gladstone, A. A. López, and E. Dorley, “Virtual Characters Help K–12 Students Learn and Improve Motivation: A Meta-Analysis,” *Review of Educational Research*, OnlineFirst, 2025, doi: 10.3102/00346543251389930.
 
-[3] J. Narmada, Dr. A. C. Priya Ranjani, K. Sruthi, P. Harshitha, D. Suchitha, and D. Veera Reddy, “AI-Powered Chacha Chaudhary Mascot for Ganga Conservation Awareness,” *Metallurgical and Materials Engineering*, vol. 31, no. 5, pp. 761–766, 2025. doi: [10.63278/mme.vi.1631](https://doi.org/10.63278/mme.vi.1631). Author names and order follow the published PDF title-block byline; the publisher landing page's “How to Cite” field instead lists Dr. Preethi Jeevani. See the research log for this metadata discrepancy. Publisher article record: https://metall-mater-eng.com/index.php/home/article/view/1631; PDF: https://metall-mater-eng.com/index.php/home/article/download/1631/951/5510.
+[9] L. Dai, M. M. Jung, M. Postma, and M. M. Louwerse, “A systematic review of pedagogical agent research: Similarities, differences and unexplored aspects,” *Computers & Education*, vol. 190, Art. no. 104607, 2022, doi: 10.1016/j.compedu.2022.104607.
 
-[4] A. Ganguly, N. Mehjabin, A. Malik, and A. Johri, “Conversational AI agents in education: An umbrella review of current utilization, challenges, and future directions for ethical and responsible use,” *AI and Ethics*, vol. 6, art. 72, 2026. doi: [10.1007/s43681-025-00916-0](https://doi.org/10.1007/s43681-025-00916-0).
+[10] Y. Tao, G. Zhang, D. Zhang, F. Wang, Y. Zhou, and T. Xu, “Exploring Persona Characteristics in Learning: A Review Study of Pedagogical Agents,” *Procedia Computer Science*, vol. 201, pp. 87–94, 2022, doi: 10.1016/j.procs.2022.03.014.
 
-[5] H. Yusuf, A. Money, and D. Daylamani-Zad, “Pedagogical AI Conversational Agents in Higher Education: A Conceptual Framework and Survey of the State of the Art,” *Educational Technology Research and Development*, vol. 73, pp. 815–874, 2025. doi: [10.1007/s11423-025-10447-4](https://doi.org/10.1007/s11423-025-10447-4).
+[11] N. L. Schroeder, O. O. Adesope, and R. B. Gilbert, “How Effective are Pedagogical Agents for Learning? A Meta-Analytic Review,” *Journal of Educational Computing Research*, vol. 49, no. 1, pp. 1–39, 2013, doi: 10.2190/EC.49.1.a.
 
-[6] X. Wang and X. Li, “Designing a flipped AI-chatbot learning module to support students’ environmental literacy development: A Fuzzy Delphi Method,” *PLOS ONE*, vol. 21, no. 3, e0345027, 2026. doi: [10.1371/journal.pone.0345027](https://doi.org/10.1371/journal.pone.0345027).
+[12] N. Reimers and I. Gurevych, “Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks,” in *Proc. EMNLP-IJCNLP*, pp. 3982–3992, 2019, doi: 10.18653/v1/D19-1410.
 
-[7] X. Wang, Z. Zainuddin, C. H. Leng, W. Dong, and X. Li, “Evaluating the efficacy of ChatGPT in environmental education: Findings from heuristic and usability assessments,” *On the Horizon: The International Journal of Learning Futures*, vol. 33, no. 2, pp. 165–185, 2025. doi: [10.1108/OTH-11-2024-0079](https://doi.org/10.1108/OTH-11-2024-0079).
+[13] W. Wang, F. Wei, L. Dong, H. Bao, N. Yang, and M. Zhou, “MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers,” in *Advances in Neural Information Processing Systems*, vol. 33, pp. 5776–5788, 2020.
 
-[8] N. L. Schroeder, S. Zhang, C. D. Jaldi, J. R. Gladstone, A. A. López, and E. Dorley, “Virtual Characters Help K–12 Students Learn and Improve Motivation: A Meta-Analysis,” *Review of Educational Research*, online first, pp. 1–47, 2025. doi: [10.3102/00346543251389930](https://doi.org/10.3102/00346543251389930).
-
-[9] L. Dai, M. M. Jung, M. Postma, and M. M. Louwerse, “A systematic review of pedagogical agent research: Similarities, differences and unexplored aspects,” *Computers & Education*, vol. 190, art. 104607, 2022. doi: [10.1016/j.compedu.2022.104607](https://doi.org/10.1016/j.compedu.2022.104607).
-
-[10] Y. Tao, G. Zhang, D. Zhang, F. Wang, Y. Zhou, and T. Xu, “Exploring Persona Characteristics in Learning: A Review Study of Pedagogical Agents,” *Procedia Computer Science*, vol. 201, pp. 87–94, 2022. doi: [10.1016/j.procs.2022.03.014](https://doi.org/10.1016/j.procs.2022.03.014).
-
-[11] N. L. Schroeder, O. O. Adesope, and R. B. Gilbert, “How Effective are Pedagogical Agents for Learning? A Meta-Analytic Review,” *Journal of Educational Computing Research*, vol. 49, no. 1, pp. 1–39, 2013. doi: [10.2190/EC.49.1.a](https://doi.org/10.2190/EC.49.1.a).
-
-[12] N. Reimers and I. Gurevych, “Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks,” in *Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)*, pp. 3982–3992, 2019. doi: [10.18653/v1/D19-1410](https://doi.org/10.18653/v1/D19-1410).
-
-[13] W. Wang, F. Wei, L. Dong, H. Bao, N. Yang, and M. Zhou, “MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers,” in *Advances in Neural Information Processing Systems*, vol. 33, pp. 5776–5788, 2020. [Official NeurIPS record](https://proceedings.neurips.cc/paper/2020/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html).
-
-[14] Sentence-Transformers, “all-MiniLM-L6-v2,” Hugging Face model card, accessed 2026-10-19. [https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2).
-
-The former current-manuscript references [1]–[10] retain their cited works and have been renumbered by first citation; former [1] (the base mascot article) is now [3], and former [2] (RAG) is now [2]. The original file `Ganga_Avatar_Paper_Draft_IEEE.docx.pdf` was not present in the repository tree during this review, so the purpose and disposition of that draft's original references [1]–[10] could not be verified or mapped. The supplied original entries for GRBMP, Sentence-BERT, and MiniLM were retained where relevant, with MiniLM and the exact model-card record distinguished from the runtime implementation. The base mascot article's author order continues to follow the published PDF title-block byline; the conflicting publisher “How to Cite” field remains documented. R7 in the prior audit (current [8]) remains OnlineFirst, with no final volume/issue assignment asserted; pp. 1–47 are PDF pagination. The manuscript references are numbered by first appearance; venue-specific style remains to be applied after venue selection.
+[14] Sentence-Transformers, “all-MiniLM-L6-v2,” Hugging Face model card, accessed Oct. 20, 2026. [Online]. Available: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2.

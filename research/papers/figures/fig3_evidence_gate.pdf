@@ -1,0 +1,51 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 258.00 155.00] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 887 >>
+stream
+1 g 0 0 258.00 155.00 re f
+BT /F2 8.5 Tf 0 g 1 0 0 1 23.00 140.00 Tm (Evidence-gate outcomes \(selected set, n=20\)) Tj ET
+BT /F1 7.0 Tf 0 g 1 0 0 1 12.00 116.00 Tm (Answerable accepted) Tj ET
+0.80 G 0.55 w 135.00 112.00 m 215.00 112.00 l S
+0.300 g 0.300 G 0.45 w 135.00 107.00 80.00 12.00 re B
+BT /F2 7.5 Tf 0 g 1 0 0 1 223.00 111.00 Tm (10/10) Tj ET
+BT /F1 7.0 Tf 0 g 1 0 0 1 12.00 82.00 Tm (Out-of-domain rejected) Tj ET
+0.80 G 0.55 w 135.00 78.00 m 215.00 78.00 l S
+0.300 g 0.300 G 0.45 w 135.00 73.00 40.00 12.00 re B
+BT /F2 7.5 Tf 0 g 1 0 0 1 223.00 77.00 Tm (5/5) Tj ET
+BT /F1 7.0 Tf 0 g 1 0 0 1 12.00 48.00 Tm (Dynamic intercepted) Tj ET
+0.80 G 0.55 w 135.00 44.00 m 215.00 44.00 l S
+0.300 g 0.300 G 0.45 w 135.00 39.00 40.00 12.00 re B
+BT /F2 7.5 Tf 0 g 1 0 0 1 223.00 43.00 Tm (5/5) Tj ET
+BT /F1 6.5 Tf 0 g 1 0 0 1 135.00 16.00 Tm (Matching decisions; scale maximum = 10) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000263 00000 n 
+0000001201 00000 n 
+0000001271 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1346
+%%EOF
