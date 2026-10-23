@@ -41,9 +41,9 @@ HITS = [
 ]
 
 
-def fake_chat_response(text: str) -> SimpleNamespace:
+def fake_chat_response(text: str, finish_reason: str = "stop") -> SimpleNamespace:
     return SimpleNamespace(
-        choices=[SimpleNamespace(message=SimpleNamespace(content=text))]
+        choices=[SimpleNamespace(message=SimpleNamespace(content=text), finish_reason=finish_reason)]
     )
 
 
@@ -81,6 +81,72 @@ class GroqGeneratorTests(unittest.TestCase):
         self.assertEqual(result["citations"][0]["file_name"], "grbmp.pdf")
         self.assertEqual(result["citations"][0]["page"], "10-11")
 
+    def test_length_finish_gets_one_bounded_continuation_and_merges_overlap(self):
+        partial = (
+            "The Ganga rises at Gaumukh and flows toward the Bay of Bengal. "
+            "Its course receives many tributaries. The Ganga"
+        )
+        continuation = "The Ganga joins several major tributaries before reaching the delta."
+        self.client.chat.completions.create.side_effect = [
+            fake_chat_response(partial, "length"),
+            fake_chat_response(continuation, "stop"),
+        ]
+
+        result = self.generator.generate("Describe the Ganga.", HITS)
+
+        self.assertEqual(self.client.chat.completions.create.call_count, 2)
+        first_call = self.client.chat.completions.create.call_args_list[0].kwargs
+        second_call = self.client.chat.completions.create.call_args_list[1].kwargs
+        self.assertEqual(first_call["max_completion_tokens"], 700)
+        self.assertEqual(second_call["max_completion_tokens"], 700)
+        self.assertNotIn("max_tokens", first_call)
+        self.assertTrue(result["answer"].endswith("before reaching the delta."))
+        self.assertEqual(result["answer"].count("The Ganga joins"), 1)
+        self.assertEqual(result["citations"][0]["file_name"], "grbmp.pdf")
+
+    def test_still_truncated_continuation_uses_extractive_fallback(self):
+        self.client.chat.completions.create.side_effect = [
+            fake_chat_response("A partial answer about the Ganga", "length"),
+            fake_chat_response("continues without a sentence ending", "length"),
+        ]
+
+        result = self.generator.generate("Describe the Ganga.", HITS)
+
+        self.assertEqual(self.client.chat.completions.create.call_count, 2)
+        self.assertEqual(result, ExtractiveGenerator().generate("Describe the Ganga.", HITS))
+        self.assertNotIn("A partial answer", result["answer"])
+
+    def test_non_stop_finish_reason_uses_extractive_fallback(self):
+        self.client.chat.completions.create.return_value = fake_chat_response(
+            "A clipped answer.", "content_filter"
+        )
+
+        result = self.generator.generate("Describe the Ganga.", HITS)
+
+        self.assertEqual(result, ExtractiveGenerator().generate("Describe the Ganga.", HITS))
+
+    def test_stop_finish_without_sentence_boundary_is_not_presented(self):
+        self.client.chat.completions.create.return_value = fake_chat_response(
+            "The Ganga is a major river that flows through several regions"
+        )
+
+        result = self.generator.generate("Describe the Ganga.", HITS)
+
+        self.assertNotIn("The Ganga is a major river", result["answer"])
+        self.assertEqual(result["answer"], ExtractiveGenerator().generate("Describe the Ganga.", HITS)["answer"])
+
+    def test_incomplete_extractive_fallback_returns_explicit_safe_response(self):
+        from brain.generator import INCOMPLETE_GENERATION_MESSAGE
+
+        incomplete_hits = [{**HITS[0], "text": "A long source fragment that has no terminal punctuation"}]
+        self.client.chat.completions.create.side_effect = TimeoutError("provider unavailable")
+
+        result = self.generator.generate("What is described?", incomplete_hits)
+
+        self.assertEqual(result["answer"], INCOMPLETE_GENERATION_MESSAGE)
+        self.assertEqual(result["citations"], [])
+        self.assertEqual(result["mode"], "insufficient-evidence")
+
     def test_insufficient_evidence_does_not_call_groq(self):
         result = self.generator.generate("Mars?", HITS, False)
 
@@ -105,6 +171,16 @@ class GroqGeneratorTests(unittest.TestCase):
         result = self.generator.generate("What is Aviral Dhara?", HITS)
 
         self.assertEqual(result, ExtractiveGenerator().generate("What is Aviral Dhara?", HITS))
+
+    def test_hosted_answer_cleanup_removes_exact_repeat_and_extra_spacing(self):
+        self.client.chat.completions.create.return_value = fake_chat_response(
+            "  Aviral Dhara supports river flow.  Aviral Dhara supports river flow.\n\n It also considers time and space.  "
+        )
+
+        result = self.generator.generate("What is Aviral Dhara?", HITS)
+
+        self.assertEqual(result["answer"], "Aviral Dhara supports river flow. It also considers time and space.")
+        self.assertEqual(result["citations"][0]["file_name"], "grbmp.pdf")
 
     def test_missing_api_key_uses_fallback_without_creating_client(self):
         with patch.dict(os.environ, {"GROQ_API_KEY": ""}):
@@ -228,11 +304,35 @@ class ProviderChainTests(unittest.TestCase):
         router_call = openrouter_client.chat.completions.create.call_args.kwargs
         self.assertEqual(groq_call["messages"], router_call["messages"])
         self.assertEqual(groq_call["temperature"], router_call["temperature"])
-        self.assertEqual(groq_call["max_tokens"], router_call["max_tokens"])
+        self.assertEqual(groq_call["max_completion_tokens"], router_call["max_completion_tokens"])
         self.assertNotIn("reasoning", groq_call)
         self.assertEqual(router_call["extra_body"]["reasoning"], {"enabled": False})
         self.assertEqual(result["citations"], ExtractiveGenerator().generate("q", HITS)["citations"])
         self.assertEqual(result["mode"], "grounded")
+
+    def test_incomplete_groq_continuation_falls_through_to_openrouter(self):
+        groq_client, openrouter_client = Mock(), Mock()
+        groq_client.chat.completions.create.side_effect = [
+            fake_chat_response("The Ganga is a major river. It flows through", "length"),
+            fake_chat_response("several regions", "length"),
+        ]
+        openrouter_client.chat.completions.create.return_value = fake_chat_response(
+            "Aviral Dhara means maintaining continuous river flow over time and space."
+        )
+        with patch.dict(os.environ, {"GROQ_API_KEY": "fake-groq", "OPENROUTER_API_KEY": "fake-or"}):
+            chain = ProviderChainGenerator([
+                ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+            ])
+            with patch("brain.generator._hosted_generator", side_effect=[
+                GroqGenerator(DEFAULT_GROQ_MODEL, groq_client, propagate_failures=True),
+                OpenRouterGenerator("nvidia/nemotron-3.5-super-vl:free", openrouter_client, propagate_failures=True),
+            ]):
+                result = chain.generate("What is Aviral Dhara?", HITS)
+
+        self.assertEqual(groq_client.chat.completions.create.call_count, 2)
+        openrouter_client.chat.completions.create.assert_called_once()
+        self.assertEqual(result["answer"], "Aviral Dhara means maintaining continuous river flow over time and space.")
+        self.assertEqual(result["citations"][0]["file_name"], "grbmp.pdf")
 
     def test_missing_groq_key_skips_to_openrouter(self):
         client = Mock()
@@ -360,7 +460,7 @@ class ProviderChainTests(unittest.TestCase):
                 first.chat.completions.create.side_effect = failed if isinstance(failed, Exception) else None
                 if not isinstance(failed, Exception):
                     first.chat.completions.create.return_value = failed
-                second.chat.completions.create.return_value = fake_chat_response("second succeeded")
+                second.chat.completions.create.return_value = fake_chat_response("Second provider succeeded.")
                 with patch.dict(os.environ, {"GROQ_API_KEY": "fake-groq", "OPENROUTER_API_KEY": "fake-or"}):
                     chain = ProviderChainGenerator([
                         ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
@@ -371,7 +471,7 @@ class ProviderChainTests(unittest.TestCase):
                     ]):
                         with self.assertLogs("brain.generator", level="WARNING") as logs:
                             result = chain.generate("question", HITS)
-                self.assertEqual(result["answer"], "second succeeded")
+                self.assertEqual(result["answer"], "Second provider succeeded.")
                 first.chat.completions.create.assert_called_once()
                 second.chat.completions.create.assert_called_once()
                 log_text = "\n".join(logs.output)

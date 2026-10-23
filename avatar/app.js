@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCitations(citations);
 
     // Trigger Real Acoustic Audio & Rhubarb Lip-Sync Playback
-    playProductionSpeech(data, answer, gesture, t_start, t_response);
+    playProductionSpeech(data, data.spoken_text || answer, gesture, t_start, t_response);
   }
 
   // Render Provenance Citations

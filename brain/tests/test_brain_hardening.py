@@ -183,7 +183,7 @@ class BrainHardeningTests(unittest.TestCase):
     def test_groq_generator_configures_sdk_with_api_key(self):
         sdk_client = Mock()
         sdk_client.chat.completions.create.return_value.choices = [
-            Mock(message=Mock(content="Supported answer."))
+            Mock(message=Mock(content="Supported answer."), finish_reason="stop")
         ]
         hits = [
             {

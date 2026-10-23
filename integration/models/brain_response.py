@@ -96,6 +96,7 @@ class AvatarPresentation(BaseModel):
     question: str = Field("", description="User question string")
     answer: str = Field("", description="Grounded answer text")
     text: str = Field("", description="Standardized alias for answer text")
+    spoken_text: str = Field("", description="Speech-friendly narration, separate from displayed answer")
     mode: str = Field("grounded", description="Brain mode")
     citations: list[CitationItem] = Field(default_factory=list, description="Provenance citations")
     input_language: str = Field("hi", description="Input language ('hi' | 'en')")

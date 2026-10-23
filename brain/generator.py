@@ -17,6 +17,10 @@ from .retriever import extract_keywords
 logger = logging.getLogger(__name__)
 MAX_LLM_EVIDENCE_CHARS = 6000
 MAX_LLM_OUTPUT_TOKENS = 700
+INCOMPLETE_GENERATION_MESSAGE = (
+    "I couldn't prepare a complete answer from the available evidence. "
+    "Please try asking a more focused question."
+)
 
 
 class MissingProviderAPIKey(RuntimeError):
@@ -67,6 +71,69 @@ def clean_hit_text(text: str) -> str:
     return text
 
 
+def clean_generated_answer(text: str) -> str:
+    """Apply conservative whitespace and exact repeated-sentence cleanup."""
+    text = re.sub(r"[ \t]+", " ", text.strip())
+    text = re.sub(r"\s*\n\s*", "\n", text)
+    text = re.sub(r"([.!?])(?:\s*\1)+", r"\1", text)
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    kept: list[str] = []
+    seen: set[str] = set()
+    for sentence in sentences:
+        normalized = re.sub(r"\W+", " ", sentence.casefold()).strip()
+        if normalized and normalized not in seen:
+            kept.append(sentence.strip())
+            seen.add(normalized)
+    return " ".join(kept).strip()
+
+
+def _has_complete_sentence_ending(text: str) -> bool:
+    """Require a terminal sentence mark before presenting hosted output as complete."""
+    return bool(re.search(r"[.!?…][\"'”’)}\]]*\s*$", text.strip()))
+
+
+def _merge_continuation(prefix: str, continuation: str) -> str:
+    """Join a continuation while removing an exact repeated word overlap."""
+    prefix = prefix.rstrip()
+    continuation = continuation.lstrip()
+    prefix_words = list(re.finditer(r"\w+", prefix, flags=re.UNICODE))
+    next_words = list(re.finditer(r"\w+", continuation, flags=re.UNICODE))
+    max_overlap = min(len(prefix_words), len(next_words), 120)
+    overlap = 0
+    for size in range(max_overlap, 0, -1):
+        left = [m.group().casefold() for m in prefix_words[-size:]]
+        right = [m.group().casefold() for m in next_words[:size]]
+        if left == right:
+            overlap = size
+            break
+    if overlap:
+        continuation = continuation[next_words[overlap - 1].end():].lstrip()
+    if not continuation:
+        return prefix
+    # Preserve punctuation immediately after the repeated overlap.
+    if continuation.startswith(('.', ',', ';', ':', '?', '!', '…')):
+        return prefix + continuation
+    return f"{prefix} {continuation}" if prefix else continuation
+
+
+def _safe_extractive_fallback(question: str, hits: list[dict], is_sufficient: bool) -> dict:
+    result = ExtractiveGenerator().generate(question, hits, is_sufficient)
+    if is_sufficient and hits and result.get("mode") != "grounded":
+        return {
+            "answer": INCOMPLETE_GENERATION_MESSAGE,
+            "citations": [],
+            "mode": "insufficient-evidence",
+        }
+    if result.get("mode") == "grounded" and not _has_complete_sentence_ending(result.get("answer", "")):
+        logger.warning("Extractive fallback was incomplete; returning a clear safe response.")
+        return {
+            "answer": INCOMPLETE_GENERATION_MESSAGE,
+            "citations": [],
+            "mode": "insufficient-evidence",
+        }
+    return result
+
+
 class ExtractiveGenerator(Generator):
     """Grounded local generator that summarizes by extracting supported sentences."""
 
@@ -96,7 +163,7 @@ class ExtractiveGenerator(Generator):
                 clean = sentence.strip()
                 clean = re.sub(r"^\s*\d+(\.\d+)*\s+", "", clean)
                 clean = re.sub(r"\s+", " ", clean).strip()
-                if len(clean) < 35 or clean in seen_sentences:
+                if len(clean) < 35 or clean in seen_sentences or not _has_complete_sentence_ending(clean):
                     continue
                 if re.search(r"(?:DAY \d+|VenUe:|cHAIr:|PAneLIST:|moDerATor:|\d+:\d+\s*-\s*\d+:\d+|Session \w+|Report Code)", clean, re.IGNORECASE):
                     continue
@@ -122,7 +189,11 @@ class ExtractiveGenerator(Generator):
             # Fallback to top hit text if valid
             if hits:
                 top_text = clean_hit_text(hits[0]["text"]).strip()
-                first_few = [re.sub(r"^\s*\d+(\.\d+)*\s+", "", s.strip()).strip() for s in re.split(r"(?<=[.!?])\s+", top_text) if len(s.strip()) >= 35][:2]
+                first_few = [
+                    re.sub(r"^\s*\d+(\.\d+)*\s+", "", sentence.strip()).strip()
+                    for sentence in re.split(r"(?<=[.!?])\s+", top_text)
+                    if len(sentence.strip()) >= 35 and _has_complete_sentence_ending(sentence.strip())
+                ][:2]
                 if first_few:
                     sentences = first_few
                     contributing_hits = [hits[0]]
@@ -234,7 +305,7 @@ class OpenAICompatibleGenerator(Generator):
         evidence = self._evidence_records(hits)
         if not evidence:
             logger.warning("No usable evidence text was available; using extractive fallback.")
-            return self.fallback.generate(question, hits, is_sufficient)
+            return _safe_extractive_fallback(question, hits, is_sufficient)
         included_chunk_ids = {record["chunk_id"] for record in evidence}
         cited_hits = [hit for hit in hits if hit.get("chunk_id", "") in included_chunk_ids]
 
@@ -265,28 +336,59 @@ class OpenAICompatibleGenerator(Generator):
                     {"role": "user", "content": request_input},
                 ],
                 "temperature": 0,
-                "max_tokens": MAX_LLM_OUTPUT_TOKENS,
+                "max_completion_tokens": MAX_LLM_OUTPUT_TOKENS,
                 **self.extra_parameters,
             }
-            response = self._get_client().chat.completions.create(
-                **parameters,
-            )
-            answer = response.choices[0].message.content
+            client = self._get_client()
+            response = client.chat.completions.create(**parameters)
+            choice = response.choices[0]
+            answer = choice.message.content
             if not isinstance(answer, str) or not answer.strip():
                 raise ValueError("Provider returned no usable output text")
+            finish_reason = getattr(choice, "finish_reason", "stop")
+            if finish_reason == "length":
+                continuation_parameters = {
+                    **parameters,
+                    "messages": [
+                        *parameters["messages"],
+                        {"role": "assistant", "content": answer},
+                        {
+                            "role": "user",
+                            "content": (
+                                "Continue the answer from exactly where it stopped. Use only the evidence "
+                                "already provided. Do not repeat any wording already given, do not add a "
+                                "new introduction or conclusion, and return only the continuation."
+                            ),
+                        },
+                    ],
+                }
+                continuation_response = client.chat.completions.create(**continuation_parameters)
+                continuation_choice = continuation_response.choices[0]
+                continuation_text = continuation_choice.message.content
+                continuation_finish = getattr(continuation_choice, "finish_reason", "stop")
+                if not isinstance(continuation_text, str) or not continuation_text.strip():
+                    raise IncompleteGenerationError("empty_continuation")
+                if continuation_finish != "stop":
+                    raise IncompleteGenerationError("continuation_not_complete")
+                answer = _merge_continuation(answer, continuation_text)
+                finish_reason = continuation_finish
+            if finish_reason != "stop" or not _has_complete_sentence_ending(answer):
+                raise IncompleteGenerationError("incomplete_output")
         except Exception as exc:
             if isinstance(exc, MissingProviderAPIKey):
                 category = "missing_credentials"
+            elif isinstance(exc, IncompleteGenerationError):
+                category = exc.category
             else:
                 category = _safe_error_category(exc)
             logger.warning("LLM provider %s failed: %s.", self.provider, category)
             if not self.propagate_failures:
-                return self.fallback.generate(question, hits, is_sufficient)
+                return _safe_extractive_fallback(question, cited_hits, is_sufficient)
             raise ProviderGenerationError(self.provider, category) from None
 
         logger.info("LLM provider %s succeeded.", self.provider)
         return {
-            "answer": answer.strip(),
+            "answer": clean_generated_answer(answer),
             "citations": citations_from_hits(cited_hits),
             "mode": "grounded",
         }
@@ -298,6 +400,14 @@ class ProviderGenerationError(RuntimeError):
     def __init__(self, provider: str, category: str) -> None:
         super().__init__(category)
         self.provider = provider
+        self.category = category
+
+
+class IncompleteGenerationError(RuntimeError):
+    """Provider output was cut off or otherwise not complete enough to present."""
+
+    def __init__(self, category: str) -> None:
+        super().__init__(category)
         self.category = category
 
 
@@ -383,7 +493,7 @@ class ProviderChainGenerator(Generator):
                 last_category = _safe_error_category(exc)
                 logger.warning("LLM provider %s failed: %s.", provider, last_category)
         logger.warning("LLM hosted generation exhausted: %s; using extractive generation.", last_category)
-        return self.fallback.generate(question, hits, is_sufficient)
+        return _safe_extractive_fallback(question, hits, is_sufficient)
 
 
 def _hosted_generator(provider: str, model: str) -> OpenAICompatibleGenerator:

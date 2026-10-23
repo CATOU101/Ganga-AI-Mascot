@@ -98,7 +98,7 @@ def integration_ask(req: BrainRequest):
 
     # T6: TTS synthesis
     t6 = time.perf_counter()
-    tts_result = tts_adapter.synthesize_speech(pres.answer, language=out_lang)
+    tts_result = tts_adapter.synthesize_speech(pres.spoken_text or pres.answer, language=out_lang)
     t7 = time.perf_counter()
 
     # T8: Rhubarb lip-sync analysis

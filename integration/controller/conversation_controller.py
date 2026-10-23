@@ -8,6 +8,7 @@ import time
 from typing import Callable, Any
 
 from integration.api.brain_client import BrainClient
+from integration.avatar.response_text import spoken_response
 from integration.config.integration_config import IntegrationConfig, load_integration_config
 from integration.models.brain_response import (
     AvatarPresentation,
@@ -155,6 +156,7 @@ class ConversationController:
                 state=ConversationState.SPEAKING,
                 question=question,
                 answer=answer,
+                spoken_text=spoken_response(answer),
                 mode=mode,
                 citations=[
                     CitationItem(source="CPCB Real-Time Water Quality Monitoring System")
@@ -208,6 +210,7 @@ class ConversationController:
             state=ConversationState.SPEAKING,
             question=question,
             answer=brain_resp.answer,
+            spoken_text=spoken_response(brain_resp.answer),
             mode=brain_resp.mode,
             citations=brain_resp.citations,
             input_language=brain_resp.input_language,
