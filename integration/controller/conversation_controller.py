@@ -21,6 +21,7 @@ from integration.models.brain_response import (
 from integration.water_quality import (
     CPCBWaterQualityError,
     CPCBWaterQualityService,
+    build_water_data_tables,
     format_water_quality_answer,
     is_water_quality_query,
     parse_water_quality_request,
@@ -126,6 +127,7 @@ class ConversationController:
         # Live CPCB readings are handled before Brain's current-information fallback.
         if self.water_quality_service and is_water_quality_query(question):
             water_request = parse_water_quality_request(question)
+            readings = []
             try:
                 readings = self.water_quality_service.readings(water_request)
                 answer = format_water_quality_answer(water_request, readings)
@@ -157,6 +159,7 @@ class ConversationController:
                 question=question,
                 answer=answer,
                 spoken_text=spoken_response(answer),
+                tables=build_water_data_tables(water_request, readings, out_lang) if mode == "live-water-quality" else [],
                 mode=mode,
                 citations=[
                     CitationItem(source="CPCB Real-Time Water Quality Monitoring System")

@@ -776,6 +776,70 @@ body {
   min-height: 120px;
 }
 
+.answer-summary {
+  margin: 0;
+}
+
+.cpcb-table-group {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.cpcb-table-block {
+  min-width: 0;
+}
+
+.cpcb-table-title {
+  margin: 0 0 8px;
+  color: #bae6fd;
+  font-size: 0.95rem;
+}
+
+.cpcb-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 8px;
+}
+
+.cpcb-data-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.cpcb-data-table th,
+.cpcb-data-table td {
+  padding: 9px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.cpcb-data-table th {
+  color: #e0f2fe;
+  background: rgba(14, 165, 233, 0.13);
+  white-space: nowrap;
+}
+
+.cpcb-data-table td {
+  color: #e2e8f0;
+  white-space: pre-line;
+}
+
+.cpcb-data-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.cpcb-table-source {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
 /* Thinking Wave */
 .thinking-wave {
   display: flex;

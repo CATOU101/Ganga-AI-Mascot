@@ -53,6 +53,13 @@ class CitationItem(BaseModel):
     knowledge_type: str | None = Field(None, description="Classification context: HISTORICAL, METHODOLOGICAL, etc.")
 
 
+class ChatTable(BaseModel):
+    title: str
+    columns: list[str]
+    rows: list[list[str]]
+    source: str | None = None
+
+
 class BrainRequest(BaseModel):
     question: str = Field("", description="Question prompt to Ganga Brain RAG")
     query: str | None = Field(None, description="Alias for question")
@@ -99,6 +106,7 @@ class AvatarPresentation(BaseModel):
     spoken_text: str = Field("", description="Speech-friendly narration, separate from displayed answer")
     mode: str = Field("grounded", description="Brain mode")
     citations: list[CitationItem] = Field(default_factory=list, description="Provenance citations")
+    tables: list[ChatTable] = Field(default_factory=list, description="Structured in-chat data tables")
     input_language: str = Field("hi", description="Input language ('hi' | 'en')")
     output_language: str = Field("hi", description="Output language ('hi' | 'en')")
     language: str = Field("hi", description="Legacy language code")

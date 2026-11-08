@@ -205,7 +205,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Display Answer Text
     if (answerText) {
-      answerText.textContent = answer;
+      if (Array.isArray(data.tables) && data.tables.length > 0) {
+        answerText.replaceChildren();
+        const summary = document.createElement('p');
+        summary.className = 'answer-summary';
+        summary.textContent = answer;
+        answerText.appendChild(summary);
+        if (window.renderCpcbTables) window.renderCpcbTables(answerText, data.tables, document);
+      } else {
+        answerText.textContent = answer;
+      }
     }
     
     // Update Mode & Mascot Indicators

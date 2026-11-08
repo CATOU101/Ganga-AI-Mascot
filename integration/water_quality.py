@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import re
 import threading
 import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Callable
 
 logger = logging.getLogger("integration.water_quality")
@@ -19,6 +20,14 @@ STATIONS_URL = "https://rtwqmsdb1.cpcb.gov.in/data/internet/stations/stations.js
 SNAPSHOT_URL = "https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json"
 CPCB_SOURCE = "CPCB Real-Time Water Quality Monitoring System"
 CPCB_URL = "https://rtwqmsdb1.cpcb.gov.in/#/"
+CPCB_BATHING_CRITERIA_URL = "https://cpcb.nic.in/wqm/Designated_Best_Use_Water_Quality_Criteria.pdf"
+CWC_FLOOD_PORTAL_URL = "https://ffs.india-water.gov.in/"
+CWC_THRESHOLDS_REFERENCE_URL = "https://cwc.gov.in/sites/default/files/sopapril2025.pdf"
+CPCB_CLASS_B_CRITERIA = {
+    "pH": "6.5–8.5",
+    "BOD": "≤3 mg/L (5-day, 20°C; Class B organized outdoor bathing)",
+    "DO": "≥5 mg/L (Class B organized outdoor bathing)",
+}
 CACHE_TTL_SECONDS = 60
 STALE_AFTER_SECONDS = 90 * 60
 
@@ -55,10 +64,16 @@ STATION_ALIASES = {
 }
 
 PARAMETERS = {
-    "DO": ("Dissolved oxygen", ("dissolved oxygen",)),
-    "BOD": ("Biochemical oxygen demand", ("biochemical oxygen demand",)),
     "pH": ("pH", ()),
+    "BOD": ("Biochemical oxygen demand", ("biochemical oxygen demand",)),
+    "DO": ("Dissolved oxygen", ("dissolved oxygen",)),
+    # Verified live layer-10 fields: S / River Stage / m and Depth / Depth / m.
+    "S": ("River stage", ("river stage", "water level", "river level")),
+    "Depth": ("Depth", ("water depth", "river depth")),
 }
+
+QUALITY_PARAMETER_CODES = ("pH", "BOD", "DO")
+LEVEL_PARAMETER_CODES = ("S", "Depth")
 
 PARAMETER_EXPLANATIONS = {
     "DO": "Dissolved oxygen is oxygen present in the water.",
@@ -77,6 +92,8 @@ class WaterQualityRequest:
     parameter_codes: tuple[str, ...]
     unsupported_location: str | None = None
     comparison: bool = False
+    include_quality: bool = True
+    include_water_level: bool = False
 
 
 def _contains_phrase(text: str, phrase: str) -> bool:
@@ -92,7 +109,7 @@ def _is_parameter_query(text: str) -> bool:
         lower,
     )
     return (
-        re.search(r"(?<!\w)DO(?!\w)", text) is not None
+        re.search(r"(?<!\w)DO(?!\w)", text, re.IGNORECASE) is not None
         or do_context is not None
         or any(
             _contains_phrase(lower, alias)
@@ -103,8 +120,17 @@ def _is_parameter_query(text: str) -> bool:
     )
 
 
+def _has_water_level_intent(text: str) -> bool:
+    lower = text.casefold()
+    return any(
+        _contains_phrase(lower, phrase)
+        for phrase in (
+            "water level", "river stage", "river level", "water depth", "river depth", "how deep",
+            "जल स्तर", "पानी का स्तर", "नदी का स्तर", "जल की गहराई", "पानी की गहराई",
+        )
+    ) or bool(re.search(r"(?<!\w)depth(?!\w)", lower))
 def is_water_quality_query(question: str) -> bool:
-    """Recognize live-measurement requests without capturing educational questions."""
+    """Recognize CPCB live water-quality, river-stage, or depth requests."""
     text = question.lower()
     has_quality_phrase = any(
         phrase in text
@@ -172,6 +198,17 @@ def is_water_quality_query(question: str) -> bool:
     ) and not has_live_intent:
         return False
 
+    has_level_intent = _has_water_level_intent(question)
+    asks_definition = re.search(
+        r"\b(?:what does .+ mean|what is (?:a |the )?(?:water level|river stage|water depth|depth)|"
+        r"define .*(?:water level|river stage|water depth|depth))\b",
+        text,
+    ) is not None
+    if has_level_intent and asks_definition and not (has_live_intent or has_station or has_ganga_context):
+        return False
+    if has_level_intent:
+        return True
+
     return (
         has_quality_phrase
         or (has_station and _is_parameter_query(question))
@@ -180,7 +217,7 @@ def is_water_quality_query(question: str) -> bool:
 
 
 def parse_water_quality_request(question: str) -> WaterQualityRequest:
-    """Extract requested stations and parameters; no match means the five-station overview."""
+    """Classify requested tables and locations; absent a location, use all five stations."""
     text = question.lower()
     located_names = []
     for alias, canonical in STATION_ALIASES.items():
@@ -193,24 +230,28 @@ def parse_water_quality_request(question: str) -> WaterQualityRequest:
             requested_names.append(canonical)
     ordered_stations = tuple(requested_names)
 
-    parameter_codes = []
-    if (
+    include_water_level = _has_water_level_intent(question)
+    mentions_quality_parameter = (
         re.search(r"(?<!\w)DO(?!\w)", question) is not None
-        or re.search(
-            r"\bdo\s+(?:reading|readings|level|levels|value|values|measurement|measurements|at|in|for)\b",
-            text,
+        or _contains_phrase(text, "bod")
+        or _contains_phrase(text, "ph")
+        or any(
+            _contains_phrase(text, alias)
+            for code in QUALITY_PARAMETER_CODES
+            for alias in PARAMETERS[code][1]
         )
-        or any(_contains_phrase(text, alias) for alias in PARAMETERS["DO"][1])
-    ):
-        parameter_codes.append("DO")
-    if _contains_phrase(text, "bod") or any(
-        _contains_phrase(text, alias) for alias in PARAMETERS["BOD"][1]
-    ):
-        parameter_codes.append("BOD")
-    if _contains_phrase(text, "ph"):
-        parameter_codes.append("pH")
-
-    requested_parameters = tuple(parameter_codes) or ("DO", "BOD", "pH")
+    )
+    has_quality_phrase = any(
+        phrase in text
+        for phrase in (
+            "water quality", "water-quality", "जल गुणवत्ता", "पानी की गुणवत्ता", "गंगा का पानी", "गंगा के पानी"
+        )
+    )
+    include_quality = has_quality_phrase or mentions_quality_parameter or not include_water_level
+    requested_parameters = (
+        (QUALITY_PARAMETER_CODES if include_quality else ())
+        + (LEVEL_PARAMETER_CODES if include_water_level else ())
+    )
     if ordered_stations:
         station_names = ordered_stations
         unsupported_location = None
@@ -224,6 +265,8 @@ def parse_water_quality_request(question: str) -> WaterQualityRequest:
         requested_parameters,
         unsupported_location,
         comparison,
+        include_quality,
+        include_water_level,
     )
 
 
@@ -240,6 +283,8 @@ def _unsupported_location(text: str) -> str | None:
         match.group(1),
         maxsplit=1,
     )[0].strip(" .'-")
+    if re.match(r"^(?:all|each|every)\s+(?:(?:five|5)\s+)?(?:configured\s+)?(?:stations?|locations?)\b", candidate):
+        return None
     if not candidate:
         return None
     if any(_contains_phrase(candidate, alias) for alias in STATION_ALIASES):
@@ -375,6 +420,11 @@ class CPCBWaterQualityService:
             "unit": str(selected.get("ts_unitsymbol") or "").strip(),
             "timestamp": selected.get("timestamp"),
             "freshness": freshness,
+            "method": next((
+                selected.get(key) for key in (
+                    "bod_method", "test_method", "measurement_method", "analysis_method", "method"
+                ) if selected.get(key) not in (None, "")
+            ), None),
         }
 
 
@@ -390,52 +440,146 @@ def format_water_quality_answer(
         )
 
     if not records:
-        return "CPCB data could not be retrieved for the requested water-quality locations."
+        return "CPCB data could not be retrieved for the requested locations."
 
-    heading = (
-        "CPCB reading comparison at the requested monitoring stations:"
-        if request.comparison
-        else "Latest available CPCB water-quality readings for the requested monitoring stations:"
+    if request.include_quality and request.include_water_level:
+        content = "Separate water-quality and water-level/depth tables are shown below."
+    elif request.include_water_level:
+        content = "The CPCB river-stage and water-depth readings are shown in the table below."
+    else:
+        content = "The CPCB pH, BOD, and DO readings are shown in the table below."
+    if request.comparison:
+        content = "Comparison: " + content[0].lower() + content[1:]
+    disclaimer = (
+        " CPCB Class B is a bathing-use benchmark; pH, BOD, and DO alone do not establish overall water safety or suitability."
+        if request.include_quality else ""
     )
-    lines = [heading]
+    return (
+        f"{content} Source: {CPCB_SOURCE} ({CPCB_URL}). Measurements apply to their named "
+        f"stations and timestamps, not the whole Ganga.{disclaimer}"
+    )
+
+
+def _localized_table_copy(language: str) -> dict[str, str]:
+    translations = {
+        "en": {"quality": "Water quality", "level": "Water level and depth", "station": "Station", "stage": "River stage (m)", "depth": "Depth (m)", "fresh": "Fresh", "stale": "Stale", "unknown": "Freshness unknown"},
+        "hi": {"quality": "जल गुणवत्ता", "level": "जल स्तर और गहराई", "station": "स्टेशन", "stage": "नदी का स्तर (m)", "depth": "गहराई (m)", "fresh": "ताज़ा", "stale": "पुराना", "unknown": "ताज़गी अज्ञात"},
+        "kn": {"quality": "ನೀರಿನ ಗುಣಮಟ್ಟ", "level": "ನೀರಿನ ಮಟ್ಟ ಮತ್ತು ಆಳ", "station": "ಕೇಂದ್ರ", "stage": "ನದಿಯ ಮಟ್ಟ (m)", "depth": "ಆಳ (m)", "fresh": "ತಾಜಾ", "stale": "ಹಳೆಯದು", "unknown": "ತಾಜಾತನ ತಿಳಿದಿಲ್ಲ"},
+        "ta": {"quality": "நீரின் தரம்", "level": "நீர்மட்டம் மற்றும் ஆழம்", "station": "நிலையம்", "stage": "ஆற்றின் நீர்மட்டம் (m)", "depth": "ஆழம் (m)", "fresh": "புதியது", "stale": "பழையது", "unknown": "புதுமை தெரியவில்லை"},
+    }
+    return translations.get(language, translations["en"])
+
+
+def _reading_status(code: str, reading: dict[str, Any] | None) -> str:
+    """Return a compact screening label; the table note carries benchmark details."""
+    if reading is None or reading.get("value") is None:
+        return "Unavailable"
+    if reading.get("freshness") == "stale":
+        return "Stale reading"
+    if reading.get("freshness") != "fresh":
+        return "Unavailable"
+    if code not in CPCB_CLASS_B_CRITERIA:
+        return "Unavailable"
+    if code == "BOD":
+        method = str(reading.get("method") or "").casefold()
+        has_5_day_basis = bool(re.search(r"\b5\s*(?:-| )?days?\b|\b5d\b", method))
+        has_20_c_basis = bool(re.search(r"\b20\s*(?:°\s*)?c\b|\b20\s*degrees?\s*c\b", method))
+        if not (has_5_day_basis and has_20_c_basis):
+            return "Unavailable"
+    unit = str(reading.get("unit", "")).strip().casefold()
+    if code == "pH":
+        valid_unit = unit in {"", "---", "ph"}
+    else:
+        valid_unit = unit in {"mg/l", "mg/litre", "mg/liter", "mg l-1", "mg·l⁻¹"}
+    try:
+        value = float(str(reading["value"]).strip())
+    except (KeyError, TypeError, ValueError):
+        return "Unavailable"
+    if not valid_unit or not math.isfinite(value):
+        return "Unavailable"
+    meets_criterion = (
+        6.5 <= value <= 8.5 if code == "pH"
+        else value <= 3.0 if code == "BOD"
+        else value >= 5.0
+    )
+    return "Meets Class B" if meets_criterion else "Outside Class B"
+
+
+def _table_cell(code: str, reading: dict[str, Any] | None, copy: dict[str, str]) -> str:
+    if reading is None or reading.get("value") is None:
+        value = "N/A"
+    else:
+        unit = reading.get("unit", "")
+        if unit == "---":
+            value = f"{reading['value']} (unitless)"
+        elif unit:
+            value = f"{reading['value']} {unit}"
+        else:
+            value = f"{reading['value']} (unit unavailable)"
+    raw_timestamp = reading.get("timestamp") if reading else None
+    timestamp_text = "Time unavailable"
+    if isinstance(raw_timestamp, str) and raw_timestamp.strip():
+        try:
+            parsed = datetime.fromisoformat(raw_timestamp.strip().replace("Z", "+00:00"))
+            if parsed.tzinfo is not None:
+                timestamp_text = parsed.astimezone(timezone.utc).astimezone(
+                    timezone(timedelta(hours=5, minutes=30))
+                ).strftime("%d %b %Y, %H:%M IST")
+        except ValueError:
+            pass
+    status = _reading_status(code, reading)
+    return f"{value}\n{timestamp_text}\nStatus: {status}"
+
+
+def build_water_data_tables(
+    request: WaterQualityRequest,
+    records: list[dict[str, Any]],
+    language: str = "en",
+) -> list[dict[str, Any]]:
+    """Build separate in-chat table payloads from verified CPCB station readings."""
+    if request.unsupported_location or not records:
+        return []
+    copy = _localized_table_copy(language)
+    by_station = {}
     for result in records:
-        station: Station = result["station"]
-        lines.append(f"\n{station.name} (CPCB station {station.station_no}):")
-        if result["unavailable"]:
-            lines.append("- No verified station record is currently available in the CPCB registry.")
-            continue
-        for item in result["readings"]:
-            code = item["parameter"]
-            description = PARAMETERS[code][0]
-            reading = item["reading"]
-            if reading is None or reading["value"] is None:
-                lines.append(f"- {description} ({code}): no reading is available from this station.")
-                continue
-            if reading["unit"] == "---":
-                unit = " (CPCB unit field: ---)"
-            else:
-                unit = f" {reading['unit']}" if reading["unit"] else " (unit not supplied)"
-            if reading["freshness"] == "unknown":
-                timestamp_text = f"timestamp unknown (source value: {reading['timestamp'] or 'not supplied'})"
-                freshness_text = "Freshness cannot be confirmed."
-            else:
-                timestamp = datetime.fromisoformat(reading["timestamp"].replace("Z", "+00:00"))
-                timestamp_text = (
-                    f"{reading['timestamp']} "
-                    f"({timestamp.astimezone(timezone.utc).strftime('%d %b %Y %H:%M UTC')})"
-                )
-                if reading["freshness"] == "stale":
-                    freshness_text = "This measurement is stale and should not be treated as current."
-                else:
-                    freshness_text = "This measurement is within the 90-minute display freshness window."
-            lines.append(
-                f"- {description} ({code}): {reading['value']}{unit}; measured {timestamp_text}. "
-                f"{freshness_text} {PARAMETER_EXPLANATIONS[code]}"
-            )
+        by_station[result["station"].name] = (
+            {item["parameter"]: item["reading"] for item in result.get("readings", [])}
+            if not result.get("unavailable") else {}
+        )
 
-    lines.append(
-        f"\nSource: {CPCB_SOURCE} ({CPCB_URL}). These readings apply to specific monitoring "
-        "stations and measurement times, not the entire Ganga. DO, BOD, and pH alone do not "
-        "determine whether water is safe to drink."
-    )
-    return "\n".join(lines)
+    tables = []
+    for include, code_set, title_key in (
+        (request.include_quality, QUALITY_PARAMETER_CODES, "quality"),
+        (request.include_water_level, LEVEL_PARAMETER_CODES, "level"),
+    ):
+        if not include:
+            continue
+        if title_key == "quality":
+            columns = [copy["station"], "pH", "BOD", "DO"]
+        else:
+            columns = [copy["station"], copy["stage"], copy["depth"]]
+        rows = []
+        for result in records:
+            station = result["station"]
+            station_readings = by_station.get(station.name, {})
+            rows.append([
+                f"{station.name} ({station.station_no})",
+                *[_table_cell(code, station_readings.get(code), copy) for code in code_set],
+            ])
+        tables.append({
+            "title": copy[title_key],
+            "columns": columns,
+            "rows": rows,
+            "source": (
+                f"{CPCB_SOURCE} ({CPCB_URL}). Class B is an organized outdoor-bathing screen: "
+                f"pH 6.5–8.5; DO ≥5 mg/L; BOD ≤3 mg/L (5-day, 20°C) ({CPCB_BATHING_CRITERIA_URL}). "
+                "These three parameters do not determine overall water safety or suitability. "
+                "BOD status is unavailable when its test method is unknown."
+                if title_key == "quality" else
+                f"{CPCB_SOURCE} ({CPCB_URL}). CWC warning/danger status is unavailable: no exact "
+                f"gauge match and current thresholds are verified ({CWC_FLOOD_PORTAL_URL}; "
+                f"station-specific reference: {CWC_THRESHOLDS_REFERENCE_URL}). CPCB Depth is a "
+                "separate measured field, not derived from river stage; no depth threshold is available."
+            ),
+        })
+    return tables
