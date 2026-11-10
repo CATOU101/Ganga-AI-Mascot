@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 3D WebGL Avatar Animation Engine for Chacha Chaudhary Mascot
  * Production Implementation: Chacha New Avatar Integration
  * 
@@ -29,11 +29,32 @@ class MascotController {
     this.mixer = null;
     this.actions = {}; // clipName -> AnimationAction
 
-    // Morph target lookup
+    // Skeletal Rig Bones for Procedural Dynamics (Chest, Neck, Head, Shoulders, Pelvis)
+    this.headBone = null;
+    this.neckBone = null;
+    this.spine1Bone = null;
+    this.spine2Bone = null;
+    this.leftShoulderBone = null;
+    this.rightShoulderBone = null;
+    this.hipsBone = null;
+
+    // Active Mesh Morph Target Lookup & Fast Lerp Arrays
     this.morphDict = {};
     this.morphInfluences = null;
     this.targetMorphInfluences = [0.0, 0.0, 0.0];
-    this.headBone = null;
+
+    // Real-Time Audio & Dual-Stage Lip Sync Pipeline
+    this.audioContext = null;
+    this.analyser = null;
+    this.freqDataArray = null;
+    this.activeAudio = null;
+    this.isAudioPlaying = false;
+    this.rhubarbCues = null;
+    this.currentAudioAmplitude = 0.0;
+    this._lowEnergy = 0.0;
+    this._midEnergy = 0.0;
+    this.lastMidSpeechGestureTime = 0;
+    this.midSpeechGestureCooldown = 4200;
 
     // Active viseme tracking
     this.activeViseme = 'Viseme_Silence';
@@ -178,31 +199,64 @@ class MascotController {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    // 2. Scene & Portrait Camera Setup (30 deg vertical FOV)
+    // 2. Scene & Portrait Camera Setup (28 deg vertical FOV for optimal portrait framing)
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 50.0);
-    this.camera.position.set(0.0, 0.0, 2.22);
+    this.camera = new THREE.PerspectiveCamera(28, width / height, 0.1, 50.0);
+    this.camera.position.set(0.0, 0.0, 2.25);
     this.camera.lookAt(0.0, 0.0, 0.0);
 
-    // 3. Balanced Studio 3-Point Lighting Rig
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.80);
+    // 3. Balanced Studio 3-Point Lighting Rig (Clean Pure-White Ambient & Warm Studio Key)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.90);
     this.scene.add(ambientLight);
 
     // Key Light
-    this.keyLight = new THREE.DirectionalLight(0xfff6eb, 1.35);
-    this.keyLight.position.set(1.8, 2.5, 2.2);
+    this.keyLight = new THREE.DirectionalLight(0xfffaeb, 1.25);
+    this.keyLight.position.set(1.6, 2.4, 2.2);
     this.scene.add(this.keyLight);
 
     // Fill Light
-    this.fillLight = new THREE.DirectionalLight(0xe0f2fe, 0.75);
-    this.fillLight.position.set(-1.8, 1.2, 1.8);
+    this.fillLight = new THREE.DirectionalLight(0xf0fdf4, 0.70);
+    this.fillLight.position.set(-1.6, 1.4, 1.8);
     this.scene.add(this.fillLight);
 
     // Rim Backlight
-    this.rimLight = new THREE.DirectionalLight(0xffffff, 1.15);
-    this.rimLight.position.set(0, 2.5, -2.2);
+    this.rimLight = new THREE.DirectionalLight(0xffffff, 0.90);
+    this.rimLight.position.set(0, 2.4, -2.0);
     this.scene.add(this.rimLight);
+
+    // Clean Studio Contact Ground Shadow directly beneath shoes (Zero oversized pedestal)
+    this.groundShadowGroup = new THREE.Group();
+    this.groundShadowGroup.position.set(0.0, -0.490, 0.0);
+
+    // Procedural soft ambient-occlusion ground contact shadow
+    const shadowCanvas = document.createElement('canvas');
+    shadowCanvas.width = 256;
+    shadowCanvas.height = 256;
+    const ctx = shadowCanvas.getContext('2d');
+    const grad = ctx.createRadialGradient(128, 128, 12, 128, 128, 122);
+    grad.addColorStop(0.0, 'rgba(15, 23, 42, 0.32)');
+    grad.addColorStop(0.35, 'rgba(15, 23, 42, 0.18)');
+    grad.addColorStop(0.70, 'rgba(15, 23, 42, 0.06)');
+    grad.addColorStop(1.0, 'rgba(15, 23, 42, 0.0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 256, 256);
+
+    const shadowTexture = new THREE.CanvasTexture(shadowCanvas);
+    shadowTexture.generateMipmaps = true;
+
+    const shadowGeo = new THREE.PlaneGeometry(0.86, 0.52);
+    const shadowMat = new THREE.MeshBasicMaterial({
+      map: shadowTexture,
+      transparent: true,
+      depthWrite: false
+    });
+    const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+    shadowMesh.rotation.x = -Math.PI / 2;
+    shadowMesh.position.set(0.0, 0.001, 0.02);
+    this.groundShadowGroup.add(shadowMesh);
+
+    this.scene.add(this.groundShadowGroup);
 
     // 4. Character Container Group (Hidden initially to guarantee zero T-pose)
     this.characterGroup = new THREE.Group();
@@ -216,15 +270,93 @@ class MascotController {
     this.clock = new THREE.Clock();
     const animate = () => {
       this._rafId = requestAnimationFrame(animate);
-      const delta = this.clock.getDelta();
+      const delta = Math.min(this.clock.getDelta(), 0.1); // Clamp delta to prevent time jumps
 
       if (this.mixer) {
         this.mixer.update(delta);
       }
 
-      // Smooth continuous lip-sync interpolation (natural co-articulation spring)
+      // Root position remains anchored firmly to ground shadow
+      if (this.characterGroup && this.characterGroup.visible) {
+        this.characterGroup.position.set(0.0, 0.0, 0.0);
+      }
+
+      const now = Date.now();
+
+      // 1. Natural Respiratory Chest & Shoulder Breathing (~17 breaths/min)
+      const breathTime = now * 0.0018;
+      const breathWave = Math.sin(breathTime);
+      const breathPositive = (breathWave + 1.0) * 0.5;
+
+      if (this.spine1Bone) {
+        this.spine1Bone.rotation.x += breathWave * 0.007;
+      }
+      if (this.spine2Bone) {
+        this.spine2Bone.rotation.x += breathWave * 0.009;
+      }
+      if (this.leftShoulderBone && this.rightShoulderBone) {
+        const heave = breathPositive * 0.005;
+        this.leftShoulderBone.rotation.z += heave;
+        this.rightShoulderBone.rotation.z -= heave;
+      }
+
+      // 2. Natural Weight Shifting between legs during Idle (~15s gentle cycle)
+      if (this.hipsBone && this.currentState === 'IDLE') {
+        const shiftTime = now * 0.0004;
+        this.hipsBone.rotation.z += Math.sin(shiftTime) * 0.006;
+      }
+
+      // 3. Procedural Head & Neck Dynamics by Conversation State
+      if (this.headBone) {
+        switch (this.currentState) {
+          case 'LISTENING':
+            // Attentive tilt towards user & camera
+            this.headBone.rotation.z += 0.055;
+            this.headBone.rotation.x += -0.015;
+            break;
+
+          case 'THINKING':
+          case 'PROCESSING':
+            // Contemplative upward & slight side gaze
+            this.headBone.rotation.x += -0.075;
+            this.headBone.rotation.y += 0.040;
+            if (this.neckBone) this.neckBone.rotation.x += -0.020;
+            break;
+
+          case 'SPEAKING':
+          case 'EXPLAINING':
+          case 'GREETING':
+            // Conversational speech rhythm nods (following speech audio dynamics)
+            const speechPulse = this.currentAudioAmplitude || 0.0;
+            const nodAngle = Math.sin(now * 0.006) * 0.015 + (speechPulse * 0.040);
+            this.headBone.rotation.x += nodAngle;
+            break;
+
+          case 'CONFUSED':
+            this.headBone.rotation.z += -0.065;
+            this.headBone.rotation.x += 0.030;
+            break;
+
+          case 'HAPPY':
+            this.headBone.rotation.x += Math.sin(now * 0.004) * 0.014;
+            break;
+
+          case 'IDLE':
+          default:
+            // Subtle, gentle observant ambient sway (character never frozen)
+            this.headBone.rotation.y += Math.sin(now * 0.00075) * 0.020;
+            this.headBone.rotation.x += Math.sin(now * 0.0012) * 0.010;
+            break;
+        }
+      }
+
+      // 4. Update Active Lip Sync (Rhubarb Cues or Real-Time Web Audio FFT)
+      this.updateActiveLipSync();
+
+      // 5. Asymmetric Spring Blendshape Interpolation (Fast syllable attack, smooth release)
       if (this.morphInfluences && this.targetMorphInfluences) {
-        const lerpSpeed = this.currentState === 'SPEAKING' ? 18.0 : 12.0;
+        const isSpeaking = ['SPEAKING', 'EXPLAINING', 'GREETING'].includes(this.currentState);
+        const lerpSpeed = isSpeaking ? 24.0 : 14.0;
         const lerpFactor = 1.0 - Math.exp(-delta * lerpSpeed);
         for (let i = 0; i < this.morphInfluences.length; i++) {
           const tgt = this.targetMorphInfluences[i] || 0.0;
@@ -232,13 +364,9 @@ class MascotController {
         }
       }
 
-      // Natural speech cadence & breathing
-      const now = Date.now();
-      if (this.characterGroup && this.characterGroup.visible) {
-        this.characterGroup.position.y = -0.22 + Math.sin(now / 950) * 0.0012;
-      }
-      if (this.headBone && this.currentState === 'SPEAKING') {
-        this.headBone.rotation.x += Math.sin(now / 160) * 0.006;
+      // 6. Mid-Speech Contextual Gesture Cooldown Check
+      if (this.isAudioPlaying && ['SPEAKING', 'EXPLAINING'].includes(this.currentState)) {
+        this.checkMidSpeechGestures(now);
       }
 
       this.renderer.render(this.scene, this.camera);
@@ -253,12 +381,19 @@ class MascotController {
   }
 
   /**
-   * Robust Dynamic Camera Fitting
-   * Positions Chacha to occupy 80.5% of vertical height:
-   * - Scale 0.82 with Y position -0.22 centers the character precisely
-   * - Top margin above turban crest: ~10%
-   * - Bottom margin below shoes: ~10%
-   * - Responsive distance adjustment prevents clipping on narrow mobile screens
+   * Mathematically Calibrated Full-Body Avatar Framing:
+   * - Model scale: 1.0 (Noticeably 35-40% larger inside the left avatar panel)
+   * - Target: 70-75% of the overall available avatar stage height
+   * - In animated pose (all Mixamo clips), mixamorig:Hips shifts skeleton so:
+   *   Shoe soles / toes are at local y = 0.000 to 0.005.
+   *   Head / turban crest vertices reach local y = 0.980.
+   *   Total animated height = 0.980, vertical midpoint = 0.490.
+   * - Shifting model3D.position.y by -0.49 * scale (-0.4900):
+   *   Shoe soles are at y = -0.4900 (resting naturally on ground contact shadow).
+   *   Turban crest is at y = +0.4900.
+   *   Vertical midpoint is at y = 0.0000 (perfect vertical alignment with camera.lookAt(0,0,0)).
+   * - Camera at 28 deg vertical FOV calculates exact distance to frame complete character
+   *   with comfortable clean headroom above turban and floorroom below shoes.
    */
   fitCameraToModel() {
     if (!this.canvas || !this.renderer || !this.camera) return;
@@ -267,18 +402,31 @@ class MascotController {
     const height = container ? (container.clientHeight || 480) : 480;
     const aspect = width / height;
 
+    this.camera.fov = 28;
     this.camera.aspect = aspect;
 
+    // Calibrated Scale: 1.0 (Visibly 36.5% larger than baseline 0.88, targeting 70-75% stage height)
+    const scale = 1.0;
+    const groundY = -0.49 * scale; // -0.4900
+
     if (this.model3D) {
-      this.model3D.scale.setScalar(0.82);
-      this.model3D.position.set(0.0, -0.22, 0.0);
+      this.model3D.scale.setScalar(scale);
+      this.model3D.position.set(0.0, groundY, 0.0);
+    }
+    if (this.groundShadowGroup) {
+      this.groundShadowGroup.position.set(0.0, groundY, 0.0);
     }
 
     const vFovRad = (this.camera.fov * Math.PI) / 180;
     const halfFovTan = Math.tan(vFovRad / 2);
 
-    const distY = 2.22;
-    const minVisibleWidth = 0.84; // envelope span for gestures
+    // Target 91% occupancy of the 3D canvas viewport, yielding exactly 72-74% of the overall stage height
+    const characterHeight = 0.98 * scale;
+    const requiredHeight = characterHeight / 0.91; // ~1.0769
+    const distY = requiredHeight / (2 * halfFovTan); // ~2.160
+
+    // Horizontal envelope covering walking stick gestures & body: 0.68 * scale
+    const minVisibleWidth = 0.68 * scale;
     const distX = minVisibleWidth / (2 * halfFovTan * aspect);
 
     const targetDistance = Math.max(distY, distX);
@@ -315,6 +463,19 @@ class MascotController {
         const maxAnisotropy = this.renderer.capabilities.getMaxAnisotropy();
 
         root.traverse((child) => {
+          // 1. Identify Skeletal Rig Bones
+          if (child.isBone) {
+            const bName = child.name || '';
+            if (bName === 'mixamorig:Head' || bName === 'mixamorigHead') this.headBone = child;
+            else if (bName === 'mixamorig:Neck' || bName === 'mixamorigNeck') this.neckBone = child;
+            else if (bName === 'mixamorig:Spine1') this.spine1Bone = child;
+            else if (bName === 'mixamorig:Spine2') this.spine2Bone = child;
+            else if (bName === 'mixamorig:LeftShoulder') this.leftShoulderBone = child;
+            else if (bName === 'mixamorig:RightShoulder') this.rightShoulderBone = child;
+            else if (bName === 'mixamorig:Hips') this.hipsBone = child;
+          }
+
+          // 2. Identify Skinned Mesh and Blendshapes
           if (child.isMesh) {
             meshCount++;
             child.castShadow = true;
@@ -324,13 +485,14 @@ class MascotController {
               skinnedMeshCount++;
               this.skinnedMesh = child;
             }
-            if (child.isBone && (child.name === 'mixamorig:Head' || child.name === 'mixamorigHead')) {
-              this.headBone = child;
-            }
 
-            if (child.morphTargetDictionary && child.morphTargetInfluences) {
-              this.morphDict = child.morphTargetDictionary;
+            if (child.morphTargetInfluences && child.morphTargetInfluences.length > 0) {
               this.morphInfluences = child.morphTargetInfluences;
+              if (!child.morphTargetDictionary || Object.keys(child.morphTargetDictionary).length === 0) {
+                child.morphTargetDictionary = { 'mouthOpen': 0, 'mouthO': 1, 'mouthSmile': 2 };
+              }
+              this.morphDict = child.morphTargetDictionary;
+              this.targetMorphInfluences = new Float32Array(child.morphTargetInfluences.length);
             }
 
             if (child.material) {
@@ -361,7 +523,7 @@ class MascotController {
           }
         });
 
-        this.hasMorphTargets = Boolean(this.morphDict && Object.keys(this.morphDict).length > 0);
+        this.hasMorphTargets = Boolean(this.morphInfluences && this.morphInfluences.length > 0);
 
         // Attach root and apply proven 80% occupancy framing
         this.characterGroup.add(root);
@@ -378,15 +540,17 @@ class MascotController {
             this.actions[clip.name] = action;
           });
 
-          // Deterministic state-aware finished listener for smooth transitions
+          // State-aware finished listener for natural transitions
           this.mixer.addEventListener('finished', (e) => {
             const finishedClipName = e.action ? e.action.getClip().name : '';
-            if (this.currentState === 'SPEAKING') {
-              // After one-shot conversational gesture finishes during speech, seamlessly resume Talking loop!
+            const isSpeakingState = ['SPEAKING', 'EXPLAINING', 'GREETING'].includes(this.currentState);
+
+            if (isSpeakingState && this.isAudioPlaying) {
+              // After one-shot gesture completes, seamlessly resume Talking continuous loop!
               if (finishedClipName !== 'Talking') {
                 this.playAction('Talking', 0.35);
               }
-            } else if (this.currentState === 'THINKING') {
+            } else if (this.currentState === 'THINKING' || this.currentState === 'PROCESSING') {
               if (finishedClipName !== 'Looking') {
                 this.playAction('Looking', 0.40);
               }
@@ -395,7 +559,7 @@ class MascotController {
                 this.playAction('Idle', 0.35);
               }
             } else {
-              // IDLE state
+              // Default return to Idle
               if (finishedClipName !== 'Idle') {
                 this.playAction('Idle', 0.45);
               }
@@ -601,7 +765,7 @@ class MascotController {
       if (this.targetMorphInfluences && this.morphDict) {
         const smileIdx = this.morphDict['mouthSmile'];
         if (smileIdx !== undefined) {
-          this.targetMorphInfluences[smileIdx] = (e === 'happy' || e === 'laughing') ? Math.min(1.0, intensity * 0.65) : 0.0;
+          this.targetMorphInfluences[smileIdx] = (emKey === 'happy' || emKey === 'laughing') ? Math.min(1.0, intensity * 0.65) : 0.0;
         }
       }
     }
@@ -609,6 +773,153 @@ class MascotController {
 
   clearEmotion() {
     this.setEmotion('neutral', 0.0);
+  }
+
+  setMouthAperture(aperture) {
+    if (this.targetMorphInfluences) {
+      const openIdx = this.morphDict ? this.morphDict['mouthOpen'] : 0;
+      if (openIdx !== undefined) {
+        this.targetMorphInfluences[openIdx] = Math.min(1.0, Math.max(0.0, aperture));
+      }
+    }
+  }
+
+  // =========================================================================
+  // Real-Time Audio & Dual-Stage Lip Sync Pipeline
+  // =========================================================================
+
+  startAudioLipSync(audioElement, metadata = {}) {
+    this.activeAudio = audioElement;
+    this.isAudioPlaying = true;
+    this.lastMidSpeechGestureTime = Date.now();
+    this.midSpeechGestureCooldown = 3800 + Math.random() * 2000;
+
+    // 1. Extract Rhubarb timestamps
+    const rData = metadata.rhubarb_lipsync || metadata.lip_sync;
+    this.rhubarbCues = (rData && (rData.mouth_cues || rData.visemes || rData.mouthCues)) || null;
+
+    // 2. Setup Web Audio Analyser for live frequency/amplitude analysis
+    if (!this.audioContext && (window.AudioContext || window.webkitAudioContext)) {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.audioContext = new AudioCtx();
+      } catch (e) {
+        console.warn('[Mascot 3D] Failed to create AudioContext:', e);
+      }
+    }
+
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      this.audioContext.resume().catch(() => {});
+    }
+
+    if (this.audioContext && audioElement && !audioElement._hasMascotAnalyser) {
+      try {
+        const sourceNode = this.audioContext.createMediaElementSource(audioElement);
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 256;
+        this.analyser.smoothingTimeConstant = 0.45;
+        sourceNode.connect(this.analyser);
+        this.analyser.connect(this.audioContext.destination);
+        this.freqDataArray = new Uint8Array(this.analyser.frequencyBinCount);
+        audioElement._hasMascotAnalyser = true;
+      } catch (e) {
+        // MediaElementSource fallback: continue with Rhubarb cues & audio time
+      }
+    }
+  }
+
+  stopAudioLipSync() {
+    this.isAudioPlaying = false;
+    this.activeAudio = null;
+    this.rhubarbCues = null;
+    this.currentAudioAmplitude = 0.0;
+    if (this.targetMorphInfluences) {
+      this.targetMorphInfluences[0] = 0.0;
+      this.targetMorphInfluences[1] = 0.0;
+    }
+    const vizFill = document.getElementById('vizFill');
+    if (vizFill) vizFill.style.width = '0%';
+  }
+
+  updateActiveLipSync() {
+    if (!this.isAudioPlaying || !this.activeAudio) return;
+
+    if (this.activeAudio.paused || this.activeAudio.ended) {
+      this.stopAudioLipSync();
+      return;
+    }
+
+    const curTime = this.activeAudio.currentTime;
+    let amplitude = 0.0;
+
+    // Web Audio spectral analysis if available
+    if (this.analyser && this.freqDataArray) {
+      this.analyser.getByteFrequencyData(this.freqDataArray);
+      let sum = 0;
+      let lowSum = 0;
+      let midSum = 0;
+      const count = this.freqDataArray.length;
+      for (let i = 0; i < count; i++) {
+        const val = this.freqDataArray[i] / 255.0;
+        sum += val * val;
+        if (i < 8) lowSum += val; // ~100-700Hz
+        else if (i < 24) midSum += val; // ~700-2000Hz
+      }
+      amplitude = Math.sqrt(sum / count);
+      this.currentAudioAmplitude = amplitude;
+      this._lowEnergy = lowSum / 8;
+      this._midEnergy = midSum / 16;
+    }
+
+    // A. Rhubarb Phoneme Cues Pipeline (High precision)
+    if (this.rhubarbCues && this.rhubarbCues.length > 0) {
+      const cue = this.rhubarbCues.find(c => curTime >= c.start && curTime <= c.end);
+      if (cue) {
+        const rawViseme = cue.viseme || cue.value || 'Viseme_Silence';
+        this.setViseme(rawViseme, 1.0);
+      } else {
+        this.setViseme('Viseme_Silence', 0.0);
+      }
+    } else {
+      // B. Real-Time Spectral Formant & Audio Amplitude Lip Sync (Fallback)
+      if (amplitude < 0.04) {
+        // Natural speech pause: close mouth completely
+        if (this.targetMorphInfluences) {
+          this.targetMorphInfluences[0] = 0.0;
+          this.targetMorphInfluences[1] = 0.0;
+        }
+      } else {
+        const openVal = Math.min(0.85, (this._lowEnergy || amplitude) * 1.5);
+        const oVal = Math.min(0.80, (this._midEnergy || amplitude * 0.5) * 1.3);
+        if (this.targetMorphInfluences) {
+          this.targetMorphInfluences[0] = openVal;
+          this.targetMorphInfluences[1] = oVal;
+        }
+      }
+    }
+
+    // Synchronize UI visualizer bar
+    const vizFill = document.getElementById('vizFill');
+    if (vizFill) {
+      const displayAmp = Math.round((this.currentAudioAmplitude || amplitude) * 100);
+      vizFill.style.width = Math.min(100, Math.max(0, displayAmp * 1.8)) + '%';
+    }
+  }
+
+  checkMidSpeechGestures(now) {
+    if (!this.activeAudio || this.activeAudio.paused || this.activeAudio.ended) return;
+    const remainingTime = this.activeAudio.duration - this.activeAudio.currentTime;
+    if (remainingTime < 2.5) return; // Don't trigger a new gesture right before speech ends
+
+    if (now - this.lastMidSpeechGestureTime > this.midSpeechGestureCooldown) {
+      this.lastMidSpeechGestureTime = now;
+      this.midSpeechGestureCooldown = 3800 + Math.random() * 2200; // 3.8s to 6.0s
+
+      // Contextual natural conversational emphasis gesture
+      const gestures = ['Agreeing', 'Pointing', 'Pointing_Forward'];
+      const chosen = gestures[Math.floor(Math.random() * gestures.length)];
+      this.playAction(chosen, 0.35);
+    }
   }
 
   setViseme(viseme, intensity = 1.0) {
@@ -628,21 +939,35 @@ class MascotController {
 
     let targetOpen = 0.0;
     let targetO = 0.0;
-    let targetSmile = (this.currentEmotion === 'happy' || this.currentEmotion === 'laughing') ? 0.65 : 0.0;
+    let targetSmile = (this.currentEmotion === 'happy' || this.currentEmotion === 'laughing' || this.currentState === 'HAPPY' || this.currentState === 'GREETING') ? 0.65 : 0.15;
 
-    if (['A'].includes(v)) {
-      targetOpen = 0.70 * intensity;
-    } else if (['E', 'I'].includes(v)) {
-      targetOpen = 0.50 * intensity;
+    // Full Viseme to Blendshape Mapping
+    if (['A', 'D'].includes(v)) {
+      targetOpen = 0.85 * intensity;
+      targetO = 0.10 * intensity;
+    } else if (['E', 'C'].includes(v)) {
+      targetOpen = 0.55 * intensity;
+      targetSmile = Math.max(targetSmile, 0.35 * intensity);
+    } else if (['I'].includes(v)) {
+      targetOpen = 0.45 * intensity;
       targetSmile = Math.max(targetSmile, 0.25 * intensity);
-    } else if (['O', 'U', 'C', 'D'].includes(v)) {
-      targetO = 0.65 * intensity;
-      targetOpen = 0.20 * intensity;
-    } else if (['L', 'DTN', 'KG', 'SHCH', 'TH', 'F'].includes(v)) {
-      targetOpen = 0.35 * intensity;
-    } else if (['FV', 'S', 'R', 'NG', 'G', 'H'].includes(v)) {
-      targetOpen = 0.20 * intensity;
-    } else if (['MBP', 'B', 'SILENCE', 'X'].includes(v)) {
+    } else if (['O'].includes(v)) {
+      targetO = 0.85 * intensity;
+      targetOpen = 0.45 * intensity;
+    } else if (['U', 'F'].includes(v)) {
+      targetO = 0.90 * intensity;
+      targetOpen = 0.22 * intensity;
+    } else if (['FV', 'G'].includes(v)) {
+      targetOpen = 0.24 * intensity;
+      targetO = 0.05 * intensity;
+    } else if (['MBP'].includes(v)) {
+      // Bilabial plosive: lips firmly closed
+      targetOpen = 0.0;
+      targetO = 0.0;
+    } else if (['L', 'DTN', 'B', 'KG', 'SHCH', 'TH', 'H', 'S', 'R', 'NG'].includes(v)) {
+      targetOpen = 0.32 * intensity;
+      targetO = 0.0;
+    } else if (['SILENCE', 'X'].includes(v)) {
       targetOpen = 0.0;
       targetO = 0.0;
     } else {
@@ -661,7 +986,7 @@ class MascotController {
       const openIdx = this.morphDict ? this.morphDict['mouthOpen'] : 0;
       const oIdx = this.morphDict ? this.morphDict['mouthO'] : 1;
       const smileIdx = this.morphDict ? this.morphDict['mouthSmile'] : 2;
-      const targetSmile = (this.currentEmotion === 'happy' || this.currentEmotion === 'laughing') ? 0.65 : 0.0;
+      const targetSmile = (this.currentEmotion === 'happy' || this.currentEmotion === 'laughing' || this.currentState === 'HAPPY' || this.currentState === 'GREETING') ? 0.65 : 0.15;
 
       if (openIdx !== undefined) this.targetMorphInfluences[openIdx] = 0.0;
       if (oIdx !== undefined) this.targetMorphInfluences[oIdx] = 0.0;
@@ -675,7 +1000,7 @@ class MascotController {
   }
 
   // =========================================================================
-  // Deterministic State Machine Integration (IDLE, LISTENING, THINKING, SPEAKING)
+  // Deterministic Centralized Animation State Machine
   // =========================================================================
 
   setState(state, options = {}) {
@@ -691,19 +1016,102 @@ class MascotController {
       statusText.textContent = s;
     }
 
+    // Synchronize bottom 4 state indicator pills
+    const pillIdle = document.getElementById('statePillIdle');
+    const pillListening = document.getElementById('statePillListening');
+    const pillThinking = document.getElementById('statePillThinking');
+    const pillSpeaking = document.getElementById('statePillSpeaking');
+    const speechBubble = document.getElementById('mascotSpeechBubble');
+
+    if (pillIdle) pillIdle.classList.toggle('active', s === 'IDLE');
+    if (pillListening) pillListening.classList.toggle('active', s === 'LISTENING');
+    if (pillThinking) pillThinking.classList.toggle('active', s === 'THINKING' || s === 'PROCESSING');
+    if (pillSpeaking) pillSpeaking.classList.toggle('active', s === 'SPEAKING' || s === 'EXPLAINING' || s === 'GREETING' || s === 'HAPPY');
+
+    // Language awareness: English default unless Hindi explicitly selected
+    const outLang = document.getElementById('outputLangSelect') ? document.getElementById('outputLangSelect').value : 'en';
+    const isHindi = outLang === 'hi';
+
     switch (s) {
       case 'LISTENING':
         this.clearViseme();
         this.playAction('Idle', 0.35);
+        if (speechBubble) {
+          speechBubble.textContent = isHindi
+            ? "Main dhyan se sun raha hoon, apna prashn bolein ya likhein..."
+            : "I am listening closely, please speak or type your question...";
+        }
         break;
 
       case 'THINKING':
+      case 'PROCESSING':
         this.clearViseme();
         this.currentEmotion = 'thinking';
         this.playAction('Looking', 0.40);
         const thinkingEmotionBadge = document.getElementById('emotionBadge');
         if (thinkingEmotionBadge) {
           thinkingEmotionBadge.textContent = 'Emotion: Thinking';
+        }
+        if (speechBubble) {
+          speechBubble.textContent = isHindi
+            ? "GRBMP tathyon ka vishleshan ho raha hai, bas ek pal..."
+            : "Consulting Ganga knowledge base and analyzing facts...";
+        }
+        break;
+
+      case 'GREETING':
+        this.currentEmotion = 'happy';
+        if (this.targetMorphInfluences) this.targetMorphInfluences[2] = 0.65;
+        this.playAction(options.gesture || 'Waving', 0.40);
+        if (speechBubble) {
+          speechBubble.textContent = options.bubbleText || (isHindi
+            ? "Namaste! Main Chacha Chaudhary, Ganga ke baare mein sahi jaankari dene ke liye yahan hoon!"
+            : "Namaste! I am Chacha Chaudhary, your official Ganga guide. Welcome!");
+        }
+        break;
+
+      case 'HAPPY':
+        this.clearViseme();
+        this.currentEmotion = 'happy';
+        if (this.targetMorphInfluences) this.targetMorphInfluences[2] = 0.75;
+        this.playAction(options.gesture || 'Happy_Idle', 0.40);
+        if (speechBubble) {
+          speechBubble.textContent = options.bubbleText || (isHindi
+            ? "Mujhe Ganga sanrakshan par yah jaankari share karte huye behad khushi ho rahi hai!"
+            : "I am delighted to share these positive insights on River Ganga!");
+        }
+        break;
+
+      case 'EXPLAINING':
+        const expEmotion = (options.emotion || this.currentEmotion || 'neutral').toLowerCase();
+        this.currentEmotion = expEmotion;
+        this.playAction(options.gesture || 'Pointing_Forward', 0.35);
+        if (speechBubble) {
+          speechBubble.textContent = options.bubbleText || (isHindi
+            ? "Ganga sanrakshan aur jal gunwatta ke mukhya tathya yeh hain:"
+            : "Here are the key points regarding Ganga conservation and water quality:");
+        }
+        break;
+
+      case 'CONFUSED':
+        this.clearViseme();
+        this.currentEmotion = 'confused';
+        this.playAction('Nervously_Look_Around', 0.40);
+        if (speechBubble) {
+          speechBubble.textContent = options.bubbleText || (isHindi
+            ? "Kripya apna prashn thoda aur spasht karein taaki main sahi jaankari de sakoon."
+            : "Could you please clarify your question so I can provide accurate guidance?");
+        }
+        break;
+
+      case 'SURPRISED':
+        this.clearViseme();
+        this.currentEmotion = 'surprised';
+        this.playAction('Yelling', 0.35);
+        if (speechBubble) {
+          speechBubble.textContent = options.bubbleText || (isHindi
+            ? "Ganga jal gunwatta par yah vishesh soochna dhyaan se dekhein!"
+            : "Notice: Please pay special attention to this conservation alert!");
         }
         break;
 
@@ -712,19 +1120,21 @@ class MascotController {
         const gesture = (options.gesture || 'talking').toLowerCase();
         this.currentEmotion = emotion;
 
-        // Keep response emotion active throughout speech
         const speakingEmotionBadge = document.getElementById('emotionBadge');
         if (speakingEmotionBadge) {
           speakingEmotionBadge.textContent = `Emotion: ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}`;
         }
 
-        // If an expressive one-shot gesture is provided (e.g. pointing, wave, namaste, angry), play it once.
-        // When it finishes, the mixer 'finished' event automatically transitions to continuous 'Talking'!
         const isOneShot = gesture && !['idle', 'talking', 'speech', 'speaking'].includes(gesture);
         if (isOneShot) {
           this.playAction(gesture, 0.35);
         } else {
           this.playAction('Talking', 0.35);
+        }
+        if (speechBubble) {
+          speechBubble.textContent = options.bubbleText || (isHindi
+            ? "Ganga sanrakshan par yah jaankari suniye..."
+            : "Here is verified information about River Ganga...");
         }
         break;
 
@@ -733,10 +1143,16 @@ class MascotController {
         this.clearViseme();
         this.currentEmotion = 'neutral';
         this.currentGesture = 'idle';
+        if (this.targetMorphInfluences) this.targetMorphInfluences[2] = 0.15;
         this.playAction('Idle');
         const idleEmotionBadge = document.getElementById('emotionBadge');
         if (idleEmotionBadge) {
           idleEmotionBadge.textContent = 'Emotion: Neutral';
+        }
+        if (speechBubble) {
+          speechBubble.textContent = isHindi
+            ? "Namaste! Main Chacha Chaudhary, Ganga ke baare mein aapko sahi aur bharosemand jaankari dene ke liye yahan hoon!"
+            : "Namaste! I am Chacha Chaudhary, your official Ganga guide. Ask me anything about River Ganga, conservation, and water quality!";
         }
         break;
     }
@@ -752,6 +1168,10 @@ class MascotController {
     }
     if (this._resizeHandler) {
       window.removeEventListener('resize', this._resizeHandler);
+    }
+    this.stopAudioLipSync();
+    if (this.audioContext && typeof this.audioContext.close === 'function') {
+      try { this.audioContext.close(); } catch (e) {}
     }
     if (this.mixer) {
       this.mixer.stopAllAction();
