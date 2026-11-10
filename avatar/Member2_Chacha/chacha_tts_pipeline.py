@@ -39,7 +39,9 @@ class EdgeTTSProvider(BaseTTSProvider):
     """
     DEFAULT_VOICES = {
         "en": "en-IN-PrabhatNeural",  # Indian English Male
-        "hi": "hi-IN-MadhurNeural"    # Hindi Male (Chacha)
+        "hi": "hi-IN-MadhurNeural",   # Hindi Male (Chacha)
+        "kn": "kn-IN-GaganNeural",    # Configured Kannada voice
+        "ta": "ta-IN-ValluvarNeural", # Configured Tamil voice
     }
 
     def __init__(self, python_exe=None, blender_exe=None):
@@ -52,7 +54,9 @@ class EdgeTTSProvider(BaseTTSProvider):
 
     def synthesize_to_wav(self, text: str, language: str, voice: str = None, output_wav: str = "") -> dict:
         lang = language.lower().strip()
-        voice_name = voice or self.DEFAULT_VOICES.get(lang, "en-IN-PrabhatNeural")
+        voice_name = voice or self.DEFAULT_VOICES.get(lang)
+        if not voice_name:
+            raise ValueError("Unsupported Edge TTS language code")
 
         temp_mp3 = output_wav.replace(".wav", "_temp.mp3")
         os.makedirs(os.path.dirname(output_wav), exist_ok=True)
@@ -151,6 +155,8 @@ class LocalSapiTTSProvider(BaseTTSProvider):
 
     def synthesize_to_wav(self, text: str, language: str, voice: str = None, output_wav: str = "") -> dict:
         lang = language.lower().strip()
+        if lang not in self.DEFAULT_VOICES:
+            raise RuntimeError("No verified local SAPI voice is configured for this language")
         voice_name = voice or self.DEFAULT_VOICES.get(lang, "Microsoft David Desktop")
         os.makedirs(os.path.dirname(output_wav), exist_ok=True)
 

@@ -60,26 +60,34 @@ The frontend interface is a responsive split-screen dashboard providing real-tim
 
 ---
 
-## 4. Files Added and Modified
+## 4. Active Interface & Voice Capability Boundaries
 
-| File | Status | Description |
-| :--- | :--- | :--- |
-| `avatar/index.html` | Modified | Complete dashboard layout, header, avatar stage, chat stream, input dock, and modal containers. |
-| `avatar/style.css` | Modified | Full pure-white design system, typography, animations, responsive breakpoints, and component styling. |
-| `avatar/mascot.js` | Modified | Three.js scene manager, camera calibration ($73.3\%$ stage height), procedural breathing, lip-sync, and state handlers. |
-| `avatar/app.js` | Modified | Application controller, Web Audio integration, speech recognition/synthesis coordination, chat message rendering. |
-| `avatar/keyboard.js` | Added | Multilingual virtual keyboard with 12 Indian script layouts, key listeners, and caret insertion. |
-| `avatar/quiz.js` | Added | Quiz state manager, timer, scoring, and UI event listeners. |
-| `avatar/quiz-data.js` | Added | Question bank on Ganga river, conservation programs, and water quality criteria. |
-| `avatar/cpcb-tables.js` | Added | Central Pollution Control Board (CPCB) designated best-use water quality classification tables. |
-| `avatar/avatar3d.html` | Modified | Standalone 3D avatar viewport for isolated model inspection and calibration. |
-| `avatar/tests/*.test.js`| Added | Automated unit tests for quiz logic and CPCB table lookups. |
+- **Active Interface**: The Three.js client loads the active Chacha model from `Chacha_New/` and presents Brain answers, citations, conversation state, CPCB water quality tables, and synchronized audio/lip-sync data.
+- **Language Selection & Translation**: Text input and output selection supports English (`en`), Hindi (`hi`), Kannada (`kn`), Tamil (`ta`), and regional languages. Translation is handled by the Brain; see privacy notes in the [main README](../README.md#language-and-translation-privacy).
+- **Voice System Boundary**:
+  - STT adapter: Vosk acoustic models support English and Hindi.
+  - TTS adapter: Edge TTS neural voices are configured for multiple languages with Windows SAPI fallback for English and Hindi.
+  - Lip-sync: Rhubarb binary is used when available, with smooth Web Audio RMS cadence fallback.
 
 ---
 
-## 5. Verification & Testing
+## 5. Running Locally
 
-- **Automated Test Suite**: All 7 integration test suites passing ($100\%$):
+From the repository root, install dependencies as documented in the [main README](../README.md#installation-and-running), then start the integration service:
+
+```bash
+python -m integration.server --host 127.0.0.1 --port 8080
+```
+
+Open `http://127.0.0.1:8080/` when the integration service reports ready. See [integration documentation](../integration/README.md) for API routes and CPCB behavior.
+
+The Unity and older avatar directories are retained historical or exploratory assets; the active web client is Three.js.
+
+---
+
+## 6. Verification & Automated Testing
+
+- **Automated Test Suite**: Verified against 7 integration test suites:
   1. HTML Structure & element integrity.
   2. Default English language configuration.
   3. CSS cache-buster and stylesheet integrity.
@@ -88,13 +96,3 @@ The frontend interface is a responsive split-screen dashboard providing real-tim
   6. English RAG & Rhubarb lip-sync endpoint.
   7. Hindi RAG & Neural Voice pipeline.
 - **Cross-Browser Verification**: Verified in Microsoft Edge and Google Chrome via Headless/CDP rendering with zero WebGL errors.
-
----
-
-## 6. Scope Boundaries & Preserved Modules
-
-- **Unchanged**: RAG engine, SQLite vector storage, ONNX embeddings, Groq/OpenRouter generation, Edge TTS, Vosk STT models, and CPCB live station polling.
-- **Next Steps / Planned Future Work**:
-  - Expanded native morph targets for higher-fidelity viseme mouth blendshapes.
-  - Full mobile viewport optimizations for screens $< 640\text{px}$.
-  - Offline PWA caching for standalone deployment.

@@ -6,6 +6,7 @@ import argparse
 import os
 import time
 import logging
+from typing import Literal
 logger = logging.getLogger("integration.server")
 import uvicorn
 from pathlib import Path
@@ -14,20 +15,27 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from brain.api import app as brain_app
+from brain.translator import TranslationConsentRequired
 from integration.api.brain_client import BrainClient
 from integration.config.integration_config import load_integration_config
 from integration.controller.conversation_controller import ConversationController
 from integration.models.brain_response import AvatarPresentation, BrainRequest
 from integration.avatar.mascot_presenter import MascotPresenter
-from integration.voice.stt_adapter import get_stt_adapter
+from integration.voice.stt_adapter import VoskSTTAdapter, get_stt_adapter
 from integration.voice.tts_adapter import get_tts_adapter
+from integration.water_quality import CPCBWaterQualityService
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 AVATAR_DIR = ROOT_DIR / "avatar"
 
 config = load_integration_config()
 brain_client = BrainClient(config)
-controller = ConversationController(brain_client=brain_client, config=config)
+water_quality_service = CPCBWaterQualityService()
+controller = ConversationController(
+    brain_client=brain_client,
+    config=config,
+    water_quality_service=water_quality_service,
+)
 presenter = MascotPresenter()
 stt_adapter = get_stt_adapter(config.stt_provider)
 tts_adapter = get_tts_adapter("synthetic" if config.mock_mode else config.tts_provider)
@@ -76,12 +84,21 @@ def integration_ask(req: BrainRequest):
 
     # T2: Brain/RAG start
     t2 = time.perf_counter()
-    pres = controller.process_text_question(q_text, input_language=in_lang, output_language=out_lang, top_k=req.top_k)
+    try:
+        pres = controller.process_text_question(
+            q_text, input_language=in_lang, output_language=out_lang,
+            top_k=req.top_k, translation_consent=req.translation_consent,
+        )
+    except TranslationConsentRequired as exc:
+        raise HTTPException(
+            status_code=428,
+            detail="External translation is disabled for this request.",
+        ) from exc
     t5 = time.perf_counter()
 
     # T6: TTS synthesis
     t6 = time.perf_counter()
-    tts_result = tts_adapter.synthesize_speech(pres.answer, language=out_lang)
+    tts_result = tts_adapter.synthesize_speech(pres.spoken_text or pres.answer, language=out_lang)
     t7 = time.perf_counter()
 
     # T8: Rhubarb lip-sync analysis
@@ -128,9 +145,10 @@ def integration_ask(req: BrainRequest):
 async def integration_stt(
     file: UploadFile = File(None),
     audio: UploadFile = File(None),
-    input_language: str = "hi",
-    output_language: str = "hi",
-    language: str | None = None,
+    input_language: Literal["en", "hi", "kn", "ta"] = "hi",
+    output_language: Literal["en", "hi", "kn", "ta"] = "hi",
+    language: Literal["en", "hi", "kn", "ta"] | None = None,
+    translation_consent: bool = True,
 ):
     upload_file = file or audio
     if not upload_file:
@@ -138,6 +156,12 @@ async def integration_stt(
 
     in_lang = (input_language or language or "hi").lower().strip()
     out_lang = (output_language or language or "hi").lower().strip()
+
+    if isinstance(stt_adapter, VoskSTTAdapter) and in_lang not in stt_adapter.SUPPORTED_LANGUAGES:
+        raise HTTPException(
+            status_code=501,
+            detail="Configured Vosk speech recognition supports English and Hindi only; Kannada/Tamil STT is not configured.",
+        )
 
     audio_bytes = await upload_file.read()
     transcription = stt_adapter.transcribe_audio(audio_bytes, language=in_lang)
@@ -152,7 +176,10 @@ async def integration_stt(
             language=out_lang,
         )
 
-    return integration_ask(BrainRequest(question=transcription, input_language=in_lang, output_language=out_lang))
+    return integration_ask(BrainRequest(
+        question=transcription, input_language=in_lang,
+        output_language=out_lang, translation_consent=translation_consent,
+    ))
 
 
 # Mount the core Brain FastAPI router endpoints (/ask, /health) directly

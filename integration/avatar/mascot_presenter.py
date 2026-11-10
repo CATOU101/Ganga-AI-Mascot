@@ -7,6 +7,7 @@ import os
 from integration.avatar.emotion_mapper import map_emotion
 from integration.avatar.gesture_mapper import map_gesture
 from integration.avatar.lipsync import LipSyncAnalyzer, RhubarbLipSyncAnalyzer
+from integration.avatar.response_text import spoken_response
 from integration.models.brain_response import AvatarPresentation, BrainResponse, ConversationState
 from integration.voice.tts_adapter import TTSAudioResult
 
@@ -43,6 +44,7 @@ class MascotPresenter:
             state=conversation_state,
             answer=brain_response.answer,
             text=brain_response.answer,
+            spoken_text=spoken_response(brain_response.answer),
             mode=brain_response.mode,
             citations=brain_response.citations,
             input_language=brain_response.input_language,
@@ -88,4 +90,6 @@ class MascotPresenter:
         presentation.lip_sync = rhubarb_lipsync
         if not presentation.text:
             presentation.text = presentation.answer
+        if not presentation.spoken_text:
+            presentation.spoken_text = spoken_response(presentation.answer)
         return presentation

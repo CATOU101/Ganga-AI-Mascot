@@ -1,5 +1,7 @@
 # Member 2: Chacha Chaudhary Digital Avatar + Voice System
 
+> **Retained asset documentation:** This describes the preserved `Chacha_Master.glb` asset and earlier integration assumptions. The active browser runtime loads `Chacha_New`; this asset's voice/animation descriptions are not current provider validation. See the [avatar overview](../README.md).
+
 ## 1. Overview
 This directory contains the production assets, runtime modules, and configuration for the **Chacha Chaudhary Digital Avatar & Voice System** (Member 2), integrated into the Ganga AI Mascot application.
 

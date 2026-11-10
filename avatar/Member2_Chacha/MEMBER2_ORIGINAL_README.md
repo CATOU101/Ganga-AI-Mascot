@@ -1,6 +1,8 @@
 # Member 2: Digital Avatar + Voice System
 ## Chacha Chaudhary Multimodal Production Deliverable
 
+> **Historical package documentation:** This file describes the original Member 2 deliverable, its Unity/asset assumptions, and capabilities claimed at that stage. It is not the current application runtime or evidence of current provider availability. See the [active avatar documentation](../README.md) for the current Three.js client and voice-language limits.
+
 ---
 
 ## 1. Executive Summary

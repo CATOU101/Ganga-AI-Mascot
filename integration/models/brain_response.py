@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 from pydantic import BaseModel, Field
+from brain.translator import detect_language, normalize_language
 
 
 class ConversationState(str, Enum):
@@ -52,12 +53,20 @@ class CitationItem(BaseModel):
     knowledge_type: str | None = Field(None, description="Classification context: HISTORICAL, METHODOLOGICAL, etc.")
 
 
+class ChatTable(BaseModel):
+    title: str
+    columns: list[str]
+    rows: list[list[str]]
+    source: str | None = None
+
+
 class BrainRequest(BaseModel):
     question: str = Field("", description="Question prompt to Ganga Brain RAG")
     query: str | None = Field(None, description="Alias for question")
-    input_language: str | None = Field(None, description="Input language ('en' | 'hi')")
-    output_language: str | None = Field(None, description="Output language ('en' | 'hi')")
-    language: str | None = Field(None, description="Legacy language fallback ('en' | 'hi')")
+    input_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Input language ('en' | 'hi' | 'kn' | 'ta')")
+    output_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Output language ('en' | 'hi' | 'kn' | 'ta')")
+    language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Legacy language fallback ('en' | 'hi' | 'kn' | 'ta')")
+    translation_consent: bool = Field(True, description="Allow external translation when needed; defaults to true. Set false to disable it.")
     top_k: int | None = Field(None, description="Retriever candidate override")
 
     def get_question(self) -> str:
@@ -65,17 +74,17 @@ class BrainRequest(BaseModel):
 
     def get_input_language(self) -> str:
         if self.input_language:
-            return self.input_language.lower().strip()
+            return normalize_language(self.input_language)
         if self.language:
-            return self.language.lower().strip()
-        return "hi"
+            return normalize_language(self.language)
+        return detect_language(self.get_question(), default="en")
 
     def get_output_language(self) -> str:
         if self.output_language:
-            return self.output_language.lower().strip()
+            return normalize_language(self.output_language)
         if self.language:
-            return self.language.lower().strip()
-        return "hi"
+            return normalize_language(self.language)
+        return self.get_input_language()
 
 
 class BrainResponse(BaseModel):
@@ -94,8 +103,10 @@ class AvatarPresentation(BaseModel):
     question: str = Field("", description="User question string")
     answer: str = Field("", description="Grounded answer text")
     text: str = Field("", description="Standardized alias for answer text")
+    spoken_text: str = Field("", description="Speech-friendly narration, separate from displayed answer")
     mode: str = Field("grounded", description="Brain mode")
     citations: list[CitationItem] = Field(default_factory=list, description="Provenance citations")
+    tables: list[ChatTable] = Field(default_factory=list, description="Structured in-chat data tables")
     input_language: str = Field("hi", description="Input language ('hi' | 'en')")
     output_language: str = Field("hi", description="Output language ('hi' | 'en')")
     language: str = Field("hi", description="Legacy language code")

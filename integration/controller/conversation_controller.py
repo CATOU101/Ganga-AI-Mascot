@@ -8,13 +8,23 @@ import time
 from typing import Callable, Any
 
 from integration.api.brain_client import BrainClient
+from integration.avatar.response_text import spoken_response
 from integration.config.integration_config import IntegrationConfig, load_integration_config
 from integration.models.brain_response import (
     AvatarPresentation,
     BrainResponse,
+    CitationItem,
     ConversationState,
     EmotionType,
     GestureType,
+)
+from integration.water_quality import (
+    CPCBWaterQualityError,
+    CPCBWaterQualityService,
+    build_water_data_tables,
+    format_water_quality_answer,
+    is_water_quality_query,
+    parse_water_quality_request,
 )
 
 logger = logging.getLogger("integration.conversation_controller")
@@ -28,9 +38,11 @@ class ConversationController:
         brain_client: BrainClient | None = None,
         config: IntegrationConfig | None = None,
         on_state_change: Callable[[AvatarPresentation], None] | None = None,
+        water_quality_service: CPCBWaterQualityService | None = None,
     ) -> None:
         self.config = config or load_integration_config()
         self.brain_client = brain_client or BrainClient(self.config)
+        self.water_quality_service = water_quality_service
         self.on_state_change = on_state_change
         self._lock = threading.Lock()
         self._current_state = ConversationState.IDLE
@@ -55,7 +67,7 @@ class ConversationController:
             try:
                 self.on_state_change(presentation)
             except Exception as e:
-                logger.error(f"[Integration] Error in state change listener: {e}")
+                logger.error("[Integration] State change listener failed (%s).", type(e).__name__)
 
     def process_text_question(
         self,
@@ -64,6 +76,7 @@ class ConversationController:
         output_language: str = "hi",
         top_k: int | None = None,
         language: str | None = None,
+        translation_consent: bool = True,
     ) -> AvatarPresentation:
         """Process a text question through the state machine synchronously / thread-safely."""
         in_lang = (input_language or language or "hi").lower().strip()
@@ -111,11 +124,73 @@ class ConversationController:
             gesture=GestureType.THINKING,
         ))
 
+        # Live CPCB readings are handled before Brain's current-information fallback.
+        if self.water_quality_service and is_water_quality_query(question):
+            water_request = parse_water_quality_request(question)
+            readings = []
+            try:
+                readings = self.water_quality_service.readings(water_request)
+                answer = format_water_quality_answer(water_request, readings)
+                mode = "live-water-quality"
+            except CPCBWaterQualityError as error:
+                logger.error("[Integration] CPCB water-quality query failed (%s).", type(error).__name__)
+                answer = (
+                    "I couldn't retrieve the requested live water-quality data from CPCB just now. "
+                    "Please try again later; I won't substitute older or unrelated readings."
+                )
+                mode = "live-water-quality-unavailable"
+
+            if out_lang != "en":
+                from brain.translator import TranslationError, translate_text
+
+                english_answer = answer
+                try:
+                    answer = translate_text(answer, "en", out_lang, allow_external=translation_consent)
+                except TranslationError:
+                    logger.warning("[Integration] CPCB answer translation unavailable or disabled.")
+                    answer = (
+                        f"{english_answer}\n\n"
+                        f"The readings remain in English because translation to {out_lang} was disabled or unavailable."
+                    )
+                    mode = "live-water-quality-translation-unavailable"
+
+            speaking_pres = AvatarPresentation(
+                state=ConversationState.SPEAKING,
+                question=question,
+                answer=answer,
+                spoken_text=spoken_response(answer),
+                tables=build_water_data_tables(water_request, readings, out_lang) if mode == "live-water-quality" else [],
+                mode=mode,
+                citations=[
+                    CitationItem(source="CPCB Real-Time Water Quality Monitoring System")
+                ],
+                input_language=in_lang,
+                output_language=out_lang,
+                language=out_lang,
+                emotion=EmotionType.NEUTRAL,
+                gesture=GestureType.EXPLAINING,
+            )
+            self._set_state(speaking_pres)
+            return speaking_pres
+
         # Step 3: Query Brain API
         try:
-            brain_resp = self.brain_client.ask(question, input_language=in_lang, output_language=out_lang, top_k=top_k)
+            brain_resp = self.brain_client.ask(
+                question, input_language=in_lang, output_language=out_lang,
+                top_k=top_k, translation_consent=translation_consent,
+            )
         except Exception as e:
-            logger.error(f"[Integration] Brain query failed: {e}")
+            from brain.translator import TranslationConsentRequired
+
+            if isinstance(e, TranslationConsentRequired):
+                self._set_state(AvatarPresentation(
+                    state=ConversationState.IDLE,
+                    input_language=in_lang,
+                    output_language=out_lang,
+                    language=out_lang,
+                ))
+                raise
+            logger.error("[Integration] Brain query failed (%s).", type(e).__name__)
             error_pres = AvatarPresentation(
                 state=ConversationState.ERROR,
                 question=question,
@@ -126,7 +201,7 @@ class ConversationController:
                 language=out_lang,
                 emotion=EmotionType.NEUTRAL,
                 gesture=GestureType.IDLE,
-                error_message=str(e),
+                error_message="The Brain could not process this request.",
             )
             self._set_state(error_pres)
             time.sleep(0.5)
@@ -138,6 +213,7 @@ class ConversationController:
             state=ConversationState.SPEAKING,
             question=question,
             answer=brain_resp.answer,
+            spoken_text=spoken_response(brain_resp.answer),
             mode=brain_resp.mode,
             citations=brain_resp.citations,
             input_language=brain_resp.input_language,

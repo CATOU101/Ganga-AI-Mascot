@@ -1,0 +1,94 @@
+{
+  "source_artifacts": {
+    "retrieval": {
+      "path": "research/benchmark/retrieval_ablation_results.json",
+      "dataset": "research/benchmark/domain_queries_30.jsonl",
+      "dataset_sha256": "66f6df3f8758b3e50ff8f6f5373bd354f98a82eb8e6bbf31dd8c84f38923a999",
+      "evaluation": "production_gated"
+    },
+    "evidence_gate": {
+      "path": "research/benchmark/evidence_gate_results.json",
+      "dataset": "research/benchmark/evidence_gate_queries_20.jsonl",
+      "dataset_sha256": "f5d0d77a75a8ce9ec29a0798486eeca3a89649b838aad4324d1a5e09ce288ca2"
+    },
+    "groundedness": {
+      "path": "research/benchmark/groundedness_results.json",
+      "dataset": "research/benchmark/groundedness_queries_20.jsonl",
+      "dataset_sha256": "8755cefa4455c31e8c24c858b8ac7113e80657a3a29808488f346d9007b51fcb"
+    }
+  },
+  "retrieval_overall": {
+    "A": {
+      "precision_at_5": 0.0533,
+      "recall_at_5": 0.1278,
+      "mrr_at_5": 0.1083
+    },
+    "B": {
+      "precision_at_5": 0.0533,
+      "recall_at_5": 0.1333,
+      "mrr_at_5": 0.1261
+    },
+    "C": {
+      "precision_at_5": 0.0533,
+      "recall_at_5": 0.1333,
+      "mrr_at_5": 0.1261
+    },
+    "D": {
+      "precision_at_5": 0.0533,
+      "recall_at_5": 0.1278,
+      "mrr_at_5": 0.1444
+    }
+  },
+  "retrieval_categories_mrr_at_5": {
+    "A": {
+      "Broad/Thematic": 0.275,
+      "Technical/Scientific": 0.05,
+      "Governance/Policy": 0.0
+    },
+    "B": {
+      "Broad/Thematic": 0.3033,
+      "Technical/Scientific": 0.05,
+      "Governance/Policy": 0.025
+    },
+    "C": {
+      "Broad/Thematic": 0.3033,
+      "Technical/Scientific": 0.05,
+      "Governance/Policy": 0.025
+    },
+    "D": {
+      "Broad/Thematic": 0.3333,
+      "Technical/Scientific": 0.05,
+      "Governance/Policy": 0.05
+    }
+  },
+  "evidence_gate_selected_set": {
+    "answerable_accepted": {
+      "count": 10,
+      "total": 10
+    },
+    "out_of_domain_rejected": {
+      "count": 5,
+      "total": 5
+    },
+    "dynamic_intercepted": {
+      "count": 5,
+      "total": 5
+    }
+  },
+  "groundedness_operational_checks": {
+    "query_count": 20,
+    "sentences_passing_lexical_heuristic": 70,
+    "sentences_evaluated": 70,
+    "citations_passing_metadata_checks": 56,
+    "citations_evaluated": 56,
+    "limited_source_or_page_alignment_rate": 1.0,
+    "queries_with_gold_document_overlap": 10,
+    "queries_evaluated_for_gold_overlap": 20,
+    "qualification": "Operational heuristics; not relevance, correctness, or semantic entailment measures."
+  },
+  "notes": [
+    "Retrieval configurations rerank a shared dense top-15 candidate pool.",
+    "Evidence-gate outcomes describe the selected 20-query dataset only.",
+    "Groundedness is a lexical heuristic; citation checks are metadata and limited alignment checks, not semantic entailment."
+  ]
+}

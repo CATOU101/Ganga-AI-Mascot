@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const statePillSpeaking = document.getElementById('statePillSpeaking');
 
   // Quiz & Modals
+  const chatView = document.getElementById('chatView');
   const quizView = document.getElementById('quiz');
   const quizNavButton = document.getElementById('quizNavButton');
   const infoModalOverlay = document.getElementById('infoModalOverlay');
@@ -124,6 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
       updateChachaGreeting();
     });
   }
+
+  // Support legacy / automated button group selectors if present
+  const inputLangBtns = document.querySelectorAll('#inputLangSelector .lang-btn');
+  const outputLangBtns = document.querySelectorAll('#outputLangSelector .lang-btn');
+  inputLangBtns.forEach((btn) => btn.addEventListener('click', () => {
+    currentInputLanguage = btn.dataset.lang;
+    if (inputLangSelect) inputLangSelect.value = btn.dataset.lang;
+    inputLangBtns.forEach((b) => b.classList.toggle('active', b.dataset.lang === btn.dataset.lang));
+    if (questionInput) questionInput.placeholder = placeholders[currentInputLanguage] || placeholders.en;
+    updateLangBadge();
+  }));
+  outputLangBtns.forEach((btn) => btn.addEventListener('click', () => {
+    currentOutputLanguage = btn.dataset.lang;
+    if (outputLangSelect) outputLangSelect.value = btn.dataset.lang;
+    outputLangBtns.forEach((b) => b.classList.toggle('active', b.dataset.lang === btn.dataset.lang));
+    updateLangBadge();
+    updateChachaGreeting();
+  }));
 
   function updateLangBadge() {
     if (responseLangBadge) {
@@ -416,9 +435,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Synchronize 3D Mascot State
     mascot.setState('SPEAKING', { emotion: emotion, gesture: gesture });
 
+    // Synchronize legacy answerText container if present
+    const answerTextEl = document.getElementById('answerText');
+    if (answerTextEl) {
+      if (Array.isArray(tables) && tables.length > 0) {
+        answerTextEl.replaceChildren();
+        const summary = document.createElement('p');
+        summary.className = 'answer-summary';
+        summary.textContent = answer;
+        answerTextEl.appendChild(summary);
+        if (window.renderCpcbTables) window.renderCpcbTables(answerTextEl, tables, document);
+      } else {
+        answerTextEl.textContent = answer;
+      }
+    }
+
     // Autoplay Speech & Rhubarb Lip-Sync
     if (audioSrc) {
-      playProductionSpeech(data, audioSrc, answer, gesture, t_start, t_response, cardRow);
+      playProductionSpeech(data, audioSrc, data.spoken_text || answer, gesture, t_start, t_response, cardRow);
     }
 
     scrollToBottom();
@@ -940,6 +974,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateActiveView(moveFocus = false) {
     const showQuiz = window.location.hash === '#quiz';
+    if (chatView) chatView.hidden = showQuiz;
     if (quizView) quizView.hidden = !showQuiz;
     if (quizNavButton) quizNavButton.setAttribute('aria-pressed', String(showQuiz));
     if (moveFocus && showQuiz) {

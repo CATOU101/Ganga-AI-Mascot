@@ -2120,3 +2120,112 @@ button, input, select {
     font-size: 0.85rem;
   }
 }
+
+/* ==========================================================================
+   CPCB WATER QUALITY REFERENCE TABLES & QUIZ VIEW TOGGLE (MERGED COMPATIBILITY)
+   ========================================================================== */
+
+.chat-view[hidden],
+.quiz-view[hidden],
+.quiz-overlay-view[hidden] {
+  display: none !important;
+}
+
+.quiz-nav-button,
+.quiz-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--green-border);
+  border-radius: var(--radius-pill);
+  color: var(--green-primary);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quiz-nav-button:hover,
+.quiz-secondary-button:hover {
+  background-color: var(--green-subtle);
+  border-color: var(--green-primary);
+  transform: translateY(-1px);
+}
+
+.quiz-nav-button[aria-pressed="true"] {
+  background-color: var(--green-primary);
+  color: #FFFFFF;
+}
+
+.answer-summary {
+  margin: 0 0 10px 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.cpcb-table-group {
+  display: grid;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.cpcb-table-block {
+  min-width: 0;
+}
+
+.cpcb-table-title {
+  margin: 0 0 8px;
+  color: var(--green-primary);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.cpcb-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background-color: #FFFFFF;
+}
+
+.cpcb-data-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.cpcb-data-table th,
+.cpcb-data-table td {
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cpcb-data-table th {
+  color: var(--green-dark);
+  background-color: var(--green-subtle);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cpcb-data-table td {
+  color: var(--text-secondary);
+  white-space: pre-line;
+}
+
+.cpcb-data-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.cpcb-table-source {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}

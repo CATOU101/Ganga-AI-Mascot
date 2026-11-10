@@ -2,21 +2,25 @@
 
 This document defines the system architecture for **Ganga AI Mascot** (PRJ_316), an AI-powered educational and conversational assistant for the Namami Gange initiative.
 
+**Official project title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
+
 The system is designed around a knowledge-grounded conversational AI agent that can answer questions about the Ganga River, its ecosystem, pollution, biodiversity, conservation, and Namami Gange programmes. The AI agent forms the core "brain" of the mascot, while the avatar, robot, or other interfaces act as presentation and interaction layers.
 
 The architecture is modular so that the AI brain can be developed and evaluated independently from the avatar and hardware components.
 
-This revision incorporates findings from the project's literature review (`research/research_log.md`, papers R1–R8) and documents the working implementation of the core AI Brain completed on the `Knowledge-base-creation` branch.
+This document combines research-grounded design rationale with the current implementation in `main`. Proposals and historical development notes are labeled where they differ from active behavior; the current component status is summarized in §20.
 
 ---
 
 ## 0. Research Grounding & Implementation Summary
 Eight sources reviewed to date shape this architecture:
 
+Source-status labels are documented in `research/literature_review.md` and reflect prior review work, not a fresh bibliography audit. R1 remains unverified; statements attributed to it are provisional.
+
 IDFocusMain influence on this documentR1AI-powered Chacha Chaudhary mascot for Ganga conservation (closest baseline)Confirms the mascot + chatbot concept, but shows the baseline **does not** clearly define a RAG pipeline, curated knowledge source, or source traceability — the primary gap this architecture is designed to closeR2Retrieval-Augmented Generation (Lewis et al., 2020)Scientific basis for §5–§6 (retriever + generator separation); clarifies that RAG ≠ any single vendor stack (SQLite, NumPy, embeddings, an LLM are independent, swappable parts)R3Umbrella review of conversational AI in educationMotivates §15 principles on privacy, information quality, human oversight, and academic/ethical responsibilityR4Pedagogical AI agent framework (higher ed)Motivates separating **pedagogical purpose** (instructional / pastoral / cognitive) from **technological function** (NLP, retrieval, embodiment) — see new §7.1R5Flipped AI-chatbot module for environmental literacyMotivates treating the agent as more than Q&A: explanation, reflection, optional quiz follow-up — see §7.2R6Usability/heuristic evaluation of ChatGPT in environmental educationMotivates splitting evaluation into **usability** (CUQ/SUS-style) vs. **information quality** (groundedness/accuracy) — see revised §12R7Meta-analysis of virtual characters in K-12 learningEvidence that embodiment helps only when pedagogically purposeful — motivates evaluating the Avatar layer independently from the Brain (§12.3)R8Systematic review of pedagogical agent designReinforces that agent design (voice, appearance, role) should be a deliberate, evaluated choice, not a default — informs §10
 
 > **Implementation Note (Current Brain Implementation)**:  
-> The core AI Brain RAG engine is fully implemented on the `Knowledge-base-creation` branch using a curated knowledge base of 86 GRBMP PDFs (4,085 indexed vector chunks), local ONNX semantic embeddings (`all-MiniLM-L6-v2`), a crash-proof SQLite + NumPy vector retrieval engine, an Evidence Quality Gate, a grounded answer generator, and a FastAPI server (`POST /ask`).
+> The current main snapshot includes the Brain RAG engine, a curated GRBMP corpus, local ONNX embeddings, an application-owned SQLite + NumPy vector index, heuristic evidence checks, a Groq → OpenRouter → extractive generation chain, and a FastAPI API. The SQLite/NumPy backend replaces earlier Chroma runtime storage; the migration is not a guarantee against all runtime failures.
 
 
 ⸻
@@ -136,7 +140,7 @@ Each processed chunk should retain useful metadata where available, including:
 - Date
 - Page number
 - Source URL or reference
-This metadata supports traceability and improves retrieval and evaluation. Source traceability was explicitly flagged as **missing** in the R1 baseline mascot paper and is treated here as a required, not optional, design property (see also §15.4).
+This metadata supports source traceability and can support retrieval analysis. Whether it improves retrieval quality or evaluation outcomes has not been measured. The cited R1 paper's publication record remains unresolved, so claims about gaps in that source are provisional (see also §15.4).
 
 ⸻
 
@@ -182,7 +186,7 @@ When a user asks a question, the question is similarly converted into a 384-dime
 The vector store enables fast, deterministic semantic retrieval of relevant knowledge.
 
 > **Vector Database Implementation Rationale**:  
-> In early prototype testing, ChromaDB 1.5.9 was used as the vector database interface. However, ChromaDB's native Rust binding (`chromadb_rust_bindings.abi3.so`) caused repeated macOS kernel `SIGSEGV` segmentation fault crashes during retrieval queries. To guarantee 100% runtime stability for API serving and demo environments, runtime retrieval was migrated to a pure Python backend using SQLite (`chroma.sqlite3`) for metadata/chunk text storage and a portable NumPy array (`semantic_vectors.npy`) for $L2$ vector similarity.
+> In early prototype testing, ChromaDB 1.5.9 was used as the vector database interface. However, ChromaDB's native Rust binding (`chromadb_rust_bindings.abi3.so`) was associated with repeated macOS kernel `SIGSEGV` segmentation fault crashes during retrieval queries. Runtime retrieval was subsequently migrated to a pure Python backend using SQLite (`knowledge_base/vector_db/brain_index.sqlite3`) for metadata/chunk text storage and a portable NumPy array (`knowledge_base/vector_db/brain_semantic_vectors.npy`) for $L2$ vector similarity, validated via SHA-256 manifests (`brain_index_manifest.json`). This migration does not establish a guarantee of runtime stability. Legacy ChromaDB files in that directory are preserved for historical reproducibility.
 
 **Note (from R2):** Retriever, generator, and knowledge store are conceptually independent — a dense-passage-retrieval-style retriever does not require any particular vector database, and a vector database or matrix store does not require any particular retriever or generator. These remain separable decisions.
 
@@ -316,6 +320,10 @@ LLM            → Reasoning and Language Generation
 ```
 This separation makes the system easier to maintain, evaluate, and improve, and is consistent with R2's separation of retriever and generator as independently replaceable components.
 
+**Current generation behavior:** Hosted generation is constructed only after retrieval and the existing evidence-quality gate accept the question. The default provider order is Groq followed by OpenRouter, with each configured provider attempted at most once; missing credentials or a provider error advances to the next provider. If hosted generation is unavailable, the local extractive generator is the final fallback. `LLM_PROVIDER=extractive` selects local-only generation. Current-information requests bypass this chain, and CPCB water-quality requests are routed separately by the integration controller. Citation objects are built from retrieved metadata. The hosted generators cite the bounded evidence supplied to them; the extractive fallback cites hits that contributed extracted sentences, so the citation list can differ while the response schema remains the same.
+
+**Language handling:** Text language codes are English (`en`), Hindi (`hi`), Kannada (`kn`), and Tamil (`ta`). Input can be detected heuristically by Unicode script when no language is supplied; explicit selections take precedence. When language conversion is needed, API routes enable translation to Google's public Translate endpoint by default and may send the question and/or generated answer. The chat UI has no consent checkbox; API callers can set `translation_consent=false` to disable external translation for a request. Exact known system phrases may be translated from a local phrase map. Translation is not part of citation assembly and does not alter the retrieval/evidence gate. No translation cache is kept. The endpoint is not Google's documented Cloud Translation API; its specific terms and availability have not been verified, so do not send personal or confidential text. Vosk currently configures only English/Hindi models; browser speech and external Edge TTS locale support depend on the host/provider and remain unverified for Kannada/Tamil.
+
 ⸻
 
 ## 9. Application and API Layer
@@ -344,6 +352,9 @@ The interface should not directly depend on internal AI components. This allows 
 
 ## 10. Avatar and Interactive Layer
 The avatar represents the presentation and interaction layer of the system.
+
+> **Production Implementation Note (Verified Baseline)**:  
+> The active production avatar runtime is a browser-native Three.js WebGL application (`avatar/index.html`, `avatar/app.js`, `avatar/mascot.js`) running directly in standard web browsers. It loads `avatar/Chacha_New/Chacha_New.glb` (65-bone Mixamo armature, 28 animations, procedural blinking, 60 FPS LERP lip-sync smoothing, and viewport occupancy calibrated to 80.5%). The high-fidelity 57-bone asset (`avatar/Member2_Chacha/Chacha_Master.glb` with 35 shape keys) is preserved intact for backward compatibility. The early Unity WebGL experiment in `avatar/07_Unity/` is archived and is not part of the active runtime.
 
 Possible interfaces include:
 
@@ -396,7 +407,7 @@ Text-to-Speech
      ▼
 Avatar Speech
 ```
-Voice processing should remain separate from the core conversational logic so that the same AI brain can support both text and voice interfaces. R6 specifically identified text-only, low-multimedia interaction as a usability and accessibility limitation of general-purpose chatbots in environmental education, and R1/R3 both raise multilingual and voice accessibility as relevant to reaching a broad, non-expert audience — this motivates voice and (future) multilingual support as accessibility features rather than purely novelty features.
+Voice processing remains separate from core conversational logic so the same Brain can support text and voice interfaces. Text language selection and translation for English, Hindi, Kannada, and Tamil are implemented. Speech support is narrower: Vosk models are configured for English and Hindi; browser speech recognition and Edge TTS locale behavior depend on host/provider support and are not asserted as verified for every language. Language accessibility is a design goal, not a measured outcome.
 
 ⸻
 
@@ -443,16 +454,13 @@ Evaluation results should be used to improve the knowledge base, retrieval confi
 ## 13. Logging and Monitoring
 During development, the system should record useful technical information to support debugging and evaluation.
 
-Potential information includes:
+Potential diagnostic information includes:
 
-- User query
-- Retrieved documents/chunks
-- Retrieval scores
-- Generated response
-- Response latency
-- System errors
-- Evaluation results
-The logging system should avoid storing unnecessary sensitive user information — a point reinforced by R3's identification of data privacy and security as a top-five ethical concern for educational conversational AI.
+- Provider and safe outcome/error category
+- Non-sensitive retrieval and evaluation metrics
+- System errors and timing measurements
+
+Provider diagnostics must not log API keys, authorization headers, prompts, retrieved evidence, generated responses, exception messages, or other private request data. The logging system should avoid storing unnecessary sensitive user information — a point reinforced by R3's identification of data privacy and security as a top-five ethical concern for educational conversational AI.
 
 Monitoring should help identify where problems occur in the pipeline. For example:
 
@@ -614,31 +622,35 @@ The avatar, robot, animation, and other presentation components can be developed
 ## 19. Future Expansion
 The architecture is designed to support future extensions without fundamentally changing the core AI system.
 
-Potential future capabilities include:
+Potential future capabilities and extensions include:
 
-- Multilingual conversations (R1, R3, R6 — accessibility)
-- Voice-based interaction (§11)
-- Additional environmental knowledge
-- Image-based educational interactions
-- Real-time environmental data
-- More advanced agent workflows (§7.2 — explanation, reflection, quiz follow-up, per R5)
-- Personalized educational interactions (R4, R8)
-- Additional physical or digital interfaces
+- Broader, maintained environmental knowledge beyond the current static GRBMP corpus.
+- Image-based educational interactions.
+- CPCB coverage beyond the currently supported stations and parameters, and other independently verified data sources.
+- More advanced agent workflows (§7.2 — explanation, reflection, quiz follow-up, per R5).
+- Personalized educational interactions (R4, R8).
+- Additional physical or digital interfaces.
+
+Text multilingual handling, the current browser avatar, voice adapters, and the limited CPCB station route are implemented; implementation does not imply full provider validation or educational effectiveness.
 Such capabilities should be added as modular components where possible.
 
 ⸻
 
 ## 20. Architecture Implementation Status
-The architecture defined here represents the active working implementation of the Ganga AI Mascot Brain completed on the `Knowledge-base-creation` branch.
+The architecture in this document is a mix of design rationale and the current `main` implementation. The historical `Knowledge-base-creation` branch is not the active source of truth.
 
 **Implemented Technology Choices:**
 - **Knowledge Base**: 86 official GRBMP PDF reports, filtered into 1,111 sections (4,085 chunks).
 - **Embedding Model**: Local ONNX `all-MiniLM-L6-v2` dense vector model (384 float32 dimensions).
-- **Vector Retrieval Backend**: Crash-proof SQLite metadata (`chroma.sqlite3`) + NumPy vector matrix (`semantic_vectors.npy`).
+- **Vector Retrieval Backend**: SQLite metadata (`brain_index.sqlite3`) + NumPy vector matrix (`brain_semantic_vectors.npy`) with manifest integrity checks; Chroma-format files are legacy artifacts.
 - **Retriever**: Hybrid (ONNX dense similarity + lexical reranking).
 - **Quality Gate**: Multi-Factor Evidence Gate (unsupported query rejection + current-info fallback).
-- **Generator**: Local Extractive grounded synthesizer default / OpenAI LLM option.
+- **Generator**: Evidence-gated Groq → OpenRouter → extractive fallback chain; `LLM_PROVIDER=extractive` selects local-only generation. Provider keys and models are configured independently with `GROQ_API_KEY` / `GROQ_MODEL` and `OPENROUTER_API_KEY` / `OPENROUTER_MODEL`; `LLM_PROVIDER_ORDER` can reverse provider order. The project-root `.env` is loaded without replacing exported environment variables.
 - **API Boundary**: FastAPI HTTP Server (`POST /ask`, `GET /health`).
+- **CPCB station readings**: A separate integration-controller path retrieves a limited set of live CPCB readings (pH, DO, BOD) for supported main-stem stations, caches payloads for 60 seconds, and labels measurements older than 90 minutes stale. This is not comprehensive river monitoring; external endpoint availability and data reuse terms are not established by this code audit.
+- **Multilingual text**: Language selection/detection and translation handling support `en`, `hi`, `kn`, and `ta`. General translation uses Google's public GTX endpoint by default on API routes; requests may send the question and/or generated response outside the application. The route has no UI consent control, API callers may set `translation_consent=false`, and endpoint terms/retention are unverified.
+- **Voice**: Vosk model mappings cover English and Hindi; browser speech controls and Edge TTS voices are configured for four languages, with host/provider support not guaranteed. Windows SAPI fallback is configured for English/Hindi. Rhubarb tooling may use a cadence fallback when its platform binary is unavailable.
+- **Avatar and quiz**: The active browser implementation is Three.js and includes the Chacha mascot and quiz interface. Legacy Unity and alternate avatar documents/assets are historical or retained assets, not the active runtime description.
 
 The architectural objective remains:
 

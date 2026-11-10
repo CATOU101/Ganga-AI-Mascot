@@ -7,10 +7,46 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 
 ROOT = Path(__file__).resolve().parents[1]
+ENV_FILE = ROOT / ".env"
 MAX_API_TOP_K = 100
 DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b"
+DEFAULT_OPENROUTER_MODEL = "nvidia/nemotron-3.5-super-vl:free"
+SUPPORTED_HOSTED_PROVIDERS = frozenset({"groq", "openrouter"})
+
+
+def _provider_order() -> tuple[str, ...]:
+    """Read a deterministic, duplicate-free hosted provider order."""
+    selected = os.getenv("LLM_PROVIDER", "groq").strip().lower()
+    default = "openrouter,groq" if selected == "openrouter" else "groq,openrouter"
+    raw = os.getenv("LLM_PROVIDER_ORDER", default)
+    tokens = [item.strip().lower() for item in raw.split(",") if item.strip()]
+    if not tokens:
+        raw = default
+        tokens = [item.strip() for item in raw.split(",")]
+    unsupported = [item for item in tokens if item not in SUPPORTED_HOSTED_PROVIDERS]
+    if unsupported:
+        raise ValueError(f"Unsupported hosted LLM provider in LLM_PROVIDER_ORDER: {unsupported[0]}")
+    return tuple(dict.fromkeys(tokens))
+
+
+def _configured_llm_model() -> str:
+    provider = os.getenv("LLM_PROVIDER", "groq").strip().lower()
+    if provider == "openrouter":
+        return os.getenv("OPENROUTER_MODEL", "").strip() or DEFAULT_OPENROUTER_MODEL
+    return os.getenv("GROQ_MODEL", "").strip() or DEFAULT_GROQ_MODEL
+
+
+def load_project_environment(env_file: Path | None = None) -> None:
+    """Load the project-local environment file without replacing exported values."""
+    load_dotenv(dotenv_path=env_file or ENV_FILE, override=False)
+
+
+# Run before BrainConfig defaults or generators read any environment values.
+load_project_environment()
 
 
 @dataclass(frozen=True)
@@ -36,9 +72,8 @@ class BrainConfig:
     min_keyword_overlap: float = float(os.getenv("GANGA_BRAIN_MIN_KEYWORD_OVERLAP", "0.15"))
     ort_threads: int = int(os.getenv("GANGA_BRAIN_ORT_THREADS", "2"))
     llm_provider: str = field(default_factory=lambda: os.getenv("LLM_PROVIDER", "groq"))
-    llm_model: str = field(
-        default_factory=lambda: os.getenv("GROQ_MODEL", "").strip() or DEFAULT_GROQ_MODEL
-    )
+    llm_model: str = field(default_factory=_configured_llm_model)
+    llm_provider_order: tuple[str, ...] = field(default_factory=_provider_order)
 
     def __post_init__(self) -> None:
         if not self.collection_name.strip():
@@ -70,8 +105,12 @@ class BrainConfig:
                 )
         elif self.embedding_provider.lower().strip() not in {"local-hash", "hash", "baseline"}:
             raise ValueError(f"Unsupported embedding provider: {self.embedding_provider}")
-        if self.llm_provider.lower().strip() not in {"extractive", "groq"}:
+        if self.llm_provider.lower().strip() not in {"extractive", "groq", "openrouter"}:
             raise ValueError(f"Unsupported answer generator provider: {self.llm_provider}")
+        if not self.llm_provider_order:
+            raise ValueError("llm_provider_order must include at least one hosted provider")
+        if any(provider not in SUPPORTED_HOSTED_PROVIDERS for provider in self.llm_provider_order):
+            raise ValueError("llm_provider_order contains an unsupported provider")
         if not self.llm_model.strip():
             raise ValueError("llm_model must not be empty")
 

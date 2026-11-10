@@ -35,7 +35,7 @@ class TTSAdapter(ABC):
 class Member2TTSAdapter(TTSAdapter):
     """
     Production TTS Adapter for Chacha Chaudhary (Member 2).
-    - Primary: EdgeTTSProvider (Neural Indian English Prabhat & Hindi Madhur).
+    - Primary: EdgeTTSProvider (configured English, Hindi, Kannada and Tamil voices).
     - Fallback: LocalSapiTTSProvider (100% offline Windows SAPI fallback).
     - Uncompressed 16-bit 16kHz Mono PCM WAV output.
     """
@@ -52,8 +52,9 @@ class Member2TTSAdapter(TTSAdapter):
 
         clean_text = text.strip()
         lang_key = (language or "hi").lower().strip()
-        if lang_key not in ("en", "hi"):
-            lang_key = "hi"
+        if lang_key not in ("en", "hi", "kn", "ta"):
+            logger.warning("[Integration TTS] Unsupported language code; refusing fallback voice.")
+            return None
 
         temp_wav = None
         try:
@@ -68,7 +69,7 @@ class Member2TTSAdapter(TTSAdapter):
                         text=clean_text, language=lang_key, output_wav=temp_wav
                     )
                 except Exception as edge_err:
-                    logger.warning(f"[Integration TTS] EdgeTTS failed: {edge_err}. Attempting SAPI fallback.")
+                    logger.warning("[Integration TTS] EdgeTTS failed (%s). Attempting SAPI fallback.", type(edge_err).__name__)
 
             if meta is None:
                 logger.info(f"[Integration TTS] Synthesizing via Local SAPI offline fallback ({lang_key})")
@@ -77,7 +78,7 @@ class Member2TTSAdapter(TTSAdapter):
                         text=clean_text, language=lang_key, output_wav=temp_wav
                     )
                 except Exception as sapi_err:
-                    logger.warning(f"[Integration TTS] SAPI fallback failed: {sapi_err}")
+                    logger.warning("[Integration TTS] SAPI fallback failed (%s).", type(sapi_err).__name__)
 
             if meta is None:
                 raise RuntimeError("Both EdgeTTS and SAPI fallback failed to generate WAV file.")
@@ -115,7 +116,7 @@ class Member2TTSAdapter(TTSAdapter):
             )
 
         except Exception as err:
-            logger.error(f"[Integration TTS] Member2TTSAdapter failed: {err}. Returning None for WebSpeech fallback.")
+            logger.error("[Integration TTS] Member2TTSAdapter failed (%s). Returning None for WebSpeech fallback.", type(err).__name__)
             if temp_wav and os.path.exists(temp_wav):
                 try:
                     os.remove(temp_wav)
@@ -132,7 +133,7 @@ class SyntheticWavTTSAdapter(TTSAdapter):
             logger.warning("[Integration TTS] Empty text passed to TTS adapter.")
             return None
 
-        logger.info(f"[Integration TTS] Synthesizing speech with SyntheticWavTTSAdapter: '{text[:30]}...' (Lang: {language})")
+        logger.info("[Integration TTS] Synthesizing speech with SyntheticWavTTSAdapter (Lang: %s).", language)
         
         sample_rate = 16000
         words = text.split()

@@ -1,11 +1,12 @@
-# Ganga AI Mascot
+# Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
 
-**Project ID:** PRJ_316  
-**Project title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
+- **Project ID:** PRJ_316
+- **Official project title:** Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange
+- **Short name:** Ganga AI Mascot
 
-Ganga AI Mascot is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based mascot interface. The Brain answers questions using a curated, static collection of official Ganga and Namami Gange documents. A Groq-hosted language model is used for grounded generation after evidence retrieval and filtering; it is not a live web or river-monitoring service.
+Ganga AI Mascot (PRJ_316) is an academic prototype for exploring Ganga-related information through a retrieval-augmented Brain service and a web-based Chacha Chaudhary mascot. The Brain answers questions from a curated, static collection of Ganga River Basin Management Plan (GRBMP) documents. It retrieves passages, applies heuristic evidence checks, then attempts Groq and OpenRouter generation in order; local extractive generation is the final fallback. This knowledge-answering path is neither live web search nor river monitoring. A separate integration route retrieves a limited set of live CPCB station readings.
 
-The project brings together source-grounded question answering, a Three.js character interface, and voice-related adapters. Its educational aim is to make information about Ganga stewardship, pollution, and conservation accessible through text and supported voice interaction.
+The project brings together source-grounded question answering, a Three.js character interface, four-language text handling (English, Hindi, Kannada, and Tamil), and voice-related adapters. These are implemented prototype capabilities; the external translation service and speech providers have operational and privacy limits described below.
 
 ## Overall system architecture
 
@@ -13,9 +14,10 @@ The project brings together source-grounded question answering, a Three.js chara
 Browser text or audio input
         ↓
 Integration FastAPI service
-        ├── Text questions ──→ Brain client ──→ Brain retrieval and answer pipeline
-        └── Audio input ──────→ STT adapter ───→ Brain retrieval and answer pipeline
-                                                   ↓
+        ├── Water-quality questions → CPCB live-data retrieval → Structured response
+        ├── Text questions ──────→ Brain client ──→ Brain retrieval and answer pipeline
+        └── Audio input ──────────→ STT adapter ───→ Brain retrieval and answer pipeline
+                                                     ↓
 Browser UI ← Avatar presentation ← TTS and lip-sync processing ← Answer and citations
 ```
 
@@ -43,27 +45,30 @@ Groq grounded generation (or extractive fallback)
 Trusted citations/provenance and FastAPI response
 ```
 
-The current knowledge-base inventory contains 86 PDF documents, 4,609 pages, 1,111 approved/reviewed sections, and 4,085 indexed chunks. The semantic embedding model is `all-MiniLM-L6-v2` with 384 dimensions. Runtime storage uses the application-owned SQLite and NumPy index files under `knowledge_base/vector_db/`, with a manifest used for index integrity checks. Chroma-format files in that directory are legacy artifacts, not the active runtime store.
+The checked-in knowledge-base inventory describes 86 PDF documents, 4,609 pages, 1,111 approved/reviewed sections, and 4,085 indexed chunks. The semantic embedding model is `all-MiniLM-L6-v2` with 384 dimensions. Runtime storage uses the application-owned SQLite and NumPy index files under `knowledge_base/vector_db/`, with a manifest used for index integrity checks. Chroma-format files in that directory are legacy artifacts, not the active runtime store. These corpus counts describe the repository snapshot and may change when its reviewed source data is updated.
 
 Retrieval combines semantic similarity with lexical reranking. A heuristic evidence gate evaluates retrieved evidence before normal answer generation. Unsupported queries may receive an insufficient-evidence response; questions recognized as requiring current information are handled separately because the knowledge base is static. These checks are not calibrated confidence estimates or guarantees that every generated claim is supported.
 
-## Groq generation and citations
+## Hosted generation and citations
 
-The default generation provider is Groq, using the OpenAI-compatible Python SDK endpoint `https://api.groq.com/openai/v1`. The configured default model is `openai/gpt-oss-120b`. The model receives the question and selected evidence with source metadata only after the evidence gate accepts the query. Citation metadata is assembled from retrieved evidence by the Brain rather than generated as source references by the model.
+Grounded generation tries Groq first, then OpenRouter, and finally the local extractive generator. Both hosted providers use the existing OpenAI-compatible Python SDK with independent keys and endpoints. The default models are `openai/gpt-oss-120b` and `nvidia/nemotron-3.5-super-vl:free`. Hosted models receive the same question and selected evidence only after the evidence gate accepts the query. Citation metadata is assembled from retrieved evidence by the Brain rather than generated as source references by a model.
 
-If the Groq key is missing or the request fails, the existing extractive generator is used. Current-information and insufficient-evidence branches bypass normal LLM generation. LLM tests use mocks and do not make real Groq API requests.
+If one hosted provider is missing or fails, generation tries the next configured provider once. If both are unavailable or fail, the existing extractive generator is used. `LLM_PROVIDER=extractive` forces local-only generation. Current-information and insufficient-evidence branches bypass hosted generation. Groq and OpenRouter preserve the same response schema and assemble citations from retrieved metadata; the extractive fallback uses the same citation schema but cites hits that contributed extracted sentences, so its citation list can differ. Provider logs report safe provider/outcome categories without credentials or request data. Automated provider tests use mocks and do not make real API requests.
 
 Prompt constants are exposed through the `brain.prompts` package. The current files are `brain/prompts/__init__.py` and `brain/prompts/system.py`; `brain/prompts.py` is no longer part of the project.
 
 ## Configuration
 
-Configuration is read from process environment variables. The application does not automatically load `.env` files. `.env` should remain local and must not be committed; `.env.example` documents non-secret settings.
+Configuration is read from process environment variables and the project-root `.env` file. Exported process variables take precedence over values in `.env`. The `.env` file should remain local and must not be committed; `.env.example` documents non-secret settings.
 
 | Variable | Purpose |
 | --- | --- |
-| `LLM_PROVIDER` | `groq` (default) or `extractive` |
+| `LLM_PROVIDER` | `groq` (default), `openrouter` (defaults its order to OpenRouter first), or `extractive` (local only) |
+| `LLM_PROVIDER_ORDER` | Comma-separated `groq` / `openrouter` order; defaults to `groq,openrouter`. Example: `openrouter,groq` |
 | `GROQ_MODEL` | Groq model; defaults to `openai/gpt-oss-120b` |
-| `GROQ_API_KEY` | Secret credential for Groq; provide through a private environment setting |
+| `GROQ_API_KEY` | Groq credential; provide privately |
+| `OPENROUTER_MODEL` | OpenRouter model; defaults to `nvidia/nemotron-3.5-super-vl:free` |
+| `OPENROUTER_API_KEY` | OpenRouter credential; provide privately |
 | `GANGA_BRAIN_EMBEDDING_PROVIDER` | Semantic embedding provider (`semantic` by default) or `local-hash` |
 | `GANGA_BRAIN_EMBEDDING_MODEL` | Semantic embedding model (`all-MiniLM-L6-v2` by default) |
 | `GANGA_BRAIN_TOP_K` | Maximum returned evidence count |
@@ -72,13 +77,15 @@ Configuration is read from process environment variables. The application does n
 | `GANGA_BRAIN_MIN_KEYWORD_OVERLAP` | Evidence-gate lexical overlap threshold |
 | `GANGA_BRAIN_ORT_THREADS` | ONNX Runtime thread limit |
 
-To use a local `.env`, add `GROQ_API_KEY` privately, then export the file before starting a server:
+### Language and translation privacy
 
-```bash
-set -a
-source .env
-set +a
-```
+Text input/output language codes are `en`, `hi`, `kn`, and `ta`. When no input language is supplied, the Brain detects a supported script; an explicit input language takes precedence. When language conversion is needed, the application sends the question and/or generated answer to Google's public Translate endpoint by default. The chat UI has no per-request consent checkbox; API clients can explicitly set `translation_consent: false` to disable external translation for a request. A static set of known system phrases can be translated locally without external requests. No translation cache is retained. The endpoint is not Google's documented Cloud Translation API, and this project has not verified its endpoint-specific terms, retention, reliability, or availability; do not send personal or confidential text. See [Google Translate](https://translate.google.com/) and [Google's privacy policy](https://policies.google.com/privacy).
+
+An earlier local-translation feasibility review reported English↔Hindi packages in the Argos index but no English↔Kannada/Tamil packages, and noted the NLLB-200 distilled 600M model card's CC-BY-NC/research-only and domain-coverage limitations. Those external resources can change and were not rechecked during this documentation audit. No local runtime/latency benchmark was performed on target hardware, so a local model is not enabled. Recheck the [Argos package index](https://github.com/argosopentech/argospm-index/blob/main/index.json) and [NLLB model card](https://huggingface.co/facebook/nllb-200-distilled-600M) before making a deployment decision.
+
+The Vosk adapter has configured speech-recognition models for English and Hindi only. Browser Web Speech locale controls include all four languages, but actual recognition depends on browser and speech-service support. Edge TTS voice identifiers are configured for all four languages; live synthesis availability depends on the external service and is not validated for every environment. Windows SAPI fallback is configured only for English and Hindi. Configuration does not guarantee provider availability or quality.
+
+For local development, set the needed provider keys privately in the project-root `.env` file. Both the standalone Brain and integration server load it automatically, regardless of the shell's current working directory. Explicitly exported variables take precedence. Set `LLM_PROVIDER_ORDER=openrouter,groq` to try OpenRouter first; `LLM_PROVIDER=extractive` avoids hosted providers entirely. OpenRouter's `:free` endpoints may be rate limited and have provider-specific data handling terms; do not send confidential or personal data to this model. Its reasoning is disabled for this request to preserve the existing 700-token output limit and avoid spending that budget on hidden reasoning.
 
 Do not paste or commit a real API key.
 
@@ -112,7 +119,7 @@ curl -X POST http://127.0.0.1:8000/ask \
   -d '{"question":"What is the Ganga River?","input_language":"en","output_language":"en"}'
 ```
 
-The ask request accepts `question`, optional `input_language` and `output_language` (`en` or `hi`), the legacy `language` field, and optional `top_k` (1–100). Responses include an answer, a response `mode`, citations, and language fields.
+The ask request accepts `question`, optional `input_language` and `output_language` (`en`, `hi`, `kn`, or `ta`), the legacy `language` field, optional `translation_consent` (defaults to `true`; set `false` to disable external translation), and optional `top_k` (1–100). Responses include an answer, a response `mode`, citations, and language fields. If a language conversion is needed while external translation is disabled, the API returns HTTP 428; provider failures return a sanitized translation-unavailable response.
 
 The integration application can be started separately:
 
@@ -120,12 +127,12 @@ The integration application can be started separately:
 python -m integration.server --host 127.0.0.1 --port 8080
 ```
 
-It defines `/api/integration/health`, `/api/integration/ask`, and `/api/integration/stt`, mounts the Brain API under `/brain`, and serves the avatar frontend when its entry point is available. If the frontend is served, open `http://127.0.0.1:8080/`. The interface supports typed questions and browser-recorded audio input, with input and output language controls for English and Hindi.
+It defines `/api/integration/health`, `/api/integration/ask`, and `/api/integration/stt`, mounts the Brain API under `/brain`, and serves the avatar frontend when its entry point is available. If the frontend is served, open `http://127.0.0.1:8080/`. The interface supports typed questions, browser-recorded audio input, and English, Hindi, Kannada, and Tamil input/output language controls. Vosk-backed uploaded-audio recognition remains limited to English and Hindi.
 
 ## Avatar, voice, and integration components
 
-- **Avatar and browser UI:** `avatar/index.html`, `avatar/app.js`, and `avatar/mascot.js` provide the web interface and Three.js avatar controller. The model asset is `avatar/Member2_Chacha/Chacha_Master.glb`. The controller includes mappings for facial morph targets, Mixamo actions, avatar states, and speech visemes.
-- The avatar implementation documents 35 morph targets, nine Mixamo actions, and a 57-bone model rig; its controller also includes procedural blinking and animation/state handling.
+- **Avatar and browser UI:** `avatar/index.html`, `avatar/app.js`, and `avatar/mascot.js` provide the web interface and Three.js avatar controller. The active production asset is `avatar/Chacha_New/Chacha_New.glb` (65-bone Mixamo armature, 28 skeletal animations, 31,058 draw vertices, calibrated for an 80.5% vertical character viewport occupancy). The previous high-fidelity asset `avatar/Member2_Chacha/Chacha_Master.glb` (57-bone armature, 35 morph targets, 9 Mixamo actions) is preserved intact for backward compatibility.
+- The avatar controller includes procedural blinking, frame-by-frame 60 FPS LERP lip-sync smoothing, speech head cadence, and state management.
 - **Speech recognition:** `integration/voice/stt_adapter.py` provides the Vosk adapter for English and Hindi, along with mock and browser-delegation adapters. Audio upload is handled by the integration STT route.
 - **Speech synthesis:** `integration/voice/tts_adapter.py` provides Edge TTS and Windows SAPI-backed adapters, a synthetic WAV adapter for testing, and browser Web Speech delegation. Actual provider availability depends on the host environment.
 - **Lip-sync and presentation:** `integration/avatar/lipsync.py` wraps Rhubarb when its binary is available and includes fallback timelines and RMS-based mouth-aperture analysis. `mascot_presenter.py` combines Brain responses with optional audio and lip-sync data for the browser.
@@ -135,16 +142,15 @@ These are implemented project components, not a claim that every provider or ope
 
 ## Tests
 
-Run the Brain and integration test suites separately:
+Run the focused configuration/generator tests and regression suites separately from the repository root. These commands force local-only generation for regression tests; provider-chain tests use mocked clients and fake credentials:
 
 ```bash
-python -m pytest -q brain/tests
-python -m pytest -q integration/tests
+./.venv/bin/python -m pytest -q brain/tests/test_config_environment.py brain/tests/test_llm_generator.py
+env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q brain/tests
+env LLM_PROVIDER=extractive GROQ_API_KEY= OPENROUTER_API_KEY= ./.venv/bin/python -m pytest -q integration/tests --ignore=integration/tests/test_end_to_end.py
 ```
 
-The Brain provider tests mock Groq. These test commands do not require a real Groq request.
-
-The Brain suite on the integrated `main` branch was most recently verified with 38 passing tests. Run the commands above to check the current checkout; no fixed result is claimed for the integration suite here.
+The Brain provider tests mock Groq and OpenRouter; no automated command above makes a hosted LLM request. The integration command omits `test_end_to_end.py` because its language translation flows may require external network access. Passing mocked tests does not establish live Groq/OpenRouter compatibility or availability. OpenRouter free endpoints may be rate-limited and have provider-specific data-handling terms.
 
 ## Project workstreams
 
@@ -162,7 +168,7 @@ brain/
   rag_pipeline.py       Retrieval and generation orchestration
   retriever.py          Hybrid retrieval and ranking
   vector_store.py       SQLite metadata and NumPy vector index
-  generator.py          Groq-backed and extractive answer generators
+  generator.py          Groq/OpenRouter chain and extractive answer generator
   prompts/              Public prompt interface and system prompt
   tests/                Brain regression and provider tests
 knowledge_base/
@@ -171,6 +177,7 @@ knowledge_base/
   vector_db/            Runtime index files and retained legacy artifacts
 integration/
   server.py             Integration FastAPI app and frontend hosting
+  water_quality.py      CPCB live water-quality retrieval, parsing, and response formatting
   api/                  Brain client
   controller/           Conversation state and orchestration
   voice/                STT and TTS adapters
@@ -182,10 +189,41 @@ docs/                   Project documentation and design material
 tools/                  Supporting tools, including lip-sync tooling
 ```
 
+## CPCB live water-quality integration
+
+The conversation controller intercepts questions about current Ganga water quality before the RAG pipeline and returns a structured response drawn directly from the CPCB Real-Time Water Quality Monitoring System.
+
+**Endpoints used (no authentication required):**
+
+```
+GET https://rtwqmsdb1.cpcb.gov.in/data/internet/stations/stations.json
+GET https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json
+```
+
+**Supported stations on the main River Ganga:**
+
+| Station | CPCB code | State |
+|---|---|---|
+| Haridwar (Har Ki Pauri) | UK55 / 11788 | Uttarakhand |
+| Kanpur (Luv Kush Barrage) | UT58 / 11791 | Uttar Pradesh |
+| Ghazipur (Abdul Hameed Setu) | UT66 / 11798 | Uttar Pradesh |
+| Farakka (Farakka Barrage) | WB86 / 11815 | West Bengal |
+| Nabadwip (Nabadwip Bathing Ghat) | WB87 / 11816 | West Bengal |
+
+**Parameters reported:** Dissolved Oxygen (DO), Biochemical Oxygen Demand (BOD), and pH.
+
+The system verifies station identity against the CPCB registry before returning readings. Responses include the measurement timestamp, a freshness label (readings older than 90 minutes are marked stale), and a source attribution to CPCB. Responses state clearly that point readings at a monitoring station do not determine whether water is safe to drink.
+
+Successful CPCB responses are returned through the normal chatbot conversation with mode `live-water-quality`. If the CPCB endpoint is unreachable, the system reports the failure and does not substitute stale or unrelated readings. Retrieved payloads are cached for 60 seconds to reduce repeated requests. CPCB's terms for data reuse have not been independently verified and should be reviewed before wider publication or redistribution.
+
+CPCB water-quality queries are detected by the integration-layer conversation controller (`integration/water_quality.py`, `integration/controller/conversation_controller.py`). This happens before the Brain RAG pipeline; all other questions continue through the existing retrieval and generation path. CPCB responses are translated through the same external translation path by default when a non-English output language is selected. If external translation is disabled or fails, the live readings remain in English with an explanatory note.
+
+This is a limited station-data feature, not a comprehensive river-monitoring network. It covers the supported stations and parameters described above; the curated static GRBMP corpus remains the source for educational and historical knowledge questions. Live endpoint availability was not tested as part of this documentation update.
+
+LLM behaviour and voice interaction with CPCB responses have not been systematically evaluated. Do not interpret the availability of live readings as a claim about response quality or accuracy in practice.
+
 ## Status and limitations
 
-The Brain Phase 1 knowledge pipeline and Phase 2 Groq generation are integrated in the current project branch. The system is a prototype: it uses static documents, heuristic retrieval/evidence thresholds, and an external generation provider. It does not have live web search or real-time water-quality data, does not perform formal claim-level entailment verification, and does not guarantee factual correctness. Translation and optional voice services depend on their configured external or platform-specific components.
-
-Potential future directions recorded in earlier project material include adding live hydrological data sources, expanding language coverage, and exploring physical mascot embodiments; these are not described as implemented features.
+The knowledge pipeline, Groq/OpenRouter generation chain, multilingual text flow, Three.js avatar, quiz, voice adapters, and CPCB station-data route are integrated in the current main snapshot. The system is a prototype: knowledge questions use static documents, retrieval and evidence thresholds are heuristic, hosted generation requires a configured provider, and the system does not perform formal claim-level entailment verification. Translation and optional voice services depend on external or platform-specific components. CPCB data can be delayed, stale, or unavailable at specific stations.
 
 This academic project demonstrates an information-access prototype for river-conservation awareness; it is not an operational environmental monitoring or decision-support system.
