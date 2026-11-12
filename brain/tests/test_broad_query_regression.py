@@ -1,10 +1,11 @@
 """Regression tests for broad query retrieval, keyword extraction, and metadata cleaning."""
 
 import unittest
+from unittest.mock import Mock, patch
 
 from brain.config import load_config
 from brain.embeddings import get_embedding_function
-from brain.generator import build_generator, clean_hit_text, current_information_response
+from brain.generator import ExtractiveGenerator, build_generator, clean_hit_text, current_information_response
 from brain.rag_pipeline import answer_question
 from brain.retriever import (
     Retriever,
@@ -12,6 +13,8 @@ from brain.retriever import (
     is_broad_ganga_query,
     asks_for_current_information,
 )
+from brain.rag_pipeline import is_namami_gange_mission_query
+from brain.answer_format import detect_answer_format
 from brain.vector_store import get_vector_store
 
 
@@ -68,6 +71,39 @@ class TestBroadQueryRegression(unittest.TestCase):
         self.assertEqual(res["mode"], "grounded")
         self.assertNotIn("report code:", res["answer"].lower())
 
+    def test_in_points_phrase_does_not_poison_lexical_gate_and_reaches_generator(self):
+        question = "Tell me about the Ganga in points."
+        generated = Mock(return_value={
+            "answer": "A short answer.", "citations": [], "mode": "grounded",
+        })
+        generator = Mock(generate=generated)
+        with patch("brain.rag_pipeline.build_generator", return_value=generator):
+            result = answer_question(question)
+
+        self.assertEqual(result["mode"], "grounded")
+        self.assertEqual(generated.call_count, 1)
+        generation_question, hits = generated.call_args.args[:2]
+        self.assertEqual(generation_question, question)
+        self.assertGreater(len(hits), 0)
+        self.assertEqual(detect_answer_format(generation_question).style, "bullets")
+        self.assertTrue(any(hit["metadata"].get("file_name") == "33_43_001_GEN_DAT_01.pdf" for hit in hits))
+
+    def test_broad_ganga_list_is_formatted_from_grounded_extractive_evidence(self):
+        question = "Tell me about the Ganga in points."
+        result = answer_question(question)
+        self.assertEqual(result["mode"], "grounded")
+        self.assertTrue(result["citations"])
+        points = [line for line in result["answer"].splitlines() if line.startswith("- ")]
+        self.assertGreaterEqual(len(points), 2)
+        self.assertTrue(all(line.endswith((".", "!", "?")) for line in points))
+        self.assertFalse(any(line.startswith("- Introduction ") for line in points))
+        self.assertIn("Gaumukh", result["answer"])
+        self.assertIn("tributaries", result["answer"].lower())
+        self.assertNotIn("Upper Ganga ≈ 294 km", result["answer"])
+
+    def test_ganga_pollution_is_specific_and_not_treated_as_broad_overview(self):
+        self.assertFalse(is_broad_ganga_query("Tell me about Ganga pollution."))
+
     def test_broad_query_what_is_ganga(self):
         """Test C: Broad query 'What is Ganga?' produces grounded overview."""
         res = answer_question("What is Ganga?")
@@ -101,6 +137,40 @@ class TestBroadQueryRegression(unittest.TestCase):
         """Test H: Current info query triggers current-info fallback."""
         res = answer_question("What is the current water quality of the Ganga today?")
         self.assertEqual(res["mode"], "current-info-fallback")
+
+    def test_exact_namami_gange_mission_question_retrieves_relevant_verified_evidence(self):
+        question = "What is the mission of Namami Gange?"
+        self.assertTrue(is_namami_gange_mission_query(question))
+        generated = Mock(return_value={
+            "answer": "The 2017 Vision Ganga material describes Ganga management objectives.",
+            "citations": [{"source": "Vision Ganga", "file_name": "Vision Ganga Eng_Compressed.pdf", "page": "15-15"}],
+            "mode": "grounded",
+        })
+        with patch("brain.rag_pipeline.build_generator", return_value=Mock(generate=generated)):
+            result = answer_question(question)
+
+        self.assertEqual(result["mode"], "grounded")
+        generation_question = generated.call_args.args[0]
+        self.assertTrue(generation_question.startswith(question))
+        self.assertIn("Distinguish these historical planning objectives", generation_question)
+        retrieved_hits = generated.call_args.args[1]
+        objective_hit = next(
+            hit for hit in retrieved_hits
+            if hit["metadata"].get("file_name") == "Vision Ganga Eng_Compressed.pdf"
+            and hit["metadata"].get("page_start") == 15
+        )
+        text = objective_hit["text"].lower()
+        self.assertIn("objectives of ganga river management", text)
+        self.assertIn("environmental flows", text)
+        self.assertIn("water quality", text)
+        self.assertEqual(result["citations"][0]["file_name"], "Vision Ganga Eng_Compressed.pdf")
+        extractive = ExtractiveGenerator().generate(generation_question, retrieved_hits, True)
+        self.assertEqual(extractive["mode"], "grounded")
+        self.assertIn("does not identify these planning objectives", extractive["answer"])
+        self.assertEqual(
+            [(citation["file_name"], citation["page"]) for citation in extractive["citations"]],
+            [("Vision Ganga Eng_Compressed.pdf", "2-2"), ("Vision Ganga Eng_Compressed.pdf", "15-15")],
+        )
 
     def test_current_information_detection_requires_freshness_and_dynamic_topic(self):
         """Freshness and dynamic-topic terms together identify current-data requests."""

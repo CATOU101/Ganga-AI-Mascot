@@ -462,12 +462,30 @@ def format_water_quality_answer(
 
 def _localized_table_copy(language: str) -> dict[str, str]:
     translations = {
-        "en": {"quality": "Water quality", "level": "Water level and depth", "station": "Station", "stage": "River stage (m)", "depth": "Depth (m)", "fresh": "Fresh", "stale": "Stale", "unknown": "Freshness unknown"},
-        "hi": {"quality": "जल गुणवत्ता", "level": "जल स्तर और गहराई", "station": "स्टेशन", "stage": "नदी का स्तर (m)", "depth": "गहराई (m)", "fresh": "ताज़ा", "stale": "पुराना", "unknown": "ताज़गी अज्ञात"},
-        "kn": {"quality": "ನೀರಿನ ಗುಣಮಟ್ಟ", "level": "ನೀರಿನ ಮಟ್ಟ ಮತ್ತು ಆಳ", "station": "ಕೇಂದ್ರ", "stage": "ನದಿಯ ಮಟ್ಟ (m)", "depth": "ಆಳ (m)", "fresh": "ತಾಜಾ", "stale": "ಹಳೆಯದು", "unknown": "ತಾಜಾತನ ತಿಳಿದಿಲ್ಲ"},
-        "ta": {"quality": "நீரின் தரம்", "level": "நீர்மட்டம் மற்றும் ஆழம்", "station": "நிலையம்", "stage": "ஆற்றின் நீர்மட்டம் (m)", "depth": "ஆழம் (m)", "fresh": "புதியது", "stale": "பழையது", "unknown": "புதுமை தெரியவில்லை"},
+        "en": {"quality": "Water quality", "level": "Water level and depth", "station": "Station", "stage": "River stage (m)", "depth": "Depth (m)", "fresh": "Fresh", "stale": "Stale", "unknown": "Freshness unknown", "unavailable": "Unavailable", "stale_reading": "Stale reading", "meets": "Meets Class B", "outside": "Outside Class B"},
+        "hi": {"quality": "जल गुणवत्ता", "level": "जल स्तर और गहराई", "station": "स्टेशन", "stage": "नदी का स्तर (m)", "depth": "गहराई (m)", "fresh": "ताज़ा", "stale": "पुराना", "unknown": "ताज़गी अज्ञात", "unavailable": "अनुपलब्ध", "stale_reading": "पुरानी रीडिंग", "meets": "कक्षा B मानदंड पूरा", "outside": "कक्षा B मानदंड से बाहर"},
+        "kn": {"quality": "ನೀರಿನ ಗುಣಮಟ್ಟ", "level": "ನೀರಿನ ಮಟ್ಟ ಮತ್ತು ಆಳ", "station": "ಕೇಂದ್ರ", "stage": "ನದಿಯ ಮಟ್ಟ (m)", "depth": "ಆಳ (m)", "fresh": "ತಾಜಾ", "stale": "ಹಳೆಯದು", "unknown": "ತಾಜಾತನ ತಿಳಿದಿಲ್ಲ", "unavailable": "ಲಭ್ಯವಿಲ್ಲ", "stale_reading": "ಹಳೆಯ ಓದು", "meets": "Class B ಮಾನದಂಡ ಪೂರೈಸುತ್ತದೆ", "outside": "Class B ಮಾನದಂಡದ ಹೊರಗೆ"},
+        "ta": {"quality": "நீரின் தரம்", "level": "நீர்மட்டம் மற்றும் ஆழம்", "station": "நிலையம்", "stage": "ஆற்றின் நீர்மட்டம் (m)", "depth": "ஆழம் (m)", "fresh": "புதியது", "stale": "பழையது", "unknown": "புதுமை தெரியவில்லை", "unavailable": "கிடைக்கவில்லை", "stale_reading": "பழைய அளவீடு", "meets": "Class B அளவுகோலைப் பூர்த்தி செய்கிறது", "outside": "Class B அளவுகோலுக்கு வெளியே"},
+        "te": {"quality": "నీటి నాణ్యత", "level": "నీటి మట్టం మరియు లోతు", "station": "కేంద్రం", "stage": "నది మట్టం (m)", "depth": "లోతు (m)", "fresh": "తాజా", "stale": "పాతది", "unknown": "తాజాదనం తెలియదు", "unavailable": "అందుబాటులో లేదు", "stale_reading": "పాత కొలత", "meets": "Class B ప్రమాణాన్ని చేరింది", "outside": "Class B ప్రమాణం వెలుపల"},
+        "bn": {"quality": "জলের গুণমান", "level": "জলের স্তর ও গভীরতা", "station": "কেন্দ্র", "stage": "নদীর স্তর (m)", "depth": "গভীরতা (m)", "fresh": "সাম্প্রতিক", "stale": "পুরনো", "unknown": "সময় অজানা", "unavailable": "অনুপলব্ধ", "stale_reading": "পুরনো পাঠ", "meets": "Class B মানদণ্ড পূরণ", "outside": "Class B মানদণ্ডের বাইরে"},
+        "mr": {"quality": "पाण्याची गुणवत्ता", "level": "पाण्याची पातळी आणि खोली", "station": "केंद्र", "stage": "नदीची पातळी (m)", "depth": "खोली (m)", "fresh": "ताजे", "stale": "जुने", "unknown": "वेळ अज्ञात", "unavailable": "उपलब्ध नाही", "stale_reading": "जुने मापन", "meets": "Class B निकष पूर्ण", "outside": "Class B निकषाबाहेर"},
+        "gu": {"quality": "પાણીની ગુણવત્તા", "level": "પાણીનું સ્તર અને ઊંડાઈ", "station": "કેન્દ્ર", "stage": "નદીનું સ્તર (m)", "depth": "ઊંડાઈ (m)", "fresh": "તાજું", "stale": "જૂનું", "unknown": "સમય અજ્ઞાત", "unavailable": "ઉપલબ્ધ નથી", "stale_reading": "જૂનું માપન", "meets": "Class B માપદંડ પૂર્ણ", "outside": "Class B માપદંડ બહાર"},
+        "ml": {"quality": "ജലഗുണനിലവാരം", "level": "ജലനിരപ്പും ആഴവും", "station": "കേന്ദ്രം", "stage": "നദിനിരപ്പ് (m)", "depth": "ആഴം (m)", "fresh": "പുതിയത്", "stale": "പഴയത്", "unknown": "സമയം അറിയില്ല", "unavailable": "ലഭ്യമല്ല", "stale_reading": "പഴയ അളവ്", "meets": "Class B മാനദണ്ഡം പാലിക്കുന്നു", "outside": "Class B മാനദണ്ഡത്തിന് പുറത്ത്"},
+        "pa": {"quality": "ਪਾਣੀ ਦੀ ਗੁਣਵੱਤਾ", "level": "ਪਾਣੀ ਦਾ ਪੱਧਰ ਅਤੇ ਡੂੰਘਾਈ", "station": "ਕੇਂਦਰ", "stage": "ਦਰਿਆ ਦਾ ਪੱਧਰ (m)", "depth": "ਡੂੰਘਾਈ (m)", "fresh": "ਤਾਜ਼ਾ", "stale": "ਪੁਰਾਣਾ", "unknown": "ਸਮਾਂ ਅਣਜਾਣ", "unavailable": "ਉਪਲਬਧ ਨਹੀਂ", "stale_reading": "ਪੁਰਾਣੀ ਰੀਡਿੰਗ", "meets": "Class B ਮਾਪਦੰਡ ਪੂਰਾ", "outside": "Class B ਮਾਪਦੰਡ ਤੋਂ ਬਾਹਰ"},
+        "ur": {"quality": "پانی کا معیار", "level": "پانی کی سطح اور گہرائی", "station": "مرکز", "stage": "دریا کی سطح (m)", "depth": "گہرائی (m)", "fresh": "تازہ", "stale": "پرانا", "unknown": "وقت نامعلوم", "unavailable": "دستیاب نہیں", "stale_reading": "پرانی پیمائش", "meets": "Class B معیار پر پورا", "outside": "Class B معیار سے باہر"},
+        "or": {"quality": "ଜଳର ଗୁଣବତ୍ତା", "level": "ଜଳସ୍ତର ଓ ଗଭୀରତା", "station": "କେନ୍ଦ୍ର", "stage": "ନଦୀ ସ୍ତର (m)", "depth": "ଗଭୀରତା (m)", "fresh": "ନୂତନ", "stale": "ପୁରୁଣା", "unknown": "ସମୟ ଅଜଣା", "unavailable": "ଉପଲବ୍ଧ ନାହିଁ", "stale_reading": "ପୁରୁଣା ମାପ", "meets": "Class B ମାନଦଣ୍ଡ ପୂରଣ", "outside": "Class B ମାନଦଣ୍ଡ ବାହାରେ"},
+        "as": {"quality": "পানীৰ গুণাগুণ", "level": "পানীৰ স্তৰ আৰু গভীৰতা", "station": "কেন্দ্ৰ", "stage": "নদীৰ স্তৰ (m)", "depth": "গভীৰতা (m)", "fresh": "শেহতীয়া", "stale": "পুৰণি", "unknown": "সময় অজ্ঞাত", "unavailable": "উপলব্ধ নহয়", "stale_reading": "পুৰণি পাঠ", "meets": "Class B মানদণ্ড পূৰণ", "outside": "Class B মানদণ্ডৰ বাহিৰত"},
     }
-    return translations.get(language, translations["en"])
+    copy = translations.get(language, translations["en"]).copy()
+    copy["status_prefix"] = _STATUS_PREFIX.get(language, "Status")
+    return copy
+
+
+_STATUS_PREFIX = {
+    "en": "Status", "hi": "स्थिति", "kn": "ಸ್ಥಿತಿ", "ta": "நிலை",
+    "te": "స్థితి", "bn": "অবস্থা", "mr": "स्थिती", "gu": "સ્થિતિ",
+    "ml": "നില", "pa": "ਸਥਿਤੀ", "ur": "حالت", "or": "ସ୍ଥିତି", "as": "অৱস্থা",
+}
 
 
 def _reading_status(code: str, reading: dict[str, Any] | None) -> str:
@@ -528,7 +546,10 @@ def _table_cell(code: str, reading: dict[str, Any] | None, copy: dict[str, str])
         except ValueError:
             pass
     status = _reading_status(code, reading)
-    return f"{value}\n{timestamp_text}\nStatus: {status}"
+    status_key = {"Unavailable": "unavailable", "Stale reading": "stale_reading", "Meets Class B": "meets", "Outside Class B": "outside"}.get(status)
+    if status_key:
+        status = copy.get(status_key, status)
+    return f"{value}\n{timestamp_text}\n{copy.get('status_prefix', 'Status')}: {status}"
 
 
 def build_water_data_tables(

@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Literal
+from typing import Any
 from pydantic import BaseModel, Field
-from brain.translator import detect_language, normalize_language
+from brain.translator import LanguageCode, detect_language, normalize_language
 
 
 class ConversationState(str, Enum):
@@ -51,6 +51,11 @@ class CitationItem(BaseModel):
     page: str | None = Field(None, description="Page number or range")
     section: str | None = Field(None, description="Section title or ID")
     knowledge_type: str | None = Field(None, description="Classification context: HISTORICAL, METHODOLOGICAL, etc.")
+    url: str | None = Field(None, description="External source URL, when applicable")
+    source_type: str | None = Field(None, description="Source classification such as external")
+    license: str | None = Field(None, description="Content license attribution")
+    retrieved_at: str | None = Field(None, description="Time the external source was retrieved")
+    page_timestamp: str | None = Field(None, description="Source page update timestamp")
 
 
 class ChatTable(BaseModel):
@@ -63,9 +68,9 @@ class ChatTable(BaseModel):
 class BrainRequest(BaseModel):
     question: str = Field("", description="Question prompt to Ganga Brain RAG")
     query: str | None = Field(None, description="Alias for question")
-    input_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Input language ('en' | 'hi' | 'kn' | 'ta')")
-    output_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Output language ('en' | 'hi' | 'kn' | 'ta')")
-    language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Legacy language fallback ('en' | 'hi' | 'kn' | 'ta')")
+    input_language: LanguageCode | None = Field(None, description="Detected or explicit supported input language")
+    output_language: LanguageCode | None = Field(None, description="Requested supported output language")
+    language: LanguageCode | None = Field(None, description="Legacy language fallback")
     translation_consent: bool = Field(True, description="Allow external translation when needed; defaults to true. Set false to disable it.")
     top_k: int | None = Field(None, description="Retriever candidate override")
 

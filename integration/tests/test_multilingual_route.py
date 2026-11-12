@@ -55,6 +55,7 @@ def test_integration_route_allows_translation_when_field_is_omitted(monkeypatch)
     )
     answer = Mock(return_value={"answer": "Ganga River answer", "mode": "grounded", "citations": []})
     monkeypatch.setattr("brain.rag_pipeline.answer_question", answer)
+    monkeypatch.setattr("brain.translator.translate_text", lambda text, _source, target, **_kwargs: "What is Ganga?" if target == "en" else text)
     monkeypatch.setattr(server.tts_adapter, "synthesize_speech", lambda *_args, **_kwargs: None)
 
     response = TestClient(app).post("/api/integration/ask", json={
@@ -91,7 +92,7 @@ def test_speech_language_support_is_configured_but_limited_by_provider():
     assert VoskSTTAdapter.SUPPORTED_LANGUAGES == {"en", "hi"}
     adapter = VoskSTTAdapter()
     assert adapter.transcribe_audio(b"RIFF" + b"0" * 48, language="kn") == ""
-    assert set(EdgeTTSProvider.DEFAULT_VOICES) == {"en", "hi", "kn", "ta"}
+    assert set(EdgeTTSProvider.DEFAULT_VOICES) == {"en", "hi", "kn", "ta", "te", "bn", "mr", "gu", "ml", "pa", "ur", "or", "as"}
     try:
         LocalSapiTTSProvider().synthesize_to_wav("text", "ta", output_wav="unused.wav")
     except RuntimeError as exc:

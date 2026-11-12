@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -12,6 +13,8 @@ import unicodedata
 import wave
 from abc import ABC, abstractmethod
 from typing import Optional
+
+from brain.translator import SPEECH_LOCALES, SUPPORTED_LANGUAGES
 
 logger = logging.getLogger("integration.stt_adapter")
 
@@ -93,8 +96,8 @@ class VoskSTTAdapter(STTAdapter):
         try:
             model = self._get_model(lang_key)
         except Exception as err:
-            logger.error("[Integration STT] Could not initialize Vosk model (%s). Falling back to mock.", type(err).__name__)
-            return MockSTTAdapter().transcribe_audio(audio_bytes, language=lang_key)
+            logger.error("[Integration STT] Could not initialize Vosk model (%s).", type(err).__name__)
+            raise RuntimeError("Configured Vosk model is unavailable") from None
 
         # Write incoming audio to a temporary file
         temp_input = None
@@ -171,6 +174,79 @@ class MockSTTAdapter(STTAdapter):
         return "What is Aviral Dhara?"
 
 
+class AzureSpeechSTTAdapter(STTAdapter):
+    """Azure Speech STT for configured Indian locales; requires key and region."""
+
+    SUPPORTED_LANGUAGES = SUPPORTED_LANGUAGES
+
+    def __init__(self, api_key: str | None = None, region: str | None = None):
+        self.api_key = api_key or os.getenv("AZURE_SPEECH_KEY", "").strip()
+        self.region = region or os.getenv("AZURE_SPEECH_REGION", "").strip()
+
+    def transcribe_audio(self, audio_bytes: bytes | None, language: str = "en") -> str:
+        lang = (language or "en").lower().strip()
+        if lang not in self.SUPPORTED_LANGUAGES:
+            raise ValueError("Unsupported Azure Speech language")
+        if not self.api_key or not self.region:
+            raise RuntimeError("Azure Speech requires AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
+        if not audio_bytes or len(audio_bytes) < 44:
+            return ""
+        try:
+            import azure.cognitiveservices.speech as speechsdk
+        except ImportError as exc:
+            raise RuntimeError("Install azure-cognitiveservices-speech to enable Azure Speech STT") from exc
+
+        source_path = None
+        wav_path = None
+        try:
+            suffix = ".wav" if audio_bytes[:4] == b"RIFF" and audio_bytes[8:12] == b"WAVE" else ".audio"
+            with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as source:
+                source.write(audio_bytes)
+                source_path = source.name
+            wav_path = source_path if suffix == ".wav" else source_path + ".wav"
+            if shutil.which("ffmpeg"):
+                converted_path = source_path + ".pcm.wav"
+                result = subprocess.run(
+                    ["ffmpeg", "-nostdin", "-y", "-i", source_path, "-ac", "1", "-ar", "16000", "-c:a", "pcm_s16le", converted_path],
+                    capture_output=True, timeout=30,
+                )
+                if result.returncode != 0 or not os.path.exists(converted_path):
+                    raise RuntimeError("Audio conversion failed")
+                wav_path = converted_path
+            else:
+                with wave.open(source_path, "rb") as audio_file:
+                    if audio_file.getframerate() != 16000 or audio_file.getnchannels() != 1 or audio_file.getsampwidth() != 2:
+                        raise RuntimeError("Install ffmpeg to convert microphone audio to Azure's 16 kHz mono PCM format")
+
+            speech_config = speechsdk.SpeechConfig(subscription=self.api_key, region=self.region)
+            speech_config.speech_recognition_language = SPEECH_LOCALES[lang]
+            audio_config = speechsdk.audio.AudioConfig(filename=wav_path)
+            recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+            result = recognizer.recognize_once_async().get()
+            if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+                return normalize_stt_text(result.text)
+            if result.reason == speechsdk.ResultReason.NoMatch:
+                return ""
+            raise RuntimeError("Azure Speech recognition did not complete")
+        except (TimeoutError, OSError):
+            logger.warning("Azure Speech STT failed: timeout_or_io")
+            raise RuntimeError("Speech recognition is temporarily unavailable") from None
+        finally:
+            for path in {source_path, wav_path, source_path + ".pcm.wav" if source_path else None}:
+                if path and os.path.exists(path):
+                    try:
+                        os.remove(path)
+                    except OSError:
+                        pass
+
+
+class UnavailableSTTAdapter(STTAdapter):
+    """Explicitly unavailable STT; avoids returning made-up mock transcripts."""
+
+    def transcribe_audio(self, audio_bytes: bytes | None, language: str = "en") -> str:
+        raise RuntimeError("No speech recognition provider is configured")
+
+
 class WebSpeechSTTAdapter(STTAdapter):
     """Adapter signaling Web Speech API integration in browser runtime."""
 
@@ -181,11 +257,20 @@ class WebSpeechSTTAdapter(STTAdapter):
 
 def get_stt_adapter(provider: str = "vosk") -> STTAdapter:
     prov_clean = (provider or "vosk").lower().strip()
-    if prov_clean in ("vosk", "auto", "local"):
+    if prov_clean == "auto":
+        if os.getenv("AZURE_SPEECH_KEY", "").strip() and os.getenv("AZURE_SPEECH_REGION", "").strip():
+            return AzureSpeechSTTAdapter()
         if VOSK_AVAILABLE:
             return VoskSTTAdapter()
-        logger.warning("[Integration STT] Vosk not available, using MockSTTAdapter.")
+        logger.warning("[Integration STT] No configured speech provider is available.")
+        return UnavailableSTTAdapter()
+    if prov_clean in ("azure", "azure-speech"):
+        return AzureSpeechSTTAdapter()
+    if prov_clean == "mock":
         return MockSTTAdapter()
-    elif prov_clean == "mock":
-        return MockSTTAdapter()
+    if prov_clean in ("vosk", "local"):
+        if VOSK_AVAILABLE:
+            return VoskSTTAdapter()
+        logger.warning("[Integration STT] Vosk unavailable; no transcription fallback is configured.")
+        return UnavailableSTTAdapter()
     return WebSpeechSTTAdapter()

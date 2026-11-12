@@ -287,6 +287,25 @@ def test_class_b_screening_status_at_and_around_thresholds(parameter, value, exp
     assert all(prefix not in cell for prefix in ("Reading:", "Timestamp:", "Source:", "Threshold/range:"))
 
 
+def test_localized_cpcb_table_preserves_readings_units_timestamp_and_status_format():
+    measured_at = datetime.now(timezone.utc).isoformat()
+    expected_timestamp = datetime.fromisoformat(measured_at).astimezone(
+        timezone(timedelta(hours=5, minutes=30))
+    ).strftime("%d %b %Y, %H:%M IST")
+    snapshot = _snapshot(measured_at)
+    service, _ = _service(snapshot=snapshot)
+    request = parse_water_quality_request("What is water quality at Kanpur?")
+    table = build_water_data_tables(request, service.readings(request), "hi")[0]
+    assert table["title"] == "जल गुणवत्ता"
+    cells = table["rows"][0][1:]
+    assert "7.4 (unitless)" in cells[0]
+    assert "1.2 mg/l" in cells[1]
+    assert "8.1 mg/l" in cells[2]
+    assert all(expected_timestamp in cell for cell in cells)
+    assert "स्थिति: कक्षा B मानदंड पूरा" in cells[0]
+    assert "स्थिति: अनुपलब्ध" in cells[1]  # The CPCB feed does not supply BOD test basis.
+
+
 def test_status_is_unavailable_for_unknown_units_or_non_numeric_readings():
     from integration.water_quality import _table_cell
 
@@ -385,6 +404,32 @@ def test_live_question_is_answered_in_conversation_without_calling_brain():
     assert result.tables[0].columns == ["Station", "pH", "BOD", "DO"]
     assert result.tables[0].rows[0][0] == "Kanpur (UT58)"
     assert not brain.called
+
+
+def test_non_english_cpcb_question_is_normalized_before_station_intent_matching(monkeypatch):
+    class Brain:
+        def ask(self, *args, **kwargs):
+            raise AssertionError("CPCB route should handle the translated question")
+
+    service, _ = _service()
+    controller = ConversationController(
+        brain_client=Brain(), config=IntegrationConfig(mock_mode=True),
+        water_quality_service=service,
+    )
+    translated = []
+
+    def translate(text, source, target, **_kwargs):
+        translated.append((text, source, target))
+        return "What is the water quality at Kanpur?"
+
+    monkeypatch.setattr("brain.translator.translate_text", translate)
+    result = controller.process_text_question(
+        "கான்பூரில் நீரின் தரம் என்ன?", input_language="ta", output_language="ta"
+    )
+    assert result.mode == "live-water-quality"
+    assert result.tables[0].rows[0][0] == "Kanpur (UT58)"
+    assert translated[0] == ("கான்பூரில் நீரின் தரம் என்ன?", "ta", "en")
+    assert translated[1][1:] == ("en", "ta")
 
 
 def test_level_and_combined_requests_get_appropriate_response_schema():

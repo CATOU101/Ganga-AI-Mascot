@@ -40,8 +40,17 @@ class EdgeTTSProvider(BaseTTSProvider):
     DEFAULT_VOICES = {
         "en": "en-IN-PrabhatNeural",  # Indian English Male
         "hi": "hi-IN-MadhurNeural",   # Hindi Male (Chacha)
-        "kn": "kn-IN-GaganNeural",    # Configured Kannada voice
-        "ta": "ta-IN-ValluvarNeural", # Configured Tamil voice
+        "kn": "kn-IN-GaganNeural",
+        "ta": "ta-IN-ValluvarNeural",
+        "te": "te-IN-MohanNeural",
+        "bn": "bn-IN-BashkarNeural",
+        "mr": "mr-IN-ManoharNeural",
+        "gu": "gu-IN-NiranjanNeural",
+        "ml": "ml-IN-MidhunNeural",
+        "pa": "pa-IN-OjasNeural",
+        "ur": "ur-IN-SalmanNeural",
+        "or": "or-IN-SukantNeural",
+        "as": "as-IN-PriyomNeural",
     }
 
     def __init__(self, python_exe=None, blender_exe=None):
@@ -150,7 +159,6 @@ class LocalSapiTTSProvider(BaseTTSProvider):
     """
     DEFAULT_VOICES = {
         "en": "Microsoft David Desktop",
-        "hi": "Microsoft David Desktop"  # Fallback if no Hindi SAPI voice installed
     }
 
     def synthesize_to_wav(self, text: str, language: str, voice: str = None, output_wav: str = "") -> dict:

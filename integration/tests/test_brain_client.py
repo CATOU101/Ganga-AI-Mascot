@@ -49,3 +49,19 @@ def test_brain_client_parse_response_validation():
     assert parsed.citations[0].source == "GRBMP Title"
     assert parsed.emotion == EmotionType.HAPPY
     assert parsed.gesture == GestureType.WAVE
+
+
+def test_brain_client_preserves_external_source_attribution_fields():
+    client = BrainClient(config=IntegrationConfig(mock_mode=True))
+    raw = (
+        b'{"answer":"Context","mode":"grounded","citations":[{"source":"Mars",'
+        b'"url":"https://en.wikipedia.org/wiki/Mars","source_type":"external",'
+        b'"license":"CC BY-SA 4.0 / GFDL","retrieved_at":"2026-11-12T00:00:00+00:00",'
+        b'"page_timestamp":"2026-11-01T00:00:00Z"}]}'
+    )
+    parsed = client._parse_response(raw, "en", "en")
+    citation = parsed.citations[0]
+    assert citation.url == "https://en.wikipedia.org/wiki/Mars"
+    assert citation.source_type == "external"
+    assert citation.license == "CC BY-SA 4.0 / GFDL"
+    assert citation.page_timestamp == "2026-11-01T00:00:00Z"

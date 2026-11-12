@@ -13,8 +13,51 @@ from abc import ABC, abstractmethod
 from typing import NamedTuple
 
 from avatar.Member2_Chacha.chacha_tts_pipeline import EdgeTTSProvider, LocalSapiTTSProvider
+from brain.translator import SPEECH_LOCALES, SUPPORTED_LANGUAGES
 
 logger = logging.getLogger("integration.tts_adapter")
+
+
+class AzureSpeechTTSProvider:
+    """Azure neural TTS provider. Requires a Speech key and region."""
+
+    VOICES = {
+        "en": "en-IN-PrabhatNeural", "hi": "hi-IN-MadhurNeural",
+        "kn": "kn-IN-GaganNeural", "ta": "ta-IN-ValluvarNeural",
+        "te": "te-IN-MohanNeural", "bn": "bn-IN-BashkarNeural",
+        "mr": "mr-IN-ManoharNeural", "gu": "gu-IN-NiranjanNeural",
+        "ml": "ml-IN-MidhunNeural", "pa": "pa-IN-OjasNeural",
+        "ur": "ur-IN-SalmanNeural", "or": "or-IN-SukantNeural",
+        "as": "as-IN-PriyomNeural",
+    }
+
+    def __init__(self, api_key: str | None = None, region: str | None = None):
+        self.api_key = api_key or os.getenv("AZURE_SPEECH_KEY", "").strip()
+        self.region = region or os.getenv("AZURE_SPEECH_REGION", "").strip()
+
+    def synthesize_to_wav(self, text: str, language: str, output_wav: str) -> dict:
+        lang = (language or "").lower().strip()
+        if lang not in self.VOICES:
+            raise ValueError("Unsupported Azure Speech TTS language")
+        if not self.api_key or not self.region:
+            raise RuntimeError("Azure Speech requires AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
+        try:
+            import azure.cognitiveservices.speech as speechsdk
+        except ImportError as exc:
+            raise RuntimeError("Install azure-cognitiveservices-speech to enable Azure Speech TTS") from exc
+
+        speech_config = speechsdk.SpeechConfig(subscription=self.api_key, region=self.region)
+        speech_config.speech_synthesis_voice_name = self.VOICES[lang]
+        speech_config.set_speech_synthesis_output_format(
+            speechsdk.SpeechSynthesisOutputFormat.Riff16Khz16BitMonoPcm
+        )
+        audio_config = speechsdk.audio.AudioOutputConfig(filename=output_wav)
+        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+        result = synthesizer.speak_text_async(text).get()
+        if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted or not os.path.exists(output_wav):
+            logger.warning("Azure Speech TTS did not complete for locale %s", SPEECH_LOCALES[lang])
+            raise RuntimeError("Selected-language speech synthesis did not complete")
+        return EdgeTTSProvider()._read_wav_info(output_wav, text, lang, self.VOICES[lang], "AzureSpeech")
 
 
 class TTSAudioResult(NamedTuple):
@@ -35,8 +78,8 @@ class TTSAdapter(ABC):
 class Member2TTSAdapter(TTSAdapter):
     """
     Production TTS Adapter for Chacha Chaudhary (Member 2).
-    - Primary: EdgeTTSProvider (configured English, Hindi, Kannada and Tamil voices).
-    - Fallback: LocalSapiTTSProvider (100% offline Windows SAPI fallback).
+    - Azure Speech is used when configured; Edge TTS provides a no-key online fallback.
+    - SAPI is used only for English so a selected Indic language never gets English audio.
     - Uncompressed 16-bit 16kHz Mono PCM WAV output.
     """
 
@@ -44,6 +87,7 @@ class Member2TTSAdapter(TTSAdapter):
         self.force_sapi = force_sapi
         self.edge_provider = EdgeTTSProvider()
         self.sapi_provider = LocalSapiTTSProvider()
+        self.azure_provider = AzureSpeechTTSProvider()
 
     def synthesize_speech(self, text: str, language: str = "hi") -> TTSAudioResult | None:
         if not text or not text.strip():
@@ -52,7 +96,7 @@ class Member2TTSAdapter(TTSAdapter):
 
         clean_text = text.strip()
         lang_key = (language or "hi").lower().strip()
-        if lang_key not in ("en", "hi", "kn", "ta"):
+        if lang_key not in SUPPORTED_LANGUAGES:
             logger.warning("[Integration TTS] Unsupported language code; refusing fallback voice.")
             return None
 
@@ -62,7 +106,14 @@ class Member2TTSAdapter(TTSAdapter):
                 temp_wav = f_wav.name
 
             meta = None
-            if not self.force_sapi:
+            if not self.force_sapi and self.azure_provider.api_key and self.azure_provider.region:
+                try:
+                    logger.info("[Integration TTS] Synthesizing with Azure Speech (%s)", SPEECH_LOCALES[lang_key])
+                    meta = self.azure_provider.synthesize_to_wav(clean_text, lang_key, temp_wav)
+                except Exception as azure_err:
+                    logger.warning("Azure Speech TTS failed (%s); trying same-language Edge voice.", type(azure_err).__name__)
+
+            if not self.force_sapi and meta is None:
                 try:
                     logger.info(f"[Integration TTS] Synthesizing via EdgeTTS neural voice ({lang_key})")
                     meta = self.edge_provider.synthesize_to_wav(
@@ -71,7 +122,7 @@ class Member2TTSAdapter(TTSAdapter):
                 except Exception as edge_err:
                     logger.warning("[Integration TTS] EdgeTTS failed (%s). Attempting SAPI fallback.", type(edge_err).__name__)
 
-            if meta is None:
+            if meta is None and lang_key == "en":
                 logger.info(f"[Integration TTS] Synthesizing via Local SAPI offline fallback ({lang_key})")
                 try:
                     meta = self.sapi_provider.synthesize_to_wav(
@@ -81,7 +132,7 @@ class Member2TTSAdapter(TTSAdapter):
                     logger.warning("[Integration TTS] SAPI fallback failed (%s).", type(sapi_err).__name__)
 
             if meta is None:
-                raise RuntimeError("Both EdgeTTS and SAPI fallback failed to generate WAV file.")
+                raise RuntimeError("Selected-language speech synthesis failed; no different-language voice was used.")
 
             # Read audio bytes and convert to Base64
             with open(temp_wav, "rb") as f:

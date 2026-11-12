@@ -22,7 +22,7 @@ from integration.models.brain_response import (
     GestureType,
 )
 from integration.server import app
-from integration.voice.stt_adapter import VoskSTTAdapter, MockSTTAdapter, get_stt_adapter
+from integration.voice.stt_adapter import VoskSTTAdapter, MockSTTAdapter, UnavailableSTTAdapter, get_stt_adapter
 from integration.voice.tts_adapter import (
     Member2TTSAdapter,
     SyntheticWavTTSAdapter,
@@ -91,11 +91,13 @@ def test_member2_gesture_mapper_aliases():
 
 def test_member2_vosk_stt_adapter():
     adapter = get_stt_adapter("vosk")
-    assert isinstance(adapter, (VoskSTTAdapter, MockSTTAdapter))
+    assert isinstance(adapter, (VoskSTTAdapter, UnavailableSTTAdapter))
 
-    # Empty audio handling
-    res_empty = adapter.transcribe_audio(b"", language="hi")
-    assert res_empty == ""
+    if isinstance(adapter, UnavailableSTTAdapter):
+        with pytest.raises(RuntimeError, match="No speech recognition provider"):
+            adapter.transcribe_audio(b"audio", language="hi")
+    else:
+        assert adapter.transcribe_audio(b"", language="hi") == ""
 
 
 def test_member2_tts_adapter_synthetic_fallback():
@@ -165,7 +167,12 @@ def test_member2_api_ask_mock_endpoint():
     assert data["language"] == "en"
 
 
-def test_member2_api_stt_endpoint():
+def test_member2_api_stt_endpoint(monkeypatch):
+    import integration.server as server
+
+    # The endpoint test uses an explicit mock recognizer; normal deployments do
+    # not fabricate a transcript when a speech provider is unavailable.
+    monkeypatch.setattr(server, "stt_adapter", MockSTTAdapter())
     client = TestClient(app)
     # Send a small fake audio file to test multipart endpoint handling
     fake_wav = b"RIFF" + b"\x00" * 36 + b"WAVEfmt " + b"\x10\x00\x00\x00\x01\x00\x01\x00\x80>\x00\x00\x00}\x00\x00\x02\x00\x10\x00data" + b"\x00" * 100

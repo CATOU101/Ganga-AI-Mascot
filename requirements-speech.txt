@@ -1,0 +1,4 @@
+# Optional full-locale Azure Speech integration. Review the Microsoft license
+# terms and Azure service pricing before installing/configuring this provider.
+-r requirements.txt
+azure-cognitiveservices-speech>=1.43,<2

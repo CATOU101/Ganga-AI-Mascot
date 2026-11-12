@@ -24,6 +24,15 @@ from brain.translator import (
     [
         ("What is Ganga?", "en"),
         ("गंगा नदी क्या है?", "hi"),
+        ("గంగా నది ఏమిటి?", "te"),
+        ("গঙ্গা নদী কী?", "bn"),
+        ("गंगा नदी काय आहे?", "mr"),
+        ("ગંગા નદી શું છે?", "gu"),
+        ("ഗംഗാ നദി എന്താണ്?", "ml"),
+        ("ਗੰਗਾ ਨਦੀ ਕੀ ਹੈ?", "pa"),
+        ("گنگا دریا کیا ہے؟", "ur"),
+        ("ଗଙ୍ଗା ନଦୀ କ’ଣ?", "or"),
+        ("গংগা নদী কি? ৰ", "as"),
         ("ಗಂಗಾ ನದಿ ಎಂದರೇನು?", "kn"),
         ("கங்கை நதி என்றால் என்ன?", "ta"),
     ],
@@ -46,7 +55,7 @@ def test_translation_is_disabled_by_default_and_does_not_call_network():
     urlopen.assert_not_called()
 
 
-@pytest.mark.parametrize("language", ["hi", "kn", "ta"])
+@pytest.mark.parametrize("language", ["hi", "kn", "ta", "te", "bn", "mr", "gu", "ml", "pa", "ur", "or", "as"])
 def test_supported_language_translation_uses_mock_provider(language):
     provider = Mock()
     provider.translate.return_value = f"translated-{language}"
@@ -91,6 +100,27 @@ def test_provider_response_is_mocked_and_parsed():
     with patch("brain.translator.urllib.request.urlopen", return_value=Response()) as urlopen:
         assert _external_translate("Ganga", "en", "kn") == "ಗಂಗಾ"
     assert urlopen.call_args.kwargs["timeout"] <= 8.0
+
+
+def test_configured_google_cloud_translation_uses_documented_v2_request(monkeypatch):
+    monkeypatch.setenv("GOOGLE_TRANSLATE_API_KEY", "test-only-key")
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def read(self):
+            return json.dumps({"data": {"translations": [{"translatedText": "ನದಿ &amp; ನದಿ"}]}}).encode()
+
+    with patch("brain.translator.urllib.request.urlopen", return_value=Response()) as urlopen:
+        assert _external_translate("river", "en", "kn") == "ನದಿ & ನದಿ"
+    request = urlopen.call_args.args[0]
+    assert "translation.googleapis.com/language/translate/v2" in request.full_url
+    assert request.data is not None
+    assert request.get_header("X-goog-api-key") == "test-only-key"
 
 
 def test_rag_evidence_rejection_bypasses_generator_and_preserves_schema():
@@ -177,12 +207,29 @@ def test_brain_api_defaults_translation_on_when_field_is_omitted(monkeypatch):
     client = TestClient(app)
     ask = Mock(return_value={"answer": "answer", "mode": "grounded", "citations": []})
     monkeypatch.setattr("brain.api.answer_question", ask)
-    for language in ("en", "hi", "kn", "ta"):
+    for language in ("en", "hi", "kn", "ta", "te", "bn", "mr", "gu", "ml", "pa", "ur", "or", "as"):
         response = client.post("/ask", json={
             "question": "What is Ganga?", "input_language": "en",
             "output_language": language,
         })
         assert response.status_code == 200
         assert response.json()["output_language"] == language
-    assert ask.call_count == 4
+    assert ask.call_count == 13
     assert all(call.kwargs["allow_external_translation"] is True for call in ask.call_args_list)
+
+
+def test_indic_input_is_translated_before_english_retrieval_and_keeps_citations():
+    hit = {"chunk_id": "telugu-hit", "text": "Ganga fact.", "metadata": {"title": "GRBMP", "page_start": 1, "page_end": 1}}
+    config = SimpleNamespace(llm_provider="groq", llm_model="model", llm_provider_order=("groq",))
+    retriever, generator = Mock(), Mock()
+    retriever.retrieve.return_value = (True, [hit])
+    generator.generate.return_value = {"answer": "Fact", "citations": [{"source": "GRBMP"}], "mode": "grounded"}
+    translated_query = Mock(return_value="What is the Ganga?")
+    with patch("brain.rag_pipeline.load_config", return_value=config), \
+         patch("brain.rag_pipeline.Retriever", return_value=retriever), \
+         patch("brain.rag_pipeline.build_generator", return_value=generator), \
+         patch("brain.rag_pipeline.translate_text", translated_query):
+        response = answer_question("గంగా నది ఏమిటి?", input_language="te", output_language="en", allow_external_translation=True)
+    retriever.retrieve.assert_called_once_with("What is the Ganga?", None)
+    assert response["citations"] == [{"source": "GRBMP"}]
+    assert translated_query.call_args_list[0].args == ("గంగా నది ఏమిటి?", "te", "en")

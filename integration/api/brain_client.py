@@ -228,7 +228,12 @@ class BrainClient:
                         file_name=item.get("file_name"),
                         page=str(item.get("page", "")) if item.get("page") is not None else None,
                         section=item.get("section"),
-                        knowledge_type=item.get("knowledge_type")
+                        knowledge_type=item.get("knowledge_type"),
+                        url=item.get("url"),
+                        source_type=item.get("source_type"),
+                        license=item.get("license"),
+                        retrieved_at=item.get("retrieved_at"),
+                        page_timestamp=item.get("page_timestamp"),
                     ))
 
         # Parse emotion & gesture safely

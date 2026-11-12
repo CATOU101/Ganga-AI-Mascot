@@ -6,7 +6,6 @@ import argparse
 import os
 import time
 import logging
-from typing import Literal
 logger = logging.getLogger("integration.server")
 import uvicorn
 from pathlib import Path
@@ -15,11 +14,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from brain.api import app as brain_app
-from brain.translator import TranslationConsentRequired
+from brain.translator import LanguageCode, TranslationConsentRequired, TranslationError
 from integration.api.brain_client import BrainClient
 from integration.config.integration_config import load_integration_config
 from integration.controller.conversation_controller import ConversationController
 from integration.models.brain_response import AvatarPresentation, BrainRequest
+from integration.resources_api import router as resources_router
 from integration.avatar.mascot_presenter import MascotPresenter
 from integration.voice.stt_adapter import VoskSTTAdapter, get_stt_adapter
 from integration.voice.tts_adapter import get_tts_adapter
@@ -54,6 +54,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(resources_router)
 
 
 @app.get("/favicon.ico", include_in_schema=False)
@@ -94,6 +95,8 @@ def integration_ask(req: BrainRequest):
             status_code=428,
             detail="External translation is disabled for this request.",
         ) from exc
+    except TranslationError as exc:
+        raise HTTPException(status_code=503, detail="Requested translation is unavailable.") from exc
     t5 = time.perf_counter()
 
     # T6: TTS synthesis
@@ -145,9 +148,9 @@ def integration_ask(req: BrainRequest):
 async def integration_stt(
     file: UploadFile = File(None),
     audio: UploadFile = File(None),
-    input_language: Literal["en", "hi", "kn", "ta"] = "hi",
-    output_language: Literal["en", "hi", "kn", "ta"] = "hi",
-    language: Literal["en", "hi", "kn", "ta"] | None = None,
+    input_language: LanguageCode = "en",
+    output_language: LanguageCode = "en",
+    language: LanguageCode | None = None,
     translation_consent: bool = True,
 ):
     upload_file = file or audio
@@ -160,11 +163,15 @@ async def integration_stt(
     if isinstance(stt_adapter, VoskSTTAdapter) and in_lang not in stt_adapter.SUPPORTED_LANGUAGES:
         raise HTTPException(
             status_code=501,
-            detail="Configured Vosk speech recognition supports English and Hindi only; Kannada/Tamil STT is not configured.",
+            detail="Configured Vosk supports English and Hindi only. Configure Azure Speech for the full language set.",
         )
 
     audio_bytes = await upload_file.read()
-    transcription = stt_adapter.transcribe_audio(audio_bytes, language=in_lang)
+    try:
+        transcription = stt_adapter.transcribe_audio(audio_bytes, language=in_lang)
+    except (RuntimeError, ValueError) as exc:
+        logger.warning("Speech recognition is unavailable (%s).", type(exc).__name__)
+        raise HTTPException(status_code=503, detail=str(exc)) from None
 
     if not transcription:
         return AvatarPresentation(
@@ -176,10 +183,15 @@ async def integration_stt(
             language=out_lang,
         )
 
-    return integration_ask(BrainRequest(
-        question=transcription, input_language=in_lang,
-        output_language=out_lang, translation_consent=translation_consent,
-    ))
+    try:
+        return integration_ask(BrainRequest(
+            question=transcription, input_language=in_lang,
+            output_language=out_lang, translation_consent=translation_consent,
+        ))
+    except TranslationConsentRequired as exc:
+        raise HTTPException(status_code=428, detail="External translation is disabled for this request.") from exc
+    except TranslationError as exc:
+        raise HTTPException(status_code=503, detail="Requested translation is unavailable.") from exc
 
 
 # Mount the core Brain FastAPI router endpoints (/ask, /health) directly

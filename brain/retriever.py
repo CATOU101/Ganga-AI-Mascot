@@ -33,7 +33,7 @@ SPECIFIC_TOPIC_TERMS = frozenset({
     "disaster", "cremation", "hazard", "swot", "legal", "legislation", "law", "act",
     "ordinance", "judgement", "court", "institution", "governance", "model", "policy",
     "mining", "tannery", "industrial", "effluent", "wetland", "afforestation",
-    "tributary", "tributaries", "monitoring", "station", "discharge", "quality",
+    "tributary", "tributaries", "monitoring", "station", "discharge", "quality", "pollution",
     "dissolved", "oxygen", "bod", "cod",
 })
 
@@ -178,7 +178,25 @@ class Retriever:
         if keywords and top_overlap < self.config.min_keyword_overlap and len(keywords) > 1:
             return False, []
 
-        reranked_hits = [hit for _, _, hit in scored_hits[:target_k]]
+        reranked_hits = []
+        seen_chunks = set()
+        seen_content = set()
+        for _, _, hit in scored_hits:
+            metadata = hit.get("metadata", {})
+            chunk_id = str(hit.get("chunk_id") or "").strip()
+            fingerprint = (
+                re.sub(r"\W+", " ", str(hit.get("text", "")).casefold()).strip(),
+                str(metadata.get("file_name") or "").casefold(),
+                str(metadata.get("page_start") or ""),
+            )
+            if (chunk_id and chunk_id in seen_chunks) or fingerprint in seen_content:
+                continue
+            if chunk_id:
+                seen_chunks.add(chunk_id)
+            seen_content.add(fingerprint)
+            reranked_hits.append(hit)
+            if len(reranked_hits) >= target_k:
+                break
         return True, reranked_hits
 
     def retrieve(self, question: str, top_k: int | None = None) -> tuple[bool, list[dict]]:

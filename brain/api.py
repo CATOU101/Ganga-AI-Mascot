@@ -4,14 +4,13 @@ from __future__ import annotations
 
 import argparse
 import logging
-from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel, Field
 
 from .config import MAX_API_TOP_K, load_config
 from .rag_pipeline import answer_question
-from .translator import TranslationConsentRequired, TranslationError, detect_language, normalize_language
+from .translator import LanguageCode, TranslationConsentRequired, TranslationError, detect_language, normalize_language
 from .vector_store import get_vector_store
 
 
@@ -27,9 +26,9 @@ app = FastAPI(
 
 class AskRequest(BaseModel):
     question: str = Field(..., description="User question about River Ganga / GRBMP material", json_schema_extra={"example": "What are the major sources of pollution in the Ganga?"})
-    input_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Input language ('en' | 'hi' | 'kn' | 'ta')", json_schema_extra={"example": "en"})
-    output_language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Output language ('en' | 'hi' | 'kn' | 'ta')", json_schema_extra={"example": "en"})
-    language: Literal["en", "hi", "kn", "ta"] | None = Field(None, description="Legacy language fallback ('en' | 'hi' | 'kn' | 'ta')")
+    input_language: LanguageCode | None = Field(None, description="Detected or explicit supported input language")
+    output_language: LanguageCode | None = Field(None, description="Requested supported output language")
+    language: LanguageCode | None = Field(None, description="Legacy language fallback")
     translation_consent: bool = Field(True, description="Allow external translation when needed; defaults to true. Set false to disable it.")
     top_k: int | None = Field(
         None,

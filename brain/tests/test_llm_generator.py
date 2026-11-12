@@ -81,6 +81,30 @@ class GroqGeneratorTests(unittest.TestCase):
         self.assertEqual(result["citations"][0]["file_name"], "grbmp.pdf")
         self.assertEqual(result["citations"][0]["page"], "10-11")
 
+    def test_general_generation_uses_configured_provider_without_rag_or_citations(self):
+        self.client.chat.completions.create.return_value = fake_chat_response(
+            "Humans are social mammals with advanced language and reasoning abilities."
+        )
+        result = self.generator.generate_general("Tell me about humans.")
+        call = self.client.chat.completions.create.call_args.kwargs
+
+        self.assertEqual(result["mode"], "general")
+        self.assertEqual(result["citations"], [])
+        self.assertEqual(result["answer"], "Humans are social mammals with advanced language and reasoning abilities.")
+        self.assertEqual(call["max_completion_tokens"], 160)
+        self.assertEqual(call["messages"][1]["content"], "Tell me about humans.")
+        self.assertIn("do not claim the answer is verified by project documents", call["messages"][0]["content"])
+        self.assertNotIn("evidence", call["messages"][1]["content"].lower())
+
+    def test_general_generation_failure_returns_explicit_unavailable_response(self):
+        from brain.generator import GENERAL_GENERATION_FAILURE
+
+        self.client.chat.completions.create.side_effect = TimeoutError("provider failed")
+        result = self.generator.generate_general("Tell me about humans.")
+        self.assertEqual(result["answer"], GENERAL_GENERATION_FAILURE)
+        self.assertEqual(result["citations"], [])
+        self.assertEqual(result["mode"], "general-unavailable")
+
     def test_length_finish_gets_one_bounded_continuation_and_merges_overlap(self):
         partial = (
             "The Ganga rises at Gaumukh and flows toward the Bay of Bengal. "
@@ -97,12 +121,66 @@ class GroqGeneratorTests(unittest.TestCase):
         self.assertEqual(self.client.chat.completions.create.call_count, 2)
         first_call = self.client.chat.completions.create.call_args_list[0].kwargs
         second_call = self.client.chat.completions.create.call_args_list[1].kwargs
-        self.assertEqual(first_call["max_completion_tokens"], 700)
-        self.assertEqual(second_call["max_completion_tokens"], 700)
+        self.assertEqual(first_call["max_completion_tokens"], 300)
+        self.assertEqual(second_call["max_completion_tokens"], 300)
         self.assertNotIn("max_tokens", first_call)
         self.assertTrue(result["answer"].endswith("before reaching the delta."))
         self.assertEqual(result["answer"].count("The Ganga joins"), 1)
         self.assertEqual(result["citations"][0]["file_name"], "grbmp.pdf")
+
+    def test_requested_answer_shape_controls_budget_without_an_extra_call(self):
+        table_answer = "| River | Length |\n| --- | --- |\n| Ganga | 2500 km |"
+        self.client.chat.completions.create.return_value = fake_chat_response(table_answer)
+        result = self.generator.generate("Compare two rivers in a table", HITS)
+        kwargs = self.client.chat.completions.create.call_args.kwargs
+        self.assertEqual(kwargs["max_completion_tokens"], 500)
+        self.assertIn("comparison table", kwargs["messages"][0]["content"])
+        self.assertEqual(self.client.chat.completions.create.call_count, 1)
+        self.assertEqual(result["answer"], table_answer)
+
+    def test_general_generation_reports_provider_or_estimated_token_usage(self):
+        response = fake_chat_response("A short answer.")
+        response.usage = SimpleNamespace(prompt_tokens=20, completion_tokens=4, total_tokens=24)
+        self.client.chat.completions.create.return_value = response
+        result = self.generator.generate_general("What is Mars?")
+        assert result["usage"]["source"] == "provider"
+        assert result["usage"]["total_tokens"] == 24
+        assert result["usage"]["latency_ms"] is not None
+
+        self.client.chat.completions.create.return_value = fake_chat_response("A short answer.")
+        estimated = self.generator.generate_general("What is Mars?")["usage"]
+        assert estimated["source"] == "estimated"
+        assert estimated["total_tokens"] > 0
+
+    def test_in_points_format_is_sent_in_the_existing_generation_call(self):
+        question = "Tell me about the Ganga in points."
+        self.client.chat.completions.create.return_value = fake_chat_response(
+            "- The Ganga originates at Gaumukh.\n- It flows to the Bay of Bengal."
+        )
+        result = self.generator.generate(question, HITS)
+        call = self.client.chat.completions.create.call_args.kwargs
+        self.assertEqual(self.client.chat.completions.create.call_count, 1)
+        self.assertIn("Use a concise bullet list", call["messages"][0]["content"])
+        self.assertEqual(json.loads(call["messages"][1]["content"])["question"], question)
+        self.assertEqual(result["mode"], "grounded")
+
+    def test_extractive_fallback_formats_only_evidence_as_requested_points(self):
+        hit = {
+            **HITS[0],
+            "text": (
+                "The Ganga originates at Gaumukh in the Himalayas. It flows approximately 2,500 km to the Bay of Bengal. "
+                "Its major tributaries include the Alaknanda, Yamuna and Kosi. The basin supports agriculture and communities. "
+                "The river contains diverse aquatic ecosystems and species."
+            ),
+            "metadata": {**HITS[0]["metadata"], "knowledge_type": "STATIC"},
+        }
+        result = ExtractiveGenerator().generate(
+            "Explain the importance of the Ganga in five points.", [hit]
+        )
+        items = [line for line in result["answer"].splitlines() if line[:1].isdigit()]
+        self.assertEqual(result["mode"], "grounded")
+        self.assertEqual(len(items), 5)
+        self.assertTrue(all(line.split(". ", 1)[0] == str(index) for index, line in enumerate(items, 1)))
 
     def test_still_truncated_continuation_uses_extractive_fallback(self):
         self.client.chat.completions.create.side_effect = [
@@ -259,7 +337,7 @@ class GroqGeneratorTests(unittest.TestCase):
         )
         self.assertEqual(sdk_client.chat.completions.create.call_count, 1)
         self.assertEqual(result["answer"], "Grounded output.")
-        self.assertIn("LLM provider groq succeeded", "\n".join(captured.output))
+        self.assertIn("llm_usage provider=groq", "\n".join(captured.output))
 
     def test_api_key_is_not_logged_on_failure(self):
         secret = "test-groq-secret"
@@ -272,6 +350,43 @@ class GroqGeneratorTests(unittest.TestCase):
 
 
 class ProviderChainTests(unittest.TestCase):
+    def test_general_generation_uses_provider_chain_without_corpus_context(self):
+        groq_client, openrouter_client = Mock(), Mock()
+        groq_client.chat.completions.create.side_effect = TimeoutError("provider unavailable")
+        openrouter_client.chat.completions.create.return_value = fake_chat_response(
+            "Humans are social mammals who communicate through language and cooperate in groups."
+        )
+        with patch.dict(os.environ, {"GROQ_API_KEY": "fake-groq", "OPENROUTER_API_KEY": "fake-or"}):
+            chain = ProviderChainGenerator([
+                ("groq", DEFAULT_GROQ_MODEL), ("openrouter", "nvidia/nemotron-3.5-super-vl:free")
+            ])
+            with patch("brain.generator._hosted_generator", side_effect=[
+                GroqGenerator(DEFAULT_GROQ_MODEL, groq_client, propagate_failures=True),
+                OpenRouterGenerator("nvidia/nemotron-3.5-super-vl:free", openrouter_client, propagate_failures=True),
+            ]):
+                result = chain.generate_general("Tell me about humans.")
+
+        self.assertEqual(result["mode"], "general")
+        self.assertEqual(result["citations"], [])
+        self.assertIn("Humans are social mammals", result["answer"])
+        self.assertEqual(groq_client.chat.completions.create.call_count, 1)
+        self.assertEqual(openrouter_client.chat.completions.create.call_count, 1)
+        call = openrouter_client.chat.completions.create.call_args.kwargs
+        self.assertEqual(call["messages"][1]["content"], "Tell me about humans.")
+        self.assertEqual(call["max_completion_tokens"], 160)
+
+    def test_general_generation_with_no_credentials_returns_failure_not_extractive_answer(self):
+        from brain.generator import GENERAL_GENERATION_FAILURE
+
+        chain = ProviderChainGenerator([("groq", DEFAULT_GROQ_MODEL)])
+        with patch.dict(os.environ, {"GROQ_API_KEY": ""}), patch("brain.generator._hosted_generator") as factory:
+            factory.return_value = GroqGenerator(DEFAULT_GROQ_MODEL)
+            result = chain.generate_general("What is Mars?")
+
+        self.assertEqual(result["mode"], "general-unavailable")
+        self.assertEqual(result["answer"], GENERAL_GENERATION_FAILURE)
+        self.assertEqual(result["citations"], [])
+
     def test_groq_success_does_not_call_openrouter(self):
         groq_client = Mock()
         groq_client.chat.completions.create.return_value = fake_chat_response("Groq answer.")

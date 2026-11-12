@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import threading
 import time
 from typing import Callable, Any
@@ -43,6 +44,11 @@ class ConversationController:
         self.config = config or load_integration_config()
         self.brain_client = brain_client or BrainClient(self.config)
         self.water_quality_service = water_quality_service
+        from integration.external_sources import ExternalSourceService
+        from integration.response_cache import TTLCache
+
+        self.external_source_service = ExternalSourceService()
+        self._general_response_cache = TTLCache[dict](ttl_seconds=900)
         self.on_state_change = on_state_change
         self._lock = threading.Lock()
         self._current_state = ConversationState.IDLE
@@ -124,9 +130,77 @@ class ConversationController:
             gesture=GestureType.THINKING,
         ))
 
+        # CPCB intent and station names are matched against the English rule set.
+        # Normalize non-English text before classification, preserving the original
+        # question in the presentation and letting translation failures surface.
+        cpcb_query = question
+        english_cues = {
+            "what", "who", "where", "when", "why", "how", "is", "are", "was", "were",
+            "does", "do", "did", "can", "could", "tell", "explain", "about", "the", "of",
+            "current", "water", "quality", "level", "purpose", "created",
+        }
+        ascii_words = set(question.casefold().split())
+        contains_non_ascii = any(not char.isascii() for char in question)
+        likely_english = bool(ascii_words & english_cues)
+        if in_lang != "en" and (contains_non_ascii or not likely_english):
+            from brain.translator import translate_text
+
+            cpcb_query = translate_text(
+                question, in_lang, "en", allow_external=translation_consent
+            )
+
+        # Resolve simple identity and scope routes before either CPCB or RAG.
+        from brain.translator import translate_text
+        from integration.scope import classify_request, identity_response, scope_response
+
+        route = classify_request(cpcb_query)
+        if route and route != "general":
+            if route == "other-river-context":
+                from integration.supplementary_info import append_supplementary_summaries
+
+                summaries = self.external_source_service.search_summaries(
+                    cpcb_query, language=out_lang, max_sources=1
+                )
+                if summaries:
+                    answer, external_citations = append_supplementary_summaries(
+                        translate_text(
+                            "The project knowledge base focuses on the Ganga. The following is brief background context from an external, community-edited source:",
+                            "en", out_lang, allow_external=translation_consent,
+                        ),
+                        summaries,
+                    )
+                    citations = [CitationItem(**item) for item in external_citations]
+                else:
+                    answer = scope_response("unsupported-water-topic", cpcb_query)
+                    citations = []
+                pres = AvatarPresentation(
+                    state=ConversationState.SPEAKING, question=question, answer=answer,
+                    spoken_text=spoken_response(answer), mode="external-river-context" if citations else "unsupported-water-topic",
+                    citations=citations, input_language=in_lang, output_language=out_lang, language=out_lang,
+                    emotion=EmotionType.NEUTRAL, gesture=GestureType.EXPLAINING,
+                )
+                self._set_state(pres)
+                return pres
+            english_answer = identity_response(cpcb_query) if route == "identity" else scope_response(route, cpcb_query)
+            answer = translate_text(english_answer, "en", out_lang, allow_external=translation_consent)
+            pres = AvatarPresentation(
+                state=ConversationState.SPEAKING,
+                question=question,
+                answer=answer,
+                spoken_text=spoken_response(answer),
+                mode=route,
+                input_language=in_lang,
+                output_language=out_lang,
+                language=out_lang,
+                emotion=EmotionType.NEUTRAL,
+                gesture=GestureType.EXPLAINING,
+            )
+            self._set_state(pres)
+            return pres
+
         # Live CPCB readings are handled before Brain's current-information fallback.
-        if self.water_quality_service and is_water_quality_query(question):
-            water_request = parse_water_quality_request(question)
+        if self.water_quality_service and is_water_quality_query(cpcb_query):
+            water_request = parse_water_quality_request(cpcb_query)
             readings = []
             try:
                 readings = self.water_quality_service.readings(water_request)
@@ -173,6 +247,83 @@ class ConversationController:
             self._set_state(speaking_pres)
             return speaking_pres
 
+        if route == "general":
+            from brain.config import load_config
+            from brain.generator import GENERAL_GENERATION_FAILURE, build_generator
+
+            from brain.answer_format import detect_answer_format
+            from integration.response_cache import general_response_cache_key
+
+            cache_key = general_response_cache_key(
+                cpcb_query, out_lang, detect_answer_format(cpcb_query).cache_key
+            )
+            general_result = self._general_response_cache.get(cache_key) if cache_key else None
+            cache_hit = general_result is not None
+            if not cache_hit:
+                try:
+                    brain_config = load_config()
+                    provider_order = getattr(brain_config, "llm_provider_order", None)
+                    generator = (
+                        build_generator(brain_config.llm_provider, brain_config.llm_model)
+                        if provider_order is None
+                        else build_generator(brain_config.llm_provider, brain_config.llm_model, provider_order)
+                    )
+                    general_result = generator.generate_general(cpcb_query)
+                except Exception as error:
+                    logger.warning("[Integration] General response generation failed (%s).", type(error).__name__)
+                    general_result = {
+                        "answer": GENERAL_GENERATION_FAILURE,
+                        "citations": [],
+                        "mode": "general-unavailable",
+                    }
+
+            generated_answer = general_result.get("answer") if isinstance(general_result, dict) else None
+            if (
+                isinstance(general_result, dict)
+                and general_result.get("mode") == "general"
+                and isinstance(generated_answer, str)
+                and generated_answer.strip()
+            ):
+                english_answer = generated_answer.strip()
+                reminder = "My main purpose is to help you learn about the Ganga, Namami Gange, and river conservation."
+                if reminder.casefold() not in english_answer.casefold():
+                    english_answer = f"{english_answer}\n\n{reminder}"
+                mode = "general"
+                if not cache_hit and cache_key:
+                    self._general_response_cache.set(cache_key, {"answer": generated_answer.strip(), "mode": "general"})
+            else:
+                english_answer = GENERAL_GENERATION_FAILURE
+                mode = "general-unavailable"
+
+            # General output is generated in English and translated exactly once here.
+            answer = translate_text(english_answer, "en", out_lang, allow_external=translation_consent)
+            citations = []
+            wants_sources = bool(re.search(r"\b(source|sources|citation|citations|reference|references|verify|verified|additional context)\b", cpcb_query, re.IGNORECASE))
+            if mode == "general" and wants_sources:
+                from integration.supplementary_info import append_supplementary_summaries
+
+                summaries = self.external_source_service.search_summaries(cpcb_query, language=out_lang, max_sources=1)
+                answer, external_citations = append_supplementary_summaries(answer, summaries)
+                citations = [CitationItem(**item) for item in external_citations]
+            usage = general_result.get("usage", {}) if isinstance(general_result, dict) else {}
+            attempted_calls = usage.get("llm_calls", 0 if cache_hit else (1 if mode == "general" else 0))
+            logger.info("general_response_cache cache_hit=%s llm_calls=%s", cache_hit, attempted_calls)
+            pres = AvatarPresentation(
+                state=ConversationState.SPEAKING,
+                question=question,
+                answer=answer,
+                spoken_text=spoken_response(answer),
+                mode=mode,
+                citations=citations,
+                input_language=in_lang,
+                output_language=out_lang,
+                language=out_lang,
+                emotion=EmotionType.NEUTRAL,
+                gesture=GestureType.EXPLAINING,
+            )
+            self._set_state(pres)
+            return pres
+
         # Step 3: Query Brain API
         try:
             brain_resp = self.brain_client.ask(
@@ -208,14 +359,48 @@ class ConversationController:
             self._set_state(AvatarPresentation(state=ConversationState.IDLE, input_language=in_lang, output_language=out_lang, language=out_lang))
             return error_pres
 
+        citations = list(brain_resp.citations)
+        final_answer = brain_resp.answer
+        source_request = bool(re.search(
+            r"\b(source|sources|citation|citations|reference|references|verify|verified|additional context|compare|comparison|contrast|versus|vs\.?)\b",
+            cpcb_query, re.IGNORECASE,
+        ))
+        if brain_resp.mode == "insufficient-evidence":
+            from brain.answer_format import strip_answer_formatting_instructions
+            from brain.retriever import is_broad_ganga_query
+
+            overview_query = strip_answer_formatting_instructions(cpcb_query)
+            if is_broad_ganga_query(overview_query):
+                from integration.supplementary_info import append_supplementary_summaries
+
+                summaries = self.external_source_service.search_summaries(
+                    overview_query, language=out_lang, max_sources=1
+                )
+                if summaries:
+                    limitation = translate_text(
+                        "The verified project knowledge base did not provide enough evidence for a grounded answer. The following is separate external background:",
+                        "en", out_lang, allow_external=translation_consent,
+                    )
+                    final_answer, external_citations = append_supplementary_summaries(
+                        limitation, summaries
+                    )
+                    citations.extend(CitationItem(**item) for item in external_citations)
+                    logger.info("Using bounded external background after an insufficient broad Ganga retrieval.")
+        if brain_resp.mode == "grounded" and source_request:
+            from integration.supplementary_info import append_supplementary_summaries
+
+            summaries = self.external_source_service.search_summaries(cpcb_query, language=out_lang, max_sources=2)
+            final_answer, external_citations = append_supplementary_summaries(final_answer, summaries)
+            citations.extend(CitationItem(**item) for item in external_citations)
+
         # State 4: SPEAKING
         speaking_pres = AvatarPresentation(
             state=ConversationState.SPEAKING,
             question=question,
-            answer=brain_resp.answer,
-            spoken_text=spoken_response(brain_resp.answer),
+            answer=final_answer,
+            spoken_text=spoken_response(final_answer),
             mode=brain_resp.mode,
-            citations=brain_resp.citations,
+            citations=citations,
             input_language=brain_resp.input_language,
             output_language=brain_resp.output_language,
             language=brain_resp.output_language,

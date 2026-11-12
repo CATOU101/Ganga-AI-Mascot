@@ -14,7 +14,8 @@
     rel="stylesheet">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌊</text></svg>">
-  <link rel="stylesheet" href="style.css?v=scaled-up-v12" />
+  <script src="theme.js?v=theme-v1"></script>
+  <link rel="stylesheet" href="style.css?v=reading-library-v1" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -58,7 +59,7 @@
         </div>
       </div>
 
-      <!-- Right Header Actions & Independent Language Selectors -->
+      <!-- Right Header Actions and Multilingual Controls -->
       <div class="header-right-actions">
         <!-- Take Quiz Action -->
         <a id="quizNavButton" class="take-quiz-pill quiz-nav-button" href="#quiz" role="button" aria-pressed="false">
@@ -66,28 +67,9 @@
           <span>Take Quiz</span>
         </a>
 
-        <!-- INPUT LANGUAGE SELECTOR (Independent) -->
-        <div class="lang-selector-box" title="Select input language for speech & typing">
-          <label class="lang-label" for="inputLangSelect">Input Language <span class="lang-sub-label">(Select query language)</span></label>
-          <div class="select-wrapper">
-            <span class="lang-symbol-badge" aria-hidden="true">A/अ</span>
-            <select id="inputLangSelect" class="lang-dropdown" aria-label="Input Language">
-              <option value="en" selected>English</option>
-              <option value="auto">Auto Detect</option>
-              <option value="hi">हिंदी (Hindi)</option>
-              <option value="bn">বাংলা (Bengali)</option>
-              <option value="ta">தமிழ் (Tamil)</option>
-              <option value="te">తెలుగు (Telugu)</option>
-              <option value="kn">ಕನ್ನಡ (Kannada)</option>
-              <option value="ml">മലയാളം (Malayalam)</option>
-              <option value="gu">ગુજરાતી (Gujarati)</option>
-              <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-              <option value="or">ଓଡ଼ିଆ (Odia)</option>
-              <option value="mr">मराठी (Marathi)</option>
-              <option value="ur">اردو (Urdu)</option>
-            </select>
-            <span class="dropdown-chevron" aria-hidden="true">▾</span>
-          </div>
+        <div class="lang-selector-box input-detection-label" aria-label="Typed language is detected automatically">
+          <span class="lang-label">Typed language</span>
+          <span class="automatic-language-value">Auto detected</span>
         </div>
 
         <!-- OUTPUT LANGUAGE SELECTOR (Independent) -->
@@ -98,49 +80,48 @@
             <select id="outputLangSelect" class="lang-dropdown" aria-label="Output Language">
               <option value="en" selected>English</option>
               <option value="hi">हिंदी (Hindi)</option>
-              <option value="bn">বাংলা (Bengali)</option>
+              <option value="kn">ಕನ್ನಡ (Kannada)</option>
               <option value="ta">தமிழ் (Tamil)</option>
               <option value="te">తెలుగు (Telugu)</option>
-              <option value="kn">ಕನ್ನಡ (Kannada)</option>
-              <option value="ml">മലയാളം (Malayalam)</option>
-              <option value="gu">ગુજરાતી (Gujarati)</option>
-              <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-              <option value="or">ଓଡ଼ିଆ (Odia)</option>
+              <option value="bn">বাংলা (Bengali)</option>
               <option value="mr">मराठी (Marathi)</option>
+              <option value="gu">ગુજરાતી (Gujarati)</option>
+              <option value="ml">മലയാളം (Malayalam)</option>
+              <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
               <option value="ur">اردو (Urdu)</option>
+              <option value="or">ଓଡ଼ିଆ (Odia)</option>
+              <option value="as">অসমীয়া (Assamese)</option>
             </select>
             <span class="dropdown-chevron" aria-hidden="true">▾</span>
           </div>
         </div>
 
-        <!-- Hidden Compatibility Lang Button Groups for Test Suites & Legacy Selectors -->
-        <div id="inputLangSelector" class="lang-selector-group sr-only" aria-hidden="true">
-          <div class="lang-selector">
-            <button id="inputLangEn" class="lang-btn active" data-lang="en">English</button>
-            <button id="inputLangHi" class="lang-btn" data-lang="hi">हिंदी</button>
-            <button id="inputLangKn" class="lang-btn" data-lang="kn">ಕನ್ನಡ</button>
-            <button id="inputLangTa" class="lang-btn" data-lang="ta">தமிழ்</button>
-          </div>
-        </div>
-        <div id="outputLangSelector" class="lang-selector-group sr-only" aria-hidden="true">
-          <div class="lang-selector">
-            <button id="outputLangEn" class="lang-btn active" data-lang="en">English</button>
-            <button id="outputLangHi" class="lang-btn" data-lang="hi">हिंदी</button>
-            <button id="outputLangKn" class="lang-btn" data-lang="kn">ಕನ್ನಡ</button>
-            <button id="outputLangTa" class="lang-btn" data-lang="ta">தமிழ்</button>
+        <div class="lang-selector-box" title="Select the language spoken into the microphone">
+          <label class="lang-label" for="voiceInputLangSelect">Voice input</label>
+          <div class="select-wrapper">
+            <span class="lang-symbol-badge" aria-hidden="true">🎙</span>
+            <select id="voiceInputLangSelect" class="lang-dropdown" aria-label="Voice input language">
+              <option value="en" selected>English</option>
+              <option value="hi">हिंदी (Hindi)</option>
+              <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              <option value="ta">தமிழ் (Tamil)</option>
+              <option value="te">తెలుగు (Telugu)</option>
+              <option value="bn">বাংলা (Bengali)</option>
+              <option value="mr">मराठी (Marathi)</option>
+              <option value="gu">ગુજરાતી (Gujarati)</option>
+              <option value="ml">മലയാളം (Malayalam)</option>
+              <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+              <option value="ur">اردو (Urdu)</option>
+              <option value="or">ଓଡ଼ିଆ (Odia)</option>
+              <option value="as">অসমীয়া (Assamese)</option>
+            </select>
+            <span class="dropdown-chevron" aria-hidden="true">▾</span>
           </div>
         </div>
 
-        <!-- Notification & Settings Pill Buttons -->
-        <button type="button" class="icon-circle-btn" id="notifBtn" title="Ganga Conservation Alerts"
-          aria-label="Alerts">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-        </button>
-        <button type="button" class="icon-circle-btn" id="themeToggleBtn" title="Light / Soft Contrast Mode"
-          aria-label="Toggle visual theme">
+        <!-- Theme toggle switches between light and dark appearance. -->
+        <button type="button" class="icon-circle-btn" id="themeToggleBtn" data-theme-toggle title="Switch to dark mode"
+          aria-label="Switch to dark mode" aria-pressed="false">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
@@ -152,21 +133,13 @@
     <div class="dashboard-body">
       <!-- Left Vertical Sidebar Navigation -->
       <aside class="sidebar-nav" aria-label="Main Navigation">
-        <button type="button" class="nav-item active" data-nav="home" title="Dashboard Home">
+        <button type="button" class="nav-item active" data-nav="home" title="Home" aria-current="page">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
             </svg>
           </span>
           <span class="nav-text">Home</span>
-        </button>
-        <button type="button" class="nav-item" data-nav="chat" title="Interactive Chat">
-          <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
-            </svg>
-          </span>
-          <span class="nav-text">Chat</span>
         </button>
         <button type="button" class="nav-item" data-nav="resources" title="Ganga Knowledge Base">
           <span class="nav-icon" aria-hidden="true">
@@ -177,15 +150,6 @@
           </span>
           <span class="nav-text">Ganga Resources</span>
         </button>
-        <button type="button" class="nav-item" data-nav="initiatives" title="Namami Gange Initiatives">
-          <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path
-                d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z" />
-            </svg>
-          </span>
-          <span class="nav-text">Initiatives</span>
-        </button>
         <button type="button" class="nav-item" data-nav="awareness" title="Water Quality & Conservation">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -193,15 +157,6 @@
             </svg>
           </span>
           <span class="nav-text">Awareness</span>
-        </button>
-        <button type="button" class="nav-item" data-nav="about" title="Project Information">
-          <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-            </svg>
-          </span>
-          <span class="nav-text">About</span>
         </button>
         <button type="button" class="nav-item" data-nav="settings" title="Preferences">
           <span class="nav-icon" aria-hidden="true">
@@ -216,6 +171,7 @@
 
       <!-- Main Split Workspace -->
       <main class="main-workspace">
+        <div id="homeView" class="home-view" data-app-view="home">
         <!-- LEFT PANEL: 3D AVATAR (Fixed Height Stage) -->
         <section class="avatar-card-container" aria-label="Chacha Chaudhary 3D Avatar Stage">
           <div class="avatar-stage-wrapper">
@@ -294,7 +250,7 @@
             </div>
             <div class="chat-header-tags">
               <span id="modeBadge" class="mode-pill mode-grounded">Verified RAG</span>
-              <span id="responseLangBadge" class="lang-tag-pill">In: EN | Out: EN</span>
+              <span id="responseLangBadge" class="lang-tag-pill">Typed: Auto | Output: EN</span>
             </div>
           </div>
 
@@ -334,9 +290,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Fallback Hidden Answer Text Container for Legacy Automation Compatibility -->
-          <div id="answerText" class="sr-only" aria-hidden="true"></div>
 
           <!-- Live Thinking / Processing Indicator -->
           <div id="thinkingWave" class="thinking-loader-row" style="display: none;">
@@ -385,8 +338,98 @@
                 </svg>
               </button>
             </form>
+            <div id="multilingualKeyboardDrawer" class="multilingual-keyboard-drawer" hidden aria-hidden="true">
+              <div id="virtualKeyboardContainer" class="virtual-keyboard-mount"></div>
+            </div>
             <div id="voiceStatusMsg" class="voice-status-bar" aria-live="polite"></div>
           </div>
+        </section>
+
+        </div>
+
+        <section id="resourcesView" class="app-page-view resources-page" data-app-view="resources" aria-labelledby="resourcesTitle" hidden>
+          <header class="app-page-heading library-heading">
+            <div>
+              <p class="app-page-eyebrow">THE GANGA KNOWLEDGE LIBRARY</p>
+              <h2 id="resourcesTitle">Ganga Resources</h2>
+              <p>Browse approved reports and source sections from the Ganga River Basin collection.</p>
+            </div>
+            <div id="resourceCounts" class="resource-counts" role="status" aria-live="polite"></div>
+          </header>
+          <section id="resourceLibraryView" aria-label="Browse Ganga resources">
+            <div class="library-search-row">
+              <label class="sr-only" for="resourceSearchInput">Search titles, topics or source text</label>
+              <input id="resourceSearchInput" class="resource-search-input" type="search" placeholder="Search the library by topic, title or phrase" autocomplete="off">
+              <p id="resourceStatus" class="resource-status" role="status" aria-live="polite">Loading approved documents…</p>
+            </div>
+            <nav id="resourceCategories" class="resource-category-list" aria-label="Filter resources by topic"></nav>
+            <div id="resourceDocumentList" class="resource-card-grid"></div>
+            <button id="resourceLoadMore" class="resource-load-more" type="button" hidden>Show more documents</button>
+          </section>
+          <section id="resourceDocumentView" class="resource-document-view" aria-label="Selected document" hidden>
+            <button id="resourceBackButton" class="resource-back-button" type="button">← Back to library</button>
+            <header class="resource-document-header">
+              <p id="resourceDocumentMeta" class="resource-document-meta"></p>
+              <h3 id="resourceDocumentTitle"></h3>
+              <p id="resourceDocumentDescription" class="resource-description"></p>
+            </header>
+            <div id="resourceSectionList" class="resource-accordion-list"></div>
+          </section>
+        </section>
+
+        <section id="awarenessView" class="app-page-view awareness-page" data-app-view="awareness" aria-labelledby="awarenessTitle" hidden>
+          <header class="app-page-heading awareness-heading">
+            <div>
+              <p class="app-page-eyebrow">LEARN FROM APPROVED SOURCES</p>
+              <h2 id="awarenessTitle">Ganga Awareness</h2>
+              <p>Short source-backed readings and a knowledge check, drawn from the approved project collection.</p>
+            </div>
+          </header>
+          <nav id="awarenessTopics" class="awareness-topic-grid" aria-label="Awareness topics">
+            <button type="button" class="awareness-topic active" data-awareness-topic="ganga" aria-pressed="true"><span>01</span><strong>Know Your Ganga</strong><small>Origins, course and basin</small></button>
+            <button type="button" class="awareness-topic" data-awareness-topic="pollution" aria-pressed="false"><span>02</span><strong>Pollution Awareness</strong><small>How pollutants enter rivers</small></button>
+            <button type="button" class="awareness-topic" data-awareness-topic="protect" aria-pressed="false"><span>03</span><strong>Protect the River</strong><small>Restoration actions in the plans</small></button>
+            <button type="button" class="awareness-topic" data-awareness-topic="myth" aria-pressed="false"><span>04</span><strong>Myth vs Fact</strong><small>Check a claim against a source</small></button>
+            <a class="awareness-topic awareness-quiz-link" href="#quiz"><span>05</span><strong>Test Your Knowledge</strong><small>Open the existing Ganga quiz</small></a>
+          </nav>
+          <section id="awarenessContent" class="awareness-content" aria-live="polite">
+            <p id="awarenessStatus" class="resource-status" role="status">Choose a topic to explore source-backed information.</p>
+            <div id="awarenessCards" class="awareness-card-grid"></div>
+          </section>
+        </section>
+
+        <section id="settingsView" class="app-page-view settings-page" data-app-view="settings" aria-labelledby="settingsTitle" hidden>
+          <header class="app-page-heading">
+            <div><p class="app-page-eyebrow">YOUR PREFERENCES</p><h2 id="settingsTitle">Settings</h2><p>These preferences are saved on this device and shared with the controls in the header.</p></div>
+          </header>
+          <div class="settings-card-grid">
+            <section class="settings-card" aria-labelledby="settingsThemeTitle">
+              <div><h3 id="settingsThemeTitle">Appearance</h3><p>Choose light or dark appearance. Your selection is saved across visits.</p></div>
+              <button type="button" class="settings-theme-button" id="settingsThemeToggleBtn" data-theme-toggle aria-label="Switch theme"><span class="settings-theme-icon" aria-hidden="true">◐</span><span class="settings-theme-label">Change theme</span></button>
+            </section>
+            <section class="settings-card">
+              <div><h3><label for="settingsOutputLangSelect">Default response language</label></h3><p>Sets the language used for Chacha's answers and speech.</p></div>
+              <select id="settingsOutputLangSelect" class="settings-select" aria-label="Default response language">
+                <option value="en">English</option><option value="hi">हिंदी (Hindi)</option><option value="kn">ಕನ್ನಡ (Kannada)</option><option value="ta">தமிழ் (Tamil)</option><option value="te">తెలుగు (Telugu)</option><option value="bn">বাংলা (Bengali)</option><option value="mr">मराठी (Marathi)</option><option value="gu">ગુજરાતી (Gujarati)</option><option value="ml">മലയാളം (Malayalam)</option><option value="pa">ਪੰਜਾਬੀ (Punjabi)</option><option value="ur">اردو (Urdu)</option><option value="or">ଓଡ଼ିଆ (Odia)</option><option value="as">অসমীয়া (Assamese)</option>
+              </select>
+            </section>
+            <section class="settings-card">
+              <div><h3><label for="settingsVoiceInputLangSelect">Voice input language</label></h3><p>Choose the language spoken into the microphone. Available recognition depends on the configured speech provider.</p></div>
+              <select id="settingsVoiceInputLangSelect" class="settings-select" aria-label="Voice input language">
+                <option value="en">English</option><option value="hi">हिंदी (Hindi)</option><option value="kn">ಕನ್ನಡ (Kannada)</option><option value="ta">தமிழ் (Tamil)</option><option value="te">తెలుగు (Telugu)</option><option value="bn">বাংলা (Bengali)</option><option value="mr">मराठी (Marathi)</option><option value="gu">ગુજરાતી (Gujarati)</option><option value="ml">മലയാളം (Malayalam)</option><option value="pa">ਪੰਜਾਬੀ (Punjabi)</option><option value="ur">اردو (Urdu)</option><option value="or">ଓଡ଼ିଆ (Odia)</option><option value="as">অসমীয়া (Assamese)</option>
+              </select>
+            </section>
+            <section class="settings-card settings-accessibility-card"><div><h3>Accessibility</h3><p>Keyboard navigation, visible focus indicators, semantic labels and the multilingual on-screen keyboard are available throughout the application.</p></div></section>
+          </div>
+        </section>
+
+        <section id="aboutView" class="app-page-view about-page" data-app-view="about" aria-labelledby="aboutTitle" hidden>
+          <header class="app-page-heading"><div><p class="app-page-eyebrow">PROJECT INFORMATION</p><h2 id="aboutTitle">About Ganga AI Mascot</h2></div></header>
+          <article class="about-card">
+            <p><strong>Project ID:</strong> PRJ_316</p>
+            <p><strong>Official title:</strong> Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange.</p>
+            <p>The project brings together the Chacha Chaudhary digital avatar, a retrieval-augmented knowledge service, speech features and multilingual support.</p>
+          </article>
         </section>
 
         <!-- Ganga Knowledge Quiz Overlay View -->
@@ -417,36 +460,23 @@
       </main>
     </div>
 
-    <!-- Floating / Docked Multilingual Virtual Keyboard Drawer -->
-    <div id="multilingualKeyboardDrawer" class="multilingual-keyboard-drawer" style="display: none;" aria-hidden="true">
-      <div class="keyboard-drawer-inner">
-        <div class="keyboard-drawer-header">
-          <div class="keyboard-brand">
-            <span class="keyboard-badge-icon" aria-hidden="true">⌨️</span>
-            <span class="keyboard-heading">Multilingual Virtual Keyboard</span>
-          </div>
-          <div class="keyboard-header-actions">
-            <label class="keyboard-switch-label" title="Enable/Disable Virtual Keyboard Input">
-              <span class="switch-text">On-Screen Keyboard</span>
-              <input type="checkbox" id="keyboardToggleSwitch" checked />
-              <span class="switch-slider"></span>
-            </label>
-            <button type="button" id="keyboardCloseBtn" class="keyboard-close-pill" title="Close Keyboard"
-              aria-label="Close on-screen keyboard">✕</button>
-          </div>
-        </div>
-        <!-- Virtual Keyboard Mount Point -->
-        <div id="virtualKeyboardContainer" class="virtual-keyboard-mount"></div>
-      </div>
-    </div>
+    <footer class="app-footer"><span>Ganga AI Mascot · Chacha Chaudhary</span><a href="#about" id="aboutFooterLink">About</a></footer>
+
   </div>
 
-  <script src="keyboard.js?v=en-default-v3"></script>
+  <script src="keyboard.js?v=all-indic-languages-v1"></script>
   <script src="mascot.js?v=scaled-up-v12"></script>
   <script src="cpcb-tables.js"></script>
+  <script src="chat-response.js"></script>
+  <script src="answer-format.js"></script>
   <script src="quiz-data.js"></script>
   <script src="quiz.js"></script>
-  <script src="app.js?v=adv-anim-v11"></script>
+  <script src="content-cleaner.js?v=clean-text-v1"></script>
+  <script src="resources.js?v=library-v1"></script>
+  <script src="awareness.js?v=lessons-v1"></script>
+  <script src="navigation.js?v=retry-active-v2"></script>
+  <script src="browser-speech.js"></script>
+  <script src="app.js?v=theme-cleanup-v12"></script>
 </body>
 
 </html>

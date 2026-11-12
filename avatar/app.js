@@ -3,8 +3,8 @@
  * Redesigned Premium White-Themed Dashboard & Multilingual Interaction
  * 
  * Pipeline:
- * - Independent Input Language (Auto Detect, Hindi, English, Bengali, Tamil, Telugu, Kannada, Malayalam, Gujarati, Punjabi, Odia, Marathi)
- * - Independent Output Language (Controls Brain translation & EdgeTTS neural voice)
+ * - Automatic typed-input language detection and selectable output language
+ * - Output languages: English and 12 Indian languages
  * - Multilingual Virtual On-Screen Keyboard with native script layouts
  * - Chacha Chaudhary 3D Avatar (28 Skeletal Animations, Pedestal, Automatic States & Lip-Sync)
  * - Modern AI Chat Stream with User bubbles, Assistant cards, Waveform Audio Player, and Verified Sources
@@ -23,8 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const keyboardToggleBtn = document.getElementById('keyboardToggleBtn');
   const virtualKeyboardContainer = document.getElementById('virtualKeyboardContainer');
 
-  const inputLangSelect = document.getElementById('inputLangSelect');
   const outputLangSelect = document.getElementById('outputLangSelect');
+  const voiceInputLangSelect = document.getElementById('voiceInputLangSelect');
+  const settingsOutputLangSelect = document.getElementById('settingsOutputLangSelect');
+  const settingsVoiceInputLangSelect = document.getElementById('settingsVoiceInputLangSelect');
   const responseLangBadge = document.getElementById('responseLangBadge');
   const modeBadge = document.getElementById('modeBadge');
   const thinkingWave = document.getElementById('thinkingWave');
@@ -38,18 +40,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const statePillThinking = document.getElementById('statePillThinking');
   const statePillSpeaking = document.getElementById('statePillSpeaking');
 
-  // Quiz & Modals
+  // Quiz and page views
   const chatView = document.getElementById('chatView');
   const quizView = document.getElementById('quiz');
   const quizNavButton = document.getElementById('quizNavButton');
-  const infoModalOverlay = document.getElementById('infoModalOverlay');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalContent = document.getElementById('modalContent');
-  const modalCloseBtn = document.getElementById('modalCloseBtn');
 
   // 3. Application State (Default: English)
-  let currentInputLanguage = 'en';
+  const supportedOutputLanguages = new Set(['en', 'hi', 'kn', 'ta', 'te', 'bn', 'mr', 'gu', 'ml', 'pa', 'ur', 'or', 'as']);
   let currentOutputLanguage = 'en';
+  let currentVoiceInputLanguage = 'en';
+  let detectedTextLanguage = 'auto';
+  try {
+    const savedOutputLanguage = localStorage.getItem('gangaOutputLanguage');
+    if (supportedOutputLanguages.has(savedOutputLanguage)) currentOutputLanguage = savedOutputLanguage;
+  } catch (_) {}
+  try {
+    const savedVoiceLanguage = localStorage.getItem('gangaVoiceInputLanguage');
+    if (supportedOutputLanguages.has(savedVoiceLanguage)) currentVoiceInputLanguage = savedVoiceLanguage;
+  } catch (_) {}
   let currentState = 'IDLE';
 
   // Audio Playback & Synchronization State
@@ -57,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeAudioPlayerBar = null;
   let lipSyncAnimationId = null;
   let lastAudioUrl = null;
+  let speechAttemptId = 0;
 
   // Microphone Recording State (MediaRecorder)
   let mediaRecorder = null;
@@ -68,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.MultilingualKeyboard && virtualKeyboardContainer) {
     virtualKeyboard = new window.MultilingualKeyboard(questionInput, {
       container: virtualKeyboardContainer,
+      drawer: document.getElementById('multilingualKeyboardDrawer'),
+      toggleButton: keyboardToggleBtn,
       defaultLanguage: 'en',
       onEnter: () => {
         if (askForm) {
@@ -87,68 +98,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 5. Input Placeholders map
-  const placeholders = {
-    auto: 'Type your question here or speak (अपना प्रश्न यहाँ लिखें या बोलें)...',
-    hi: 'गंगा नदी या नमामि गंगे से जुड़ा प्रश्न पूछें...',
-    en: 'Type your question about Ganga, GRBMP, or water quality...',
-    bn: 'গঙ্গা নদী বা দূষণ নিয়ন্ত্রণ সম্পর্কে আপনার প্রশ্ন লিখুন...',
-    ta: 'கங்கை நதி அல்லது நமாமி கங்கை குறித்த உங்கள் கேள்வியைத் தட்டச்சு செய்க...',
-    te: 'గంగా నది లేదా నమామి గంగే గురించి మీ ప్రశ్నను అడగండి...',
-    kn: 'ಗಂಗಾ ನದಿ ಅಥವಾ ನಮಾಮಿ ಗಂಗೆ ಕುರಿತು ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ...',
-    ml: 'ഗംഗാ നദിയെക്കുറിച്ചുള്ള ചോദ്യം ടൈപ്പ് ചെയ്യുക...',
-    gu: 'ગંગા નદી અથવા જળ સંરક્ષણ વિશે તમારો પ્રશ્ન પૂછો...',
-    pa: 'ਗੰਗਾ ਨਦੀ ਬਾਰੇ ਆਪਣਾ ਸਵਾਲ ਪੁੱਛੋ...',
-    or: 'ଗଙ୍ଗା ନଦୀ ସମ୍ପର୍କରେ ଆପଣଙ୍କ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ...',
-    mr: 'गंगा नदी किंवा नमामी गंगे संदर्भात प्रश्न विचारा...'
-  };
-
-  // 6. Independent Language Selectors
-  if (inputLangSelect) {
-    inputLangSelect.addEventListener('change', () => {
-      currentInputLanguage = inputLangSelect.value;
-      if (questionInput) {
-        questionInput.placeholder = placeholders[currentInputLanguage] || placeholders.en;
-      }
-      // If user chose a specific script, also synchronize virtual keyboard
-      if (virtualKeyboard && currentInputLanguage !== 'auto' && virtualKeyboard.layouts[currentInputLanguage]) {
-        virtualKeyboard.setLanguage(currentInputLanguage);
-      }
-      updateLangBadge();
-    });
-  }
-
-  if (outputLangSelect) {
-    outputLangSelect.addEventListener('change', () => {
-      currentOutputLanguage = outputLangSelect.value;
+  // Typed queries are script-detected by the backend; the keyboard locale is independent.
+  const outputLanguageControls = [outputLangSelect, settingsOutputLangSelect].filter(Boolean);
+  outputLanguageControls.forEach(control => {
+    control.value = currentOutputLanguage;
+    control.addEventListener('change', () => {
+      currentOutputLanguage = supportedOutputLanguages.has(control.value) ? control.value : 'en';
+      outputLanguageControls.forEach(item => { item.value = currentOutputLanguage; });
+      try { localStorage.setItem('gangaOutputLanguage', currentOutputLanguage); } catch (_) {}
       updateLangBadge();
       updateChachaGreeting();
     });
-  }
+  });
 
-  // Support legacy / automated button group selectors if present
-  const inputLangBtns = document.querySelectorAll('#inputLangSelector .lang-btn');
-  const outputLangBtns = document.querySelectorAll('#outputLangSelector .lang-btn');
-  inputLangBtns.forEach((btn) => btn.addEventListener('click', () => {
-    currentInputLanguage = btn.dataset.lang;
-    if (inputLangSelect) inputLangSelect.value = btn.dataset.lang;
-    inputLangBtns.forEach((b) => b.classList.toggle('active', b.dataset.lang === btn.dataset.lang));
-    if (questionInput) questionInput.placeholder = placeholders[currentInputLanguage] || placeholders.en;
-    updateLangBadge();
-  }));
-  outputLangBtns.forEach((btn) => btn.addEventListener('click', () => {
-    currentOutputLanguage = btn.dataset.lang;
-    if (outputLangSelect) outputLangSelect.value = btn.dataset.lang;
-    outputLangBtns.forEach((b) => b.classList.toggle('active', b.dataset.lang === btn.dataset.lang));
-    updateLangBadge();
-    updateChachaGreeting();
-  }));
+  const voiceLanguageControls = [voiceInputLangSelect, settingsVoiceInputLangSelect].filter(Boolean);
+  voiceLanguageControls.forEach(control => {
+    control.value = currentVoiceInputLanguage;
+    control.addEventListener('change', () => {
+      currentVoiceInputLanguage = supportedOutputLanguages.has(control.value) ? control.value : 'en';
+      voiceLanguageControls.forEach(item => { item.value = currentVoiceInputLanguage; });
+      try { localStorage.setItem('gangaVoiceInputLanguage', currentVoiceInputLanguage); } catch (_) {}
+    });
+  });
 
   function updateLangBadge() {
     if (responseLangBadge) {
-      const inLabel = currentInputLanguage.toUpperCase();
       const outLabel = currentOutputLanguage.toUpperCase();
-      responseLangBadge.textContent = `In: ${inLabel} | Out: ${outLabel}`;
+      responseLangBadge.textContent = `Typed: ${detectedTextLanguage.toUpperCase()} | Output: ${outLabel}`;
     }
   }
 
@@ -157,15 +133,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const greetings = {
         hi: "नमस्ते! मैं चाचा चौधरी हूँ। गंगा नदी व संरक्षण के बारे में सही जानकारी के लिए मुझसे पूछें!",
         en: "Namaste! I am Chacha Chaudhary. Ask me anything about River Ganga, conservation, and water quality!",
-        bn: "নমস্কার! আমি চাচা চৌধুরী। গঙ্গা নদী এবং সংরক্ষণ সম্পর্কিত তথ্যের জন্য আমাকে জিজ্ঞাসা করুন!",
         ta: "வணக்கம்! நான் சாச்சா சவுத்ரி. கங்கை நதி மற்றும் பாதுகாப்பு பற்றிய விவரங்களுக்கு என்னைக் கேளுங்கள்!",
-        te: "నమస్కారం! నేను చాచా చౌదరి. గంగా నది పరిరక్షణ గురించి సమాచారం కోసం నన్ను అడగండి!",
         kn: "ನಮಸ್ಕಾರ! ನಾನು ಚಾಚಾ ಚೌಧರಿ. ಗಂಗಾ ನದಿ ಸಂರಕ್ಷಣೆ ಕುರಿತು ಮಾಹಿತಿಗಾಗಿ ನನ್ನನ್ನು ಕೇಳಿ!",
-        ml: "നമസ്കാരം! ഞാൻ ചാച്ചാ ചൗധരി. ഗംഗാ നദീ സംരക്ഷണത്തെക്കുറിച്ചുള്ള ചോദ്യങ്ങൾക്ക് എന്നോട് ചോദിക്കൂ!",
-        gu: "નમસ્તે! હું ચાચા ચૌધરી છું. ગંગા નદીના સંરક્ષણ માટે મને કોઈ પણ પ્રશ્ન પૂછો!",
-        pa: "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਚਾਚਾ ਚੌਧਰੀ ਹਾਂ। ਗੰਗਾ ਨਦੀ ਬਾਰੇ ਜਾਣਕਾਰੀ ਲਈ ਮੈਨੂੰ ਪੁੱਛੋ!",
-        or: "ନମସ୍କାର! ମୁଁ ଚାଚା ଚୌଧୁରୀ। ଗଙ୍ଗା ନଦୀ ସଂରକ୍ଷଣ ସମ୍ପର୍କରେ ମୋତେ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ!",
-        mr: "नमस्ते! मी चाचा चौधरी. गंगा नदी संरक्षणाविषयी माहितीसाठी मला प्रश्न विचारा!"
+        te: "నమస్కారం! గంగా నది మరియు పరిరక్షణ గురించి నన్ను అడగండి!",
+        bn: "নমস্কার! গঙ্গা নদী ও সংরক্ষণ সম্পর্কে আমাকে জিজ্ঞাসা করুন!",
+        mr: "नमस्कार! गंगा नदी आणि संवर्धनाबद्दल मला विचारा!",
+        gu: "નમસ્તે! ગંગા નદી અને સંરક્ષણ વિશે મને પૂછો!",
+        ml: "നമസ്കാരം! ഗംഗാ നദിയെയും സംരക്ഷണത്തെയും കുറിച്ച് ചോദിക്കൂ!",
+        pa: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਗੰਗਾ ਨਦੀ ਅਤੇ ਸੰਭਾਲ ਬਾਰੇ ਮੈਨੂੰ ਪੁੱਛੋ!",
+        ur: "السلام علیکم! دریائے گنگا اور اس کے تحفظ کے بارے میں پوچھیں!",
+        or: "ନମସ୍କାର! ଗଙ୍ଗା ନଦୀ ଓ ସଂରକ୍ଷଣ ବିଷୟରେ ପଚାରନ୍ତୁ!",
+        as: "নমস্কাৰ! গংগা নদী আৰু সংৰক্ষণৰ বিষয়ে সুধক!",
       };
       mascotSpeechBubble.textContent = greetings[currentOutputLanguage] || greetings.en;
     }
@@ -262,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 9. Main Question Pipeline (Question -> User Bubble -> RAG Brain -> Assistant Card)
-  async function processQuestion(question) {
+  async function processQuestion(question, inputLanguage = null) {
     if (currentState === 'SPEAKING' || currentState === 'THINKING') {
       stopCurrentSpeech();
     }
@@ -286,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           question: question,
-          input_language: currentInputLanguage === 'auto' ? null : currentInputLanguage,
+          input_language: inputLanguage,
           output_language: currentOutputLanguage
         })
       });
@@ -302,6 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const t_response = performance.now();
       const data = await response.json();
+      detectedTextLanguage = data.input_language || 'auto';
+      updateLangBadge();
 
       // Replace Loading card with full formatted Assistant Message Card
       replaceLoadingWithResponse(loadingCardId, data, t_start, t_response);
@@ -380,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tables = data.tables || [];
 
     // Format text with clean bullet list if multiple sentences or points
-    const formattedHtml = formatAnswerHtml(answer, tables);
+    const formattedHtml = formatAnswerHtml(answer);
 
     // Audio payload check
     let audioSrc = null;
@@ -416,6 +396,11 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
+    // Structured CPCB data belongs to the visible assistant message.
+    if (window.appendAssistantTables) {
+      window.appendAssistantTables(cardRow, tables, document, window.renderCpcbTables);
+    }
+
     // Attach Citations Toggle Listener
     const accordion = cardRow.querySelector('.sources-accordion');
     if (accordion) {
@@ -435,24 +420,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Synchronize 3D Mascot State
     mascot.setState('SPEAKING', { emotion: emotion, gesture: gesture });
 
-    // Synchronize legacy answerText container if present
-    const answerTextEl = document.getElementById('answerText');
-    if (answerTextEl) {
-      if (Array.isArray(tables) && tables.length > 0) {
-        answerTextEl.replaceChildren();
-        const summary = document.createElement('p');
-        summary.className = 'answer-summary';
-        summary.textContent = answer;
-        answerTextEl.appendChild(summary);
-        if (window.renderCpcbTables) window.renderCpcbTables(answerTextEl, tables, document);
-      } else {
-        answerTextEl.textContent = answer;
-      }
-    }
-
     // Autoplay Speech & Rhubarb Lip-Sync
     if (audioSrc) {
       playProductionSpeech(data, audioSrc, data.spoken_text || answer, gesture, t_start, t_response, cardRow);
+    } else if (voiceStatusMsg && data.spoken_text) {
+      playProductionSpeech(data, null, data.spoken_text || answer, gesture, t_start, t_response, cardRow);
     }
 
     scrollToBottom();
@@ -466,12 +438,12 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="avatar-thumb-box">
         <img src="08_Final/validation_renders/Face_SadConfused.png" alt="Chacha Confused" class="chacha-thumb-img" onerror="this.onerror=null;this.src='08_Final/validation_renders/Face_Happy.png';" />
       </div>
-      <div class="message-bubble assistant-card" style="border-color: #FCA5A5;">
+      <div class="message-bubble assistant-card" style="border-color: var(--danger-border);">
         <div class="bubble-header-bar">
-          <span class="assistant-name" style="color: #DC2626;">Chacha Chaudhary</span>
-          <span class="verified-tag" style="background-color: #FEF2F2; color: #DC2626;">Notice</span>
+          <span class="assistant-name" style="color: var(--text-danger);">Chacha Chaudhary</span>
+          <span class="verified-tag" style="background-color: var(--danger-bg); color: var(--text-danger);">Notice</span>
         </div>
-        <div class="bubble-content-text" style="color: #991B1B;">
+        <div class="bubble-content-text" style="color: var(--text-danger);">
           ${escapeHtml(errorMessage)}
         </div>
       </div>
@@ -479,22 +451,10 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollToBottom();
   }
 
-  function formatAnswerHtml(answer, tables = []) {
-    let clean = escapeHtml(answer);
-    
-    // Convert numbered lists or bullet sentences to stylized clean list items
-    const lines = clean.split('\n').filter(l => l.trim().length > 0);
-    if (lines.length > 2) {
-      let html = `<p>${lines[0]}</p><ul>`;
-      for (let i = 1; i < lines.length; i++) {
-        let line = lines[i].replace(/^[-•*]|\d+\.\s*/, '').trim();
-        html += `<li>${line}</li>`;
-      }
-      html += `</ul>`;
-      return html;
-    } else {
-      return `<p>${clean}</p>`;
-    }
+  function formatAnswerHtml(answer) {
+    return window.formatAssistantAnswer
+      ? window.formatAssistantAnswer(answer)
+      : `<p>${escapeHtml(answer).replace(/\n/g, '<br>')}</p>`;
   }
 
   function renderCitationsAccordion(citations) {
@@ -505,17 +465,21 @@ document.addEventListener('DOMContentLoaded', () => {
     return `
       <div class="sources-accordion">
         <button type="button" class="sources-toggle-btn" aria-expanded="false">
-          <span>📚 Verified Sources (${citations.length})</span>
+          <span>📚 ${citations.some((item) => item.source_type === 'external') ? 'Sources' : 'Verified Sources'} (${citations.length})</span>
           <span class="sources-chevron" aria-hidden="true">▾</span>
         </button>
         <div class="sources-list">
-          ${citations.map(c => `
+          ${citations.map(c => {
+            const externalUrl = c.source_type === 'external' && typeof c.url === 'string' && /^https:\/\/[a-z0-9.-]+\.wikipedia\.org\//i.test(c.url);
+            return `
             <div class="source-item-card">
-              <span class="source-pdf-badge">PDF</span>
-              <span class="source-title-text">${escapeHtml(c.source || c.file_name || 'GRBMP Document')}</span>
+              <span class="source-pdf-badge">${c.source_type === 'external' ? 'WEB' : 'PDF'}</span>
+              ${externalUrl ? `<a class="source-title-text" href="${escapeHtml(c.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(c.source || 'External source')}</a>` : `<span class="source-title-text">${escapeHtml(c.source || c.file_name || 'GRBMP Document')}</span>`}
               <span class="source-meta-text">${c.page ? `p. ${c.page}` : ''}</span>
+              ${c.license ? `<span class="source-meta-text">${escapeHtml(c.license)}</span>` : ''}
             </div>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
       </div>
     `;
@@ -585,9 +549,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 11. Production Audio & Real-Time Dual-Stage Lip-Sync Player
   function playProductionSpeech(data, audioSrc, fallbackText, gesture = 'explaining', t_start = null, t_response = null, cardRow = null) {
     stopCurrentSpeech();
+    const attemptId = speechAttemptId;
+    if (voiceStatusMsg) voiceStatusMsg.textContent = '';
 
     if (!audioSrc) {
-      fallbackBrowserTTS(fallbackText);
+      fallbackBrowserTTS(fallbackText, attemptId);
       return;
     }
 
@@ -631,6 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     activeAudio.onplay = () => {
+      if (voiceStatusMsg) voiceStatusMsg.textContent = '';
       // Connect audio element to 3D Mascot Dual-Stage Lip-Sync System
       if (mascot && mascot.startAudioLipSync) {
         mascot.startAudioLipSync(activeAudio, data);
@@ -658,13 +625,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     activeAudio.play().then(() => {
+      if (voiceStatusMsg) voiceStatusMsg.textContent = '';
       console.log('[Frontend Audio] Neural EdgeTTS audio playing with 3D Lip-Sync.');
     }).catch((err) => {
       console.warn('[Frontend Audio] Autoplay interrupted or blocked:', err);
+      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Audio playback could not start. Use the play control to try again.';
     });
   }
 
   function stopCurrentSpeech() {
+    speechAttemptId += 1;
     if (lipSyncAnimationId) {
       cancelAnimationFrame(lipSyncAnimationId);
       lipSyncAnimationId = null;
@@ -698,8 +668,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 12. Fallback Browser TTS
-  function fallbackBrowserTTS(text) {
+  async function fallbackBrowserTTS(text, attemptId = speechAttemptId) {
     if (!window.speechSynthesis) {
+      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Browser speech playback is unavailable.';
       setState('IDLE');
       return;
     }
@@ -710,9 +681,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const locales = {
       en: 'en-IN', hi: 'hi-IN', bn: 'bn-IN', ta: 'ta-IN',
       te: 'te-IN', kn: 'kn-IN', ml: 'ml-IN', gu: 'gu-IN',
-      mr: 'mr-IN', pa: 'pa-IN', ur: 'ur-IN'
+      mr: 'mr-IN', pa: 'pa-IN', ur: 'ur-IN', or: 'or-IN', as: 'as-IN'
     };
     utter.lang = locales[currentOutputLanguage] || 'en-IN';
+    const selectedVoice = window.GangaBrowserSpeech
+      ? await window.GangaBrowserSpeech.resolveVoice(window.speechSynthesis, utter.lang)
+      : window.speechSynthesis.getVoices().find(
+        (voice) => voice.lang.toLowerCase() === utter.lang.toLowerCase()
+      );
+    if (attemptId !== speechAttemptId) return;
+    if (!selectedVoice) {
+      if (voiceStatusMsg) voiceStatusMsg.textContent = `No ${utter.lang} browser voice is available; no other-language voice was used.`;
+      setState('IDLE');
+      return;
+    }
+    if (voiceStatusMsg) voiceStatusMsg.textContent = '';
+    utter.voice = selectedVoice;
     utter.rate = 1.0;
 
     let simInterval = setInterval(() => {
@@ -724,13 +708,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 60);
 
     utter.onend = () => {
+      if (attemptId !== speechAttemptId) return;
       clearInterval(simInterval);
       stopCurrentSpeech();
       setState('IDLE');
     };
-    utter.onerror = () => {
+    utter.onerror = (event) => {
       clearInterval(simInterval);
+      if (['canceled', 'interrupted'].includes(event && event.error)) return;
+      if (attemptId !== speechAttemptId) return;
       stopCurrentSpeech();
+      if (voiceStatusMsg) {
+        voiceStatusMsg.textContent = 'Browser speech playback failed. Please try again.';
+      }
       setState('IDLE');
     };
 
@@ -772,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mediaRecorder.onstop = async () => {
         stream.getTracks().forEach((track) => track.stop());
         const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-        if (voiceStatusMsg) voiceStatusMsg.textContent = 'Transcribing with local STT...';
+        if (voiceStatusMsg) voiceStatusMsg.textContent = 'Transcribing with the configured speech provider...';
         setState('THINKING');
         await uploadAudioForSTT(audioBlob);
       };
@@ -802,28 +792,48 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData();
       formData.append('file', blob, 'user_speech.webm');
 
-      const response = await fetch(`/api/integration/stt?input_language=${currentInputLanguage === 'auto' ? 'en' : currentInputLanguage}&output_language=${currentOutputLanguage}`, {
+      const response = await fetch(`/api/integration/stt?input_language=${encodeURIComponent(currentVoiceInputLanguage)}&output_language=${encodeURIComponent(currentOutputLanguage)}`, {
         method: 'POST',
         body: formData
       });
 
       if (!response.ok) {
-        throw new Error(`STT server returned status ${response.status}`);
+        let detail = `STT server returned status ${response.status}`;
+        try { detail = (await response.json()).detail || detail; } catch (_) {}
+        throw new Error(detail);
       }
 
       const data = await response.json();
       if (voiceStatusMsg) {
         voiceStatusMsg.textContent = data.question ? `Heard: "${data.question}"` : 'Speech transcribed.';
       }
-      if (data.question) {
-        await processQuestion(data.question);
+      if (data.question && data.answer) {
+        renderCompletedResponse(data.question, data);
+      } else if (data.question) {
+        await processQuestion(data.question, currentVoiceInputLanguage);
       }
 
     } catch (err) {
       console.warn('[Frontend STT] Backend STT failed, trying Web Speech API:', err);
-      if (voiceStatusMsg) voiceStatusMsg.textContent = 'STT unavailable, please type question.';
       setState('IDLE');
+      if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+        if (voiceStatusMsg) voiceStatusMsg.textContent = 'Backend speech recognition is unavailable; trying this browser with the selected voice-input language.';
+        startWebSpeechFallback();
+      } else if (voiceStatusMsg) {
+        voiceStatusMsg.textContent = `${err.message || 'Speech recognition unavailable.'} You can type your question.`;
+      }
     }
+  }
+
+  function renderCompletedResponse(question, data) {
+    appendUserMessage(question);
+    const loadingCardId = 'loadingCard_' + Date.now();
+    appendLoadingAssistantCard(loadingCardId);
+    setState('THINKING');
+    const receivedAt = performance.now();
+    detectedTextLanguage = data.input_language || currentVoiceInputLanguage;
+    updateLangBadge();
+    replaceLoadingWithResponse(loadingCardId, data, receivedAt, receivedAt);
   }
 
   function startWebSpeechFallback() {
@@ -835,11 +845,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const recognition = new SpeechRec();
     const locales = {
-      en: 'en-IN', hi: 'hi-IN', bn: 'bn-IN', ta: 'ta-IN',
-      te: 'te-IN', kn: 'kn-IN', ml: 'ml-IN', gu: 'gu-IN',
-      mr: 'mr-IN', pa: 'pa-IN', ur: 'ur-IN'
+      en: 'en-IN', hi: 'hi-IN', kn: 'kn-IN', ta: 'ta-IN', te: 'te-IN',
+      bn: 'bn-IN', mr: 'mr-IN', gu: 'gu-IN', ml: 'ml-IN', pa: 'pa-IN',
+      ur: 'ur-IN', or: 'or-IN', as: 'as-IN'
     };
-    recognition.lang = locales[currentInputLanguage] || 'en-IN';
+    recognition.lang = locales[currentVoiceInputLanguage] || 'en-IN';
     recognition.interimResults = false;
 
     recognition.onstart = () => {
@@ -852,7 +862,7 @@ document.addEventListener('DOMContentLoaded', () => {
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript;
       if (voiceStatusMsg) voiceStatusMsg.textContent = `Heard: "${transcript}"`;
-      processQuestion(transcript);
+      processQuestion(transcript, currentVoiceInputLanguage);
     };
 
     recognition.onerror = (e) => {
@@ -869,100 +879,6 @@ document.addEventListener('DOMContentLoaded', () => {
     recognition.start();
   }
 
-  // 14. Sidebar Navigation Modals
-  const sidebarData = {
-    resources: {
-      title: "Ganga Resources & Knowledge Base",
-      content: `
-        <p>The Ganga AI Mascot is built on the complete <strong>Ganga River Basin Management Plan (GRBMP)</strong> prepared by the Consortium of 7 Indian Institutes of Technology (IITs).</p>
-        <br/>
-        <ul>
-          <li><strong>Corpus Size:</strong> 86 Verified GRBMP Reports, 4,609 pages, 4,085 indexed semantic chunks.</li>
-          <li><strong>Key Documents:</strong> Mission 1 (Aviral Dhara), Mission 2 (Nirmal Dhara), Mission 3 (Geological Safeguards), Mission 4 (Ecological Restoration), Mission 5 (Gyan Ganga).</li>
-          <li><strong>Storage:</strong> Deterministic SQLite metadata index + 384-dimensional ONNX vector store.</li>
-        </ul>
-      `
-    },
-    initiatives: {
-      title: "Namami Gange Key Initiatives",
-      content: `
-        <p><strong>Namami Gange</strong> is an Integrated Conservation Mission approved as a 'Flagship Programme' by the Union Government with four primary pillars:</p>
-        <br/>
-        <ul>
-          <li><strong>Nirmal Dhara (Unpolluted Flow):</strong> Zero untreated domestic sewage and industrial effluents entering the river through decentralized STPs and sewage networks.</li>
-          <li><strong>Aviral Dhara (Continuous Flow):</strong> Environmental-flow management, basin water budgeting, and barrage water regulation.</li>
-          <li><strong>Jan Ganga (People-River Connect):</strong> Community participation, ghat cleanliness, riverfront development, and educational mascots like Chacha Chaudhary.</li>
-          <li><strong>Gyan Ganga (Knowledge & Ecology):</strong> Biodiversity monitoring, river dolphin conservation, and AI-enabled GIS mapping.</li>
-        </ul>
-      `
-    },
-    awareness: {
-      title: "Water Quality & Conservation Awareness",
-      content: `
-        <p>Real-Time Water Quality Monitoring System (RTWQMS) stations track Ganga water safety parameters against <strong>CPCB Designated Best Use Criteria (Class B - Outdoor Bathing)</strong>:</p>
-        <br/>
-        <ul>
-          <li><strong>Dissolved Oxygen (DO):</strong> ≥ 5.0 mg/L (Critical for aquatic life).</li>
-          <li><strong>Biochemical Oxygen Demand (BOD):</strong> ≤ 3.0 mg/L (Indicates organic purity).</li>
-          <li><strong>pH:</strong> 6.5 to 8.5 (Healthy aquatic balance).</li>
-          <li><strong>Faecal Coliforms:</strong> ≤ 2500 MPN/100 mL desirable limit.</li>
-        </ul>
-      `
-    },
-    about: {
-      title: "About PRJ_316 Ganga AI Mascot",
-      content: `
-        <p><strong>Project ID:</strong> PRJ_316<br/>
-        <strong>Official Title:</strong> Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange.</p>
-        <br/>
-        <p>Brings together a real-time 3D Three.js Chacha Chaudhary avatar (28 skeletal actions, viseme morphs), retrieval-augmented Brain service, Neural EdgeTTS speech, and multi-language support across Indian languages.</p>
-      `
-    },
-    settings: {
-      title: "Settings & System Info",
-      content: `
-        <p><strong>Voice Synthesizer:</strong> Neural EdgeTTS (Indian Regional Voices) with Windows SAPI fallback.</p>
-        <p><strong>Speech Lip-Sync:</strong> Phonetic Acoustic Rhubarb viseme alignment.</p>
-        <p><strong>3D Model:</strong> Chacha_New (65 bones, Mixamo armature, PBR shaders).</p>
-        <p><strong>Server Host:</strong> Localhost / Unified FastAPI backend (port 8080).</p>
-      `
-    }
-  };
-
-  document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const navKey = item.dataset.nav;
-      document.querySelectorAll('.sidebar-nav .nav-item').forEach(b => b.classList.remove('active'));
-      item.classList.add('active');
-
-      if (navKey === 'home' || navKey === 'chat') {
-        if (quizView) quizView.hidden = true;
-        closeInfoModal();
-      } else if (sidebarData[navKey]) {
-        openInfoModal(sidebarData[navKey].title, sidebarData[navKey].content);
-      }
-    });
-  });
-
-  function openInfoModal(title, html) {
-    if (modalTitle) modalTitle.textContent = title;
-    if (modalContent) modalContent.innerHTML = html;
-    if (infoModalOverlay) infoModalOverlay.style.display = 'flex';
-  }
-
-  function closeInfoModal() {
-    if (infoModalOverlay) infoModalOverlay.style.display = 'none';
-    const homeBtn = document.querySelector('.sidebar-nav .nav-item[data-nav="home"]');
-    if (homeBtn) homeBtn.classList.add('active');
-  }
-
-  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeInfoModal);
-  if (infoModalOverlay) {
-    infoModalOverlay.addEventListener('click', (e) => {
-      if (e.target === infoModalOverlay) closeInfoModal();
-    });
-  }
-
   // 15. Quiz Integration (Preserved)
   if (window.GangaQuiz) {
     window.GangaQuiz.createQuizController({
@@ -972,18 +888,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function updateActiveView(moveFocus = false) {
-    const showQuiz = window.location.hash === '#quiz';
-    if (chatView) chatView.hidden = showQuiz;
-    if (quizView) quizView.hidden = !showQuiz;
-    if (quizNavButton) quizNavButton.setAttribute('aria-pressed', String(showQuiz));
-    if (moveFocus && showQuiz) {
-      document.getElementById('quizTitle')?.focus();
+  const fetchPage = window.fetch.bind(window);
+  const resourcesPage = window.GangaResources?.create({ document, fetch: fetchPage });
+  const awarenessPage = window.GangaAwareness?.create({
+    document,
+    fetch: fetchPage,
+    openResource: (fileName, section, pageStart) => {
+      window.location.hash = `#resources`;
+      requestAnimationFrame(() => resourcesPage?.openSection(fileName, section, pageStart));
     }
-  }
-
-  window.addEventListener('hashchange', () => updateActiveView(true));
-  updateActiveView();
+  });
+  window.GangaNavigation?.create({
+    document,
+    window,
+    onViewChange: (view) => {
+      if (view === 'resources') resourcesPage?.show();
+      if (view === 'awareness') awarenessPage?.show();
+    },
+    onQuizChange: (show) => {
+      if (quizView) quizView.hidden = !show;
+      if (chatView) chatView.hidden = show;
+      if (quizNavButton) quizNavButton.setAttribute('aria-pressed', String(show));
+    }
+  });
 
   // Utility helpers
   function scrollToBottom() {

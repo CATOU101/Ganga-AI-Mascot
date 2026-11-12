@@ -41,7 +41,9 @@ def test_end_to_end_out_of_scope_query():
     assert response.status_code == 200
     data = response.json()
 
-    assert data["mode"] in ("insufficient-evidence", "grounded")
+    assert data["mode"] in ("insufficient-evidence", "grounded", "general-unavailable")
+    if data["mode"] == "general-unavailable":
+        assert "general-knowledge question right now" in data["answer"].lower()
     assert data["input_language"] == "en"
     assert data["output_language"] == "en"
 

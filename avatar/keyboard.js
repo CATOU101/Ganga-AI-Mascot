@@ -1,18 +1,7 @@
 /**
  * Multilingual Virtual On-Screen Keyboard for Ganga AI Mascot
  * 
- * Supports full native script layouts for Indian languages:
- * - Hindi (हिंदी)
- * - English (English QWERTY)
- * - Bengali (বাংলা)
- * - Tamil (தமிழ்)
- * - Telugu (తెలుగు)
- * - Kannada (ಕನ್ನಡ)
- * - Malayalam (മലയാളം)
- * - Gujarati (ગુજરાતી)
- * - Punjabi (ਪੰਜਾਬੀ Gurmukhi)
- * - Odia (ଓଡ଼ିଆ)
- * - Marathi (मराठी)
+ * Provides native-script layouts for all 13 text-language choices.
  * 
  * Preserves cursor position, never clears current message, supports physical keyboard concurrently.
  */
@@ -21,6 +10,8 @@ class MultilingualKeyboard {
   constructor(inputElement, options = {}) {
     this.input = inputElement;
     this.container = options.container || document.getElementById('virtualKeyboardContainer');
+    this.drawer = options.drawer || document.getElementById('multilingualKeyboardDrawer');
+    this.toggleButton = options.toggleButton || document.getElementById('keyboardToggleBtn');
     this.currentLang = options.defaultLanguage || 'en';
     this.isShift = false;
     this.isNumberMode = false;
@@ -60,23 +51,70 @@ class MultilingualKeyboard {
         spaceLabel: 'स्पेस'
       },
 
-      // 3. BENGALI (বাংলা)
-      bn: {
-        name: 'বাংলা',
-        rows: [
-          ['ক', 'খ', 'গ', 'ঘ', 'ঙ', 'চ', 'ছ', 'জ', 'ঝ', 'ঞ', 'ট', 'ঠ', 'ড', 'ঢ', 'ণ'],
-          ['ত', 'থ', 'দ', 'ধ', 'ন', 'প', 'ফ', 'ব', 'ভ', 'ম', 'য', 'র', 'ল', 'ব'],
-          ['শ', 'ষ', 'স', 'হ', 'ড়', 'ঢ়', 'য়', 'ৎ', 'ং', 'ঃ', 'ঁ', '।', '⌫']
-        ],
-        vowels: [
-          ['অ', 'আ', 'ই', 'ঈ', 'উ', 'ঊ', 'ঋ', 'এ', 'ঐ', 'ও', 'ঔ'],
-          ['া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ে', 'ৈ', 'ো', 'ৌ', '্', '১', '২', '৩', '৪', '৫'],
-          ['৬', '৭', '৮', '৯', '০', '!', '?', '⌫']
-        ],
-        spaceLabel: 'স্পেস'
+      te: {
+        name: 'తెలుగు',
+        rows: [['క','ఖ','గ','ఘ','ఙ','చ','ఛ','జ','ఝ','ఞ','ట','ఠ','డ','ఢ','ణ'],['త','థ','ద','ధ','న','ప','ఫ','బ','భ','మ','య','ర','ల','వ'],['శ','ష','స','హ','ళ','క్ష','ఱ','ం','ః','?','⌫']],
+        vowels: [['అ','ఆ','ఇ','ఈ','ఉ','ఊ','ఋ','ఎ','ఏ','ఐ','ఒ','ఓ','ఔ'],['ా','ి','ీ','ు','ూ','ృ','ె','ే','ై','ొ','ో','ౌ','్','౦','⌫']],
+        spaceLabel: 'విరామం', shiftLabel: 'అచ్చులు'
       },
 
-      // 4. TAMIL (தமிழ்)
+      bn: {
+        name: 'বাংলা',
+        rows: [['ক','খ','গ','ঘ','ঙ','চ','ছ','জ','ঝ','ঞ','ট','ঠ','ড','ঢ','ণ'],['ত','থ','দ','ধ','ন','প','ফ','ব','ভ','ম','য','র','ল','শ'],['ষ','স','হ','ড়','ঢ়','য়','ৎ','ং','ঃ','।','⌫']],
+        vowels: [['অ','আ','ই','ঈ','উ','ঊ','ঋ','এ','ঐ','ও','ঔ'],['া','ি','ী','ু','ূ','ৃ','ে','ৈ','ো','ৌ','্','ঁ','ঃ','⌫']],
+        spaceLabel: 'স্পেস', shiftLabel: 'স্বরচিহ্ন'
+      },
+
+      mr: {
+        name: 'मराठी',
+        rows: [['क','ख','ग','घ','ङ','च','छ','ज','झ','ञ','ट','ठ','ड','ढ','ण'],['त','थ','द','ध','न','प','फ','ब','भ','म','य','र','ल','व'],['श','ष','स','ह','ळ','क्ष','ज्ञ','ॐ','।','?','⌫']],
+        vowels: [['अ','आ','इ','ई','उ','ऊ','ऋ','ए','ऐ','ओ','औ','अं','अः'],['ा','ि','ी','ु','ू','ृ','े','ै','ो','ौ','ं','ः','ँ','्','़','⌫']],
+        spaceLabel: 'स्पेस', shiftLabel: 'स्वर/मात्रा'
+      },
+
+      gu: {
+        name: 'ગુજરાતી',
+        rows: [['ક','ખ','ગ','ઘ','ઙ','ચ','છ','જ','ઝ','ઞ','ટ','ઠ','ડ','ઢ','ણ'],['ત','થ','દ','ધ','ન','પ','ફ','બ','ભ','મ','ય','ર','લ','વ'],['શ','ષ','સ','હ','ળ','ક્ષ','જ્ઞ','ં','ઃ','।','⌫']],
+        vowels: [['અ','આ','ઇ','ઈ','ઉ','ઊ','ઋ','એ','ઐ','ઓ','ઔ','અં','અઃ'],['ા','િ','ી','ુ','ૂ','ૃ','ે','ૈ','ો','ૌ','ં','ઃ','્','ૅ','ૉ','⌫']],
+        spaceLabel: 'જગ્યા', shiftLabel: 'સ્વરચિહ્નો'
+      },
+
+      ml: {
+        name: 'മലയാളം',
+        rows: [['ക','ഖ','ഗ','ഘ','ങ','ച','ഛ','ജ','ഝ','ഞ','ട','ഠ','ഡ','ഢ','ണ'],['ത','ഥ','ദ','ധ','ന','പ','ഫ','ബ','ഭ','മ','യ','ര','ല','വ'],['ശ','ഷ','സ','ഹ','ള','ഴ','റ','ക്ഷ','ം','ഃ','⌫']],
+        vowels: [['അ','ആ','ഇ','ഈ','ഉ','ഊ','ഋ','എ','ഏ','ഐ','ഒ','ഓ','ഔ'],['ാ','ി','ീ','ു','ൂ','ൃ','െ','േ','ൈ','ൊ','ോ','ൌ','്','ം','ഃ','⌫']],
+        spaceLabel: 'ഇടം', shiftLabel: 'സ്വരചിഹ്നങ്ങൾ'
+      },
+
+      pa: {
+        name: 'ਪੰਜਾਬੀ',
+        rows: [['ਕ','ਖ','ਗ','ਘ','ਙ','ਚ','ਛ','ਜ','ਝ','ਞ','ਟ','ਠ','ਡ','ਢ','ਣ'],['ਤ','ਥ','ਦ','ਧ','ਨ','ਪ','ਫ','ਬ','ਭ','ਮ','ਯ','ਰ','ਲ','ਵ'],['ੜ','ਸ','ਹ','ਖ਼','ਗ਼','ਜ਼','ਫ਼','ਲ਼','ਸ਼','।','⌫']],
+        vowels: [['ਅ','ਆ','ਇ','ਈ','ਉ','ਊ','ਏ','ਐ','ਓ','ਔ'],['ਾ','ਿ','ੀ','ੁ','ੂ','ੇ','ੈ','ੋ','ੌ','ੰ','ੱ','਼','੍','ੑ','⌫']],
+        spaceLabel: 'ਖਾਲੀ ਥਾਂ', shiftLabel: 'ਲਗਾਂ-ਮਾਤਰਾਂ'
+      },
+
+      ur: {
+        name: 'اردو',
+        dir: 'rtl',
+        rows: [['ق','و','ع','ر','ت','ے','ء','ی','ہ','پ'],['ا','س','د','ف','گ','ح','ج','ک','ل'],['ز','ش','چ','ط','ب','ن','م','ڑ','؟','⌫']],
+        vowels: [['آ','ا','ؤ','ئ','ی','ے','ں','ھ','ۃ'],['َ','ِ','ُ','ّ','ْ','ً','ٍ','ٌ','۔','،','⌫']],
+        spaceLabel: 'فاصلہ', shiftLabel: 'اعراب'
+      },
+
+      or: {
+        name: 'ଓଡ଼ିଆ',
+        rows: [['କ','ଖ','ଗ','ଘ','ଙ','ଚ','ଛ','ଜ','ଝ','ଞ','ଟ','ଠ','ଡ','ଢ','ଣ'],['ତ','ଥ','ଦ','ଧ','ନ','ପ','ଫ','ବ','ଭ','ମ','ଯ','ର','ଲ','ୱ'],['ଶ','ଷ','ସ','ହ','ଳ','କ୍ଷ','ୟ','ଡ଼','ଢ଼','।','⌫']],
+        vowels: [['ଅ','ଆ','ଇ','ଈ','ଉ','ଊ','ଋ','ଏ','ଐ','ଓ','ଔ'],['ା','ି','ୀ','ୁ','ୂ','ୃ','େ','ୈ','ୋ','ୌ','ଂ','ଃ','୍','⌫']],
+        spaceLabel: 'ଖାଲି ସ୍ଥାନ', shiftLabel: 'ସ୍ୱର ଚିହ୍ନ'
+      },
+
+      as: {
+        name: 'অসমীয়া',
+        rows: [['ক','খ','গ','ঘ','ঙ','চ','ছ','জ','ঝ','ঞ','ট','ঠ','ড','ঢ','ণ'],['ত','থ','দ','ধ','ন','প','ফ','ব','ভ','ম','য','ৰ','ল','ৱ'],['শ','ষ','স','হ','ড়','ঢ়','য়','ৎ','ং','।','⌫']],
+        vowels: [['অ','আ','ই','ঈ','উ','ঊ','ঋ','এ','ঐ','ও','ঔ'],['া','ি','ী','ু','ূ','ৃ','ে','ৈ','ো','ৌ','্','ঁ','ঃ','⌫']],
+        spaceLabel: 'স্পেচ', shiftLabel: 'স্বৰচিহ্ন'
+      },
+
       ta: {
         name: 'தமிழ்',
         rows: [
@@ -90,22 +128,6 @@ class MultilingualKeyboard {
         spaceLabel: 'இடைவெளி'
       },
 
-      // 5. TELUGU (తెలుగు)
-      te: {
-        name: 'తెలుగు',
-        rows: [
-          ['క', 'ఖ', 'గ', 'ఘ', 'ఙ', 'చ', 'ఛ', 'జ', 'ఝ', 'ఞ', 'ట', 'ఠ', 'డ', 'ఢ', 'ణ'],
-          ['త', 'థ', 'ద', 'ధ', 'న', 'ప', 'ఫ', 'బ', 'భ', 'మ', 'య', 'ర', 'ల', 'వ'],
-          ['శ', 'ష', 'స', 'హ', 'ళ', 'క్ష', 'ఱ', 'ం', 'ః', '?', '⌫']
-        ],
-        vowels: [
-          ['అ', 'ఆ', 'ఇ', 'ఈ', 'ఉ', 'ఊ', 'ఋ', 'ఎ', 'ఏ', 'ఐ', 'ఒ', 'ఓ', 'ఔ'],
-          ['ా', 'ి', 'ీ', 'ు', 'ూ', 'ృ', 'ె', 'ే', 'ై', 'ొ', 'ో', 'ౌ', '్', '⌫']
-        ],
-        spaceLabel: 'స్పేస్'
-      },
-
-      // 6. KANNADA (ಕನ್ನಡ)
       kn: {
         name: 'ಕನ್ನಡ',
         rows: [
@@ -118,82 +140,8 @@ class MultilingualKeyboard {
           ['ಾ', 'ಿ', 'ೀ', 'ು', 'ೂ', 'ೃ', 'ೆ', 'ೇ', 'ೈ', 'ೊ', 'ೋ', 'ೌ', '್', '⌫']
         ],
         spaceLabel: 'ಸ್ಪೇಸ್'
-      },
-
-      // 7. MALAYALAM (മലയാളം)
-      ml: {
-        name: 'മലയാളം',
-        rows: [
-          ['ക', 'ഖ', 'ഗ', 'ഘ', 'ങ', 'ച', 'ഛ', 'ജ', 'ഝ', 'ഞ', 'ട', 'ഠ', 'ഡ', 'ഢ', 'ണ'],
-          ['ത', 'ഥ', 'ദ', 'ധ', 'ന', 'പ', 'ഫ', 'ബ', 'ഭ', 'മ', 'യ', 'ര', 'ല', 'വ'],
-          ['ശ', 'ഷ', 'സ', 'ഹ', 'ള', 'ഴ', 'റ', 'ം', 'ഃ', '?', '⌫']
-        ],
-        vowels: [
-          ['അ', 'ആ', 'ഇ', 'ഈ', 'ഉ', 'ഊ', 'ഋ', 'എ', 'ഏ', 'ഐ', 'ഒ', 'ഓ', 'ഔ'],
-          ['ാ', 'ി', 'ീ', 'ു', 'ൂ', 'ൃ', 'െ', 'േ', 'ൈ', 'ൊ', 'ോ', 'ൌ', '്', '⌫']
-        ],
-        spaceLabel: 'സ്പേസ്'
-      },
-
-      // 8. GUJARATI (ગુજરાતી)
-      gu: {
-        name: 'ગુજરાતી',
-        rows: [
-          ['ક', 'ખ', 'ગ', 'ઘ', 'ઙ', 'ચ', 'છ', 'જ', 'ઝ', 'ઞ', 'ટ', 'ઠ', 'ડ', 'ઢ', 'ણ'],
-          ['ત', 'થ', 'દ', 'ધ', 'ન', 'પ', 'ફ', 'બ', 'ભ', 'મ', 'ય', 'ર', 'લ', 'વ'],
-          ['શ', 'ષ', 'સ', 'હ', 'ળ', 'ક્ષ', 'જ્ઞ', '।', '?', '⌫']
-        ],
-        vowels: [
-          ['અ', 'આ', 'ઇ', 'ઈ', 'ઉ', 'ઊ', 'ઋ', 'એ', 'ઐ', 'ઓ', 'ઔ', 'અં', 'અઃ'],
-          ['ા', 'િ', 'ી', 'ુ', 'ૂ', 'ૃ', 'ે', 'ૈ', 'ો', 'ૌ', 'ં', 'ઃ', '્', '⌫']
-        ],
-        spaceLabel: 'સ્પેસ'
-      },
-
-      // 9. PUNJABI (ਪੰਜਾਬੀ Gurmukhi)
-      pa: {
-        name: 'ਪੰਜਾਬੀ',
-        rows: [
-          ['ਕ', 'ਖ', 'ਗ', 'ਘ', 'ਙ', 'ਚ', 'ਛ', 'ਜ', 'ਝ', 'ਞ', 'ਟ', 'ਠ', 'ਡ', 'ਢ', 'ਣ'],
-          ['ਤ', 'ਥ', 'ਦ', 'ਧ', 'ਨ', 'ਪ', 'ਫ', 'ਬ', 'ਭ', 'ਮ', 'ਯ', 'ਰ', 'ਲ', 'ਵ'],
-          ['ੜ', 'ਸ', 'ਹ', 'ਖ਼', 'ਗ਼', 'ਜ਼', 'ਫ਼', 'ਲ਼', '।', '?', '⌫']
-        ],
-        vowels: [
-          ['ਅ', 'ਆ', 'ਇ', 'ਈ', 'ਉ', 'ਊ', 'ਏ', 'ਐ', 'ਓ', 'ਔ'],
-          ['ਾ', 'ਿ', 'ੀ', 'ੁ', 'ੂ', 'ੇ', 'ੈ', 'ੋ', 'ੌ', 'ੰ', 'ੱ', '਼', '੍', '⌫']
-        ],
-        spaceLabel: 'ਸਪੇਸ'
-      },
-
-      // 10. ODIA (ଓଡ଼ିଆ)
-      or: {
-        name: 'ଓଡ଼ିଆ',
-        rows: [
-          ['କ', 'ଖ', 'ଗ', 'ଘ', 'ଙ', 'ଚ', 'ଛ', 'ଜ', 'ଝ', 'ଞ', 'ଟ', 'ଠ', 'ଡ', 'ଢ', 'ଣ'],
-          ['ତ', 'ଥ', 'ଦ', 'ଧ', 'ନ', 'ପ', 'ଫ', 'ବ', 'ଭ', 'ମ', 'ଯ', 'ର', 'ଳ', 'ୱ'],
-          ['ଶ', 'ଷ', 'ସ', 'ହ', 'କ୍ଷ', 'ୟ', 'ଡ଼', 'ଢ଼', '।', '?', '⌫']
-        ],
-        vowels: [
-          ['ଅ', 'ଆ', 'ଇ', 'ଈ', 'ଉ', 'ଊ', 'ଋ', 'ଏ', 'ଐ', 'ଓ', 'ଔ'],
-          ['ା', 'ି', 'ୀ', 'ୁ', 'ୂ', 'ୃ', 'େ', 'ୈ', 'ୋ', 'ୌ', 'ଂ', 'ଃ', '୍', '⌫']
-        ],
-        spaceLabel: 'ସ୍ପେସ୍'
-      },
-
-      // 11. MARATHI (मराठी)
-      mr: {
-        name: 'मराठी',
-        rows: [
-          ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण'],
-          ['त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व'],
-          ['श', 'ष', 'स', 'ह', 'ळ', 'क्ष', 'ज्ञ', 'ॐ', '।', '?', '⌫']
-        ],
-        vowels: [
-          ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ए', 'ऐ', 'ओ', 'औ', 'अं', 'अः'],
-          ['ा', 'ि', 'ी', 'ु', 'ू', 'ृ', 'े', 'ै', 'ो', 'ौ', 'ं', 'ः', 'ँ', '्', 'ॅ', 'ॉ', '⌫']
-        ],
-        spaceLabel: 'स्पेस'
       }
+
     };
 
     // Numbers & Symbols Layout
@@ -254,7 +202,7 @@ class MultilingualKeyboard {
             ${this.isNumberMode ? 'ABC' : '123'}
           </button>
           <button type="button" class="vk-special-btn ${this.isShift ? 'active' : ''}" id="vkShiftToggle" title="Vowels / Matras or Shift">
-            ${this.currentLang === 'en' ? '⇧ Shift' : (this.isShift ? 'व्यंजन' : 'स्वर/मात्रा')}
+            ${this.currentLang === 'en' ? '⇧ Shift' : (this.layouts[this.currentLang]?.shiftLabel || 'Vowels / Matras')}
           </button>
           <button type="button" class="vk-special-btn" id="vkEmojiToggle" title="Ganga Emojis & Quick Words">
             😀
@@ -413,7 +361,14 @@ class MultilingualKeyboard {
 
     if (key === '⌫') {
       if (start === end && start > 0) {
-        this.input.setRangeText('', start - 1, end, 'end');
+        const beforeCaret = this.input.value.slice(0, start);
+        const segments = typeof Intl.Segmenter === 'function'
+          ? Array.from(new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(beforeCaret))
+          : null;
+        const previousStart = segments
+          ? (segments.length ? segments[segments.length - 1].index : start)
+          : Math.max(0, start - (/[\uDC00-\uDFFF]/.test(beforeCaret.slice(-1)) ? 2 : 1));
+        this.input.setRangeText('', previousStart, end, 'end');
       } else if (start !== end) {
         this.input.setRangeText('', start, end, 'end');
       }
@@ -456,6 +411,7 @@ class MultilingualKeyboard {
 
     // Do NOT clear or reset input text!
     if (this.input) {
+      this.input.dir = this.layouts[lang].dir || 'auto';
       this.input.focus();
     }
   }
@@ -471,7 +427,7 @@ class MultilingualKeyboard {
       if (this.currentLang === 'en') {
         shiftBtn.textContent = '⇧ Shift';
       } else {
-        shiftBtn.textContent = this.isShift ? 'व्यंजन' : 'स्वर/मात्रा';
+        shiftBtn.textContent = this.layouts[this.currentLang]?.shiftLabel || 'Vowels / Matras';
       }
     }
 
@@ -492,12 +448,15 @@ class MultilingualKeyboard {
   open() {
     this.isOpen = true;
     this.container.classList.add('open');
-    this.container.style.display = 'block';
+    if (this.drawer) {
+      this.drawer.hidden = false;
+      this.drawer.setAttribute('aria-hidden', 'false');
+    }
     const toggle = this.container.querySelector('#vkSwitchToggle');
     if (toggle) toggle.checked = true;
 
     // Notify keyboard button in input
-    const toggleBtn = document.getElementById('keyboardToggleBtn');
+    const toggleBtn = this.toggleButton || document.getElementById('keyboardToggleBtn');
     if (toggleBtn) {
       toggleBtn.classList.add('active');
       toggleBtn.setAttribute('aria-expanded', 'true');
@@ -511,11 +470,14 @@ class MultilingualKeyboard {
   close() {
     this.isOpen = false;
     this.container.classList.remove('open');
-    this.container.style.display = 'none';
+    if (this.drawer) {
+      this.drawer.hidden = true;
+      this.drawer.setAttribute('aria-hidden', 'true');
+    }
     const toggle = this.container.querySelector('#vkSwitchToggle');
     if (toggle) toggle.checked = false;
 
-    const toggleBtn = document.getElementById('keyboardToggleBtn');
+    const toggleBtn = this.toggleButton || document.getElementById('keyboardToggleBtn');
     if (toggleBtn) {
       toggleBtn.classList.remove('active');
       toggleBtn.setAttribute('aria-expanded', 'false');
@@ -535,5 +497,6 @@ class MultilingualKeyboard {
   }
 }
 
-window.MultilingualKeyboard = MultilingualKeyboard;
+if (typeof module !== 'undefined' && module.exports) module.exports = MultilingualKeyboard;
+if (typeof window !== 'undefined') window.MultilingualKeyboard = MultilingualKeyboard;
 
