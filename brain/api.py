@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 
 from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel, Field
@@ -125,7 +126,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Start Ganga Brain API server")
     parser.add_argument("--host", default="0.0.0.0", help="Host address to bind (default: 0.0.0.0)")
-    parser.add_argument("--port", type=int, default=8000, help="Port to listen on (default: 8000)")
+    parser.add_argument("--port", type=int, default=int(os.getenv("PORT", "8000")), help="Port to listen on (default: 8000)")
     args = parser.parse_args()
 
     uvicorn.run("brain.api:app", host=args.host, port=args.port, reload=False)

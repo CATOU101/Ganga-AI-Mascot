@@ -16,7 +16,7 @@ class IntegrationConfig:
     tts_provider: str = os.getenv("TTS_PROVIDER", "edge")
     tts_fallback: str = os.getenv("TTS_FALLBACK", "sapi")
     server_host: str = os.getenv("SERVER_HOST", "0.0.0.0")
-    server_port: int = int(os.getenv("SERVER_PORT", "8080"))
+    server_port: int = int(os.getenv("PORT", os.getenv("SERVER_PORT", "8080")))
 
 
 def load_integration_config() -> IntegrationConfig:
