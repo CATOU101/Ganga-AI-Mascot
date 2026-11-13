@@ -6,6 +6,7 @@ import json
 import logging
 import math
 import re
+import ssl
 import threading
 import time
 import urllib.error
@@ -297,8 +298,16 @@ def _default_fetch_json(url: str) -> Any:
         url,
         headers={"Accept": "application/json", "User-Agent": "Ganga-AI-Mascot/1.0"},
     )
+    ssl_context = None
+    if url.startswith("https://"):
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
     try:
-        with urllib.request.urlopen(request, timeout=10) as response:
+        kwargs = {"timeout": 10}
+        if ssl_context is not None:
+            kwargs["context"] = ssl_context
+        with urllib.request.urlopen(request, **kwargs) as response:
             if response.status != 200:
                 raise CPCBWaterQualityError(f"CPCB returned HTTP {response.status}.")
             return json.loads(response.read().decode("utf-8"))

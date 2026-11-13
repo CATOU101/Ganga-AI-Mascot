@@ -10,7 +10,7 @@ from .config import load_config
 from .answer_format import strip_answer_formatting_instructions
 from .generator import build_generator, current_information_response, insufficient_evidence_response
 from .retriever import Retriever, asks_for_current_information
-from .translator import TranslationConsentRequired, normalize_language, translate_text
+from .translator import TranslationConsentRequired, detect_language, normalize_language, translate_text
 from .vector_store import build_index as build_vector_index
 
 
@@ -41,9 +41,16 @@ def answer_question(
     output_language: str | None = None,
     allow_external_translation: bool = False,
 ) -> dict:
-    """Answer a question; unspecified language defaults to English."""
-    input_lang = normalize_language(input_language, default="en")
-    output_lang = normalize_language(output_language, default=input_lang)
+    """Answer a question; unspecified language defaults to auto-detected language."""
+    if input_language and str(input_language).lower().strip() not in ("auto", "none"):
+        input_lang = normalize_language(input_language)
+    else:
+        input_lang = detect_language(question, default="en")
+
+    if output_language and str(output_language).lower().strip() not in ("auto", "none"):
+        output_lang = normalize_language(output_language)
+    else:
+        output_lang = input_lang
 
     if not question or not question.strip():
         resp = insufficient_evidence_response()

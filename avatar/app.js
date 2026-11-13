@@ -79,9 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentOutputLanguage = 'en';
   let currentVoiceInputLanguage = 'en';
   let detectedTextLanguage = 'auto';
+  let hasUserExplicitlySetOutputLang = false;
   try {
     const savedOutputLanguage = localStorage.getItem('gangaOutputLanguage');
-    if (supportedOutputLanguages.has(savedOutputLanguage)) currentOutputLanguage = savedOutputLanguage;
+    if (supportedOutputLanguages.has(savedOutputLanguage)) {
+      currentOutputLanguage = savedOutputLanguage;
+      hasUserExplicitlySetOutputLang = true;
+    }
   } catch (_) {}
   try {
     const savedVoiceLanguage = localStorage.getItem('gangaVoiceInputLanguage');
@@ -132,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
   outputLanguageControls.forEach(control => {
     control.value = currentOutputLanguage;
     control.addEventListener('change', () => {
+      hasUserExplicitlySetOutputLang = true;
       currentOutputLanguage = supportedOutputLanguages.has(control.value) ? control.value : 'en';
       outputLanguageControls.forEach(item => { item.value = currentOutputLanguage; });
       try { localStorage.setItem('gangaOutputLanguage', currentOutputLanguage); } catch (_) {}
@@ -291,13 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // Call Integration Server /api/integration/ask
+      // If user has not manually locked output language, let server auto-detect language from question
+      const reqOutputLang = hasUserExplicitlySetOutputLang ? currentOutputLanguage : (inputLanguage || null);
       const response = await fetch('/api/integration/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           question: question,
           input_language: inputLanguage,
-          output_language: currentOutputLanguage
+          output_language: reqOutputLang
         })
       });
 
@@ -314,6 +321,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       avatarEventBus.emit('response_completed', { data, latencyMs: t_response - t_start });
       detectedTextLanguage = data.input_language || 'auto';
+      if (!hasUserExplicitlySetOutputLang && data.output_language && supportedOutputLanguages.has(data.output_language)) {
+        currentOutputLanguage = data.output_language;
+        outputLanguageControls.forEach(item => { item.value = currentOutputLanguage; });
+      }
       updateLangBadge();
 
       // Replace Loading card with full formatted Assistant Message Card

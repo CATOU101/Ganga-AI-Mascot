@@ -78,15 +78,26 @@ class ConversationController:
     def process_text_question(
         self,
         question: str,
-        input_language: str = "hi",
-        output_language: str = "hi",
+        input_language: str | None = None,
+        output_language: str | None = None,
         top_k: int | None = None,
         language: str | None = None,
         translation_consent: bool = True,
     ) -> AvatarPresentation:
         """Process a text question through the state machine synchronously / thread-safely."""
-        in_lang = (input_language or language or "hi").lower().strip()
-        out_lang = (output_language or language or "hi").lower().strip()
+        from brain.translator import detect_language, normalize_language
+
+        raw_in = (input_language or language or "").lower().strip()
+        if raw_in and raw_in not in ("auto", "none"):
+            in_lang = normalize_language(raw_in)
+        else:
+            in_lang = detect_language(question, default="en")
+
+        raw_out = (output_language or language or "").lower().strip()
+        if raw_out and raw_out not in ("auto", "none"):
+            out_lang = normalize_language(raw_out)
+        else:
+            out_lang = in_lang
 
         if self.is_busy:
             logger.warning("[Integration] Conversation controller is busy. Ignoring duplicate request.")

@@ -78,17 +78,15 @@ class BrainRequest(BaseModel):
         return (self.question or self.query or "").strip()
 
     def get_input_language(self) -> str:
-        if self.input_language:
-            return normalize_language(self.input_language)
-        if self.language:
-            return normalize_language(self.language)
+        raw_in = (str(self.input_language) if self.input_language else (str(self.language) if self.language else "")).lower().strip()
+        if raw_in and raw_in not in ("auto", "none"):
+            return normalize_language(raw_in)
         return detect_language(self.get_question(), default="en")
 
     def get_output_language(self) -> str:
-        if self.output_language:
-            return normalize_language(self.output_language)
-        if self.language:
-            return normalize_language(self.language)
+        raw_out = (str(self.output_language) if self.output_language else (str(self.language) if self.language else "")).lower().strip()
+        if raw_out and raw_out not in ("auto", "none"):
+            return normalize_language(raw_out)
         return self.get_input_language()
 
 

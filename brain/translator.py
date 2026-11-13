@@ -7,6 +7,7 @@ import logging
 import html
 import os
 import re
+import ssl
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -44,6 +45,15 @@ def normalize_language(language: str | None, *, default: str = "en") -> str:
     if normalized not in SUPPORTED_LANGUAGES:
         raise ValueError("Unsupported language code; expected one of: " + ", ".join(sorted(SUPPORTED_LANGUAGES)))
     return normalized
+
+
+ROMANIZED_HINDI_CUES = frozenset({
+    "kahan", "kaha", "kahaa", "kidhar", "kya", "kaun", "kon", "kaise", "kyun", "kyu",
+    "kitna", "kitni", "kitne", "hai", "hain", "ho", "hogi", "hoga", "nadi", "nahin", "nahi",
+    "pani", "paani", "safai", "pradushan", "shuru", "hoti", "hota", "hote", "nikalti", "nikalta", "nikalte",
+    "aati", "aata", "aate", "batao", "bataiye", "bolo", "karo", "kijiye", "mujhe", "mera", "meri", "mere",
+    "aap", "aapka", "aapki", "hum", "hume", "ka", "ki", "ke", "ko", "se", "me", "mein", "par",
+})
 
 
 def detect_language(text: str | None, *, default: str = "en") -> str:
@@ -95,11 +105,23 @@ def detect_language(text: str | None, *, default: str = "en") -> str:
             return "as"
         return "bn"
 
+    # Check for Romanized Indic / Hinglish phrasing in ASCII questions
+    if counts["en"] > 0 and not any(counts[code] > 0 for code in SUPPORTED_LANGUAGES if code != "en"):
+        ascii_tokens = set(re.findall(r"[a-zA-Z]+", text.casefold()))
+        matched_cues = ascii_tokens & ROMANIZED_HINDI_CUES
+        if len(matched_cues) >= 2 or (len(matched_cues) == 1 and any(cue in matched_cues for cue in ("kahan", "kaha", "nikalti", "kitni", "pradushan", "batao", "bataiye"))):
+            return "hi"
+
     language, count = max(counts.items(), key=lambda item: item[1])
     return language if count else normalize_language(default)
 
 
 _DOMAIN_TRANSLATIONS = {
+    ("hi", "en", "अविरल धारा क्या है?"): "What is Aviral Dhara?",
+    ("hi", "en", "अविरल धारा क्या है"): "What is Aviral Dhara?",
+    ("hi", "en", "अविरल धारा"): "Aviral Dhara",
+    ("hi", "en", "निर्मल धारा क्या है?"): "What is Nirmal Dhara?",
+    ("hi", "en", "निर्मल धारा"): "Nirmal Dhara",
     ("en", "hi", "From the retrieved historical GRBMP material:"): "ऐतिहासिक GRBMP सामग्री से प्राप्त जानकारी के अनुसार:",
     ("en", "kn", "From the retrieved historical GRBMP material:"): "ಹಿಂಪಡೆಯಲಾದ ಐತಿಹಾಸಿಕ GRBMP ವಿಷಯದ ಪ್ರಕಾರ:",
     ("en", "ta", "From the retrieved historical GRBMP material:"): "மீட்டெடுக்கப்பட்ட வரலாற்று GRBMP தரவுகளின்படி:",
@@ -129,6 +151,10 @@ _PREFIXES = {
 
 def _external_translate(text: str, source_lang: str, target_lang: str) -> str:
     """Use official Cloud Translation when configured, else legacy public GTX."""
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
     cloud_key = os.getenv("GOOGLE_TRANSLATE_API_KEY", "").strip()
     if cloud_key:
         url = "https://translation.googleapis.com/language/translate/v2"
@@ -138,7 +164,7 @@ def _external_translate(text: str, source_lang: str, target_lang: str) -> str:
             "X-Goog-Api-Key": cloud_key,
         })
         try:
-            with urllib.request.urlopen(request, timeout=DEFAULT_TIMEOUT_SECONDS) as response:
+            with urllib.request.urlopen(request, timeout=DEFAULT_TIMEOUT_SECONDS, context=ssl_context) as response:
                 data = json.loads(response.read().decode("utf-8"))
             translated = data["data"]["translations"][0]["translatedText"]
             if isinstance(translated, str) and translated.strip():
@@ -156,38 +182,41 @@ def _external_translate(text: str, source_lang: str, target_lang: str) -> str:
             logger.warning("Cloud translation failed: malformed_response")
             raise TranslationError("External translation returned an unusable response") from None
 
-    # Compatibility path for existing installations without a Cloud key. This
-    # endpoint is not Google's documented Cloud API and has no project SLA.
-    query = urllib.parse.urlencode({
-        "client": "gtx", "sl": source_lang, "tl": target_lang, "dt": "t", "q": text,
-    })
-    url = f"https://translate.googleapis.com/translate_a/single?{query}"
-    request = urllib.request.Request(url, headers={"User-Agent": "Ganga-AI-Mascot/1.0"})
-    try:
-        with urllib.request.urlopen(request, timeout=DEFAULT_TIMEOUT_SECONDS) as response:
-            data = json.loads(response.read().decode("utf-8"))
-        if isinstance(data, list) and data and isinstance(data[0], list):
-            translated = "".join(
-                item[0] for item in data[0]
-                if isinstance(item, list) and item and isinstance(item[0], str)
-            ).strip()
-            if translated:
-                return translated
-        raise TranslationError("Translation provider returned an unusable response")
-    except TranslationError:
-        raise
-    except urllib.error.HTTPError as http_err:
-        logger.warning("External translation failed: http_status_%s", http_err.code)
-        raise TranslationError("External translation is unavailable") from None
-    except (urllib.error.URLError, TimeoutError, OSError):
-        logger.warning("External translation failed: network_or_timeout")
-        raise TranslationError("External translation is unavailable") from None
-    except (ValueError, TypeError, KeyError):
-        logger.warning("External translation failed: malformed_response")
-        raise TranslationError("External translation returned an unusable response") from None
-    except Exception:
-        logger.warning("External translation failed: provider_error")
-        raise TranslationError("External translation is unavailable") from None
+    # Compatibility path for existing installations without a Cloud key.
+    # Try dict-chrome-ex client first (more resilient against 429), then fall back to gtx.
+    for client in ("dict-chrome-ex", "gtx"):
+        query = urllib.parse.urlencode({
+            "client": client, "sl": source_lang, "tl": target_lang, "dt": "t", "q": text,
+        })
+        url = f"https://translate.googleapis.com/translate_a/single?{query}"
+        request = urllib.request.Request(
+            url,
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"},
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=DEFAULT_TIMEOUT_SECONDS, context=ssl_context) as response:
+                data = json.loads(response.read().decode("utf-8"))
+            if isinstance(data, list) and data and isinstance(data[0], list):
+                translated = "".join(
+                    item[0] for item in data[0]
+                    if isinstance(item, list) and item and isinstance(item[0], str)
+                ).strip()
+                if translated:
+                    return translated
+        except urllib.error.HTTPError as http_err:
+            logger.warning("External translation (%s) failed: http_status_%s", client, http_err.code)
+            continue
+        except (urllib.error.URLError, TimeoutError, OSError):
+            logger.warning("External translation (%s) failed: network_or_timeout", client)
+            continue
+        except (ValueError, TypeError, KeyError):
+            logger.warning("External translation (%s) failed: malformed_response", client)
+            continue
+        except Exception:
+            logger.warning("External translation (%s) failed: provider_error", client)
+            continue
+
+    raise TranslationError("External translation is unavailable")
 
 
 def _http_translate(
