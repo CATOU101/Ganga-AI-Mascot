@@ -1,6 +1,6 @@
 # Research Paper Work Plan: Ganga AI Mascot (PRJ_316)
 
-**Research Paper Title:** AI-Powered Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
+**Research Paper Title:** AI-Enabled Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
 
 **Target Venue:** Undecided; current master manuscript is venue-neutral
 **Historical technical baseline SHA:** `56032d744b80695be7593c6f85e50d53c7c5a083`
