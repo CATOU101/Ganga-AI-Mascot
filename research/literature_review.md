@@ -1,4 +1,4 @@
-# Literature Review: AI-Powered Grounded Conversational Agents and Digital Mascots for Environmental Awareness
+# Literature Review: AI-Enabled Interactive Digital Mascot for Namami Gange Awareness & River-People Connectivity
 
 **Project ID:** PRJ_316  
 **Status:** Thematic review of ten sources. Bibliographic metadata for R1–R10 was checked against publisher records, the NeurIPS proceedings, and DOI-linked records on 2026-10-19. R1's author names and order follow the published PDF title-block byline; the publisher landing page's “How to Cite” field differs. R7 remains online first without a final volume/issue assignment on the checked SAGE record. Source-by-source status and URLs are recorded in the research log.
