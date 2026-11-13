@@ -14,8 +14,9 @@
     rel="stylesheet">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌊</text></svg>">
-  <script src="theme.js?v=theme-v1"></script>
-  <link rel="stylesheet" href="style.css?v=reading-library-v1" />
+  <script src="ui-i18n.js?v=ui-languages-v1"></script>
+  <script src="theme.js?v=localized-ui-v1"></script>
+  <link rel="stylesheet" href="style.css?v=responsive-home-mobile-v1" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -54,7 +55,7 @@
           </div>
           <div>
             <h1 class="main-title">Ganga AI Mascot</h1>
-            <p class="tagline">Chacha Chaudhary – Your Ganga Guide</p>
+            <p class="tagline" data-i18n="brand.tagline">Chacha Chaudhary – Your Ganga Guide</p>
           </div>
         </div>
       </div>
@@ -64,20 +65,30 @@
         <!-- Take Quiz Action -->
         <a id="quizNavButton" class="take-quiz-pill quiz-nav-button" href="#quiz" role="button" aria-pressed="false">
           <span class="quiz-trophy" aria-hidden="true">🏆</span>
-          <span>Take Quiz</span>
+          <span data-i18n="header.takeQuiz">Take Quiz</span>
         </a>
 
-        <div class="lang-selector-box input-detection-label" aria-label="Typed language is detected automatically">
-          <span class="lang-label">Typed language</span>
-          <span class="automatic-language-value">Auto detected</span>
+        <div class="lang-selector-box website-language-box" title="Website Language">
+          <label class="lang-label" for="websiteLangSelect" data-i18n="header.websiteLanguage">Website Language</label>
+          <div class="select-wrapper">
+            <span class="lang-symbol-badge" aria-hidden="true">文</span>
+            <select id="websiteLangSelect" class="lang-dropdown" aria-label="Website language"
+              data-i18n-aria-label="header.websiteLanguageAria">
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+              <option value="kn">ಕನ್ನಡ</option>
+              <option value="ta">தமிழ்</option>
+            </select>
+            <span class="dropdown-chevron" aria-hidden="true">▾</span>
+          </div>
         </div>
 
         <!-- OUTPUT LANGUAGE SELECTOR (Independent) -->
-        <div class="lang-selector-box" title="Select output language for Chacha's response & neural voice">
-          <label class="lang-label" for="outputLangSelect">Output Language <span class="lang-sub-label">(Select response language)</span></label>
+        <div class="lang-selector-box" title="Select output language for Chacha's response & neural voice" data-i18n-title="header.outputTitle">
+          <label class="lang-label" for="outputLangSelect"><span data-i18n="header.outputLanguage">Output Language</span> <span class="lang-sub-label" data-i18n="header.outputHint">(Select response language)</span></label>
           <div class="select-wrapper">
             <span class="lang-symbol-badge" aria-hidden="true">A/अ</span>
-            <select id="outputLangSelect" class="lang-dropdown" aria-label="Output Language">
+            <select id="outputLangSelect" class="lang-dropdown" aria-label="Output Language" data-i18n-aria-label="header.outputAria">
               <option value="en" selected>English</option>
               <option value="hi">हिंदी (Hindi)</option>
               <option value="kn">ಕನ್ನಡ (Kannada)</option>
@@ -96,11 +107,11 @@
           </div>
         </div>
 
-        <div class="lang-selector-box" title="Select the language spoken into the microphone">
-          <label class="lang-label" for="voiceInputLangSelect">Voice input</label>
+        <div class="lang-selector-box" title="Select the language spoken into the microphone" data-i18n-title="header.voiceTitle">
+          <label class="lang-label" for="voiceInputLangSelect" data-i18n="header.voiceInput">Voice input</label>
           <div class="select-wrapper">
             <span class="lang-symbol-badge" aria-hidden="true">🎙</span>
-            <select id="voiceInputLangSelect" class="lang-dropdown" aria-label="Voice input language">
+            <select id="voiceInputLangSelect" class="lang-dropdown" aria-label="Voice input language" data-i18n-aria-label="header.voiceInputAria">
               <option value="en" selected>English</option>
               <option value="hi">हिंदी (Hindi)</option>
               <option value="kn">ಕನ್ನಡ (Kannada)</option>
@@ -121,7 +132,7 @@
 
         <!-- Theme toggle switches between light and dark appearance. -->
         <button type="button" class="icon-circle-btn" id="themeToggleBtn" data-theme-toggle title="Switch to dark mode"
-          aria-label="Switch to dark mode" aria-pressed="false">
+          aria-label="Switch to dark mode" data-i18n-title="theme.switchDark" data-i18n-aria-label="theme.switchDark" aria-pressed="false">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
@@ -132,40 +143,40 @@
     <!-- Main Application Split-Screen Layout -->
     <div class="dashboard-body">
       <!-- Left Vertical Sidebar Navigation -->
-      <aside class="sidebar-nav" aria-label="Main Navigation">
-        <button type="button" class="nav-item active" data-nav="home" title="Home" aria-current="page">
+      <aside class="sidebar-nav" aria-label="Main Navigation" data-i18n-aria-label="nav.main">
+        <button type="button" class="nav-item active" data-nav="home" title="Home" data-i18n-title="nav.home" aria-current="page">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
             </svg>
           </span>
-          <span class="nav-text">Home</span>
+          <span class="nav-text" data-i18n="nav.home">Home</span>
         </button>
-        <button type="button" class="nav-item" data-nav="resources" title="Ganga Knowledge Base">
+        <button type="button" class="nav-item" data-nav="resources" title="Ganga Knowledge Base" data-i18n-title="nav.resourcesTitle">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path
                 d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
             </svg>
           </span>
-          <span class="nav-text">Ganga Resources</span>
+          <span class="nav-text" data-i18n="nav.resources">Ganga Resources</span>
         </button>
-        <button type="button" class="nav-item" data-nav="awareness" title="Water Quality & Conservation">
+        <button type="button" class="nav-item" data-nav="awareness" title="Water Quality & Conservation" data-i18n-title="nav.awareness">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z" />
             </svg>
           </span>
-          <span class="nav-text">Awareness</span>
+          <span class="nav-text" data-i18n="nav.awareness">Awareness</span>
         </button>
-        <button type="button" class="nav-item" data-nav="settings" title="Preferences">
+        <button type="button" class="nav-item" data-nav="settings" title="Preferences" data-i18n-title="nav.settings">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path
                 d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
             </svg>
           </span>
-          <span class="nav-text">Settings</span>
+          <span class="nav-text" data-i18n="nav.settings">Settings</span>
         </button>
       </aside>
 
@@ -173,17 +184,17 @@
       <main class="main-workspace">
         <div id="homeView" class="home-view" data-app-view="home">
         <!-- LEFT PANEL: 3D AVATAR (Fixed Height Stage) -->
-        <section class="avatar-card-container" aria-label="Chacha Chaudhary 3D Avatar Stage">
+        <section class="avatar-card-container" aria-label="Chacha Chaudhary 3D Avatar Stage" data-i18n-aria-label="avatar.stageAria">
           <div class="avatar-stage-wrapper">
             <!-- Clean Professional Header -->
             <div class="avatar-stage-header">
               <div class="avatar-header-info">
-                <span class="avatar-eyebrow">DIGITAL AI MASCOT</span>
+                <span class="avatar-eyebrow" data-i18n="avatar.eyebrow">DIGITAL AI MASCOT</span>
                 <h2 class="avatar-character-name">Chacha Chaudhary</h2>
               </div>
               <div class="avatar-live-badge" id="avatarLiveBadge">
                 <span class="live-status-dot dot-idle" id="liveStatusDot"></span>
-                <span class="live-status-text" id="liveStatusText">Idle</span>
+                <span class="live-status-text" id="liveStatusText" data-i18n="status.idle">Idle</span>
               </div>
             </div>
 
@@ -200,14 +211,14 @@
             <div class="canvas-3d-box">
               <div id="avatarLoadingOverlay" class="avatar-loading-overlay">
                 <div class="avatar-spinner"></div>
-                <span class="loading-label">Loading Chacha New (3D GLB)...</span>
-                <span class="loading-sub">Full Rig with 28 Skeletal Animations &amp; Lip-Sync</span>
+                <span class="loading-label" data-i18n="avatar.loading">Loading Chacha New (3D GLB)...</span>
+                <span class="loading-sub" data-i18n="avatar.loadingDetails">Full Rig with 28 Skeletal Animations &amp; Lip-Sync</span>
               </div>
               <canvas id="mascotCanvas3D" class="mascot-canvas-3d" width="380" height="480"></canvas>
             </div>
 
             <!-- Real-Time Audio Signal Waveform Bar -->
-            <div class="audio-signal-strip" aria-label="Speech Signal Indicator">
+            <div class="audio-signal-strip" aria-label="Speech Signal Indicator" data-i18n-aria-label="avatar.signalAria">
               <div class="signal-track">
                 <div id="vizFill" class="signal-fill" style="width: 0%;"></div>
               </div>
@@ -215,41 +226,41 @@
             </div>
 
             <!-- 4 Automatic State Indicator Pills (Idle, Listening, Thinking, Speaking) -->
-            <div class="avatar-status-dock" aria-label="Avatar Status">
+            <div class="avatar-status-dock" aria-label="Avatar Status" data-i18n-aria-label="avatar.statusAria">
               <button type="button" class="state-dock-pill active" id="statePillIdle" data-state="IDLE"
-                title="Chacha is Idle &amp; Attentive">
+                title="Chacha is Idle &amp; Attentive" data-i18n-title="avatar.idleTitle">
                 <span class="state-indicator-dot dot-idle"></span>
-                <span class="state-title">Idle</span>
+                <span class="state-title" data-i18n="status.idle">Idle</span>
               </button>
               <button type="button" class="state-dock-pill" id="statePillListening" data-state="LISTENING"
-                title="Chacha is Listening to your Voice">
+                title="Chacha is Listening to your Voice" data-i18n-title="avatar.listeningTitle">
                 <span class="state-indicator-dot dot-listening"></span>
-                <span class="state-title">Listening</span>
+                <span class="state-title" data-i18n="avatar.listening">Listening</span>
               </button>
               <button type="button" class="state-dock-pill" id="statePillThinking" data-state="THINKING"
-                title="Chacha is Consulting the GRBMP Brain">
+                title="Chacha is Consulting the GRBMP Brain" data-i18n-title="avatar.thinkingTitle">
                 <span class="state-indicator-dot dot-thinking"></span>
-                <span class="state-title">Thinking</span>
+                <span class="state-title" data-i18n="avatar.thinking">Thinking</span>
               </button>
               <button type="button" class="state-dock-pill" id="statePillSpeaking" data-state="SPEAKING"
-                title="Chacha is Speaking with Neural EdgeTTS">
+                title="Chacha is Speaking with Neural EdgeTTS" data-i18n-title="avatar.speakingTitle">
                 <span class="state-indicator-dot dot-speaking"></span>
-                <span class="state-title">Speaking</span>
+                <span class="state-title" data-i18n="avatar.speaking">Speaking</span>
               </button>
             </div>
           </div>
         </section>
 
         <!-- RIGHT PANEL: AI CHAT (Modern Conversation Stream) -->
-        <section id="chatView" class="chat-card-container chat-view" aria-label="AI Conversation Stream">
+        <section id="chatView" class="chat-card-container chat-view" aria-label="AI Conversation Stream" data-i18n-aria-label="chat.streamAria">
           <!-- Chat Card Header -->
           <div class="chat-card-header">
             <div class="chat-header-title">
               <span class="header-dot"></span>
-              <h3>Ganga River Basin Assistant</h3>
+              <h3 data-i18n="chat.title">Ganga River Basin Assistant</h3>
             </div>
             <div class="chat-header-tags">
-              <span id="modeBadge" class="mode-pill mode-grounded">Verified RAG</span>
+              <span id="modeBadge" class="mode-pill mode-grounded" data-i18n="chat.verifiedRag">Verified RAG</span>
               <span id="responseLangBadge" class="lang-tag-pill">Typed: Auto | Output: EN</span>
             </div>
           </div>
@@ -259,32 +270,25 @@
             <!-- Welcome Assistant Message -->
             <div class="message-row assistant-row">
               <div class="avatar-thumb-box">
-                <img src="08_Final/validation_renders/Face_Happy.png" alt="Chacha Avatar" class="chacha-thumb-img"
+                  <img src="08_Final/validation_renders/Face_Happy.png" alt="Chacha Avatar" data-i18n-alt="avatar.imageAlt" class="chacha-thumb-img"
                   onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>👳</text></svg>';" />
               </div>
               <div class="message-bubble assistant-card">
                 <div class="bubble-header-bar">
                   <div class="assistant-meta-left">
                     <span class="assistant-name">Chacha Chaudhary</span>
-                    <span class="verified-tag">Ganga Official Guide</span>
+                    <span class="verified-tag" data-i18n="chat.guideTag">Ganga Official Guide</span>
                   </div>
-                  <span class="bubble-timestamp">Just now</span>
+                  <span class="bubble-timestamp" data-i18n="chat.justNow">Just now</span>
                 </div>
                 <div class="bubble-content-text">
-                  <p>Namaste! I am Chacha Chaudhary, your official Ganga River guide. Ask me anything about the River
-                    Ganga basin, Namami Gange conservation initiatives, water quality standards, or the Basin Management
-                    Plan (GRBMP).</p>
-                  <p class="guide-prompt-tip">You can click any of the suggested topics below or type your question:</p>
+                    <p data-i18n="chat.welcome">Namaste! I am Chacha Chaudhary, your official Ganga River guide. Ask me anything about the River Ganga basin, Namami Gange conservation initiatives, water quality standards, or the Basin Management Plan (GRBMP).</p>
+                  <p class="guide-prompt-tip" data-i18n="chat.promptTip">You can click any of the suggested topics below or type your question:</p>
                   <div class="sample-pills-row">
-                    <button type="button" class="sample-prompt-pill"
-                      data-prompt="What is the mission of Namami Gange?">What is Namami Gange?</button>
-                    <button type="button" class="sample-prompt-pill"
-                      data-prompt="What can we do to keep River Ganga clean?">How to keep Ganga clean?</button>
-                    <button type="button" class="sample-prompt-pill"
-                      data-prompt="What is the water quality at Haridwar?">Water quality at Haridwar</button>
-                    <button type="button" class="sample-prompt-pill"
-                      data-prompt="What are the major pollution sources in River Ganga?">Major pollution
-                      sources</button>
+                    <button type="button" class="sample-prompt-pill" data-prompt-key="chat.sampleNamami" data-i18n="chat.sampleNamami">What is the mission of Namami Gange?</button>
+                    <button type="button" class="sample-prompt-pill" data-prompt-key="chat.sampleClean" data-i18n="chat.sampleClean">What can we do to keep River Ganga clean?</button>
+                    <button type="button" class="sample-prompt-pill" data-prompt-key="chat.sampleQuality" data-i18n="chat.sampleQuality">What is the water quality at Haridwar?</button>
+                    <button type="button" class="sample-prompt-pill" data-prompt-key="chat.samplePollution" data-i18n="chat.samplePollution">What are the major pollution sources in River Ganga?</button>
                   </div>
                 </div>
               </div>
@@ -298,15 +302,15 @@
               <span class="dot"></span>
               <span class="dot"></span>
             </div>
-            <span class="thinking-msg-text">Consulting verified GRBMP knowledge base...</span>
+            <span class="thinking-msg-text" data-i18n="chat.consulting">Consulting verified GRBMP knowledge base...</span>
           </div>
 
           <!-- Bottom Chat Input Bar -->
           <div class="chat-input-dock">
             <form id="askForm" class="chat-input-form">
               <!-- Left Microphone Button -->
-              <button type="button" id="micBtn" class="mic-round-btn" title="Speak through microphone (Speech-to-Text)"
-                aria-label="Microphone Voice Input">
+              <button type="button" id="micBtn" class="mic-round-btn" title="Speak through microphone (Speech-to-Text)" data-i18n-title="chat.micTitle"
+                aria-label="Microphone Voice Input" data-i18n-aria-label="chat.micAria">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
                   <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -318,11 +322,11 @@
               <!-- Main Input Field with Keyboard Toggle Inside -->
               <div class="input-pill-field">
                 <input type="text" id="questionInput" class="chat-text-input"
-                  placeholder="Type your question about Ganga, GRBMP, or water quality..." autocomplete="off"
-                  aria-label="Ask Chacha a question" />
+                  placeholder="Type your question about Ganga, GRBMP, or water quality..." data-i18n-placeholder="chat.placeholder" autocomplete="off"
+                  aria-label="Ask Chacha a question" data-i18n-aria-label="chat.askAria" />
                 <!-- On-Screen Multilingual Keyboard Toggle Button -->
                 <button type="button" id="keyboardToggleBtn" class="keyboard-dock-toggle-btn"
-                  title="Toggle Multilingual On-Screen Keyboard" aria-label="Toggle Virtual Keyboard" aria-expanded="false">
+                  title="Toggle Multilingual On-Screen Keyboard" data-i18n-title="chat.keyboardToggle" aria-label="Toggle Virtual Keyboard" data-i18n-aria-label="chat.keyboardToggle" aria-expanded="false">
                   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="2" y="4" width="20" height="16" rx="3" ry="3"></rect>
                     <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"></path>
@@ -331,8 +335,8 @@
               </div>
 
               <!-- Right Send Message Button -->
-              <button type="submit" id="submitBtn" class="send-action-btn" title="Send question to Chacha"
-                aria-label="Send message">
+              <button type="submit" id="submitBtn" class="send-action-btn" title="Send question to Chacha" data-i18n-title="chat.sendTitle"
+                aria-label="Send message" data-i18n-aria-label="chat.sendAria">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
@@ -350,24 +354,24 @@
         <section id="resourcesView" class="app-page-view resources-page" data-app-view="resources" aria-labelledby="resourcesTitle" hidden>
           <header class="app-page-heading library-heading">
             <div>
-              <p class="app-page-eyebrow">THE GANGA KNOWLEDGE LIBRARY</p>
-              <h2 id="resourcesTitle">Ganga Resources</h2>
-              <p>Browse approved reports and source sections from the Ganga River Basin collection.</p>
+              <p class="app-page-eyebrow" data-i18n="resources.eyebrow">THE GANGA KNOWLEDGE LIBRARY</p>
+              <h2 id="resourcesTitle" data-i18n="resources.title">Ganga Resources</h2>
+              <p data-i18n="resources.description">Browse approved reports and source sections from the Ganga River Basin collection.</p>
             </div>
             <div id="resourceCounts" class="resource-counts" role="status" aria-live="polite"></div>
           </header>
-          <section id="resourceLibraryView" aria-label="Browse Ganga resources">
+          <section id="resourceLibraryView" aria-label="Browse Ganga resources" data-i18n-aria-label="resources.browseAria">
             <div class="library-search-row">
-              <label class="sr-only" for="resourceSearchInput">Search titles, topics or source text</label>
-              <input id="resourceSearchInput" class="resource-search-input" type="search" placeholder="Search the library by topic, title or phrase" autocomplete="off">
-              <p id="resourceStatus" class="resource-status" role="status" aria-live="polite">Loading approved documents…</p>
+              <label class="sr-only" for="resourceSearchInput" data-i18n="resources.searchLabel">Search titles, topics or source text</label>
+              <input id="resourceSearchInput" class="resource-search-input" type="search" placeholder="Search the library by topic, title or phrase" data-i18n-placeholder="resources.searchPlaceholder" autocomplete="off">
+              <p id="resourceStatus" class="resource-status" role="status" aria-live="polite" data-i18n="resources.loading">Loading approved documents…</p>
             </div>
-            <nav id="resourceCategories" class="resource-category-list" aria-label="Filter resources by topic"></nav>
+            <nav id="resourceCategories" class="resource-category-list" aria-label="Filter resources by topic" data-i18n-aria-label="resources.filterAria"></nav>
             <div id="resourceDocumentList" class="resource-card-grid"></div>
-            <button id="resourceLoadMore" class="resource-load-more" type="button" hidden>Show more documents</button>
+            <button id="resourceLoadMore" class="resource-load-more" type="button" hidden data-i18n="resources.loadMore">Show more documents</button>
           </section>
-          <section id="resourceDocumentView" class="resource-document-view" aria-label="Selected document" hidden>
-            <button id="resourceBackButton" class="resource-back-button" type="button">← Back to library</button>
+          <section id="resourceDocumentView" class="resource-document-view" aria-label="Selected document" data-i18n-aria-label="resources.selectedAria" hidden>
+            <button id="resourceBackButton" class="resource-back-button" type="button" data-i18n="resources.back">← Back to library</button>
             <header class="resource-document-header">
               <p id="resourceDocumentMeta" class="resource-document-meta"></p>
               <h3 id="resourceDocumentTitle"></h3>
@@ -380,55 +384,55 @@
         <section id="awarenessView" class="app-page-view awareness-page" data-app-view="awareness" aria-labelledby="awarenessTitle" hidden>
           <header class="app-page-heading awareness-heading">
             <div>
-              <p class="app-page-eyebrow">LEARN FROM APPROVED SOURCES</p>
-              <h2 id="awarenessTitle">Ganga Awareness</h2>
-              <p>Short source-backed readings and a knowledge check, drawn from the approved project collection.</p>
+              <p class="app-page-eyebrow" data-i18n="awareness.eyebrow">LEARN FROM APPROVED SOURCES</p>
+              <h2 id="awarenessTitle" data-i18n="awareness.title">Ganga Awareness</h2>
+              <p data-i18n="awareness.description">Short source-backed readings and a knowledge check, drawn from the approved project collection.</p>
             </div>
           </header>
-          <nav id="awarenessTopics" class="awareness-topic-grid" aria-label="Awareness topics">
-            <button type="button" class="awareness-topic active" data-awareness-topic="ganga" aria-pressed="true"><span>01</span><strong>Know Your Ganga</strong><small>Origins, course and basin</small></button>
-            <button type="button" class="awareness-topic" data-awareness-topic="pollution" aria-pressed="false"><span>02</span><strong>Pollution Awareness</strong><small>How pollutants enter rivers</small></button>
-            <button type="button" class="awareness-topic" data-awareness-topic="protect" aria-pressed="false"><span>03</span><strong>Protect the River</strong><small>Restoration actions in the plans</small></button>
-            <button type="button" class="awareness-topic" data-awareness-topic="myth" aria-pressed="false"><span>04</span><strong>Myth vs Fact</strong><small>Check a claim against a source</small></button>
-            <a class="awareness-topic awareness-quiz-link" href="#quiz"><span>05</span><strong>Test Your Knowledge</strong><small>Open the existing Ganga quiz</small></a>
+          <nav id="awarenessTopics" class="awareness-topic-grid" aria-label="Awareness topics" data-i18n-aria-label="awareness.topicsAria">
+            <button type="button" class="awareness-topic active" data-awareness-topic="ganga" aria-pressed="true"><span>01</span><strong data-i18n="awareness.topic.ganga">Know Your Ganga</strong><small data-i18n="awareness.topic.gangaDesc">Origins, course and basin</small></button>
+            <button type="button" class="awareness-topic" data-awareness-topic="pollution" aria-pressed="false"><span>02</span><strong data-i18n="awareness.topic.pollution">Pollution Awareness</strong><small data-i18n="awareness.topic.pollutionDesc">How pollutants enter rivers</small></button>
+            <button type="button" class="awareness-topic" data-awareness-topic="protect" aria-pressed="false"><span>03</span><strong data-i18n="awareness.topic.protect">Protect the River</strong><small data-i18n="awareness.topic.protectDesc">Restoration actions in the plans</small></button>
+            <button type="button" class="awareness-topic" data-awareness-topic="myth" aria-pressed="false"><span>04</span><strong data-i18n="awareness.topic.myth">Myth vs Fact</strong><small data-i18n="awareness.topic.mythDesc">Check a claim against a source</small></button>
+            <a class="awareness-topic awareness-quiz-link" href="#quiz"><span>05</span><strong data-i18n="awareness.topic.quiz">Test Your Knowledge</strong><small data-i18n="awareness.topic.quizDesc">Open the existing Ganga quiz</small></a>
           </nav>
           <section id="awarenessContent" class="awareness-content" aria-live="polite">
-            <p id="awarenessStatus" class="resource-status" role="status">Choose a topic to explore source-backed information.</p>
+            <p id="awarenessStatus" class="resource-status" role="status" data-i18n="awareness.initial">Choose a topic to explore source-backed information.</p>
             <div id="awarenessCards" class="awareness-card-grid"></div>
           </section>
         </section>
 
         <section id="settingsView" class="app-page-view settings-page" data-app-view="settings" aria-labelledby="settingsTitle" hidden>
           <header class="app-page-heading">
-            <div><p class="app-page-eyebrow">YOUR PREFERENCES</p><h2 id="settingsTitle">Settings</h2><p>These preferences are saved on this device and shared with the controls in the header.</p></div>
+            <div><p class="app-page-eyebrow" data-i18n="settings.eyebrow">YOUR PREFERENCES</p><h2 id="settingsTitle" data-i18n="settings.title">Settings</h2><p data-i18n="settings.description">These preferences are saved on this device and shared with the controls in the header.</p></div>
           </header>
           <div class="settings-card-grid">
             <section class="settings-card" aria-labelledby="settingsThemeTitle">
-              <div><h3 id="settingsThemeTitle">Appearance</h3><p>Choose light or dark appearance. Your selection is saved across visits.</p></div>
-              <button type="button" class="settings-theme-button" id="settingsThemeToggleBtn" data-theme-toggle aria-label="Switch theme"><span class="settings-theme-icon" aria-hidden="true">◐</span><span class="settings-theme-label">Change theme</span></button>
+              <div><h3 id="settingsThemeTitle" data-i18n="settings.appearance">Appearance</h3><p data-i18n="settings.appearanceDescription">Choose light or dark appearance. Your selection is saved across visits.</p></div>
+              <button type="button" class="settings-theme-button" id="settingsThemeToggleBtn" data-theme-toggle aria-label="Switch theme" data-i18n-aria-label="theme.change"><span class="settings-theme-icon" aria-hidden="true">◐</span><span class="settings-theme-label" data-i18n="theme.change">Change theme</span></button>
             </section>
             <section class="settings-card">
-              <div><h3><label for="settingsOutputLangSelect">Default response language</label></h3><p>Sets the language used for Chacha's answers and speech.</p></div>
-              <select id="settingsOutputLangSelect" class="settings-select" aria-label="Default response language">
+              <div><h3><label for="settingsOutputLangSelect" data-i18n="settings.defaultOutput">Default response language</label></h3><p data-i18n="settings.outputDescription">Sets the language used for Chacha's answers and speech.</p></div>
+              <select id="settingsOutputLangSelect" class="settings-select" aria-label="Default response language" data-i18n-aria-label="settings.defaultOutput">
                 <option value="en">English</option><option value="hi">हिंदी (Hindi)</option><option value="kn">ಕನ್ನಡ (Kannada)</option><option value="ta">தமிழ் (Tamil)</option><option value="te">తెలుగు (Telugu)</option><option value="bn">বাংলা (Bengali)</option><option value="mr">मराठी (Marathi)</option><option value="gu">ગુજરાતી (Gujarati)</option><option value="ml">മലയാളം (Malayalam)</option><option value="pa">ਪੰਜਾਬੀ (Punjabi)</option><option value="ur">اردو (Urdu)</option><option value="or">ଓଡ଼ିଆ (Odia)</option><option value="as">অসমীয়া (Assamese)</option>
               </select>
             </section>
             <section class="settings-card">
-              <div><h3><label for="settingsVoiceInputLangSelect">Voice input language</label></h3><p>Choose the language spoken into the microphone. Available recognition depends on the configured speech provider.</p></div>
-              <select id="settingsVoiceInputLangSelect" class="settings-select" aria-label="Voice input language">
+              <div><h3><label for="settingsVoiceInputLangSelect" data-i18n="settings.voiceInput">Voice input language</label></h3><p data-i18n="settings.voiceDescription">Choose the language spoken into the microphone. Available recognition depends on the configured speech provider.</p></div>
+              <select id="settingsVoiceInputLangSelect" class="settings-select" aria-label="Voice input language" data-i18n-aria-label="header.voiceInputAria">
                 <option value="en">English</option><option value="hi">हिंदी (Hindi)</option><option value="kn">ಕನ್ನಡ (Kannada)</option><option value="ta">தமிழ் (Tamil)</option><option value="te">తెలుగు (Telugu)</option><option value="bn">বাংলা (Bengali)</option><option value="mr">मराठी (Marathi)</option><option value="gu">ગુજરાતી (Gujarati)</option><option value="ml">മലയാളം (Malayalam)</option><option value="pa">ਪੰਜਾਬੀ (Punjabi)</option><option value="ur">اردو (Urdu)</option><option value="or">ଓଡ଼ିଆ (Odia)</option><option value="as">অসমীয়া (Assamese)</option>
               </select>
             </section>
-            <section class="settings-card settings-accessibility-card"><div><h3>Accessibility</h3><p>Keyboard navigation, visible focus indicators, semantic labels and the multilingual on-screen keyboard are available throughout the application.</p></div></section>
+            <section class="settings-card settings-accessibility-card"><div><h3 data-i18n="settings.accessibility">Accessibility</h3><p data-i18n="settings.accessibilityDescription">Keyboard navigation, visible focus indicators, semantic labels and the multilingual on-screen keyboard are available throughout the application.</p></div></section>
           </div>
         </section>
 
         <section id="aboutView" class="app-page-view about-page" data-app-view="about" aria-labelledby="aboutTitle" hidden>
-          <header class="app-page-heading"><div><p class="app-page-eyebrow">PROJECT INFORMATION</p><h2 id="aboutTitle">About Ganga AI Mascot</h2></div></header>
+          <header class="app-page-heading"><div><p class="app-page-eyebrow" data-i18n="about.eyebrow">PROJECT INFORMATION</p><h2 id="aboutTitle" data-i18n="about.title">About Ganga AI Mascot</h2></div></header>
           <article class="about-card">
-            <p><strong>Project ID:</strong> PRJ_316</p>
-            <p><strong>Official title:</strong> Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange.</p>
-            <p>The project brings together the Chacha Chaudhary digital avatar, a retrieval-augmented knowledge service, speech features and multilingual support.</p>
+            <p><strong data-i18n="about.projectId">Project ID:</strong> PRJ_316</p>
+            <p><strong data-i18n="about.officialTitle">Official title:</strong> <span data-i18n="about.officialProject">Development of AI, ML and Chatbot-powered Interactive Robot Mascot (Chacha Chaudhary) and Digital Avatar to Strengthen the River People Connect Component of Namami Gange.</span></p>
+            <p data-i18n="about.description">The project brings together the Chacha Chaudhary digital avatar, a retrieval-augmented knowledge service, speech features and multilingual support.</p>
           </article>
         </section>
 
@@ -437,10 +441,10 @@
           <div class="quiz-container-card">
             <header class="quiz-header">
               <div>
-                <p class="quiz-eyebrow">NAMAMI GANGE AWARENESS</p>
-                <h2 id="quizTitle" tabindex="-1">Ganga River Knowledge Quiz</h2>
+                <p class="quiz-eyebrow" data-i18n="quiz.eyebrow">NAMAMI GANGE AWARENESS</p>
+                <h2 id="quizTitle" tabindex="-1" data-i18n="quiz.title">Ganga River Knowledge Quiz</h2>
               </div>
-              <a class="quiz-close-pill quiz-secondary-button" href="#" role="button">✕ Back to Chat</a>
+              <a class="quiz-close-pill quiz-secondary-button" href="#" role="button" data-i18n="quiz.back">✕ Back to Chat</a>
             </header>
             <div id="quizContent" class="quiz-body-content"></div>
             <p id="quizAnnouncement" class="sr-only" role="status" aria-live="polite"></p>
@@ -451,8 +455,8 @@
         <div id="cpcbTableView" class="cpcb-modal-container" style="display: none;" aria-hidden="true">
           <div class="cpcb-modal-card">
             <div class="cpcb-modal-header">
-              <h3>CPCB Water Quality Classification Criteria</h3>
-              <button type="button" class="close-modal-btn" id="closeCpcbModal" aria-label="Close CPCB Table">✕</button>
+              <h3 data-i18n="modal.cpcbTitle">CPCB Water Quality Classification Criteria</h3>
+              <button type="button" class="close-modal-btn" id="closeCpcbModal" aria-label="Close CPCB Table" data-i18n-aria-label="modal.closeCpcb">✕</button>
             </div>
             <div id="cpcbTableBody" class="cpcb-modal-body"></div>
           </div>
@@ -460,23 +464,23 @@
       </main>
     </div>
 
-    <footer class="app-footer"><span>Ganga AI Mascot · Chacha Chaudhary</span><a href="#about" id="aboutFooterLink">About</a></footer>
+    <footer class="app-footer"><span data-i18n="footer.brand">Ganga AI Mascot · Chacha Chaudhary</span><a href="#about" id="aboutFooterLink" data-i18n="nav.about">About</a></footer>
 
   </div>
 
-  <script src="keyboard.js?v=all-indic-languages-v1"></script>
+  <script src="keyboard.js?v=localized-ui-v1"></script>
   <script src="mascot.js?v=scaled-up-v12"></script>
-  <script src="cpcb-tables.js"></script>
+  <script src="cpcb-tables.js?v=localized-ui-v1"></script>
   <script src="chat-response.js"></script>
   <script src="answer-format.js"></script>
   <script src="quiz-data.js"></script>
-  <script src="quiz.js"></script>
+  <script src="quiz.js?v=localized-quiz-v1"></script>
   <script src="content-cleaner.js?v=clean-text-v1"></script>
-  <script src="resources.js?v=library-v1"></script>
-  <script src="awareness.js?v=lessons-v1"></script>
+  <script src="resources.js?v=localized-ui-v1"></script>
+  <script src="awareness.js?v=localized-ui-v1"></script>
   <script src="navigation.js?v=retry-active-v2"></script>
   <script src="browser-speech.js"></script>
-  <script src="app.js?v=theme-cleanup-v12"></script>
+  <script src="app.js?v=website-language-v1"></script>
 </body>
 
 </html>

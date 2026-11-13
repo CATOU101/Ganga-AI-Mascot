@@ -155,13 +155,20 @@ test('backspace removes a complete grapheme and Enter submits the chat form', ()
   assert.equal(submitted(), 1);
 });
 
-test('UI advertises automatic input detection and only supported output languages', () => {
+test('website language selector is separate from the independent 13-language output and voice selectors', () => {
   const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-  assert.match(html, /Typed language[\s\S]*Auto detected/);
+  const header = html.match(/class="header-right-actions"[\s\S]*?<\/header>/)?.[0] || '';
+  assert.match(header, /id="websiteLangSelect"/);
+  assert.doesNotMatch(header, /Typed language|Auto detected/);
+  const websiteSelect = html.match(/<select id="websiteLangSelect"[\s\S]*?<\/select>/)?.[0] || '';
+  assert.deepEqual(Array.from(websiteSelect.matchAll(/<option value="([^"]+)"/g), (match) => match[1]), ['en', 'hi', 'kn', 'ta']);
   assert.doesNotMatch(html, /id="inputLangSelect"/);
   assert.doesNotMatch(html, /outputLangSelector|class="lang-btn"/);
   assert.doesNotMatch(html, /id="answerText"|id="notifBtn"/);
   assert.match(html, /id="themeToggleBtn"/);
+  const i18n = fs.readFileSync(path.join(__dirname, '..', 'ui-i18n.js'), 'utf8');
+  assert.match(i18n, /gangaWebsiteLanguage/);
+  assert.match(i18n, /ganga-website-language-change/);
   const outputSelect = html.match(/<select id="outputLangSelect"[\s\S]*?<\/select>/)?.[0] || '';
   const languageCodes = ['en', 'hi', 'kn', 'ta', 'te', 'bn', 'mr', 'gu', 'ml', 'pa', 'ur', 'or', 'as'];
   assert.deepEqual(Array.from(outputSelect.matchAll(/<option value="([^"]+)"/g), (match) => match[1]), languageCodes);

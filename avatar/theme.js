@@ -21,16 +21,20 @@
     if (!button) return;
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     const icon = theme === 'dark' ? DARK_ICON : LIGHT_ICON;
+    const translated = globalThis.GangaUII18n?.t;
+    const label = translated
+      ? translated(nextTheme === 'dark' ? 'theme.switchDark' : 'theme.switchLight')
+      : `Switch to ${nextTheme} mode`;
     if (button.id === 'settingsThemeToggleBtn') {
       const iconSlot = button.querySelector('.settings-theme-icon');
-      const label = button.querySelector('.settings-theme-label');
+      const text = button.querySelector('.settings-theme-label');
       if (iconSlot) iconSlot.innerHTML = icon;
-      if (label) label.textContent = `Switch to ${nextTheme} mode`;
+      if (text) text.textContent = label;
     } else {
       button.innerHTML = icon;
     }
-    button.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
-    button.setAttribute('title', `Switch to ${nextTheme} mode`);
+    button.setAttribute('aria-label', label);
+    button.setAttribute('title', label);
     button.setAttribute('aria-pressed', String(theme === 'dark'));
   }
 
@@ -71,6 +75,10 @@
         return;
       }
       buttons.forEach(button => setTheme(documentObject, currentTheme, button));
+    }
+
+    if (typeof globalThis.addEventListener === 'function') {
+      globalThis.addEventListener('ganga-website-language-change', renderTheme);
     }
 
     function toggle() {

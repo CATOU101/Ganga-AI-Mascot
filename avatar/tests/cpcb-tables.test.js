@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
 const renderCpcbTables = require("../cpcb-tables.js");
+const uiI18n = require('../ui-i18n.js');
 
 class FakeElement {
   constructor(tagName) {
@@ -67,4 +68,19 @@ test("table values are inserted as text, not interpreted as HTML", () => {
 
   assert.equal(descendants(chat, "td")[0].textContent, hostileValue);
   assert.equal(descendants(chat, "img").length, 0);
+});
+
+test('CPCB interface labels and rule statuses follow website language while preserving source attribution', () => {
+  uiI18n.setLanguage('hi', { persist: false, document: null, window: null });
+  const chat = new FakeElement('div');
+  renderCpcbTables(chat, [{
+    title: 'Water quality', columns: ['Station', 'pH'],
+    rows: [['Haridwar', '7.0\n08 Nov 2026, 19:00 IST\nStatus: Meets Class B']],
+    source: 'Source: CPCB RTWQMS official source',
+  }], fakeDocument);
+  const table = descendants(chat, 'table')[0];
+  assert.equal(descendants(table, 'th')[0].textContent, 'केंद्र');
+  assert.match(descendants(chat, 'td')[1].textContent, /स्थिति: Class B मानदंड पूरा/);
+  assert.equal(descendants(chat, 'p')[0].textContent, 'स्रोत: CPCB RTWQMS official source');
+  uiI18n.setLanguage('en', { persist: false, document: null, window: null });
 });

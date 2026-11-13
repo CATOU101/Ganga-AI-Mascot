@@ -83,13 +83,17 @@
     }
   }
 
-  function createQuizController({ document, questions, getMascot = () => null }) {
+  function createQuizController({ document, questions, getMascot = () => null, i18n = globalThis.GangaUII18n }) {
     const content = document.getElementById('quizContent');
     const announcement = document.getElementById('quizAnnouncement');
     if (!content) throw new Error('Quiz view is missing its content element.');
 
     const session = new QuizSession(questions);
     let explanationTimer = null;
+    let lastAnnouncement = null;
+    let announcementState = null;
+    function tr(key, values = {}) { return i18n ? i18n.t(key, values) : key; }
+    function localized(question) { return i18n ? i18n.translateQuiz(question) : question; }
 
     function createElement(tag, className, text) {
       const element = document.createElement(tag);
@@ -121,19 +125,20 @@
       const progress = createElement('progress', 'quiz-progress');
       progress.max = session.totalQuestions;
       progress.value = session.answeredCount;
-      progress.setAttribute('aria-label', `${session.answeredCount} of ${session.totalQuestions} questions answered`);
+      progress.setAttribute('aria-label', tr('quiz.answered', { count: session.answeredCount, total: session.totalQuestions }));
       return progress;
     }
 
     function renderQuestion() {
-      const question = session.currentQuestion;
+      const rawQuestion = session.currentQuestion;
+      const question = localized(rawQuestion);
       const questionNumber = session.currentIndex + 1;
       const wrapper = createElement('div', 'quiz-question-view');
       const meta = createElement('div', 'quiz-question-meta');
       meta.append(
         createElement('span', 'quiz-category', question.category),
-        createElement('span', 'quiz-question-count', `Question ${questionNumber} of ${session.totalQuestions}`),
-        createElement('span', 'quiz-current-score', `Score ${session.score} / ${session.totalQuestions}`)
+        createElement('span', 'quiz-question-count', tr('quiz.questionCount', { number: questionNumber, total: session.totalQuestions })),
+        createElement('span', 'quiz-current-score', tr('quiz.score', { score: session.score, total: session.totalQuestions }))
       );
       wrapper.append(meta, renderProgress());
 
@@ -144,7 +149,7 @@
       const form = createElement('form', 'quiz-form');
       form.id = 'quizAnswerForm';
       const fieldset = createElement('fieldset', 'quiz-options');
-      const legend = createElement('legend', 'sr-only', 'Choose one answer');
+      const legend = createElement('legend', 'sr-only', tr('quiz.choose'));
 
       question.options.forEach((option) => {
         const label = createElement('label', 'quiz-option');
@@ -161,10 +166,10 @@
 
         if (session.isSubmitted && option.id === question.correctOptionId) {
           label.classList.add('correct');
-          label.appendChild(createElement('span', 'quiz-option-result', 'Correct answer'));
+          label.appendChild(createElement('span', 'quiz-option-result', tr('quiz.correctAnswer')));
         } else if (session.isSubmitted && input.checked) {
           label.classList.add('incorrect');
-          label.appendChild(createElement('span', 'quiz-option-result', 'Your answer'));
+          label.appendChild(createElement('span', 'quiz-option-result', tr('quiz.yourAnswer')));
         }
 
         fieldset.appendChild(label);
@@ -175,30 +180,30 @@
 
       if (session.isSubmitted) {
         const result = session.answers[session.currentIndex];
-        const correct = result.selectedOptionId === question.correctOptionId;
+        const correct = result.selectedOptionId === rawQuestion.correctOptionId;
         const feedback = createElement('section', `quiz-feedback ${correct ? 'feedback-correct' : 'feedback-incorrect'}`);
         feedback.setAttribute('aria-labelledby', 'quizFeedbackTitle');
-        const feedbackTitle = createElement('h4', '', correct ? 'Correct!' : 'Not quite');
+        const feedbackTitle = createElement('h4', '', correct ? tr('quiz.correct') : tr('quiz.notQuite'));
         feedbackTitle.id = 'quizFeedbackTitle';
         feedback.appendChild(feedbackTitle);
         if (!correct) {
-          const correctOption = question.options.find((option) => option.id === question.correctOptionId);
-          feedback.appendChild(createElement('p', 'quiz-correct-answer', `Correct answer: ${correctOption.text}`));
+          const correctOption = question.options.find((option) => option.id === rawQuestion.correctOptionId);
+          feedback.appendChild(createElement('p', 'quiz-correct-answer', tr('quiz.answerPrefix', { answer: correctOption.text })));
         }
         feedback.appendChild(createElement('p', 'quiz-explanation', question.explanation));
-        feedback.appendChild(createElement('p', 'quiz-source', `Source: ${question.source.title} — ${question.source.reference}`));
+        feedback.appendChild(createElement('p', 'quiz-source', tr('quiz.source', { source: `${rawQuestion.source.title} — ${rawQuestion.source.reference}` })));
         wrapper.appendChild(feedback);
       }
 
       const actions = createElement('div', 'quiz-actions');
       if (!session.isSubmitted) {
-        const submit = createElement('button', 'submit-btn quiz-submit', 'Submit Answer');
+        const submit = createElement('button', 'submit-btn quiz-submit', tr('quiz.submit'));
         submit.id = 'quizSubmitButton';
         submit.type = 'submit';
         submit.disabled = !session.selectedOptionId;
         actions.appendChild(submit);
       } else {
-        const next = createElement('button', 'submit-btn quiz-next', questionNumber === session.totalQuestions ? 'See Results' : 'Next Question');
+        const next = createElement('button', 'submit-btn quiz-next', tr(questionNumber === session.totalQuestions ? 'quiz.results' : 'quiz.next'));
         next.id = 'quizNextButton';
         next.type = 'button';
         actions.appendChild(next);
@@ -221,8 +226,9 @@
         if (!result) return;
         const isLastQuestion = session.currentIndex === session.totalQuestions - 1;
         if (announcement) {
-          const outcome = result.isCorrect ? 'Correct answer.' : 'Incorrect answer.';
-          announcement.textContent = `${outcome} ${question.explanation}${isLastQuestion ? ` Quiz score: ${session.score} out of ${session.totalQuestions}.` : ''}`;
+          announcementState = { isCorrect: result.isCorrect, questionId: rawQuestion.id, includeScore: isLastQuestion, score: session.score };
+          lastAnnouncement = buildAnnouncement();
+          announcement.textContent = lastAnnouncement;
         }
         playMascotReaction(result.isCorrect ? ['Happy_Idle', 'Clapping'] : ['Acknowledging', 'Looking']);
         playExplanationReaction();
@@ -245,22 +251,22 @@
     function renderResults() {
       const percentage = Math.round((session.score / session.totalQuestions) * 100);
       const wrapper = createElement('section', 'quiz-results');
-      const title = createElement('h3', '', 'Quiz complete!');
+      const title = createElement('h3', '', tr('quiz.complete'));
       title.id = 'quizResultsTitle';
       title.tabIndex = -1;
       wrapper.append(
         renderProgress(),
         title,
-        createElement('p', 'quiz-score', `Your score: ${session.score} out of ${session.totalQuestions}`),
+        createElement('p', 'quiz-score', tr('quiz.yourScore', { score: session.score, total: session.totalQuestions })),
         createElement('p', 'quiz-percentage', `${percentage}%`),
-        createElement('p', 'quiz-completion-message', 'Thanks for learning about the Ganga. Keep exploring and sharing what you learned!')
+        createElement('p', 'quiz-completion-message', tr('quiz.thanks'))
       );
 
       const actions = createElement('div', 'quiz-actions');
-      const retry = createElement('button', 'submit-btn', 'Retry Quiz');
+      const retry = createElement('button', 'submit-btn', tr('quiz.retry'));
       retry.id = 'quizRetryButton';
       retry.type = 'button';
-      const back = createElement('a', 'quiz-secondary-button', 'Back to Chat');
+      const back = createElement('a', 'quiz-secondary-button', tr('quiz.back'));
       back.href = '#';
       actions.append(retry, back);
       wrapper.appendChild(actions);
@@ -268,7 +274,9 @@
 
       retry.addEventListener('click', () => {
         session.retry();
-        if (announcement) announcement.textContent = 'Quiz restarted.';
+        announcementState = null;
+        lastAnnouncement = tr('quiz.restarted');
+        if (announcement) announcement.textContent = lastAnnouncement;
         render();
         content.querySelector('#quizQuestionText')?.focus();
       });
@@ -279,7 +287,22 @@
       else renderQuestion();
     }
 
+    function buildAnnouncement() {
+      if (!announcementState) return lastAnnouncement;
+      const question = questions.find(item => item.id === announcementState.questionId);
+      const localizedQuestion = localized(question);
+      return `${tr(announcementState.isCorrect ? 'quiz.groupCorrect' : 'quiz.groupIncorrect')} ${localizedQuestion.explanation}${announcementState.includeScore ? ` ${tr('quiz.groupScore', { score: announcementState.score, total: session.totalQuestions })}` : ''}`;
+    }
+
     render();
+    if (typeof globalThis.addEventListener === 'function') globalThis.addEventListener('ganga-website-language-change', () => {
+      if (announcement && lastAnnouncement) {
+        if (announcementState) lastAnnouncement = buildAnnouncement();
+        else lastAnnouncement = tr('quiz.restarted');
+        announcement.textContent = lastAnnouncement;
+      }
+      render();
+    });
     return session;
   }
 

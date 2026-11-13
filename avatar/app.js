@@ -11,6 +11,19 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const uiI18n = window.GangaUII18n;
+  const t = (key, values = {}) => uiI18n ? uiI18n.t(key, values) : key;
+  const setUiText = (element, key, values = {}) => {
+    if (!element) return;
+    if (uiI18n) uiI18n.setText(element, key, values);
+    else element.textContent = t(key, values);
+  };
+  const clearUiText = (element) => {
+    if (!element) return;
+    element.textContent = '';
+    element.removeAttribute('data-i18n');
+    element.removeAttribute('data-i18n-values');
+  };
   // 1. Initialize 3D Avatar Mascot Controller
   const mascot = new MascotController();
 
@@ -124,7 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateLangBadge() {
     if (responseLangBadge) {
       const outLabel = currentOutputLanguage.toUpperCase();
-      responseLangBadge.textContent = `Typed: ${detectedTextLanguage.toUpperCase()} | Output: ${outLabel}`;
+      setUiText(responseLangBadge, 'chat.typedOutput', {
+        input: detectedTextLanguage.toUpperCase(), output: outLabel
+      });
     }
   }
 
@@ -150,6 +165,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 7. Synchronize Avatar State Machine & Status Indicator Pills
+  function updateLiveStatusLabel(state) {
+    const liveStatusText = document.getElementById('liveStatusText');
+    const keys = {
+      IDLE: 'status.idle', LISTENING: 'status.listening', THINKING: 'status.thinking',
+      PROCESSING: 'status.analyzing', SPEAKING: 'status.speaking', ERROR: 'status.error'
+    };
+    if (liveStatusText) setUiText(liveStatusText, keys[state] || 'status.idle');
+  }
+
   function setState(state, options = {}) {
     currentState = state;
 
@@ -161,17 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update Live State Indicator Badge in Avatar Header
     const liveStatusText = document.getElementById('liveStatusText');
     const liveStatusDot = document.getElementById('liveStatusDot');
-    if (liveStatusText) {
-      const labels = {
-        'IDLE': 'Idle',
-        'LISTENING': 'Listening...',
-        'THINKING': 'Thinking...',
-        'PROCESSING': 'Analyzing...',
-        'SPEAKING': 'Speaking...',
-        'ERROR': 'Error'
-      };
-      liveStatusText.textContent = labels[state] || state;
-    }
+    updateLiveStatusLabel(state);
     if (liveStatusDot) {
       liveStatusDot.className = 'live-status-dot dot-' + state.toLowerCase();
     }
@@ -232,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', (e) => {
     const pill = e.target.closest('.sample-prompt-pill');
     if (pill) {
-      const prompt = pill.dataset.prompt;
+      const prompt = pill.dataset.promptKey ? t(pill.dataset.promptKey) : pill.dataset.prompt;
       if (prompt) {
         processQuestion(prompt);
       }
@@ -289,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.error('[Frontend] Error querying Brain API:', err);
       setState('ERROR');
-      replaceLoadingWithError(loadingCardId, err.message || "Could not retrieve response from Ganga Brain.");
+      replaceLoadingWithError(loadingCardId, t('chat.requestFailed'));
       setTimeout(() => setState('IDLE'), 2500);
     }
   }
@@ -297,7 +311,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 10. Message Stream Helpers
   function getFormattedTime() {
     const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const locale = { en: 'en-IN', hi: 'hi-IN', kn: 'kn-IN', ta: 'ta-IN' }[uiI18n?.getLanguage?.()] || 'en-IN';
+    return now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
   }
 
   function appendUserMessage(text) {
@@ -323,13 +338,13 @@ document.addEventListener('DOMContentLoaded', () => {
     row.id = cardId;
     row.innerHTML = `
       <div class="avatar-thumb-box">
-        <img src="08_Final/validation_renders/Face_Thinking.png" alt="Chacha Thinking" class="chacha-thumb-img" onerror="this.onerror=null;this.src='08_Final/validation_renders/Face_Happy.png';" />
+        <img src="08_Final/validation_renders/Face_Thinking.png" alt="Chacha Thinking" data-i18n-alt="avatar.thinkingTitle" class="chacha-thumb-img" onerror="this.onerror=null;this.src='08_Final/validation_renders/Face_Happy.png';" />
       </div>
       <div class="message-bubble assistant-card">
         <div class="bubble-header-bar">
           <div class="assistant-meta-left">
             <span class="assistant-name">Chacha Chaudhary</span>
-            <span class="verified-tag">Analyzing Corpus</span>
+            <span class="verified-tag" data-i18n="status.analyzing">Analyzing Corpus</span>
           </div>
           <span class="bubble-timestamp">${getFormattedTime()}</span>
         </div>
@@ -340,19 +355,20 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="dot"></span>
               <span class="dot"></span>
             </div>
-            <span class="thinking-msg-text">Consulting verified GRBMP knowledge base...</span>
+            <span class="thinking-msg-text" data-i18n="chat.consulting">Consulting verified GRBMP knowledge base...</span>
           </div>
         </div>
       </div>
     `;
     chatMessagesList.appendChild(row);
+    uiI18n?.applySubtree(row);
   }
 
   function replaceLoadingWithResponse(cardId, data, t_start = null, t_response = null) {
     const cardRow = document.getElementById(cardId);
     if (!cardRow) return;
 
-    const answer = data.answer || data.text || "No response received.";
+    const answer = data.answer || data.text || t('chat.noResponse');
     const mode = data.mode || "grounded";
     const emotion = (data.emotion || "happy").toLowerCase();
     const gesture = (data.gesture || "explaining").toLowerCase();
@@ -380,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="bubble-header-bar">
           <div class="assistant-meta-left">
             <span class="assistant-name">Chacha Chaudhary</span>
-            <span class="verified-tag">${mode === 'grounded' ? 'Verified RAG' : 'Ganga Guide'}</span>
+            <span class="verified-tag" data-i18n="${mode === 'grounded' ? 'chat.verifiedRag' : 'chat.gangaGuide'}">${escapeHtml(t(mode === 'grounded' ? 'chat.verifiedRag' : 'chat.gangaGuide'))}</span>
           </div>
           <span class="bubble-timestamp">${getFormattedTime()}</span>
         </div>
@@ -395,6 +411,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ${audioSrc ? renderAudioPlayerBar(audioSrc) : ''}
       </div>
     `;
+
+    uiI18n?.applySubtree(cardRow);
 
     // Structured CPCB data belongs to the visible assistant message.
     if (window.appendAssistantTables) {
@@ -441,13 +459,14 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="message-bubble assistant-card" style="border-color: var(--danger-border);">
         <div class="bubble-header-bar">
           <span class="assistant-name" style="color: var(--text-danger);">Chacha Chaudhary</span>
-          <span class="verified-tag" style="background-color: var(--danger-bg); color: var(--text-danger);">Notice</span>
+          <span class="verified-tag" data-i18n="chat.notice" style="background-color: var(--danger-bg); color: var(--text-danger);">${escapeHtml(t('chat.notice'))}</span>
         </div>
-        <div class="bubble-content-text" style="color: var(--text-danger);">
+        <div class="bubble-content-text" data-i18n="chat.requestFailed" style="color: var(--text-danger);">
           ${escapeHtml(errorMessage)}
         </div>
       </div>
     `;
+    uiI18n?.applySubtree(cardRow);
     scrollToBottom();
   }
 
@@ -465,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `
       <div class="sources-accordion">
         <button type="button" class="sources-toggle-btn" aria-expanded="false">
-          <span>📚 ${citations.some((item) => item.source_type === 'external') ? 'Sources' : 'Verified Sources'} (${citations.length})</span>
+          <span>📚 <span data-i18n="${citations.some((item) => item.source_type === 'external') ? 'chat.sources' : 'chat.verifiedSources'}">${escapeHtml(t(citations.some((item) => item.source_type === 'external') ? 'chat.sources' : 'chat.verifiedSources'))}</span> (${citations.length})</span>
           <span class="sources-chevron" aria-hidden="true">▾</span>
         </button>
         <div class="sources-list">
@@ -474,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `
             <div class="source-item-card">
               <span class="source-pdf-badge">${c.source_type === 'external' ? 'WEB' : 'PDF'}</span>
-              ${externalUrl ? `<a class="source-title-text" href="${escapeHtml(c.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(c.source || 'External source')}</a>` : `<span class="source-title-text">${escapeHtml(c.source || c.file_name || 'GRBMP Document')}</span>`}
+              ${externalUrl ? `<a class="source-title-text" href="${escapeHtml(c.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(c.source || t('chat.externalSource'))}</a>` : `<span class="source-title-text">${escapeHtml(c.source || c.file_name || t('chat.grbmpDocument'))}</span>`}
               <span class="source-meta-text">${c.page ? `p. ${c.page}` : ''}</span>
               ${c.license ? `<span class="source-meta-text">${escapeHtml(c.license)}</span>` : ''}
             </div>
@@ -488,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderAudioPlayerBar(audioSrc) {
     return `
       <div class="audio-player-bar" data-audio-src="${audioSrc}">
-        <button type="button" class="audio-play-circle-btn" title="Play Voice Audio">
+        <button type="button" class="audio-play-circle-btn" title="Play Voice Audio" data-i18n-title="chat.playAudio">
           ▶
         </button>
         <div class="audio-waveform-canvas">
@@ -506,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="wave-bar" style="height: 10px;"></span>
         </div>
         <span class="audio-time-label">0:00 / 0:12</span>
-        <button type="button" class="audio-tool-btn audio-download-btn" title="Download WAV">
+        <button type="button" class="audio-tool-btn audio-download-btn" title="Download WAV" data-i18n-title="chat.downloadAudio">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
         </button>
       </div>
@@ -550,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function playProductionSpeech(data, audioSrc, fallbackText, gesture = 'explaining', t_start = null, t_response = null, cardRow = null) {
     stopCurrentSpeech();
     const attemptId = speechAttemptId;
-    if (voiceStatusMsg) voiceStatusMsg.textContent = '';
+    clearUiText(voiceStatusMsg);
 
     if (!audioSrc) {
       fallbackBrowserTTS(fallbackText, attemptId);
@@ -597,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     activeAudio.onplay = () => {
-      if (voiceStatusMsg) voiceStatusMsg.textContent = '';
+      clearUiText(voiceStatusMsg);
       // Connect audio element to 3D Mascot Dual-Stage Lip-Sync System
       if (mascot && mascot.startAudioLipSync) {
         mascot.startAudioLipSync(activeAudio, data);
@@ -625,11 +644,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     activeAudio.play().then(() => {
-      if (voiceStatusMsg) voiceStatusMsg.textContent = '';
+      clearUiText(voiceStatusMsg);
       console.log('[Frontend Audio] Neural EdgeTTS audio playing with 3D Lip-Sync.');
     }).catch((err) => {
       console.warn('[Frontend Audio] Autoplay interrupted or blocked:', err);
-      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Audio playback could not start. Use the play control to try again.';
+      setUiText(voiceStatusMsg, 'voice.audioFailed');
     });
   }
 
@@ -670,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 12. Fallback Browser TTS
   async function fallbackBrowserTTS(text, attemptId = speechAttemptId) {
     if (!window.speechSynthesis) {
-      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Browser speech playback is unavailable.';
+      setUiText(voiceStatusMsg, 'voice.browserUnavailable');
       setState('IDLE');
       return;
     }
@@ -691,11 +710,11 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     if (attemptId !== speechAttemptId) return;
     if (!selectedVoice) {
-      if (voiceStatusMsg) voiceStatusMsg.textContent = `No ${utter.lang} browser voice is available; no other-language voice was used.`;
+      setUiText(voiceStatusMsg, 'voice.noVoice', { locale: utter.lang });
       setState('IDLE');
       return;
     }
-    if (voiceStatusMsg) voiceStatusMsg.textContent = '';
+    clearUiText(voiceStatusMsg);
     utter.voice = selectedVoice;
     utter.rate = 1.0;
 
@@ -719,7 +738,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (attemptId !== speechAttemptId) return;
       stopCurrentSpeech();
       if (voiceStatusMsg) {
-        voiceStatusMsg.textContent = 'Browser speech playback failed. Please try again.';
+        setUiText(voiceStatusMsg, 'voice.playbackFailed');
       }
       setState('IDLE');
     };
@@ -762,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mediaRecorder.onstop = async () => {
         stream.getTracks().forEach((track) => track.stop());
         const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-        if (voiceStatusMsg) voiceStatusMsg.textContent = 'Transcribing with the configured speech provider...';
+        setUiText(voiceStatusMsg, 'voice.transcribing');
         setState('THINKING');
         await uploadAudioForSTT(audioBlob);
       };
@@ -771,7 +790,7 @@ document.addEventListener('DOMContentLoaded', () => {
       isRecording = true;
       micBtn.classList.add('recording');
       setState('LISTENING');
-      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Listening... Speak clearly, click mic again to send.';
+      setUiText(voiceStatusMsg, 'voice.listeningSend');
 
     } catch (err) {
       console.warn('[Frontend Mic] MediaRecorder not accessible, falling back to Web Speech API:', err);
@@ -805,7 +824,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const data = await response.json();
       if (voiceStatusMsg) {
-        voiceStatusMsg.textContent = data.question ? `Heard: "${data.question}"` : 'Speech transcribed.';
+        if (data.question) setUiText(voiceStatusMsg, 'voice.heard', { text: data.question });
+        else setUiText(voiceStatusMsg, 'voice.transcribed');
       }
       if (data.question && data.answer) {
         renderCompletedResponse(data.question, data);
@@ -817,10 +837,10 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('[Frontend STT] Backend STT failed, trying Web Speech API:', err);
       setState('IDLE');
       if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-        if (voiceStatusMsg) voiceStatusMsg.textContent = 'Backend speech recognition is unavailable; trying this browser with the selected voice-input language.';
+        setUiText(voiceStatusMsg, 'voice.backendFallback');
         startWebSpeechFallback();
       } else if (voiceStatusMsg) {
-        voiceStatusMsg.textContent = `${err.message || 'Speech recognition unavailable.'} You can type your question.`;
+        setUiText(voiceStatusMsg, 'voice.recognitionFailedWithError', { error: err.message || t('voice.noRecognition') });
       }
     }
   }
@@ -839,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function startWebSpeechFallback() {
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRec) {
-      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Microphone speech recognition not supported in this browser.';
+      setUiText(voiceStatusMsg, 'voice.micUnsupported');
       return;
     }
 
@@ -856,18 +876,18 @@ document.addEventListener('DOMContentLoaded', () => {
       isRecording = true;
       if (micBtn) micBtn.classList.add('recording');
       setState('LISTENING');
-      if (voiceStatusMsg) voiceStatusMsg.textContent = 'Listening via browser speech recognition...';
+      setUiText(voiceStatusMsg, 'voice.browserListening');
     };
 
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript;
-      if (voiceStatusMsg) voiceStatusMsg.textContent = `Heard: "${transcript}"`;
+      setUiText(voiceStatusMsg, 'voice.heard', { text: transcript });
       processQuestion(transcript, currentVoiceInputLanguage);
     };
 
     recognition.onerror = (e) => {
       console.warn('[Web Speech API] Error:', e.error);
-      if (voiceStatusMsg) voiceStatusMsg.textContent = `Speech recognition error: ${e.error}`;
+      setUiText(voiceStatusMsg, 'voice.recognitionError', { error: e.error });
       stopMicrophoneRecording();
       setState('IDLE');
     };
@@ -935,4 +955,10 @@ document.addEventListener('DOMContentLoaded', () => {
   updateLangBadge();
   updateChachaGreeting();
   setState('IDLE');
+  window.addEventListener('ganga-website-language-change', () => {
+    updateLangBadge();
+    updateLiveStatusLabel(currentState);
+    uiI18n?.applySubtree(chatMessagesList);
+    uiI18n?.applySubtree(voiceStatusMsg);
+  });
 });

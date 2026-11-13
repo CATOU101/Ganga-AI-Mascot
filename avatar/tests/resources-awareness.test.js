@@ -3,6 +3,7 @@ const test = require('node:test');
 const resources = require('../resources.js');
 const awareness = require('../awareness.js');
 const cleaner = require('../content-cleaner.js');
+const i18n = require('../ui-i18n.js');
 
 class Element {
   constructor(tag = 'div', dataset = {}) {
@@ -24,6 +25,7 @@ class Element {
   replaceChildren(...items) { this._text = ''; this.children = items; }
   addEventListener(type, listener) { this.listeners[type] = listener; }
   setAttribute(name, value) { this.attributes[name] = value; }
+  removeAttribute(name) { delete this.attributes[name]; }
   querySelectorAll(selector) { return selector === 'button' ? this.children.filter(child => child.tagName === 'button') : []; }
   querySelector(selector) { return selector === 'tbody' ? this.children.find(child => child.tagName === 'tbody') || null : null; }
 }
@@ -66,7 +68,10 @@ test('Resources library categories use supported documents and document sections
     }
     return { ok: true, json: async () => ({ counts: { documents: 1, approved_sections: 2, indexed_chunks: 3 }, documents: [{ title: 'GRBMP report', file_name: 'report.pdf', source_id: 'SRC-1', section_count: 2 }] }) };
   };
-  const controller = resources.create({ document, fetch });
+  const oldAddEventListener = globalThis.addEventListener;
+  const listeners = new Map();
+  globalThis.addEventListener = (name, listener) => listeners.set(name, listener);
+  const controller = resources.create({ document, fetch, i18n });
   controller.show();
   await tick(); await tick();
   assert.match(document.elements.resourceCounts.textContent, /1 documents/);
@@ -93,6 +98,13 @@ test('Resources library categories use supported documents and document sections
   document.elements.resourceBackButton.listeners.click();
   assert.equal(document.elements.resourceDocumentView.hidden, true);
   assert.equal(document.elements.resourceLibraryView.hidden, false);
+  i18n.setLanguage('kn', { persist: false, document: null, window: { dispatchEvent: event => listeners.get(event.type)?.(event) } });
+  assert.match(document.elements.resourceCategories.textContent, /ಎಲ್ಲಾ ಸಂಪನ್ಮೂಲಗಳು/);
+  assert.equal(document.elements.resourceDocumentTitle.textContent, 'GRBMP report');
+  assert.match(document.elements.resourceStatus.textContent, /ತೆರೆಯಲಾಗುತ್ತಿದೆ/);
+  i18n.setLanguage('en', { persist: false, document: null, window: null });
+  if (oldAddEventListener === undefined) delete globalThis.addEventListener;
+  else globalThis.addEventListener = oldAddEventListener;
 });
 
 test('Awareness lesson uses source-derived points and Myth vs Fact reveals its cited answer', async () => {
@@ -110,7 +122,10 @@ test('Awareness lesson uses source-derived points and Myth vs Fact reveals its c
     const item = url.includes('pollutant') ? pollution : evidence;
     return { ok: true, json: async () => ({ results: [item] }) };
   };
-  const controller = awareness.create({ document, fetch });
+  const oldAddEventListener = globalThis.addEventListener;
+  const listeners = new Map();
+  globalThis.addEventListener = (name, listener) => listeners.set(name, listener);
+  const controller = awareness.create({ document, fetch, i18n });
   await controller.selectTopic('pollution');
   assert.match(cards.textContent, /Pollutant Ingress/);
   assert.match(cards.textContent, /Page 25/);
@@ -125,4 +140,11 @@ test('Awareness lesson uses source-derived points and Myth vs Fact reveals its c
   assert.match(card.children[4].textContent, /Fact — the cited GRBMP section states this/);
   assert.match(card.children[5].textContent, /six main headstreams/);
   assert.match(card.children[7].textContent, /Page 21/);
+  i18n.setLanguage('hi', { persist: false, document: null, window: { dispatchEvent: event => listeners.get(event.type)?.(event) } });
+  assert.match(cards.textContent, /स्रोत-आधारित पाठ/);
+  assert.match(cards.textContent, /सही|तथ्य/);
+  assert.match(cards.textContent, /GRBMP report/);
+  i18n.setLanguage('en', { persist: false, document: null, window: null });
+  if (oldAddEventListener === undefined) delete globalThis.addEventListener;
+  else globalThis.addEventListener = oldAddEventListener;
 });

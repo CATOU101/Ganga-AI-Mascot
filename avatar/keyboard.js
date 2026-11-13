@@ -159,6 +159,9 @@ class MultilingualKeyboard {
     ];
 
     this.init();
+      if (typeof globalThis.addEventListener === 'function') globalThis.addEventListener('ganga-website-language-change', () => {
+        if (this.isOpen) this.render();
+      });
   }
 
   init() {
@@ -173,15 +176,15 @@ class MultilingualKeyboard {
         <div class="vk-header">
           <div class="vk-title">
             <span class="vk-icon" aria-hidden="true">⌨</span>
-            <span class="vk-label">Multilingual Keyboard</span>
+            <span class="vk-label" data-i18n="keyboard.title">${this.t('keyboard.title')}</span>
           </div>
           <div class="vk-header-actions">
             <label class="vk-toggle-label">
               <input type="checkbox" id="vkSwitchToggle" ${this.isOpen ? 'checked' : ''} />
               <span class="vk-switch-slider"></span>
-              <span class="vk-switch-text">On-Screen Keyboard</span>
+              <span class="vk-switch-text" data-i18n="keyboard.onScreen">${this.t('keyboard.onScreen')}</span>
             </label>
-            <button type="button" id="vkCloseBtn" class="vk-close-btn" title="Close Keyboard" aria-label="Close on-screen keyboard">×</button>
+            <button type="button" id="vkCloseBtn" class="vk-close-btn" title="Close Keyboard" data-i18n-title="keyboard.closeTitle" aria-label="Close on-screen keyboard" data-i18n-aria-label="keyboard.close">×</button>
           </div>
         </div>
 
@@ -198,28 +201,33 @@ class MultilingualKeyboard {
         </div>
 
         <div class="vk-bottom-bar">
-          <button type="button" class="vk-special-btn ${this.isNumberMode ? 'active' : ''}" id="vkModeToggle" title="Numbers and Symbols">
+          <button type="button" class="vk-special-btn ${this.isNumberMode ? 'active' : ''}" id="vkModeToggle" title="Numbers and Symbols" data-i18n-title="keyboard.numbers">
             ${this.isNumberMode ? 'ABC' : '123'}
           </button>
-          <button type="button" class="vk-special-btn ${this.isShift ? 'active' : ''}" id="vkShiftToggle" title="Vowels / Matras or Shift">
+          <button type="button" class="vk-special-btn ${this.isShift ? 'active' : ''}" id="vkShiftToggle" title="Vowels / Matras or Shift" data-i18n-title="keyboard.shift">
             ${this.currentLang === 'en' ? '⇧ Shift' : (this.layouts[this.currentLang]?.shiftLabel || 'Vowels / Matras')}
           </button>
-          <button type="button" class="vk-special-btn" id="vkEmojiToggle" title="Ganga Emojis & Quick Words">
+          <button type="button" class="vk-special-btn" id="vkEmojiToggle" title="Ganga Emojis & Quick Words" data-i18n-title="keyboard.emojis">
             😀
           </button>
           <button type="button" class="vk-key vk-space-key" data-key=" ">
-            <span>${this.layouts[this.currentLang]?.spaceLabel || 'Space'}</span>
+            <span data-i18n="keyboard.space">${this.t('keyboard.space')}</span>
           </button>
-          <button type="button" class="vk-key vk-nav-key" id="vkNavLeft" title="Cursor Left">←</button>
-          <button type="button" class="vk-key vk-nav-key" id="vkNavRight" title="Cursor Right">→</button>
-          <button type="button" class="vk-key vk-enter-key" id="vkEnterKey" title="Send Question">
+          <button type="button" class="vk-key vk-nav-key" id="vkNavLeft" title="Cursor Left" data-i18n-title="keyboard.left">←</button>
+          <button type="button" class="vk-key vk-nav-key" id="vkNavRight" title="Cursor Right" data-i18n-title="keyboard.right">→</button>
+          <button type="button" class="vk-key vk-enter-key" id="vkEnterKey" title="Send Question" data-i18n-title="keyboard.send">
             <span>⏎</span>
           </button>
         </div>
       </div>
     `;
 
+    globalThis.GangaUII18n?.applySubtree(this.container);
     this.renderKeypad();
+  }
+
+  t(key) {
+    return globalThis.GangaUII18n ? globalThis.GangaUII18n.t(key) : key;
   }
 
   renderKeypad() {
@@ -425,7 +433,7 @@ class MultilingualKeyboard {
     if (shiftBtn) {
       shiftBtn.classList.toggle('active', this.isShift);
       if (this.currentLang === 'en') {
-        shiftBtn.textContent = '⇧ Shift';
+        shiftBtn.textContent = `⇧ ${this.t('keyboard.shift')}`;
       } else {
         shiftBtn.textContent = this.layouts[this.currentLang]?.shiftLabel || 'Vowels / Matras';
       }
@@ -441,7 +449,7 @@ class MultilingualKeyboard {
     }
 
     if (spaceBtn) {
-      spaceBtn.textContent = this.layouts[this.currentLang]?.spaceLabel || 'Space';
+      spaceBtn.textContent = this.t('keyboard.space');
     }
   }
 

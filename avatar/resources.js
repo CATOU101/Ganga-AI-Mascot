@@ -7,16 +7,16 @@
   'use strict';
 
   const CATEGORIES = [
-    { id: 'basin', label: 'River and Basin', query: 'Ganga river basin course tributaries' },
-    { id: 'quality', label: 'Water Quality', query: 'water quality BOD DO pH dissolved oxygen' },
-    { id: 'pollution', label: 'Pollution', query: 'pollutant ingress sewage discharge runoff' },
-    { id: 'ecology', label: 'Ecology and Biodiversity', query: 'ecological restoration biodiversity habitat wetlands' },
-    { id: 'conservation', label: 'Conservation and Restoration', query: 'ecological restoration recommended actions conservation' },
-    { id: 'governance', label: 'Namami Gange and Governance', query: 'Namami Gange mission governance' },
+    { id: 'basin', label: 'River and Basin', labelKey: 'resources.cat.basin', query: 'Ganga river basin course tributaries' },
+    { id: 'quality', label: 'Water Quality', labelKey: 'resources.cat.quality', query: 'water quality BOD DO pH dissolved oxygen' },
+    { id: 'pollution', label: 'Pollution', labelKey: 'resources.cat.pollution', query: 'pollutant ingress sewage discharge runoff' },
+    { id: 'ecology', label: 'Ecology and Biodiversity', labelKey: 'resources.cat.ecology', query: 'ecological restoration biodiversity habitat wetlands' },
+    { id: 'conservation', label: 'Conservation and Restoration', labelKey: 'resources.cat.conservation', query: 'ecological restoration recommended actions conservation' },
+    { id: 'governance', label: 'Namami Gange and Governance', labelKey: 'resources.cat.governance', query: 'Namami Gange mission governance' },
   ];
   const PAGE_SIZE = 12;
 
-  function create({ document, fetch: fetchImpl = globalThis.fetch.bind(globalThis) }) {
+  function create({ document, fetch: fetchImpl = globalThis.fetch.bind(globalThis), i18n = globalThis.GangaUII18n }) {
     const counts = document.getElementById('resourceCounts');
     const search = document.getElementById('resourceSearchInput');
     const status = document.getElementById('resourceStatus');
@@ -38,6 +38,16 @@
     let loaded = false;
     let searchTimer;
     let visibleCount = PAGE_SIZE;
+    let currentDocument = null;
+    let currentFocusSection = null;
+    let lastStatus = null;
+
+    function tr(key, values = {}) { return i18n ? i18n.t(key, values) : key; }
+    function setUiText(element, key, values = {}) {
+      if (i18n) i18n.setText(element, key, values);
+      else element.textContent = tr(key, values);
+    }
+    function categoryLabel(category) { return tr(category.labelKey); }
 
     function node(tag, className, text) {
       const item = document.createElement(tag);
@@ -47,19 +57,24 @@
     }
     function requestJson(path) {
       return fetchImpl(path, { headers: { Accept: 'application/json' } }).then(response => {
-        if (!response.ok) throw new Error(`Request failed (${response.status})`);
+        if (!response.ok) throw new Error(tr('resources.connectionError', { status: response.status }));
         return response.json();
       });
     }
     function sourceLine(section) {
-      const page = section.page_start ? `Page ${section.page_start}${section.page_end && section.page_end !== section.page_start ? `–${section.page_end}` : ''}` : 'Page reference unavailable';
+      const page = section.page_start
+        ? (section.page_end && section.page_end !== section.page_start
+          ? tr('resources.pages', { start: section.page_start, end: section.page_end })
+          : tr('resources.page', { page: section.page_start }))
+        : tr('resources.pageUnavailable');
       return `${section.title} · ${section.file_name} · ${page}`;
     }
     function cleanText(text, heading) {
       return cleaner ? cleaner.cleanText(text, { sectionHeading: heading }) : String(text || '').trim();
     }
-    function showStatus(message, kind = '') {
-      status.textContent = message;
+    function showStatus(key, kind = '', values = {}) {
+      lastStatus = { key, kind, values };
+      setUiText(status, key, values);
       status.dataset.state = kind;
     }
     function categoryResults(id) {
@@ -67,14 +82,14 @@
     }
     function renderCategories() {
       categoriesNode.replaceChildren();
-      const all = node('button', `resource-category${selectedCategory === 'all' ? ' active' : ''}`, 'All resources');
+      const all = node('button', `resource-category${selectedCategory === 'all' ? ' active' : ''}`, tr('resources.all'));
       all.type = 'button';
       all.setAttribute('aria-pressed', String(selectedCategory === 'all'));
-      all.addEventListener('click', () => { selectedCategory = 'all'; matches = new Map(); search.value = '';  visibleCount = PAGE_SIZE; renderCategories(); renderDocuments(documents); showStatus(`${documents.length} approved documents in the library.`); });
+      all.addEventListener('click', () => { selectedCategory = 'all'; matches = new Map(); search.value = '';  visibleCount = PAGE_SIZE; renderCategories(); renderDocuments(documents); showStatus('resources.approvedCount', '', { count: documents.length }); });
       categoriesNode.appendChild(all);
       CATEGORIES.forEach(category => {
         if (!categoryResults(category.id).length) return;
-        const button = node('button', `resource-category${selectedCategory === category.id ? ' active' : ''}`, category.label);
+        const button = node('button', `resource-category${selectedCategory === category.id ? ' active' : ''}`, categoryLabel(category));
         button.type = 'button';
         button.setAttribute('aria-pressed', String(selectedCategory === category.id));
         button.addEventListener('click', () => {
@@ -85,7 +100,7 @@
           const files = new Set(categoryResults(category.id).map(item => item.file_name));
           renderCategories();
           renderDocuments(documents.filter(item => files.has(item.file_name)));
-          showStatus(`${files.size} documents matched approved sections for ${category.label}.`);
+          showStatus('resources.documentsMatched', '', { count: files.size, category: categoryLabel(category) });
         });
         categoriesNode.appendChild(button);
       });
@@ -98,7 +113,7 @@
         const cutoff = excerpt.lastIndexOf(' ', 210);
         return `${excerpt.slice(0, cutoff > 0 ? cutoff : 210)}…`;
       }
-      return `${doc.section_count} approved sections available to browse.`;
+      return tr('resources.sectionsAvailable', { count: doc.section_count });
     }
     function renderDocuments(items) {
       visibleDocuments = items;
@@ -107,12 +122,12 @@
       current.forEach(doc => {
         const card = node('article', 'resource-book-card');
         card.append(
-          node('p', 'resource-card-kicker', doc.source_id ? `Source ${doc.source_id}` : 'Approved source document'),
+          node('p', 'resource-card-kicker', doc.source_id ? tr('resources.source', { id: doc.source_id }) : tr('resources.approvedSource')),
           node('h3', 'resource-document-title', doc.title),
-          node('p', 'resource-document-meta', `${doc.section_count} approved sections · ${doc.file_name}`),
+          node('p', 'resource-document-meta', `${tr('resources.sectionsCount', { count: doc.section_count })} · ${doc.file_name}`),
           node('p', 'resource-card-description', cardDescription(doc))
         );
-        const open = node('button', 'resource-open-button', 'Open document');
+        const open = node('button', 'resource-open-button', tr('resources.open'));
         open.type = 'button';
         open.addEventListener('click', () => openDocument(doc.file_name));
         card.appendChild(open);
@@ -124,9 +139,11 @@
       target.replaceChildren();
       if (cleaner) target.appendChild(cleaner.renderText(document, text, { sectionHeading }));
       else target.textContent = text || '';
-      if (!target.textContent.trim()) target.appendChild(node('p', 'resource-empty-copy', 'No readable text is available for this approved section.'));
+      if (!target.textContent.trim()) target.appendChild(node('p', 'resource-empty-copy', tr('resources.noReadableText')));
     }
     function renderDocument(doc, focusSection = null) {
+      currentDocument = doc;
+      currentFocusSection = focusSection;
       libraryView.hidden = true;
       detailView.hidden = false;
       title.textContent = doc.title;
@@ -142,29 +159,34 @@
         details.open = focusSection ? section.section === focusSection && section.page_start === doc.focusPage : index === 0;
         const summary = node('summary', 'resource-section-summary');
         const label = section.subsection ? `${section.section} · ${section.subsection}` : section.section;
-        summary.append(node('span', 'resource-section-heading', label), node('span', 'resource-section-page', section.page_start ? `Pages ${section.page_start}${section.page_end && section.page_end !== section.page_start ? `–${section.page_end}` : ''}` : 'Pages unavailable'));
+        const pageLabel = section.page_start
+          ? (section.page_end && section.page_end !== section.page_start
+            ? tr('resources.pages', { start: section.page_start, end: section.page_end })
+            : tr('resources.page', { page: section.page_start }))
+          : tr('resources.pagesUnavailable');
+        summary.append(node('span', 'resource-section-heading', label), node('span', 'resource-section-page', pageLabel));
         const content = node('div', 'resource-section-content');
         const classification = [section.classification, section.knowledge_type, section.time_period, section.geographic_scope].filter(Boolean).join(' · ');
         content.appendChild(node('p', 'resource-section-metadata', classification));
         const body = node('div', 'resource-section-text');
         renderReadableText(body, section.text, section.section);
         content.appendChild(body);
-        content.appendChild(node('p', 'resource-reference', `Source: ${sourceLine(section)}`));
+        content.appendChild(node('p', 'resource-reference', tr('awareness.source', { source: sourceLine(section) })));
         details.append(summary, content);
         sections.appendChild(details);
       });
-      if (!sectionRows.length) sections.appendChild(node('p', 'resource-empty-copy', 'This approved document has no readable sections in the current index.'));
+      if (!sectionRows.length) sections.appendChild(node('p', 'resource-empty-copy', tr('resources.noSections')));
       const expanded = Array.from(sections.children).find(item => item.open);
       if (expanded && focusSection) expanded.scrollIntoView?.({ block: 'start' });
     }
     async function openDocument(fileName, sectionName = null, pageStart = null) {
-      showStatus('Opening approved document…', 'loading');
+      showStatus('resources.opening', 'loading');
       try {
         const doc = await requestJson(`/api/integration/resources/document?file_name=${encodeURIComponent(fileName)}`);
         doc.focusPage = pageStart;
         renderDocument(doc, sectionName);
       } catch (_) {
-        showStatus('This approved document could not be opened. Check the connection and try again.', 'error');
+        showStatus('resources.openFailed', 'error');
       }
     }
     async function runSearch(query) {
@@ -175,12 +197,12 @@
         visibleCount = PAGE_SIZE;
         renderCategories();
         renderDocuments(documents);
-        showStatus(`${documents.length} approved documents in the library.`);
+        showStatus('resources.approvedCount', '', { count: documents.length });
         return;
       }
       selectedCategory = '';
       renderCategories();
-      showStatus('Searching approved sections…', 'loading');
+      showStatus('resources.searching', 'loading');
       try {
         const payload = await requestJson(`/api/integration/resources/search?q=${encodeURIComponent(normalized)}&limit=20`);
         const results = payload.results || [];
@@ -189,9 +211,10 @@
         const matchedDocs = [...matches.keys()].map(fileName => docMap.get(fileName)).filter(Boolean);
         visibleCount = PAGE_SIZE;
         renderDocuments(matchedDocs);
-        showStatus(matchedDocs.length ? `${matchedDocs.length} documents have matching approved sections.` : 'No approved sections matched that search. Try a broader term.', matchedDocs.length ? '' : 'empty');
+        if (matchedDocs.length) showStatus('resources.searchMatches', '', { count: matchedDocs.length });
+        else showStatus('resources.noMatches', 'empty');
       } catch (_) {
-        showStatus('The library search could not be completed. Check the connection and try again.', 'error');
+        showStatus('resources.searchFailed', 'error');
       }
     }
     async function loadCategories() {
@@ -204,19 +227,19 @@
       if (selectedCategory === 'all') renderDocuments(documents);
     }
     async function load() {
-      showStatus('Loading the approved Ganga collection…', 'loading');
+      showStatus('resources.loading', 'loading');
       try {
         const payload = await requestJson('/api/integration/resources');
         documents = payload.documents || [];
         const values = payload.counts || {};
-        counts.textContent = `${values.documents ?? documents.length} documents · ${values.approved_sections ?? '—'} sections`;
+        setUiText(counts, 'resources.loadedCount', { documents: values.documents ?? documents.length, sections: values.approved_sections ?? '—' });
         loaded = true;
         renderDocuments(documents);
-        showStatus(`${documents.length} approved documents in the library.`);
+        showStatus('resources.approvedCount', '', { count: documents.length });
         loadCategories();
       } catch (_) {
         loaded = false;
-        showStatus('The approved library could not be loaded. Check the connection and select Resources to retry.', 'error');
+        showStatus('resources.loadFailed', 'error');
       }
     }
     search.addEventListener('input', () => {
@@ -225,6 +248,18 @@
     });
     loadMore.addEventListener('click', () => { visibleCount += PAGE_SIZE; renderDocuments(visibleDocuments); });
     backButton.addEventListener('click', () => { detailView.hidden = true; libraryView.hidden = false; });
+    if (typeof globalThis.addEventListener === 'function') {
+      globalThis.addEventListener('ganga-website-language-change', () => {
+        renderCategories();
+        renderDocuments(selectedCategory === 'all' ? documents : visibleDocuments);
+        if (!detailView.hidden && currentDocument) renderDocument(currentDocument, currentFocusSection);
+        if (lastStatus) {
+          const values = { ...lastStatus.values };
+          if (lastStatus.key === 'resources.documentsMatched') values.category = categoryLabel(CATEGORIES.find(category => category.id === selectedCategory) || CATEGORIES[0]);
+          showStatus(lastStatus.key, lastStatus.kind, values);
+        }
+      });
+    }
     return {
       show() { if (!loaded) load(); },
       async openSection(fileName, section, pageStart) { await openDocument(fileName, section, pageStart); },

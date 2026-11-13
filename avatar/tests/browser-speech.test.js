@@ -39,6 +39,6 @@ test('voice fallback is connected to UI and voice warning remains in the compose
   assert.match(html, /browser-speech\.js/);
   assert.match(html, /id="voiceStatusMsg"[^>]*aria-live="polite"/);
   assert.match(app, /await window\.GangaBrowserSpeech\.resolveVoice/);
-  assert.match(app, /voiceStatusMsg\.textContent = ''/);
-  assert.match(app, /Browser speech playback failed/);
+  assert.match(app, /clearUiText\(voiceStatusMsg\)/);
+  assert.match(app, /setUiText\(voiceStatusMsg, 'voice\.playbackFailed'\)/);
 });

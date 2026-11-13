@@ -7,19 +7,25 @@
   'use strict';
 
   const TOPICS = {
-    ganga: { title: 'Know Your Ganga', intro: 'Explore source-backed information about the river’s origin, course and basin.', query: 'Defining River Ganga six main headstreams', section: /^2\.3\.\s*Defining River Ganga$/i, pointsPerSource: 3 },
-    pollution: { title: 'Pollution Awareness', intro: 'Learn how approved Ganga Basin reports describe pollutant pathways and sources.', query: 'Ganga pollutant ingress direct discharge polluted runoff', section: /^5\. Ganga River System:\s*Pollutant Ingress$/i, pointsPerSource: 3 },
-    protect: { title: 'Protect the River', intro: 'Review actions recommended in the approved ecological restoration material.', query: 'Ganga ecological restoration recommended actions environmental flows', section: /^6\. Summary of Recommended Actions$/i, pointsPerSource: 5, useFullText: true },
-    myth: { title: 'Myth vs Fact', intro: 'Check one reviewed statement against the cited GRBMP passage. This is a source check, not a claim about a widespread myth.', query: 'Defining River Ganga six main headstreams', section: /^2\.3\.\s*Defining River Ganga$/i, pointsPerSource: 3 },
+    ganga: { titleKey: 'awareness.topic.ganga', introKey: 'awareness.intro.ganga', query: 'Defining River Ganga six main headstreams', section: /^2\.3\.\s*Defining River Ganga$/i, pointsPerSource: 3 },
+    pollution: { titleKey: 'awareness.topic.pollution', introKey: 'awareness.intro.pollution', query: 'Ganga pollutant ingress direct discharge polluted runoff', section: /^5\. Ganga River System:\s*Pollutant Ingress$/i, pointsPerSource: 3 },
+    protect: { titleKey: 'awareness.topic.protect', introKey: 'awareness.intro.protect', query: 'Ganga ecological restoration recommended actions environmental flows', section: /^6\. Summary of Recommended Actions$/i, pointsPerSource: 5, useFullText: true },
+    myth: { titleKey: 'awareness.topic.myth', introKey: 'awareness.intro.myth', query: 'Defining River Ganga six main headstreams', section: /^2\.3\.\s*Defining River Ganga$/i, pointsPerSource: 3 },
   };
 
-  function create({ document, fetch: fetchImpl = globalThis.fetch.bind(globalThis), openResource = () => {} }) {
+  function create({ document, fetch: fetchImpl = globalThis.fetch.bind(globalThis), openResource = () => {}, i18n = globalThis.GangaUII18n }) {
     const topics = document.getElementById('awarenessTopics');
     const status = document.getElementById('awarenessStatus');
     const cards = document.getElementById('awarenessCards');
     let loaded = false;
     let currentTopic = 'ganga';
     let requestNumber = 0;
+    let currentResults = null;
+    let currentLessonResults = null;
+    let lastStatus = null;
+    let claimChoice = null;
+
+    function tr(key, values = {}) { return i18n ? i18n.t(key, values) : key; }
 
     function el(tag, className, text) {
       const node = document.createElement(tag);
@@ -27,13 +33,22 @@
       if (text !== undefined) node.textContent = text;
       return node;
     }
-    function setStatus(text, state = '') {
+    function setStatus(key, state = '', values = {}) {
+      lastStatus = { key, state, values };
       status.replaceChildren();
       status.dataset.state = state;
-      status.appendChild(el('span', '', text));
+      const displayValues = { ...values };
+      if (displayValues.topicKey) displayValues.topic = tr(displayValues.topicKey);
+      status.appendChild(el('span', '', tr(key, displayValues)));
+      if (key === 'awareness.loadFailed') {
+        const retry = el('button', 'resource-retry-button', tr('awareness.retry'));
+        retry.type = 'button';
+        retry.addEventListener('click', () => selectTopic(currentTopic));
+        status.appendChild(retry);
+      }
     }
     function citationText(item) {
-      const pages = item.page_start ? `Page ${item.page_start}${item.page_end && item.page_end !== item.page_start ? `–${item.page_end}` : ''}` : 'Page reference unavailable';
+      const pages = item.page_start ? (item.page_end && item.page_end !== item.page_start ? tr('resources.pages', { start: item.page_start, end: item.page_end }) : tr('resources.page', { page: item.page_start })) : tr('resources.pageUnavailable');
       return `${item.title} · ${item.file_name} · ${pages}${item.section ? ` · ${item.section}` : ''}`;
     }
     function pointsFor(item) {
@@ -43,14 +58,14 @@
     }
     function sourceBlock(item, points) {
       const article = el('article', 'awareness-lesson-source');
-      article.appendChild(el('p', 'awareness-source-kicker', item.section || 'Approved source section'));
+      article.appendChild(el('p', 'awareness-source-kicker', item.section || tr('awareness.sourceSection')));
       const list = el('ul', 'awareness-learning-points');
       points.forEach(point => list.appendChild(el('li', '', point)));
       article.appendChild(list);
       const metadata = [item.knowledge_type, item.time_period, item.geographic_scope].filter(Boolean).join(' · ');
       if (metadata) article.appendChild(el('p', 'awareness-metadata', metadata));
-      article.appendChild(el('p', 'awareness-citation', `Source: ${citationText(item)}`));
-      const open = el('button', 'awareness-source-link', 'Read this approved section');
+      article.appendChild(el('p', 'awareness-citation', tr('awareness.source', { source: citationText(item) })));
+      const open = el('button', 'awareness-source-link', tr('awareness.readSection'));
       open.type = 'button';
       open.addEventListener('click', () => openResource(item.file_name, item.section, item.page_start));
       article.appendChild(open);
@@ -60,11 +75,11 @@
       const config = TOPICS[key];
       cards.replaceChildren();
       cards.appendChild(el('header', 'awareness-lesson-heading'));
-      cards.lastChild.append(el('p', 'app-page-eyebrow', 'SOURCE-BASED LESSON'), el('h3', '', config.title), el('p', 'awareness-lesson-intro', config.intro));
+      cards.lastChild.append(el('p', 'app-page-eyebrow', tr('awareness.lessonEyebrow')), el('h3', '', tr(config.titleKey)), el('p', 'awareness-lesson-intro', tr(config.introKey)));
       if (key === 'myth') {
         const evidence = results.find(item => item.section.toLowerCase().includes('defining river ganga') && /six main headstreams/i.test(item.excerpt));
         if (!evidence) return false;
-        cards.appendChild(renderClaimCheck(evidence));
+        cards.appendChild(renderClaimCheck(evidence, claimChoice));
         return true;
       }
       let pointCount = 0;
@@ -77,23 +92,25 @@
       }
       return pointCount > 0;
     }
-    function renderClaimCheck(item) {
+    function renderClaimCheck(item, selectedChoice = null) {
       const article = el('article', 'awareness-claim-card');
       article.append(
-        el('p', 'awareness-source-kicker', 'Reviewed claim · answer using this source'),
-        el('h4', '', 'The GRBMP defines the Ganga as including six main Himalayan headstreams.'),
-        el('p', 'awareness-claim-note', 'This statement is checked against one cited passage; it is not presented as a widespread myth.')
+        el('p', 'awareness-source-kicker', tr('awareness.claimEyebrow')),
+        el('h4', '', tr('awareness.claimText')),
+        el('p', 'awareness-claim-note', tr('awareness.claimNote'))
       );
       const controls = el('div', 'awareness-claim-controls');
-      const result = el('p', 'awareness-claim-result', 'Choose Myth or Fact to reveal the source-based answer.');
+      const result = el('p', 'awareness-claim-result', selectedChoice ? (selectedChoice === 'fact' ? tr('awareness.factResult') : tr('awareness.factSupported')) : tr('awareness.choose'));
       result.setAttribute('role', 'status');
       const explanation = el('div', 'awareness-claim-explanation');
-      const myth = el('button', 'awareness-source-link awareness-choice', 'Myth');
-      const fact = el('button', 'awareness-source-link awareness-choice', 'Fact');
+      const myth = el('button', 'awareness-source-link awareness-choice', tr('awareness.myth'));
+      const fact = el('button', 'awareness-source-link awareness-choice', tr('awareness.fact'));
       myth.type = fact.type = 'button';
+      myth.disabled = fact.disabled = Boolean(selectedChoice);
       const reveal = (choice) => {
+        claimChoice = choice;
         const correct = choice === 'fact';
-        result.textContent = correct ? 'Fact — the cited GRBMP section states this.' : 'The cited GRBMP section supports this as a fact.';
+        result.textContent = correct ? tr('awareness.factResult') : tr('awareness.factSupported');
         myth.disabled = fact.disabled = true;
         if (cleaner) explanation.appendChild(cleaner.renderText(document, item.excerpt, { sectionHeading: item.section }));
         else explanation.textContent = item.excerpt;
@@ -102,10 +119,11 @@
       fact.addEventListener('click', () => reveal('fact'));
       controls.append(myth, fact);
       article.append(controls, result, explanation);
+      if (selectedChoice) reveal(selectedChoice);
       const metadata = [item.knowledge_type, item.time_period, item.geographic_scope].filter(Boolean).join(' · ');
       if (metadata) article.appendChild(el('p', 'awareness-metadata', metadata));
-      article.appendChild(el('p', 'awareness-citation', `Source: ${citationText(item)}`));
-      const open = el('button', 'awareness-source-link', 'Read the full source section');
+      article.appendChild(el('p', 'awareness-citation', tr('awareness.source', { source: citationText(item) })));
+      const open = el('button', 'awareness-source-link', tr('awareness.readFullSection'));
       open.type = 'button';
       open.addEventListener('click', () => openResource(item.file_name, item.section, item.page_start));
       article.appendChild(open);
@@ -127,6 +145,7 @@
       const config = TOPICS[key];
       if (!config) return;
       currentTopic = key;
+      currentLessonResults = null;
       const thisRequest = ++requestNumber;
       topics.querySelectorAll('[data-awareness-topic]').forEach(button => {
         const active = button.dataset.awarenessTopic === key;
@@ -134,37 +153,41 @@
         button.setAttribute('aria-pressed', String(active));
       });
       cards.replaceChildren();
-      setStatus('Finding approved learning sources…', 'loading');
+      setStatus('awareness.loading', 'loading');
       try {
         const response = await fetchImpl(`/api/integration/resources/search?q=${encodeURIComponent(config.query)}&limit=20`, { headers: { Accept: 'application/json' } });
-        if (!response.ok) throw new Error(`Search failed (${response.status})`);
+        if (!response.ok) throw new Error(tr('awareness.searchError', { status: response.status }));
         const payload = await response.json();
         if (thisRequest !== requestNumber) return;
         const results = (payload.results || []).filter(item => config.section.test(item.section || ''));
+        currentResults = results;
+        claimChoice = null;
         if (!results.length) {
           cards.replaceChildren();
-          setStatus(`The approved collection does not currently have a matching lesson for ${config.title}.`, 'empty');
+          setStatus('awareness.noLesson', 'empty', { topicKey: config.titleKey });
           return;
         }
         const fullResults = config.useFullText ? await loadFullSections(results.slice(0, 1)) : results.slice(0, 3);
         if (thisRequest !== requestNumber) return;
+        currentLessonResults = fullResults;
         if (!renderLesson(key, fullResults)) {
           cards.replaceChildren();
-          setStatus('The matching passages did not contain enough clean readable text for a lesson.', 'empty');
+          setStatus('awareness.notEnough', 'empty');
           return;
         }
-        setStatus(`${config.title} · learning points are taken from the cited approved sections.`);
+        setStatus('awareness.status', '', { topicKey: config.titleKey });
       } catch (_) {
         if (thisRequest !== requestNumber) return;
-        setStatus('Awareness sources could not be loaded. Check the connection and select this topic to retry.', 'error');
-        const retry = el('button', 'resource-retry-button', 'Retry');
-        retry.type = 'button';
-        retry.addEventListener('click', () => selectTopic(currentTopic));
-        status.appendChild(retry);
+        setStatus('awareness.loadFailed', 'error');
       }
     }
     topics.querySelectorAll('[data-awareness-topic]').forEach(button => {
       button.addEventListener('click', () => selectTopic(button.dataset.awarenessTopic));
+    });
+    if (typeof globalThis.addEventListener === 'function') globalThis.addEventListener('ganga-website-language-change', () => {
+      if (lastStatus) setStatus(lastStatus.key, lastStatus.state, lastStatus.values);
+      if (currentLessonResults) renderLesson(currentTopic, currentLessonResults);
+      if (i18n) i18n.applySubtree(topics);
     });
     return {
       show() { if (!loaded) { loaded = true; selectTopic(currentTopic); } },
