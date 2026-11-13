@@ -26,8 +26,8 @@ class MascotPresenter:
         tts_result: TTSAudioResult | None = None,
     ) -> AvatarPresentation:
         """Build AvatarPresentation object with verified emotion, gesture, and lip-sync values."""
-        emotion = map_emotion(brain_response.emotion, brain_response.mode)
-        gesture = map_gesture(brain_response.gesture, brain_response.mode)
+        emotion = map_emotion(brain_response.emotion, brain_response.mode, text=brain_response.answer)
+        gesture = map_gesture(brain_response.gesture, brain_response.mode, text=brain_response.answer)
         
         rms_lip_sync: list[float] = []
         audio_b64: str | None = None
@@ -66,8 +66,8 @@ class MascotPresenter:
         tts_result: TTSAudioResult | None = None,
     ) -> AvatarPresentation:
         """Attach audio payload and lip-sync analysis to existing AvatarPresentation."""
-        emotion = map_emotion(presentation.emotion, presentation.mode)
-        gesture = map_gesture(presentation.gesture, presentation.mode)
+        emotion = map_emotion(presentation.emotion, presentation.mode, text=presentation.answer)
+        gesture = map_gesture(presentation.gesture, presentation.mode, text=presentation.answer)
 
         rms_lip_sync: list[float] = []
         audio_b64: str | None = None

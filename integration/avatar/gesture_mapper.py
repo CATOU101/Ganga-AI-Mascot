@@ -51,8 +51,12 @@ SUPPORTED_GESTURES = {
 }
 
 
-def map_gesture(raw_gesture: str | GestureType | None, mode: str | None = None) -> GestureType:
-    """Map arbitrary gesture string or response mode to supported GestureType with idle fallback."""
+def map_gesture(
+    raw_gesture: str | GestureType | None,
+    mode: str | None = None,
+    text: str | None = None,
+) -> GestureType:
+    """Map arbitrary gesture string, response mode, and conversational text to supported GestureType."""
     if isinstance(raw_gesture, GestureType):
         val = raw_gesture.value
     elif hasattr(raw_gesture, "value"):
@@ -61,6 +65,20 @@ def map_gesture(raw_gesture: str | GestureType | None, mode: str | None = None) 
         val = str(raw_gesture) if raw_gesture is not None else ""
 
     clean_gesture = val.strip().lower()
+    if clean_gesture in SUPPORTED_GESTURES and clean_gesture != "idle":
+        return SUPPORTED_GESTURES[clean_gesture]
+
+    if text:
+        t_low = text.lower()
+        if any(w in t_low for w in ("namaste", "pranam", "नमस्ते", "प्रणाम")):
+            return GestureType.THANKFUL
+        elif any(w in t_low for w in ("hello", "welcome", "greetings", "नमस्कार", "स्वागत")):
+            return GestureType.WAVE
+        elif any(w in t_low for w in ("warning", "alert", "danger", "point", "chetavni", "savdhaan", "चेतावनी")):
+            return GestureType.POINT
+        elif any(w in t_low for w in ("sorry", "apologize", "kshama", "maaf")):
+            return GestureType.SHRUG
+
     if clean_gesture in SUPPORTED_GESTURES:
         mapped = SUPPORTED_GESTURES[clean_gesture]
         if mapped == GestureType.IDLE:
@@ -78,4 +96,5 @@ def map_gesture(raw_gesture: str | GestureType | None, mode: str | None = None) 
     if raw_gesture:
         logger.warning(f"[Integration Gesture] Unknown gesture '{raw_gesture}'. Falling back to 'idle'.")
     return GestureType.IDLE
+
 

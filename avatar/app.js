@@ -27,6 +27,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize 3D Avatar Mascot Controller
   const mascot = new MascotController();
 
+  // Centralized Event Bus for Human-Like Conversation & Animation Coordination (Phase 5)
+  const avatarEventBus = {
+    listeners: {},
+    on(event, callback) {
+      if (!this.listeners[event]) this.listeners[event] = [];
+      this.listeners[event].push(callback);
+    },
+    emit(event, payload) {
+      const list = this.listeners[event] || [];
+      for (const cb of list) {
+        try { cb(payload); } catch (e) { console.warn(`[EventBus] Error in ${event} listener:`, e); }
+      }
+    }
+  };
+  window.avatarEventBus = avatarEventBus;
+
   // 2. DOM Elements
   const chatMessagesList = document.getElementById('chatMessagesList');
   const askForm = document.getElementById('askForm');
@@ -259,6 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
       stopCurrentSpeech();
     }
 
+    avatarEventBus.emit('response_started', { question, inputLanguage });
+
     // Append User Message Bubble to stream
     appendUserMessage(question);
 
@@ -294,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const t_response = performance.now();
       const data = await response.json();
+      avatarEventBus.emit('response_completed', { data, latencyMs: t_response - t_start });
       detectedTextLanguage = data.input_language || 'auto';
       updateLangBadge();
 
@@ -565,7 +584,104 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 11. Production Audio & Real-Time Dual-Stage Lip-Sync Player
+  // Context-Aware Intent, Sentiment & Tone Classifier (Phase 2 & Phase 5)
+  function classifyResponseContext(answerText, questionText = '', serverData = {}) {
+    const text = String(answerText || '').toLowerCase();
+    const qText = String(questionText || '').toLowerCase();
+    const mode = String(serverData.mode || 'grounded').toLowerCase();
+
+    // 1. GREETING (English & Indic scripts)
+    if (/^(namaste|hello|hi|welcome|greetings|pranam|good (morning|afternoon|evening)|नमस्ते|नमस्कार|प्रणाम|स्वागत|सत श्री अकाल|வணக்கம்|నమస్కారం|ನಮಸ್ಕಾರ|নমস্কার|سلام)/i.test(text) ||
+        /^(hi|hello|namaste|hey|नमस्ते|प्रणाम|வணக்கம்|నమస్కారం)/i.test(qText)) {
+      const isNamaste = /namaste|pranam|नमस्ते|प्रणाम|வணக்கம்|నమస్కారం|ನಮಸ್ಕಾರ/i.test(text) || /namaste|pranam|नमस्ते|प्रणाम/i.test(qText);
+      return {
+        state: 'GREETING',
+        emotion: 'happy',
+        gesture: isNamaste ? 'Praying' : 'Waving',
+        contextType: 'greeting',
+        bubbleText: null
+      };
+    }
+
+    // 2. CRITICAL ALERT / POLLUTION WARNING / MANDATORY ADVISORY
+    if (/warning|critical|alert|danger|prohibited|violation|severely polluted|hazardous|penalty|dhyan dein|savdhaan|chetavni|asurakshit|चेतावनी|सावधान|प्रतिबंधित/i.test(text)) {
+      return {
+        state: 'IMPORTANT_ALERT',
+        emotion: 'surprised',
+        gesture: 'Pointing_Forward',
+        contextType: 'important_alert',
+        bubbleText: null
+      };
+    }
+
+    // 3. CELEBRATORY / EXCELLENT PROGRESS / DELIGHT
+    if (/congratulations|excellent|fantastic|wonderful|delighted|pure|cleanest|achievement|pristine|badhai|shandaar|sarahniya|safal|बधाई|शानदार|सराहनीय|उत्कृष्ट/i.test(text)) {
+      return {
+        state: 'HAPPY',
+        emotion: 'happy',
+        gesture: 'Happy_Idle',
+        contextType: 'celebratory',
+        bubbleText: null
+      };
+    }
+
+    // 4. APOLOGETIC / OUT OF SCOPE / INSUFFICIENT EVIDENCE
+    if (mode === 'insufficient-evidence' || mode === 'general-unavailable' ||
+        /sorry|apologize|not found|insufficient evidence|cannot find|out of scope|kshama|maaf|माफ़|क्षमा|उपलब्ध नहीं/i.test(text)) {
+      return {
+        state: 'APOLOGETIC',
+        emotion: 'confused',
+        gesture: 'Defeat_Idle',
+        contextType: 'apologetic',
+        bubbleText: null
+      };
+    }
+
+    // 5. INQUISITIVE / ASKING QUESTION / CLARIFYING
+    if (/\?$/.test(text.trim()) || /could you (please )?(clarify|tell|rephrase)|did you know|would you like to know|kya aap|kripya spasht|क्या आप/i.test(text)) {
+      return {
+        state: 'QUESTION',
+        emotion: 'thinking',
+        gesture: 'Looking',
+        contextType: 'question',
+        bubbleText: null
+      };
+    }
+
+    // 6. TECHNICAL / WATER QUALITY / SCIENTIFIC DATA
+    if (/bod|do|ph|cod|mg\/l|coliform|cpcb|monitoring station|dissolved oxygen|conductivity|turbidity|standards|biochemical|जल गुणवत्ता|मानक/i.test(text) ||
+        (serverData.tables && serverData.tables.length > 0)) {
+      return {
+        state: 'TECHNICAL',
+        emotion: 'neutral',
+        gesture: 'Acknowledging',
+        contextType: 'technical',
+        bubbleText: null
+      };
+    }
+
+    // 7. INFORMATIVE / EXPLAINING (Default for multi-point factual responses)
+    if (text.length > 120 || /\n[-*•]|\d+\./.test(answerText) || mode === 'grounded') {
+      return {
+        state: 'EXPLAINING',
+        emotion: 'neutral',
+        gesture: 'Pointing_Forward',
+        contextType: 'explaining',
+        bubbleText: null
+      };
+    }
+
+    // 8. GENERAL SPEAKING
+    return {
+      state: 'SPEAKING',
+      emotion: 'neutral',
+      gesture: 'Talking',
+      contextType: 'general',
+      bubbleText: null
+    };
+  }
+
+  // 11. Production Audio & Real-Time Multi-Stage Lip-Sync Player
   function playProductionSpeech(data, audioSrc, fallbackText, gesture = 'explaining', t_start = null, t_response = null, cardRow = null) {
     stopCurrentSpeech();
     const attemptId = speechAttemptId;
@@ -584,30 +700,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Context-Aware State, Emotion & Gesture Classification
-    const answer = (data.answer || fallbackText || '').toLowerCase();
-    let detectedState = 'SPEAKING';
-    let detectedGesture = gesture || 'talking';
-    let detectedEmotion = data.emotion || 'neutral';
+    const context = classifyResponseContext(data.answer || fallbackText || '', data.question || '', data);
+    const detectedState = context.state;
+    const detectedGesture = context.gesture || gesture || 'talking';
+    const detectedEmotion = context.emotion || data.emotion || 'neutral';
 
-    if (/namaste|hello|hi|welcome|नमस्ते|प्रणाम|स्वागत/i.test(answer)) {
-      detectedState = 'GREETING';
-      detectedGesture = 'waving';
-      detectedEmotion = 'happy';
-    } else if (/important|note|warning|guideline|must|alert|ध्यातव्य|महत्वपूर्ण|नियम/i.test(answer)) {
-      detectedState = 'EXPLAINING';
-      detectedGesture = 'pointing_forward';
-      detectedEmotion = 'neutral';
-    } else if (/thank|great|wonderful|delighted|happy|congratulations|धन्यवाद|सराहनीय|उत्कृष्ट/i.test(answer)) {
-      detectedState = 'HAPPY';
-      detectedGesture = 'happy_idle';
-      detectedEmotion = 'happy';
-    } else if (/sorry|not found|clarify|माफ़|स्पष्ट/i.test(answer)) {
-      detectedState = 'CONFUSED';
-      detectedGesture = 'nervously_look_around';
-      detectedEmotion = 'confused';
-    }
-
-    setState(detectedState, { emotion: detectedEmotion, gesture: detectedGesture });
+    avatarEventBus.emit('emotion_detected', { emotion: detectedEmotion, contextType: context.contextType });
+    setState(detectedState, {
+      emotion: detectedEmotion,
+      gesture: detectedGesture,
+      bubbleText: context.bubbleText
+    });
 
     if (activeAudioPlayerBar) {
       activeAudioPlayerBar.classList.add('playing');
@@ -617,9 +720,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     activeAudio.onplay = () => {
       clearUiText(voiceStatusMsg);
-      // Connect audio element to 3D Mascot Dual-Stage Lip-Sync System
+      avatarEventBus.emit('speech_started', { audio: activeAudio, data });
+      // Connect audio element to 3D Mascot Multi-Stage Lip-Sync System
       if (mascot && mascot.startAudioLipSync) {
         mascot.startAudioLipSync(activeAudio, data);
+      }
+    };
+
+    activeAudio.onpause = () => {
+      avatarEventBus.emit('speech_paused');
+      if (mascot && mascot.stopAudioLipSync) {
+        mascot.stopAudioLipSync();
       }
     };
 
@@ -633,6 +744,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     activeAudio.onended = () => {
+      avatarEventBus.emit('speech_completed');
       stopCurrentSpeech();
       setState('IDLE');
     };
@@ -654,6 +766,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function stopCurrentSpeech() {
     speechAttemptId += 1;
+    avatarEventBus.emit('interruption');
     if (lipSyncAnimationId) {
       cancelAnimationFrame(lipSyncAnimationId);
       lipSyncAnimationId = null;
@@ -663,6 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (activeAudio) {
       activeAudio.pause();
+      activeAudio.currentTime = 0;
       activeAudio = null;
     }
     if (activeAudioPlayerBar) {
@@ -779,6 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       mediaRecorder.onstop = async () => {
+        avatarEventBus.emit('listening_completed');
         stream.getTracks().forEach((track) => track.stop());
         const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
         setUiText(voiceStatusMsg, 'voice.transcribing');
@@ -789,6 +904,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mediaRecorder.start();
       isRecording = true;
       micBtn.classList.add('recording');
+      avatarEventBus.emit('listening_started');
       setState('LISTENING');
       setUiText(voiceStatusMsg, 'voice.listeningSend');
 
